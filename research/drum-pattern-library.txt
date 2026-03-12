@@ -1,0 +1,2527 @@
+################################################################################
+#                                                                              #
+#                    COMPREHENSIVE DRUM PATTERN LIBRARY                        #
+#                    Web Drum Machine Preset Collection                        #
+#                                                                              #
+#                    130+ Playable 16-Step Patterns                            #
+#                                                                              #
+################################################################################
+
+NOTATION KEY:
+  Each character = one 16th note in a 16-step bar (one measure of 4/4)
+  Steps:  1 e + a 2 e + a 3 e + a 4 e + a
+  Index:  1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6
+
+  x = hit
+  X = ACCENT (harder velocity)
+  . = rest (silence)
+  o = open hi-hat hit
+  g = ghost note (very soft hit)
+
+TRACKS:
+  HH = Closed Hi-Hat
+  OH = Open Hi-Hat
+  RD = Ride Cymbal
+  CP = Clap
+  SD = Snare Drum
+  GH = Ghost Snare (soft snare hits)
+  KK = Kick Drum
+  PR = Percussion (cowbell, rimshot, shaker, conga, etc.)
+
+NOTE ON 32-STEP PATTERNS:
+  DnB and some breakbeat patterns use 32 steps (two bars of 16th notes
+  at high BPM, or one bar of 32nd notes). These are clearly marked.
+
+
+================================================================================
+================================================================================
+==                                                                            ==
+==                          E L E C T R O N I C                               ==
+==                            (30 Patterns)                                   ==
+==                                                                            ==
+================================================================================
+================================================================================
+
+
+=== E01: Classic House ===
+Genre: House
+BPM: 120-128
+Swing: Straight
+Difficulty: Beginner
+Description: The foundation of all house music. Four-on-the-floor kick with
+offbeat open hi-hats. Think Larry Heard, Frankie Knuckles. The open hat on
+every offbeat 8th note is what gives house its distinctive pulse.
+
+HH: |................|
+OH: |..x...x...x...x.|
+RD: |................|
+CP: |....x.......x...|
+SD: |................|
+GH: |................|
+KK: |x...x...x...x...|
+PR: |................|
+
+
+=== E02: Deep House ===
+Genre: Deep House
+BPM: 118-124
+Swing: 55%
+Difficulty: Beginner
+Description: Sparser than classic house, deeper groove. Think Kerri Chandler,
+Larry Heard "Can You Feel It." The kick pattern has subtle syncopation and the
+hats are more restrained. Clap sits back, rimshot adds texture.
+
+HH: |x...x...x...x...|
+OH: |..x...x...x...x.|
+RD: |................|
+CP: |....x.......x...|
+SD: |................|
+GH: |................|
+KK: |x.....x.x...x...|
+PR: |..x...........x.|
+
+
+=== E03: Tech House ===
+Genre: Tech House
+BPM: 124-130
+Swing: Straight
+Difficulty: Intermediate
+Description: Driving and percussive. Think Green Velvet, Fisher, Jamie Jones.
+More aggressive than deep house, with busier hi-hat patterns and layered
+percussion. The kick is relentless, the hats drive forward.
+
+HH: |x.x.x.x.x.x.x.x.|
+OH: |..........x.....|
+RD: |................|
+CP: |....x.......x...|
+SD: |................|
+GH: |................|
+KK: |x...x..xx...x...|
+PR: |x..x..x..x..x.x.|
+
+
+=== E04: Acid House ===
+Genre: Acid House
+BPM: 126-134
+Swing: Straight
+Difficulty: Intermediate
+Description: Built around the Roland TB-303 bassline and TR-808/TR-909 drums.
+Think Phuture "Acid Tracks," DJ Pierre. Raw, hypnotic. The hat pattern is
+relentless 16ths, kick is four-on-floor, clap snaps on 2 and 4.
+
+HH: |x.x.x.x.x.x.x.x.|
+OH: |................|
+RD: |................|
+CP: |....x.......x...|
+SD: |................|
+GH: |................|
+KK: |x...x...x...x...|
+PR: |....x.......x...|
+
+
+=== E05: Chicago House ===
+Genre: Chicago House / Ghetto House
+BPM: 120-130
+Swing: Straight
+Difficulty: Beginner
+Description: Raw, stripped-down, TR-808 or TR-909 based. Think DJ Funk,
+Paul Johnson, early Trax Records. Minimal elements, maximum groove. The
+open hat on the offbeats is essential; the kick never stops.
+
+HH: |x...x...x...x...|
+OH: |..x...x...x...x.|
+RD: |................|
+CP: |....X.......X...|
+SD: |................|
+GH: |................|
+KK: |x...x...x...x...|
+PR: |................|
+
+
+=== E06: Progressive House ===
+Genre: Progressive House
+BPM: 126-132
+Swing: Straight
+Difficulty: Intermediate
+Description: Building, layered, evolving. Think Sasha & Digweed, Deadmau5
+"Strobe," Eric Prydz. Start sparse, layer elements in over time. This is
+the full pattern; strip elements for intro/breakdown sections.
+
+HH: |x.x.x.x.x.x.x.x.|
+OH: |..............x.|
+RD: |x...x...x...x...|
+CP: |....x.......x...|
+SD: |................|
+GH: |................|
+KK: |x...x...x.x.x...|
+PR: |..x...x..x..x...|
+
+
+=== E07: Minimal House (Micro-House) ===
+Genre: Minimal / Micro-House
+BPM: 120-128
+Swing: 54%
+Difficulty: Intermediate
+Description: Tiny clicks, pops, and micro-sounds. Think Villalobos, Richie
+Hawtin "Minus" era, Kompakt label. Every element is stripped to its essence.
+The "percussion" here represents tiny click/pop sounds.
+
+HH: |..x...x..........|
+OH: |................|
+RD: |................|
+CP: |....x.......x...|
+SD: |................|
+GH: |........g.......|
+KK: |x...x...x...x...|
+PR: |x..x....x.x.....|
+
+
+=== E08: Afro-House ===
+Genre: Afro-House
+BPM: 120-126
+Swing: 56%
+Difficulty: Intermediate
+Description: African rhythmic influence meets house. Think Black Coffee,
+Culoe De Song, Rampa. Polyrhythmic percussion layers over a four-on-floor
+kick. The PR line represents shaker/djembe patterns.
+
+HH: |x.x.x.x.x.x.x.x.|
+OH: |..x.......x.....|
+RD: |................|
+CP: |....x.......x...|
+SD: |................|
+GH: |........g..g....|
+KK: |x...x...x.x.x...|
+PR: |x..x.xx..x.xx.x.|
+
+
+=== E09: Jackin' House ===
+Genre: Jackin' House
+BPM: 126-132
+Swing: Straight
+Difficulty: Intermediate
+Description: Fast, funky, raw. Think DJ Sneak, Cajmere/Green Velvet early
+work. The syncopated kick and rapid-fire hats give it an urgent, physical
+energy. Named for making dancers "jack" their bodies.
+
+HH: |x.xxx.x.x.xxx.x.|
+OH: |................|
+RD: |................|
+CP: |....x.......x...|
+SD: |................|
+GH: |................|
+KK: |x..x..x.x..x.x..|
+PR: |..x...x...x...x.|
+
+
+=== E10: French House ===
+Genre: French House / French Touch
+BPM: 120-128
+Swing: Straight
+Difficulty: Intermediate
+Description: Filtered disco loops meet house. Think Daft Punk "Around the
+World," Cassius, Stardust. The kick is punchy, hats swing, and there is a
+disco DNA in the groove. The percussion represents filtered disco elements.
+
+HH: |x.x.x.x.x.x.x.x.|
+OH: |..x...x...x...x.|
+RD: |................|
+CP: |....x.......x...|
+SD: |................|
+GH: |..........g.....|
+KK: |x...x...x.x.x...|
+PR: |x.....x.x.....x.|
+
+
+=== E11: Detroit Techno ===
+Genre: Detroit Techno
+BPM: 128-135
+Swing: Straight
+Difficulty: Intermediate
+Description: Sophisticated, funky, futuristic. Think Juan Atkins, Derrick
+May "Strings of Life," Kevin Saunderson. More musical and soulful than
+Berlin techno. The ride cymbal is key, often replacing hi-hats entirely.
+
+HH: |................|
+OH: |..x.......x.....|
+RD: |x.x.x.x.x.x.x.x.|
+CP: |....x.......x...|
+SD: |................|
+GH: |........g.......|
+KK: |x...x..xx...x...|
+PR: |..x...x..x...x..|
+
+
+=== E12: Berlin Techno ===
+Genre: Berlin Techno
+BPM: 130-140
+Swing: Straight
+Difficulty: Beginner
+Description: Industrial, pounding, hypnotic. Think Berghain, Ben Klock,
+Marcel Dettmann. Heavy, distorted kick on every beat. Minimal melodic
+content; it is all about the physical impact and subtle hi-hat variations.
+
+HH: |x.x.x.x.x.x.x.x.|
+OH: |................|
+RD: |................|
+CP: |....x.......x...|
+SD: |................|
+GH: |................|
+KK: |x...x...x...x...|
+PR: |..x.......x.....|
+
+
+=== E13: Minimal Techno ===
+Genre: Minimal Techno
+BPM: 125-135
+Swing: 53%
+Difficulty: Intermediate
+Description: Hypnotic, repetitive, spacious. Think Plastikman, Robert Hood,
+Basic Channel. Every element is essential. The groove comes from tiny timing
+variations and the interplay between very few sounds.
+
+HH: |x.....x.x.....x.|
+OH: |................|
+RD: |..x.......x.....|
+CP: |....x.......x...|
+SD: |................|
+GH: |................|
+KK: |x...x...x...x...|
+PR: |......x.......x.|
+
+
+=== E14: Hard Techno ===
+Genre: Hard Techno
+BPM: 140-155
+Swing: Straight
+Difficulty: Intermediate
+Description: Aggressive, distorted, relentless. Think VTSS, Kobosil, 999999999.
+The kick is heavily distorted/saturated. Everything hits hard. The clap is
+often layered with a metallic snare for maximum impact.
+
+HH: |x.x.x.x.x.x.x.x.|
+OH: |......x.......x.|
+RD: |................|
+CP: |....X.......X...|
+SD: |....x.......x...|
+GH: |................|
+KK: |x...x...x...x...|
+PR: |x.x...x.x.x...x.|
+
+
+=== E15: Dub Techno ===
+Genre: Dub Techno
+BPM: 120-130
+Swing: Straight
+Difficulty: Intermediate
+Description: Reverb-drenched, echoing, oceanic. Think Basic Channel, Deepchord,
+Rhythm & Sound. Every hit trails off into infinite reverb/delay. Sparse
+placement; the echoes fill the space. Apply heavy delay to all channels.
+
+HH: |x...x.....x...x.|
+OH: |......x.........|
+RD: |..x.......x.....|
+CP: |....x.......x...|
+SD: |................|
+GH: |................|
+KK: |x.......x.......|
+PR: |..........x.....|
+
+
+=== E16: Industrial Techno ===
+Genre: Industrial Techno
+BPM: 135-150
+Swing: Straight
+Difficulty: Advanced
+Description: Surgeon, Regis, Ancient Methods. Punishing, mechanical, metallic.
+The percussion represents industrial noise hits and metallic clangs. The kick
+is heavily processed and distorted. Not for the faint of heart.
+
+HH: |x.x.x.xxx.x.x.x.|
+OH: |................|
+RD: |................|
+CP: |....X..x....X..x.|
+SD: |....x.......x...|
+GH: |..........g.g...|
+KK: |x..xx...x..xx...|
+PR: |x.x..xx.x.x..xx.|
+
+
+=== E17: Drum and Bass (Two-Step) — 32 STEPS ===
+Genre: Drum and Bass
+BPM: 170-180
+Swing: Straight
+Difficulty: Advanced
+Description: The classic two-step DnB pattern. Think Goldie, LTJ Bukem,
+Roni Size. The kick-snare pattern spans two beats in a fast shuffle. 32
+steps shown below represent one full bar at 170+ BPM. The snare hits on
+beats 2 and 4 give the "two-step" feel.
+
+     |beat 1          |beat 2          |beat 3          |beat 4          |
+HH:  |x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.|
+OH:  |................................|
+RD:  |................................|
+CP:  |........x..............x.......|
+SD:  |........x...............x......|
+GH:  |....g.......g.g.....g.......g.g.|
+KK:  |x.............x.x.............x.|
+PR:  |................................|
+
+
+=== E18: Liquid DnB — 32 STEPS ===
+Genre: Liquid Drum and Bass
+BPM: 170-176
+Swing: Straight
+Difficulty: Intermediate
+Description: Smooth, rolling, musical. Think Calibre, High Contrast, LSB.
+Gentler than standard DnB with flowing hi-hat patterns and a lighter touch.
+The ghost notes are essential for the rolling, liquid feel.
+
+     |beat 1          |beat 2          |beat 3          |beat 4          |
+HH:  |x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.|
+OH:  |......x...............x.........|
+RD:  |................................|
+CP:  |................................|
+SD:  |........x...............x......|
+GH:  |..g.g.....g.g.g...g.g.....g.g.g.|
+KK:  |x...........x.x.x...........x.|
+PR:  |................................|
+
+
+=== E19: Neurofunk — 32 STEPS ===
+Genre: Neurofunk / DnB
+BPM: 174-178
+Swing: Straight
+Difficulty: Advanced
+Description: Aggressive, complex, technical. Think Noisia, Mefjus, Phace.
+Intricate kick-snare interplay with rapid ghost notes. The bass design is
+crucial but the drum pattern is equally technical and driving.
+
+     |beat 1          |beat 2          |beat 3          |beat 4          |
+HH:  |x.x.xxx.x.x.xxx.x.x.xxx.x.x.xxx.|
+OH:  |................................|
+RD:  |................................|
+CP:  |........X...............X......|
+SD:  |........x..x............x..x...|
+GH:  |..g.g.....g...g...g.g.....g...g.|
+KK:  |x...x.........x.x...x.......x.x.|
+PR:  |....x.x...x.........x.x...x...|
+
+
+=== E20: Jungle (Amen Break-Based) — 32 STEPS ===
+Genre: Jungle
+BPM: 160-170
+Swing: Straight
+Difficulty: Advanced
+Description: Based on the Amen break from The Winstons' "Amen Brother."
+The most sampled breakbeat in history. Think early Remarc, Congo Natty,
+Shy FX. This is a simplified notation of the Amen pattern adapted
+for a drum machine grid.
+
+     |beat 1          |beat 2          |beat 3          |beat 4          |
+HH:  |x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.|
+OH:  |..............x...............x.|
+RD:  |x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.|
+CP:  |................................|
+SD:  |....x...x..x..x.....x..x...x.x.|
+GH:  |..g...g.......g...g...g.......g.|
+KK:  |x...x.....x.....x.x.......x...|
+PR:  |................................|
+
+
+=== E21: Breakbeat (Big Beat) ===
+Genre: Breakbeat / Big Beat
+BPM: 120-140
+Swing: Straight
+Difficulty: Intermediate
+Description: Mid-tempo, heavy breaks. Think The Chemical Brothers, Fatboy
+Slim, The Prodigy. Chunky breakbeats with big kicks and snares. The pattern
+has that characteristic "broken" feel that distinguishes it from straight
+four-on-floor.
+
+HH: |x.x.x.x.x.x.x.x.|
+OH: |..............x.|
+RD: |................|
+CP: |................|
+SD: |....x..x....x...|
+GH: |..g.......g.....|
+KK: |x.....x.x.......|
+PR: |................|
+
+
+=== E22: Trance ===
+Genre: Trance
+BPM: 136-142
+Swing: Straight
+Difficulty: Beginner
+Description: Driving, uplifting, euphoric. Think Tiesto, Armin van Buuren,
+Paul van Dyk. Four-on-floor kick with rolling offbeat hats and a sharp
+clap on 2 and 4. The ride adds a shimmering top layer. Build sections by
+removing/adding the kick.
+
+HH: |..x...x...x...x.|
+OH: |................|
+RD: |x.x.x.x.x.x.x.x.|
+CP: |....X.......X...|
+SD: |................|
+GH: |................|
+KK: |x...x...x...x...|
+PR: |................|
+
+
+=== E23: Dubstep (Half-Time) ===
+Genre: Dubstep
+BPM: 140 (half-time feel = 70 BPM groove)
+Swing: Straight
+Difficulty: Intermediate
+Description: Heavy, spacious half-time feel. Think Skream, Benga, early
+Caspa. The snare on beat 3 (step 9) gives the heavy half-time feel.
+Kick is sparse to leave room for massive sub-bass wobbles.
+
+HH: |..x...x...x...x.|
+OH: |................|
+RD: |................|
+CP: |........x.......|
+SD: |........x.......|
+GH: |................|
+KK: |x.........x.....|
+PR: |................|
+
+
+=== E24: Future Bass ===
+Genre: Future Bass
+BPM: 140-160
+Swing: Straight
+Difficulty: Intermediate
+Description: Complex hats, syncopated kicks. Think Flume, San Holo, Louis
+the Child. The hi-hat pattern is intricate with varying velocities. The kick
+is syncopated against the snare. Sidechain compression is essential.
+
+HH: |x.xxx.x.x.xxx.x.|
+OH: |......x.......x.|
+RD: |................|
+CP: |....x.......x...|
+SD: |....x.......x...|
+GH: |..g.......g.....|
+KK: |x.....x.x..x....|
+PR: |..x.x.....x.x...|
+
+
+=== E25: IDM (Aphex Twin Style) ===
+Genre: IDM / Experimental Electronic
+BPM: 130-160
+Swing: Irregular
+Difficulty: Advanced
+Description: Glitchy, irregular, complex. Think Aphex Twin "Windowlicker,"
+Autechre, Squarepusher. Intentionally off-grid and complex. Best programmed
+with varying velocities and micro-timing offsets. This is a simplified
+grid version of an inherently chaotic style.
+
+HH: |x..xx.x..x.xx...|
+OH: |.x..........x...|
+RD: |................|
+CP: |....x..x.....x..|
+SD: |..x.x.....x..x..|
+GH: |.g....g..g....g.|
+KK: |x..x....x.x..x..|
+PR: |...x.x.x...x.x.x|
+
+
+=== E26: Ambient Techno ===
+Genre: Ambient Techno
+BPM: 110-125
+Swing: Straight
+Difficulty: Beginner
+Description: Sparse, atmospheric, wide-open. Think The Orb, Biosphere, Gas.
+Very few hits per bar, each drenched in reverb and delay. The space between
+hits is as important as the hits themselves. Less is more.
+
+HH: |................|
+OH: |..x.........x...|
+RD: |x.......x.......|
+CP: |........x.......|
+SD: |................|
+GH: |................|
+KK: |x.......x.......|
+PR: |............x...|
+
+
+=== E27: EBM (Electronic Body Music) ===
+Genre: EBM / Industrial
+BPM: 120-135
+Swing: Straight
+Difficulty: Intermediate
+Description: Industrial, driving, physical. Think Front 242, Nitzer Ebb,
+DAF. Rigid, mechanical drum machine patterns with distorted kicks and
+aggressive snare/clap hits. The sequencer is relentless and robotic.
+
+HH: |x.x.x.x.x.x.x.x.|
+OH: |................|
+RD: |................|
+CP: |....X.......X...|
+SD: |....x.......x...|
+GH: |................|
+KK: |x.x...x.x.x...x.|
+PR: |..x.x.....x.x...|
+
+
+=== E28: Synthwave / Retrowave ===
+Genre: Synthwave / Retrowave
+BPM: 100-120
+Swing: Straight
+Difficulty: Beginner
+Description: 80s-inspired electronic. Think Kavinsky, Perturbator, Carpenter
+Brut. LinnDrum/TR-808 sounds, gated reverb snare, driving but not too fast.
+Think neon lights, VHS, and DeLoreans.
+
+HH: |x.x.x.x.x.x.x.x.|
+OH: |................|
+RD: |................|
+CP: |....x.......x...|
+SD: |....X.......X...|
+GH: |................|
+KK: |x...x...x.x.x...|
+PR: |................|
+
+
+=== E29: Vaporwave ===
+Genre: Vaporwave
+BPM: 70-90
+Swing: 58%
+Difficulty: Beginner
+Description: Slowed, dreamy, nostalgic. Think Macintosh Plus, Saint Pepsi,
+Blank Banshee. Often pitched-down samples of 80s/90s pop. The drums are
+deliberately lo-fi, washed out, and sometimes chopped/screwed.
+
+HH: |x...x...x...x...|
+OH: |..x.......x.....|
+RD: |................|
+CP: |....x.......x...|
+SD: |....x.......x...|
+GH: |................|
+KK: |x.......x.......|
+PR: |........x.......|
+
+
+=== E30: Footwork / Juke ===
+Genre: Footwork / Juke
+BPM: 155-165
+Swing: Straight
+Difficulty: Advanced
+Description: Rapid-fire kicks, Chicago-born. Think DJ Rashad, RP Boo, DJ
+Spinn. The kick pattern is frenetic and polyrhythmic, with bursts of rapid
+hits. Snare on 2 and 4 keeps the groove anchored while everything else
+flies around it.
+
+HH: |x.x.xxx.x.x.xxx.|
+OH: |................|
+RD: |................|
+CP: |....x.......x...|
+SD: |....x.......x...|
+GH: |..g...g...g...g.|
+KK: |x.xx.x.xx.xx.x.x.|
+PR: |..x.x...x.x.x...|
+
+
+================================================================================
+================================================================================
+==                                                                            ==
+==                               P O P                                        ==
+==                            (22 Patterns)                                   ==
+==                                                                            ==
+================================================================================
+================================================================================
+
+
+=== P01: Standard Pop (Motown) ===
+Genre: Pop / Motown
+BPM: 100-120
+Swing: Straight
+Difficulty: Beginner
+Description: The most fundamental pop beat. Straight 8th-note hi-hats, kick on
+1 and 3, snare on 2 and 4. Think "I Want You Back" by the Jackson 5, "My Girl"
+by the Temptations. This is the bread and butter of pop music drumming.
+
+HH: |x.x.x.x.x.x.x.x.|
+OH: |................|
+RD: |................|
+CP: |................|
+SD: |....x.......x...|
+GH: |................|
+KK: |x.......x.......|
+PR: |................|
+
+
+=== P02: Pop-Rock ===
+Genre: Pop-Rock
+BPM: 110-130
+Swing: Straight
+Difficulty: Beginner
+Description: Driving 8th-note hats with a solid backbeat. Think Tom Petty,
+Fleetwood Mac, Matchbox Twenty. A little more energy than standard pop. The
+kick adds a pickup note before beat 3 for forward momentum.
+
+HH: |x.x.x.x.x.x.x.x.|
+OH: |................|
+RD: |................|
+CP: |................|
+SD: |....x.......x...|
+GH: |................|
+KK: |x.......x.x.....|
+PR: |................|
+
+
+=== P03: Pop Ballad ===
+Genre: Pop Ballad
+BPM: 60-80
+Swing: Straight
+Difficulty: Beginner
+Description: Sparse, open, emotional. Think Adele "Someone Like You," Whitney
+Houston "I Will Always Love You." Very few hits per bar, lots of space. The
+hi-hat is open and airy. Every hit is deliberate and expressive.
+
+HH: |x.......x.......|
+OH: |....x.......x...|
+RD: |................|
+CP: |................|
+SD: |....x.......x...|
+GH: |................|
+KK: |x...........x...|
+PR: |................|
+
+
+=== P04: 80s Pop (LinnDrum Feel) ===
+Genre: 80s Pop
+BPM: 110-120
+Swing: Straight
+Difficulty: Intermediate
+Description: The LinnDrum defined the 80s. Think Phil Collins "In the Air
+Tonight," Prince "When Doves Cry," Michael Jackson "Thriller." Gated reverb
+on the snare is ESSENTIAL. Tight, punchy kick. Apply massive gated reverb
+to the snare channel.
+
+HH: |x.x.x.x.x.x.x.x.|
+OH: |................|
+RD: |................|
+CP: |....x.......x...|
+SD: |....X.......X...|
+GH: |................|
+KK: |x...x...x.x.x...|
+PR: |................|
+
+
+=== P05: 80s Synth-Pop ===
+Genre: Synth-Pop
+BPM: 118-130
+Swing: Straight
+Difficulty: Beginner
+Description: Programmed, electronic, precise. Think Depeche Mode, New Order
+"Blue Monday," Pet Shop Boys. TR-808 or LinnDrum sounds, minimal variation,
+perfectly quantized. The rigidity IS the aesthetic.
+
+HH: |x.x.x.x.x.x.x.x.|
+OH: |................|
+RD: |................|
+CP: |....x.......x...|
+SD: |................|
+GH: |................|
+KK: |x...x...x...x...|
+PR: |..x...x...x...x.|
+
+
+=== P06: 90s Pop (R&B Influenced) ===
+Genre: 90s Pop / R&B
+BPM: 90-108
+Swing: 56%
+Difficulty: Intermediate
+Description: Ghost notes galore. Think TLC, Destiny's Child, Aaliyah, Babyface
+productions. The ghost notes on the snare give it that smooth, grooving R&B
+feel. Swing is critical; do not program this straight.
+
+HH: |x.x.x.x.x.x.x.x.|
+OH: |..............x.|
+RD: |................|
+CP: |....x.......x...|
+SD: |....x.......x...|
+GH: |..g...g.g.g...g.|
+KK: |x..x..x.x...x...|
+PR: |................|
+
+
+=== P07: 2000s Pop-Punk (Blink-182 Era) ===
+Genre: Pop-Punk
+BPM: 160-190
+Swing: Straight
+Difficulty: Intermediate
+Description: Fast, driving, energetic. Think Blink-182 (Travis Barker), Sum
+41, Good Charlotte. The hi-hat is relentless 8ths at high BPM. The kick
+drives with punk energy. This is meant to be played FAST.
+
+HH: |x.x.x.x.x.x.x.x.|
+OH: |................|
+RD: |................|
+CP: |................|
+SD: |....x.......x...|
+GH: |................|
+KK: |x.x...x.x.x...x.|
+PR: |................|
+
+
+=== P08: Modern Pop (2020s Trap-Influenced) ===
+Genre: Modern Pop / Trap-Pop
+BPM: 130-145
+Swing: Straight
+Difficulty: Intermediate
+Description: Trap hi-hat patterns in a pop structure. Think Billie Eilish,
+Dua Lipa, The Weeknd. 808-style sub kick, triplet and rolling hi-hats,
+sparse arrangement with pop songwriting. The "x" clusters on HH represent
+hi-hat rolls.
+
+HH: |x..xx.x.x..xxx..|
+OH: |................|
+RD: |................|
+CP: |....x.......x...|
+SD: |....x.......x...|
+GH: |................|
+KK: |x.........x.x...|
+PR: |................|
+
+
+=== P09: Indie Pop ===
+Genre: Indie Pop
+BPM: 100-120
+Swing: Straight
+Difficulty: Beginner
+Description: Lo-fi, simple, charming. Think Mac DeMarco, Vampire Weekend,
+MGMT "Kids." Not overthought, slightly sloppy in a good way. The pattern is
+simple but effective. Add slight timing humanization for authenticity.
+
+HH: |x.x.x.x.x.x.x.x.|
+OH: |................|
+RD: |................|
+CP: |................|
+SD: |....x.......x...|
+GH: |................|
+KK: |x.....x.x.......|
+PR: |................|
+
+
+=== P10: K-Pop (Standard) ===
+Genre: K-Pop
+BPM: 120-130
+Swing: Straight
+Difficulty: Intermediate
+Description: Complex, genre-blending. Think BTS, BLACKPINK, TWICE. K-pop
+borrows from EDM, hip-hop, R&B, and pop. This is a standard K-pop verse
+pattern with EDM-influenced production.
+
+HH: |x.x.x.x.x.x.x.x.|
+OH: |..............x.|
+RD: |................|
+CP: |....x.......x...|
+SD: |....x.......x...|
+GH: |..g.........g...|
+KK: |x...x..xx...x...|
+PR: |..x...x...x...x.|
+
+
+=== P11: K-Pop (Drop Section) ===
+Genre: K-Pop / EDM Drop
+BPM: 128-135
+Swing: Straight
+Difficulty: Intermediate
+Description: K-pop chorus/drop section with heavy EDM influence. Think
+BLACKPINK "DDU-DU DDU-DU," BTS "Dynamite" chorus. Four-on-floor meets
+trap snare with high energy. This is the "hard-hitting" section.
+
+HH: |x.xxx.xxx.xxx.xx.|
+OH: |................|
+RD: |................|
+CP: |....X.......X...|
+SD: |....x.......x...|
+GH: |................|
+KK: |x...x...x...x...|
+PR: |x.x...x.x.x...x.|
+
+
+=== P12: K-Pop (Hip-Hop Verse) ===
+Genre: K-Pop / Hip-Hop
+BPM: 85-95
+Swing: 55%
+Difficulty: Intermediate
+Description: K-pop rap verse section. Think BTS RM verses, Stray Kids, (G)I-DLE
+rap sections. Trap-influenced with 808 sub bass, laid-back groove. The hi-hats
+have that trap character with occasional rolls.
+
+HH: |x..xx.x.x.xxx.x.|
+OH: |................|
+RD: |................|
+CP: |....x.......x...|
+SD: |....x.......x...|
+GH: |................|
+KK: |x.......x.x.....|
+PR: |................|
+
+
+=== P13: City Pop (Japanese) ===
+Genre: City Pop
+BPM: 105-120
+Swing: 55%
+Difficulty: Intermediate
+Description: Disco-funk hybrid from late 70s/80s Tokyo. Think Tatsuro Yamashita,
+Mariya Takeuchi "Plastic Love," Toshiki Kadomatsu. Sophisticated grooves
+blending American funk/disco with Japanese pop sensibility. Light swing,
+four-on-floor undertone with funky kick variations.
+
+HH: |x.x.x.x.x.x.x.x.|
+OH: |..x...x...x...x.|
+RD: |................|
+CP: |....x.......x...|
+SD: |....x.......x...|
+GH: |..g.....g.g.....|
+KK: |x...x..xx..xx...|
+PR: |................|
+
+
+=== P14: Teen Pop / Bubblegum ===
+Genre: Teen Pop / Bubblegum
+BPM: 120-130
+Swing: Straight
+Difficulty: Beginner
+Description: Simple four-on-floor, high energy. Think early Britney Spears,
+*NSYNC, S Club 7. Uncomplicated, bouncy, designed for maximum catchiness.
+The four-on-floor kick keeps it danceable and radio-friendly.
+
+HH: |x.x.x.x.x.x.x.x.|
+OH: |................|
+RD: |................|
+CP: |....x.......x...|
+SD: |................|
+GH: |................|
+KK: |x...x...x...x...|
+PR: |................|
+
+
+=== P15: Soft Rock ===
+Genre: Soft Rock
+BPM: 85-100
+Swing: 54%
+Difficulty: Beginner
+Description: Gentle, brushes-like, understated. Think Eagles "Hotel California"
+verse, Fleetwood Mac "Landslide." Imagine brushes on a snare rather than
+sticks. The ghost notes simulate the brush wash. Ride cymbal instead of
+hi-hat for warmth.
+
+HH: |................|
+OH: |................|
+RD: |x.x.x.x.x.x.x.x.|
+CP: |................|
+SD: |....x.......x...|
+GH: |..g.g.g.g.g.g.g.|
+KK: |x.......x.......|
+PR: |................|
+
+
+=== P16: Power Ballad (Half-Time Section) ===
+Genre: Power Ballad
+BPM: 70-80
+Swing: Straight
+Difficulty: Beginner
+Description: The quiet, half-time verse before the big chorus comes in. Think
+Guns N' Roses "November Rain," Bon Jovi "Always." Sparse and building. When
+the chorus hits, switch to a driving pattern with crashes.
+
+HH: |x...x...x...x...|
+OH: |................|
+RD: |................|
+CP: |................|
+SD: |........x.......|
+GH: |................|
+KK: |x...............|
+PR: |................|
+
+
+=== P17: Power Ballad (Full Chorus) ===
+Genre: Power Ballad
+BPM: 70-80
+Swing: Straight
+Difficulty: Intermediate
+Description: The explosive chorus section. Think Journey "Don't Stop Believin,"
+Aerosmith "I Don't Want to Miss a Thing." Driving, full, emotional. Maximum
+energy with crashes (represented by open hat) and full backbeat.
+
+HH: |x.x.x.x.x.x.x.x.|
+OH: |x...............|
+RD: |................|
+CP: |....x.......x...|
+SD: |....X.......X...|
+GH: |................|
+KK: |x.x...x.x.x...x.|
+PR: |................|
+
+
+=== P18: Electropop ===
+Genre: Electropop
+BPM: 120-130
+Swing: Straight
+Difficulty: Beginner
+Description: Four-on-floor with synth percussion. Think Lady Gaga "Bad Romance,"
+Robyn "Dancing On My Own," CHVRCHES. Clean electronic drums, punchy kick,
+snappy clap, and electronic percussion layers.
+
+HH: |x.x.x.x.x.x.x.x.|
+OH: |................|
+RD: |................|
+CP: |....x.......x...|
+SD: |................|
+GH: |................|
+KK: |x...x...x...x...|
+PR: |x..x..x..x..x.x.|
+
+
+=== P19: Dream Pop ===
+Genre: Dream Pop / Shoegaze
+BPM: 95-115
+Swing: Straight
+Difficulty: Beginner
+Description: Washy, reverb-heavy open hats. Think Cocteau Twins, Beach House,
+Slowdive. The open hi-hat washes carry the pattern. Everything should be
+drenched in reverb. The kick and snare are felt more than heard beneath layers
+of dreamy ambiance.
+
+HH: |................|
+OH: |x.x.x.x.x.x.x.x.|
+RD: |................|
+CP: |................|
+SD: |....x.......x...|
+GH: |..g.......g.....|
+KK: |x.......x.......|
+PR: |................|
+
+
+=== P20: Disco-Pop ===
+Genre: Disco-Pop
+BPM: 115-125
+Swing: Straight
+Difficulty: Beginner
+Description: Four-on-floor with open hat offbeats. Think Donna Summer, ABBA
+"Dancing Queen," Dua Lipa "Don't Start Now" (modern disco-pop). The open
+hi-hat on every offbeat 8th is the disco signature. Classic and timeless.
+
+HH: |x...x...x...x...|
+OH: |..x...x...x...x.|
+RD: |................|
+CP: |....x.......x...|
+SD: |....x.......x...|
+GH: |................|
+KK: |x...x...x...x...|
+PR: |................|
+
+
+=== P21: Pop with Latin Influence ===
+Genre: Latin Pop
+BPM: 95-110
+Swing: Straight
+Difficulty: Intermediate
+Description: Latin rhythmic elements in pop context. Think Shakira, Ricky Martin,
+Luis Fonsi "Despacito." The kick has a tresillo (3+3+2) influence and the
+percussion adds clave-like patterns. Merging Latin and pop worlds.
+
+HH: |x.x.x.x.x.x.x.x.|
+OH: |................|
+RD: |................|
+CP: |....x.......x...|
+SD: |....x.......x...|
+GH: |................|
+KK: |x..x..x.x.......|
+PR: |x..x..x...x.x...|
+
+
+=== P22: Pop-EDM Crossover ===
+Genre: Pop-EDM / Festival Pop
+BPM: 126-132
+Swing: Straight
+Difficulty: Intermediate
+Description: Chainsmokers, Calvin Harris, Zedd, Marshmello era. Pop songwriting
+over EDM production. Big build-ups, four-on-floor drops, sidechain pumping.
+This is the "drop" pattern. Strip back for verse sections.
+
+HH: |x.xxx.x.x.xxx.x.|
+OH: |................|
+RD: |................|
+CP: |....X.......X...|
+SD: |....x.......x...|
+GH: |................|
+KK: |x...x...x...x...|
+PR: |x.x...x.x.x...x.|
+
+
+================================================================================
+================================================================================
+==                                                                            ==
+==                              F U N K                                       ==
+==                           (21 Patterns)                                    ==
+==                                                                            ==
+================================================================================
+================================================================================
+
+
+=== F01: Classic Funk — "Funky Drummer" (Clyde Stubblefield) ===
+Genre: Funk
+BPM: 100-114
+Swing: 56%
+Difficulty: Advanced
+Description: THE funk drum break. Clyde Stubblefield's break from James Brown's
+"Funky Drummer" (1970). The most sampled drum break in hip-hop history.
+The ghost notes are ESSENTIAL — they are what make this pattern funky.
+Without them it is just a basic beat. Every "g" must be felt, not heard.
+
+HH: |x.x.x.x.x.x.x.x.|
+OH: |................|
+RD: |................|
+CP: |................|
+SD: |....x..x....x...|
+GH: |..g.g....g.g..g.|
+KK: |x..x..x...x.x...|
+PR: |................|
+
+
+=== F02: Tower of Power Groove ===
+Genre: Funk (Tower of Power)
+BPM: 100-110
+Swing: Straight (tight 16ths)
+Difficulty: Advanced
+Description: David Garibaldi's tight, linear 16th-note funk. Think "What Is
+Hip?," "Soul Vaccination." Every 16th note is accounted for across the kit.
+The hi-hat, snare ghosts, and kick interlock like clockwork. This is
+precision funk at its finest.
+
+HH: |x.x.x.x.x.x.x.x.|
+OH: |................|
+RD: |................|
+CP: |................|
+SD: |....x.......x...|
+GH: |g.g...g.g.g...g.|
+KK: |x.....x.x...x...|
+PR: |................|
+
+
+=== F03: Parliament-Funkadelic ===
+Genre: P-Funk
+BPM: 95-110
+Swing: 58%
+Difficulty: Intermediate
+Description: Heavy, spacious, groove-centered. Think "Give Up the Funk (Tear
+the Roof Off)," "Flash Light," "Atomic Dog." The kick is heavy, the groove
+is wide, and there is space to breathe. Jerome Brailey and Tiki Fullwood
+defined this feel.
+
+HH: |x.x.x.x.x.x.x.x.|
+OH: |..x.........x...|
+RD: |................|
+CP: |....x.......x...|
+SD: |....x.......x...|
+GH: |..g.......g.....|
+KK: |x.....x...x.....|
+PR: |................|
+
+
+=== F04: Sly Stone — "Thank You (Falettinme Be Mice Elf Agin)" ===
+Genre: Funk (Sly & the Family Stone)
+BPM: 108-115
+Swing: 55%
+Difficulty: Intermediate
+Description: Greg Errico's groove from this 1970 classic. A foundational funk
+pattern that influenced everything from disco to hip-hop. The kick has a
+signature dotted pattern, and the hi-hat drives in 16ths. Pairs with the
+iconic slap bass line.
+
+HH: |x.x.x.x.x.x.x.x.|
+OH: |................|
+RD: |................|
+CP: |................|
+SD: |....x.......x...|
+GH: |..g.....g.g.....|
+KK: |x..x....x..x.x..|
+PR: |................|
+
+
+=== F05: Meters Groove (Zigaboo Modeliste) ===
+Genre: New Orleans Funk
+BPM: 95-110
+Swing: 58%
+Difficulty: Advanced
+Description: Joseph "Zigaboo" Modeliste of The Meters. Think "Cissy Strut,"
+"Look-Ka Py Py." Deeply syncopated New Orleans funk with a second-line
+influence. The kick and snare interplay is conversational. This groove
+BREATHES — feel the space between the notes.
+
+HH: |x.x.x.x.x.x.x.x.|
+OH: |..........x.....|
+RD: |................|
+CP: |................|
+SD: |....x....x..x...|
+GH: |..g...g.g......g.|
+KK: |x.......x.x.....|
+PR: |................|
+
+
+=== F06: Prince-Style Funk ===
+Genre: Minneapolis Funk
+BPM: 110-125
+Swing: Straight
+Difficulty: Intermediate
+Description: Tight, precise, 16th-note driven. Think "Kiss," "When Doves Cry,"
+"1999." Prince's drum machine and live drumming style was metronomic and
+percussive. LinnDrum sounds with the tightest possible feel. Slightly
+mechanical is correct for this style.
+
+HH: |x.x.x.x.x.x.x.x.|
+OH: |................|
+RD: |................|
+CP: |....x.......x...|
+SD: |....x.......x...|
+GH: |..g.......g.....|
+KK: |x...x..xx..xx...|
+PR: |x.......x.......|
+
+
+=== F07: Funk Shuffle — Bernard Purdie "Purdie Shuffle" ===
+Genre: Funk / Shuffle
+BPM: 95-110
+Swing: 65% (heavy shuffle/triplet)
+Difficulty: Advanced
+Description: Bernard "Pretty" Purdie's legendary shuffle. Used on Steely Dan
+"Home at Last," "Babylon Sisters." A triplet-based shuffle feel with ghost
+notes between the main beats. Set your swing to maximum and feel the triplets.
+The ghost notes on the snare create a rolling, wave-like feel.
+
+HH: |x.x.x.x.x.x.x.x.|
+OH: |................|
+RD: |................|
+CP: |................|
+SD: |....x.......x...|
+GH: |.gg..gg..gg..gg.|
+KK: |x.......x.......|
+PR: |................|
+
+
+=== F08: Disco-Funk (Nile Rodgers Era) ===
+Genre: Disco-Funk
+BPM: 110-125
+Swing: Straight
+Difficulty: Intermediate
+Description: Four-on-floor but funky. Think Chic "Good Times," "Le Freak,"
+Sister Sledge "We Are Family." Tony Thompson's drumming was the bridge
+between funk and disco. Open hi-hat on offbeats is essential. The kick
+locks to four-on-floor but the ghost notes keep it funky.
+
+HH: |x...x...x...x...|
+OH: |..x...x...x...x.|
+RD: |................|
+CP: |................|
+SD: |....x.......x...|
+GH: |..g...g...g...g.|
+KK: |x...x...x...x...|
+PR: |................|
+
+
+=== F09: Go-Go (Chuck Brown Style) ===
+Genre: Go-Go / DC Funk
+BPM: 115-130
+Swing: Straight
+Difficulty: Advanced
+Description: Chuck Brown and the Soul Searchers. DC-specific, conga-heavy,
+polyrhythmic. Think "Bustin' Loose." The percussion line represents
+the crucial conga/timbale pattern that defines go-go. Multiple drummers
+and percussionists create a dense rhythmic web.
+
+HH: |x.x.x.x.x.x.x.x.|
+OH: |..............x.|
+RD: |................|
+CP: |....x.......x...|
+SD: |....x.......x...|
+GH: |..g.g...g.g.g...|
+KK: |x.....x.x.....x.|
+PR: |x.xx.xx.x.xx.xx.|
+
+
+=== F10: Funk-Rock (Chad Smith / RHCP Style) ===
+Genre: Funk-Rock
+BPM: 95-120
+Swing: Straight
+Difficulty: Intermediate
+Description: Red Hot Chili Peppers, Rage Against the Machine, Living Colour.
+Think "Give It Away," "Higher Ground." Rock energy with funk syncopation.
+The kick is more aggressive than pure funk, the hats drive harder, but
+the ghost notes and syncopation keep it funky.
+
+HH: |x.x.x.x.x.x.x.x.|
+OH: |..............x.|
+RD: |................|
+CP: |................|
+SD: |....X.......X...|
+GH: |..g...g.g.g...g.|
+KK: |x..x..x.x...x.x.|
+PR: |................|
+
+
+=== F11: Modern Funk (Vulfpeck / Daft Punk "Get Lucky") ===
+Genre: Modern Funk / Nu-Funk
+BPM: 110-118
+Swing: 55%
+Difficulty: Intermediate
+Description: Vulfpeck, Daft Punk "Random Access Memories," Chromeo. A revival
+of classic funk with modern production. Clean, tight, groove-focused. Think
+Nile Rodgers playing over a modern pocket. The ghost notes are restrained
+but critical.
+
+HH: |x.x.x.x.x.x.x.x.|
+OH: |..x.........x...|
+RD: |................|
+CP: |....x.......x...|
+SD: |....x.......x...|
+GH: |..g.......g.....|
+KK: |x.....x.x...x...|
+PR: |................|
+
+
+=== F12: Minneapolis Sound ===
+Genre: Minneapolis Sound / Synth-Funk
+BPM: 115-128
+Swing: Straight
+Difficulty: Intermediate
+Description: Prince, The Time, Jimmy Jam & Terry Lewis, Jesse Johnson. Think
+"Jungle Love," "The Bird," Janet Jackson "Nasty." LinnDrum programming with
+tight, precise, syncopated kicks. Handclap on 2 and 4 is mandatory.
+
+HH: |x.x.x.x.x.x.x.x.|
+OH: |................|
+RD: |................|
+CP: |....X.......X...|
+SD: |................|
+GH: |..g.......g.....|
+KK: |x..x..x.x.x..x.|
+PR: |x.......x.......|
+
+
+=== F13: Slap-Bass Funk Groove ===
+Genre: Funk
+BPM: 100-115
+Swing: 55%
+Difficulty: Intermediate
+Description: The drum pattern that sits under slap bass. Think Larry Graham,
+Marcus Miller, Victor Wooten contexts. The kick locks with the bass thumb
+slaps while the snare pops with the bass pops. Tight, interlocking, in the
+pocket. Do NOT overplay; leave room for the bass.
+
+HH: |x.x.x.x.x.x.x.x.|
+OH: |................|
+RD: |................|
+CP: |................|
+SD: |....x.......x...|
+GH: |g.g...g.g.g...g.|
+KK: |x..x....x..x....|
+PR: |................|
+
+
+=== F14: Funk with Open Hi-Hat Accents ===
+Genre: Funk
+BPM: 100-115
+Swing: 55%
+Difficulty: Intermediate
+Description: Open hi-hat splashes create rhythmic accents. The open-close
+technique on the hi-hat is fundamental to funk drumming. Think Dennis
+Chambers, Steve Jordan. The open hats breathe life into the pattern.
+
+HH: |x.x.x.x.x.x.x.x.|
+OH: |..x.......x.....|
+RD: |................|
+CP: |................|
+SD: |....x.......x...|
+GH: |..g...g...g...g.|
+KK: |x..x....x..xx...|
+PR: |................|
+
+
+=== F15: Funk Half-Time (Stevie Wonder Style) ===
+Genre: Funk / Soul
+BPM: 90-105
+Swing: 56%
+Difficulty: Intermediate
+Description: Half-time groove with funk feel. Think Stevie Wonder "Superstition,"
+"Higher Ground." The snare hits on beat 3 only (half-time) while the hi-hat
+and kick maintain a funky 16th-note undercurrent. The ghost notes fill the
+space where the "missing" snare would be.
+
+HH: |x.x.x.x.x.x.x.x.|
+OH: |................|
+RD: |................|
+CP: |................|
+SD: |........x.......|
+GH: |..g.g.....g.g.g.|
+KK: |x..x....x..x.x..|
+PR: |................|
+
+
+=== F16: Synth-Funk (Zapp / Roger Troutman) ===
+Genre: Synth-Funk / Electro-Funk
+BPM: 108-120
+Swing: 55%
+Difficulty: Intermediate
+Description: Zapp, Roger Troutman, Cameo. Think "More Bounce to the Ounce,"
+"I Want to Be Your Man." TR-808 drum machine with heavy synth bass. The
+kick pattern has that bouncy 808 character. Tight and mechanical with
+deep groove.
+
+HH: |x.x.x.x.x.x.x.x.|
+OH: |................|
+RD: |................|
+CP: |....x.......x...|
+SD: |................|
+GH: |..g.......g.....|
+KK: |x..x..x.x..x.x..|
+PR: |x.......x.......|
+
+
+=== F17: Funk Breakbeat (Sample Source) ===
+Genre: Funk Breakbeat
+BPM: 100-115
+Swing: 56%
+Difficulty: Advanced
+Description: A classic funk break designed for sampling. Think "Funky
+Drummer," "Amen Brother," "Apache" — the breaks that built hip-hop.
+This is a composite pattern inspired by the most sampled funk breaks.
+Rich in ghost notes and syncopation.
+
+HH: |x.x.x.x.x.x.x.x.|
+OH: |..........x.....|
+RD: |................|
+CP: |................|
+SD: |....x..x..x.x...|
+GH: |..g.g....g....g.|
+KK: |x..x....x....x..|
+PR: |................|
+
+
+=== F18: Neo-Funk (Bruno Mars / Anderson .Paak) ===
+Genre: Neo-Funk / Modern Soul
+BPM: 105-118
+Swing: 56%
+Difficulty: Intermediate
+Description: Bruno Mars "Uptown Funk," "24K Magic," Anderson .Paak "Come
+Down." Modern funk that honors the classics while sounding fresh. Punchy,
+tight, groovy. The kick pattern has that classic bounce, the ghost notes
+keep it swinging.
+
+HH: |x.x.x.x.x.x.x.x.|
+OH: |..x.......x.....|
+RD: |................|
+CP: |....x.......x...|
+SD: |....x.......x...|
+GH: |..g...g.g.g...g.|
+KK: |x..x..x.x..xx...|
+PR: |................|
+
+
+=== F19: Afro-Funk (Fela Kuti Crossover) ===
+Genre: Afro-Funk / Afrobeat
+BPM: 105-120
+Swing: Straight
+Difficulty: Advanced
+Description: Fela Kuti, Tony Allen. The great Tony Allen once said "I am the
+chief priest of Afrobeat drumming." This is the core Afrobeat pattern.
+The hi-hat plays a 12/8 cross-rhythm over 4/4. The kick and snare create a
+hypnotic, cycling pattern. Tony Allen's genius was making complexity feel
+simple.
+
+HH: |x.x.x.x.x.x.x.x.|
+OH: |..x...x...x...x.|
+RD: |................|
+CP: |................|
+SD: |....x..x....x...|
+GH: |..g.......g.....|
+KK: |x.....x...x.x...|
+PR: |x..x..x..x..x..x|
+
+
+=== F20: Bayou Funk (New Orleans Second Line + Funk) ===
+Genre: Bayou Funk / New Orleans
+BPM: 100-115
+Swing: 60%
+Difficulty: Advanced
+Description: New Orleans second-line parade rhythm merged with funk. Think
+The Meters, Dr. John, Galactic. The snare pattern has the second-line
+"press roll" character. Heavy swing is essential. The PR line represents
+the tambourine pattern that is central to second-line grooves.
+
+HH: |x.x.x.x.x.x.x.x.|
+OH: |................|
+RD: |................|
+CP: |................|
+SD: |....x.....x.x...|
+GH: |..g.g.g.g...g.g.|
+KK: |x.......x.x.....|
+PR: |x.x.x.x.x.x.x.x.|
+
+
+=== F21: Funk-Fusion (Herbie Hancock "Chameleon" Style) ===
+Genre: Funk-Fusion / Jazz-Funk
+BPM: 98-112
+Swing: 55%
+Difficulty: Advanced
+Description: Herbie Hancock's Headhunters, Weather Report, Snarky Puppy.
+Think "Chameleon," "Watermelon Man" (Headhunters version). Jazz-trained
+musicians playing funk. The ghost notes are incredibly dynamic, creating
+a constant 16th-note undercurrent. Harvey Mason, Mike Clark territory.
+
+HH: |x.x.x.x.x.x.x.x.|
+OH: |..............x.|
+RD: |................|
+CP: |................|
+SD: |....x.......x...|
+GH: |g.g.g.g.g.g.g.g.|
+KK: |x.....x.x..x....|
+PR: |................|
+
+
+================================================================================
+================================================================================
+==                                                                            ==
+==                          H I P - H O P                                     ==
+==                           (26 Patterns)                                    ==
+==                                                                            ==
+================================================================================
+================================================================================
+
+
+=== H01: Boom Bap Classic (90s NYC) ===
+Genre: Boom Bap / East Coast Hip-Hop
+BPM: 85-98
+Swing: 55%
+Difficulty: Beginner
+Description: The foundation of 90s New York hip-hop. Think DJ Premier (Gang
+Starr), Pete Rock, Buckwild. Hard snare on beat 3, punchy kick, sampled
+drum breaks. The "boom" is the kick, the "bap" is the snare. Simple,
+hard-hitting, and timeless.
+
+HH: |x.x.x.x.x.x.x.x.|
+OH: |................|
+RD: |................|
+CP: |................|
+SD: |........x.......|
+GH: |................|
+KK: |x..x......x.....|
+PR: |................|
+
+
+=== H02: Boom Bap with Ghost Notes ===
+Genre: Boom Bap
+BPM: 88-95
+Swing: 56%
+Difficulty: Intermediate
+Description: More nuanced boom bap with ghost snare hits for texture. Think
+A Tribe Called Quest, De La Soul, Pharcyde productions. The ghost notes add
+a human, live-drum feel to the sampled breaks. More sophisticated than basic
+boom bap.
+
+HH: |x.x.x.x.x.x.x.x.|
+OH: |................|
+RD: |................|
+CP: |................|
+SD: |........x.......|
+GH: |..g.g.....g.g...|
+KK: |x..x......x.x...|
+PR: |................|
+
+
+=== H03: Boom Bap with Swing (Native Tongues) ===
+Genre: Boom Bap / Jazz Rap
+BPM: 90-100
+Swing: 60%
+Difficulty: Intermediate
+Description: Native Tongues collective: A Tribe Called Quest, De La Soul,
+Jungle Brothers. Think "Can I Kick It?," "Scenario." Heavy swing gives a
+jazz influence. The swing percentage is crucial here; too straight and you
+lose the entire feel.
+
+HH: |x.x.x.x.x.x.x.x.|
+OH: |..............x.|
+RD: |................|
+CP: |................|
+SD: |........x.......|
+GH: |....g.......g...|
+KK: |x.....x.x..x....|
+PR: |................|
+
+
+=== H04: East Coast Layered (RZA / Wu-Tang) ===
+Genre: East Coast / Wu-Tang
+BPM: 80-92
+Swing: 55%
+Difficulty: Intermediate
+Description: RZA's raw, detuned, grimy production. Think "C.R.E.A.M.,"
+"Protect Ya Neck," "Triumph." Deliberately lo-fi, dusty, sometimes
+out-of-tune samples. The kick is heavy and boomy, the snare cracks hard.
+The open hat adds a raw, unpolished edge.
+
+HH: |x.x.x.x.x.x.x.x.|
+OH: |......x.......x.|
+RD: |................|
+CP: |........x.......|
+SD: |........x.......|
+GH: |................|
+KK: |x..x..x...x.....|
+PR: |................|
+
+
+=== H05: West Coast G-Funk (Dr. Dre) ===
+Genre: G-Funk / West Coast
+BPM: 92-100
+Swing: 58%
+Difficulty: Intermediate
+Description: Dr. Dre's "The Chronic," Snoop Dogg "Doggystyle," Warren G
+"Regulate." Laid-back, smooth, P-Funk influenced. The groove is relaxed and
+bouncy with heavy swing. Whistle synths and Moog bass ride on top, but the
+drum groove is the foundation.
+
+HH: |x.x.x.x.x.x.x.x.|
+OH: |................|
+RD: |................|
+CP: |....x.......x...|
+SD: |....x.......x...|
+GH: |..g.......g.....|
+KK: |x..x..x.x...x...|
+PR: |................|
+
+
+=== H06: Dirty South / Crunk (Lil Jon) ===
+Genre: Crunk / Dirty South
+BPM: 70-80
+Swing: Straight
+Difficulty: Beginner
+Description: Lil Jon, Ying Yang Twins, Three 6 Mafia. "Get Low," "Yeah!" Heavy
+808 kick, aggressive clap/snare, rolling hi-hats. The energy is chaotic and
+high. Made for clubs and parties. Maximum low-end, maximum hype.
+
+HH: |x.x.x.x.x.x.x.x.|
+OH: |..............x.|
+RD: |................|
+CP: |....x.......x...|
+SD: |....x.......x...|
+GH: |................|
+KK: |x..x..x.x..x..x.|
+PR: |................|
+
+
+=== H07: Trap (Basic) ===
+Genre: Trap
+BPM: 130-145 (half-time feel = 65-72 BPM groove)
+Swing: Straight
+Difficulty: Beginner
+Description: The fundamental trap pattern. 808 kick boom, triplet hi-hats,
+snare/clap on beat 3 (half-time). Think Lex Luger, Young Jeezy, early
+Gucci Mane. The 808 kick is tuned low and sustained. The hi-hat rolls are
+the defining characteristic.
+
+HH: |x..xx.x.x..xx.x.|
+OH: |................|
+RD: |................|
+CP: |........x.......|
+SD: |........x.......|
+GH: |................|
+KK: |x.........x.....|
+PR: |................|
+
+
+=== H08: Trap (Advanced Hi-Hats) ===
+Genre: Trap
+BPM: 135-150
+Swing: Straight
+Difficulty: Advanced
+Description: Complex hi-hat patterns with rolls, stutters, and velocity changes.
+Think Metro Boomin, Southside, TM88. The hi-hat is the star. In production,
+these patterns use varying velocities (X = open/accent, x = closed) and
+rapid 32nd/64th note rolls programmed between 16th steps.
+
+HH: |xxXxx.x.xxXxxx.x.|
+OH: |..x.........x...|
+RD: |................|
+CP: |........X.......|
+SD: |........x.......|
+GH: |................|
+KK: |x.......x.x.....|
+PR: |................|
+
+
+=== H09: Trap (Metro Boomin Style) ===
+Genre: Trap / Atlanta
+BPM: 140-155
+Swing: Straight
+Difficulty: Intermediate
+Description: Metro Boomin's signature spacious trap. Think "Bad and Boujee,"
+"Mask Off," "Jumpman." Spacious, heavy 808 with room to breathe. Less busy
+than some trap; the space between hits is what creates the vibe. The 808
+kick glides between pitches.
+
+HH: |x..x..x.x..x..x.|
+OH: |......x.......x.|
+RD: |................|
+CP: |........x.......|
+SD: |........x.......|
+GH: |................|
+KK: |x...........x...|
+PR: |................|
+
+
+=== H10: Drill (Chicago) ===
+Genre: Chicago Drill
+BPM: 140-150 (half-time feel)
+Swing: Straight
+Difficulty: Intermediate
+Description: Chief Keef, Lil Durk, Young Chop productions. Dark, aggressive,
+nihilistic. Fast hi-hats over half-time snare. The kick pattern is sparse
+but hits hard. Darker sound palette than standard trap. Originated in
+Chicago's South Side around 2011-2012.
+
+HH: |x.xxx.xxx.xxx.xx.|
+OH: |................|
+RD: |................|
+CP: |........X.......|
+SD: |........x.......|
+GH: |................|
+KK: |x.....x...x.....|
+PR: |................|
+
+
+=== H11: UK Drill ===
+Genre: UK Drill
+BPM: 138-145 (half-time feel)
+Swing: Straight
+Difficulty: Intermediate
+Description: 67, Headie One, Pop Smoke (who brought it to NYC). Sliding 808
+bass, distinctive snare placement. UK drill has a bouncier feel than Chicago
+drill with more syncopated kick patterns and that characteristic "slide"
+on the 808 bass.
+
+HH: |x.xxx.x.x.xxx.x.|
+OH: |..............x.|
+RD: |................|
+CP: |........x.......|
+SD: |........x..x....|
+GH: |................|
+KK: |x..x......x.x...|
+PR: |..x...x.........|
+
+
+=== H12: Brooklyn Drill ===
+Genre: Brooklyn Drill / NY Drill
+BPM: 140-148
+Swing: Straight
+Difficulty: Intermediate
+Description: Pop Smoke, Fivio Foreign, Sheff G. NYC's adaptation of UK drill
+with New York attitude. Think "Dior," "Welcome to the Party." Slightly
+more aggressive snare patterns than UK drill, often with a New York vocal
+energy. The 808 slides are essential.
+
+HH: |x.xxx.xxx.xxx.xx.|
+OH: |................|
+RD: |................|
+CP: |........X..X....|
+SD: |........x..x....|
+GH: |................|
+KK: |x..x..x...x.....|
+PR: |................|
+
+
+=== H13: Lo-Fi Hip-Hop ===
+Genre: Lo-Fi Hip-Hop / Chillhop
+BPM: 75-90
+Swing: 60%
+Difficulty: Beginner
+Description: Nujabes, J Dilla influence, "beats to study to." Swing is
+essential, vinyl crackle implied. Simple, warm, and comforting. The ghost
+notes and heavy swing give it that dusty, vinyl feel. Pair with jazz
+piano chords and vinyl noise.
+
+HH: |x.x.x.x.x.x.x.x.|
+OH: |..............x.|
+RD: |................|
+CP: |................|
+SD: |....x.......x...|
+GH: |..g.......g.....|
+KK: |x.......x..x....|
+PR: |................|
+
+
+=== H14: J Dilla Style (Drunk Drums) ===
+Genre: Lo-Fi / Neo-Soul Hip-Hop
+BPM: 80-95
+Swing: Irregular (multiple swing values simultaneously)
+Difficulty: Advanced
+Description: J Dilla's revolutionary "drunk" drums from "Donuts" and Slum
+Village work. Each element has its OWN timing — the kick slightly late,
+the snare slightly early, the hat somewhere else entirely. This CANNOT
+be fully replicated on a grid; apply different swing/humanize amounts to
+each channel. The grid below is approximate.
+
+HH: |x.x.x.x.x.x.x.x.|
+OH: |..........x.....|
+RD: |................|
+CP: |................|
+SD: |....x.......x...|
+GH: |..g...g...g...g.|
+KK: |x..x....x.x.....|
+PR: |................|
+
+NOTE: For authentic Dilla feel, offset each channel's timing differently:
+  HH: +5ms late, KK: +15ms late, SD: -8ms early, GH: +20ms late
+
+
+=== H15: Madlib Style (Dusty Chops) ===
+Genre: Experimental Hip-Hop / Abstract
+BPM: 80-95
+Swing: 57%
+Difficulty: Intermediate
+Description: Madlib (Madvillain, Quasimoto). Dusty, chopped, sample-based.
+Think "Madvillainy," "Shades of Blue." Lo-fi drum machines and chopped vinyl
+breaks. The kick pattern is deceptively simple but the swing and sample
+texture make it unique.
+
+HH: |x.x.x.x.x.x.x.x.|
+OH: |......x.........|
+RD: |................|
+CP: |................|
+SD: |....x.....x.x...|
+GH: |..g.........g...|
+KK: |x..x..x.x.......|
+PR: |................|
+
+
+=== H16: Phonk (Memphis) ===
+Genre: Phonk / Memphis Rap
+BPM: 130-145 (half-time feel)
+Swing: Straight
+Difficulty: Intermediate
+Description: Three 6 Mafia influence, DJ Spanish Fly, modern: CORPSE,
+Freddie Dredd. Dark, cowbell-heavy, lo-fi. The cowbell (PR line) is the
+defining element. Deliberately lo-fi, dark, and horror-influenced. Distorted
+808 kick and tape-saturated hats.
+
+HH: |x.x.x.x.x.x.x.x.|
+OH: |................|
+RD: |................|
+CP: |........x.......|
+SD: |........x.......|
+GH: |................|
+KK: |x..x......x.....|
+PR: |x..x..x.x..x..x.|
+
+
+=== H17: Cloud Rap ===
+Genre: Cloud Rap
+BPM: 60-75
+Swing: 55%
+Difficulty: Beginner
+Description: Lil B, Clams Casino, Yung Lean, A$AP Rocky early work. Minimal,
+atmospheric, dreamy. Very sparse drums floating in reverb-drenched pads.
+Fewer hits per bar than almost any other hip-hop subgenre. Space is
+everything.
+
+HH: |x...x...x...x...|
+OH: |..............x.|
+RD: |................|
+CP: |........x.......|
+SD: |........x.......|
+GH: |................|
+KK: |x.............x.|
+PR: |................|
+
+
+=== H18: Conscious / Backpack Rap ===
+Genre: Conscious Hip-Hop
+BPM: 88-100
+Swing: 56%
+Difficulty: Beginner
+Description: Clean boom bap, positive energy. Think Common, Mos Def, Talib
+Kweli, early Kanye West productions. Jazz samples, clean drums, soulful
+feel. More polished than grimy East Coast but still rooted in boom bap
+fundamentals.
+
+HH: |x.x.x.x.x.x.x.x.|
+OH: |................|
+RD: |................|
+CP: |................|
+SD: |....x.......x...|
+GH: |..g.......g.....|
+KK: |x.....x.x..x....|
+PR: |................|
+
+
+=== H19: Chopped & Screwed ===
+Genre: Chopped & Screwed
+BPM: 55-70 (slowed from 80-100 originals)
+Swing: 58%
+Difficulty: Beginner
+Description: DJ Screw's Houston innovation. Take any hip-hop beat, slow it
+to 60-70% speed, chop (stutter) elements. The syrupy, slowed-down feeling
+is the entire point. Everything feels heavy and underwater. Pitch the entire
+pattern down.
+
+HH: |x...x...x...x...|
+OH: |..x.......x.....|
+RD: |................|
+CP: |....x.......x...|
+SD: |....x.......x...|
+GH: |................|
+KK: |x.......x.x.....|
+PR: |................|
+
+
+=== H20: Bounce (New Orleans Triggerman) ===
+Genre: New Orleans Bounce
+BPM: 95-115
+Swing: Straight
+Difficulty: Intermediate
+Description: Based on the "Triggerman" pattern (Showboys "Drag Rap"). Think
+Juvenile "Back That Azz Up," Big Freedia. The kick pattern has a distinctive
+call-and-response feel. The hi-hat and kick interplay creates the bounce.
+This is party music — high energy, constant movement.
+
+HH: |x.x.x.x.x.x.x.x.|
+OH: |................|
+RD: |................|
+CP: |....x.......x...|
+SD: |....x.......x...|
+GH: |................|
+KK: |x..x..x.x..x..x.|
+PR: |..x...x...x...x.|
+
+
+=== H21: Hyphy (Bay Area) ===
+Genre: Hyphy / Bay Area Rap
+BPM: 95-110
+Swing: Straight
+Difficulty: Intermediate
+Description: E-40, Mac Dre, Too $hort, Mistah F.A.B. "Tell Me When to Go,"
+"Thizzle Dance." High-energy, go-dumb, sideshow music. The kick pattern has
+Bay Area bounce, and the clap is prominent. Made for ghost-riding and getting
+stupid.
+
+HH: |x.x.x.x.x.x.x.x.|
+OH: |..............x.|
+RD: |................|
+CP: |....X.......X...|
+SD: |....x.......x...|
+GH: |................|
+KK: |x..x..x.x.x..x.|
+PR: |x.....x.x.....x.|
+
+
+=== H22: Afroswing (UK) ===
+Genre: Afroswing / UK Afrobeats Fusion
+BPM: 95-108
+Swing: 55%
+Difficulty: Intermediate
+Description: J Hus, Not3s, Yxng Bane, Kojo Funds. Afrobeats rhythms fused
+with UK grime and rap production. Think "Did You See." The percussion line
+carries the Afrobeats influence with patterns derived from West African
+rhythms.
+
+HH: |x.x.x.x.x.x.x.x.|
+OH: |..x.......x.....|
+RD: |................|
+CP: |....x.......x...|
+SD: |....x.......x...|
+GH: |..g.........g...|
+KK: |x..x..x.x...x...|
+PR: |x..x.xx..x.xx...|
+
+
+=== H23: Grime ===
+Genre: Grime
+BPM: 138-142
+Swing: Straight
+Difficulty: Intermediate
+Description: Wiley, Skepta, Dizzee Rascal, Stormzy. Think "Shut Up," "That's
+Not Me," "Boy in da Corner." 140 BPM, syncopated, aggressive. The kick
+pattern is punchy and syncopated. Square wave bass and icy synth stabs ride
+on top. Born in East London circa 2003.
+
+HH: |x.x.x.x.x.x.x.x.|
+OH: |................|
+RD: |................|
+CP: |....x.......x...|
+SD: |....x.......x...|
+GH: |................|
+KK: |x..x..x.x.x..x.|
+PR: |..x...x...x...x.|
+
+
+=== H24: UK Garage / 2-Step ===
+Genre: UK Garage / 2-Step
+BPM: 130-140
+Swing: 57%
+Difficulty: Advanced
+Description: MJ Cole, Artful Dodger, Craig David. "Re-Rewind," "Fill Me In,"
+"Born to Do It" era. Shuffled, skippy kick pattern with swing. The kick
+deliberately avoids beat 1 sometimes, creating the "2-step" feel. The
+shuffle and swing are absolutely essential.
+
+HH: |x.x.x.x.x.x.x.x.|
+OH: |..x.......x.....|
+RD: |................|
+CP: |....x.......x...|
+SD: |....x.......x...|
+GH: |..g.........g...|
+KK: |..x...x.x.....x.|
+PR: |................|
+
+
+=== H25: Jersey Club ===
+Genre: Jersey Club
+BPM: 130-140
+Swing: Straight
+Difficulty: Advanced
+Description: DJ Sliink, Brick Bandits, Nadus. Rapid-fire kick patterns that
+are the hallmark of the genre. Born in Newark, NJ. The kick is the star,
+with machine-gun-like patterns. Bed-squeak samples and chopped vocals ride
+on top. Raw, energetic, designed for dancing.
+
+HH: |x.x.x.x.x.x.x.x.|
+OH: |................|
+RD: |................|
+CP: |....x.......x...|
+SD: |....x.......x...|
+GH: |................|
+KK: |x.xx.xx.x.xx.xx.|
+PR: |................|
+
+
+=== H26: Boom Bap (Hard Knock — Premier Style) ===
+Genre: Boom Bap / DJ Premier
+BPM: 90-96
+Swing: 54%
+Difficulty: Intermediate
+Description: DJ Premier's harder, more aggressive boom bap. Think "Mass Appeal,"
+"Nas Is Like," "Full Clip." Chopped samples with razor-sharp snare hits. The
+open hat adds urgency. Every hit is intentional and hard.
+
+HH: |x.x.x.x.x.x.x.x.|
+OH: |..x.........x...|
+RD: |................|
+CP: |................|
+SD: |........X.......|
+GH: |....g.......g...|
+KK: |x..x..x...x.x...|
+PR: |................|
+
+
+================================================================================
+================================================================================
+==                                                                            ==
+==                          R E G G A E                                       ==
+==                          (16 Patterns)                                     ==
+==                                                                            ==
+================================================================================
+================================================================================
+
+
+=== R01: One Drop (Basic) ===
+Genre: Reggae / One Drop
+BPM: 70-85
+Swing: Straight
+Difficulty: Beginner
+Description: THE reggae signature rhythm. Kick on beat 3, NOTHING on beat 1.
+Think Bob Marley, Peter Tosh, Burning Spear. Carlton Barrett (Wailers) defined
+this. The absence of kick on beat 1 is what makes reggae feel like reggae.
+The cross-stick rimshot on 3 combines with the kick to create the "drop."
+
+HH: |x.x.x.x.x.x.x.x.|
+OH: |................|
+RD: |................|
+CP: |................|
+SD: |................|
+GH: |................|
+KK: |........x.......|
+PR: |........x.......|
+
+
+=== R02: One Drop (Variation with Ghost Notes) ===
+Genre: Reggae / One Drop
+BPM: 70-85
+Swing: Straight
+Difficulty: Intermediate
+Description: A more developed one drop with ghost notes adding texture around
+the main drop on beat 3. Think Carlton Barrett's more nuanced playing on
+"Exodus" or "Natural Mystic." The ghost notes fill space without disrupting
+the essential one-drop feel.
+
+HH: |x.x.x.x.x.x.x.x.|
+OH: |..x.........x...|
+RD: |................|
+CP: |................|
+SD: |................|
+GH: |..g.g.g...g.g.g.|
+KK: |........x.......|
+PR: |........x.......|
+
+
+=== R03: Rockers (Sly Dunbar Style) ===
+Genre: Reggae / Rockers
+BPM: 75-90
+Swing: Straight
+Difficulty: Intermediate
+Description: Sly Dunbar (of Sly & Robbie) pioneered the "Rockers" style. Kick
+on beat 1 AND 3, unlike one drop which only has beat 3. Think "Right Time"
+by The Mighty Diamonds. More driving than one drop, with the kick anchoring
+both beats. The rimshot cross-stick is on beat 3.
+
+HH: |x.x.x.x.x.x.x.x.|
+OH: |................|
+RD: |................|
+CP: |................|
+SD: |................|
+GH: |..g.......g.....|
+KK: |x.......x.......|
+PR: |........x.......|
+
+
+=== R04: Steppers ===
+Genre: Reggae / Steppers
+BPM: 72-85
+Swing: Straight
+Difficulty: Beginner
+Description: Kick on EVERY beat. Militant, marching, hypnotic. Think "Exodus"
+by Bob Marley, Burning Spear's uptempo tracks. The four-on-floor kick gives
+it a driving, forward-motion feel. Often used for more militant or Rastafarian
+spiritual music. Steady and relentless.
+
+HH: |x.x.x.x.x.x.x.x.|
+OH: |................|
+RD: |................|
+CP: |................|
+SD: |................|
+GH: |................|
+KK: |x...x...x...x...|
+PR: |........x.......|
+
+
+=== R05: Nyahbinghi ===
+Genre: Nyahbinghi / Rastafari Spiritual
+BPM: 60-80
+Swing: Straight
+Difficulty: Intermediate
+Description: The spiritual, hand-drum-based rhythm of Rastafari ceremonies.
+Predates and influenced reggae. Think Count Ossie, early Rastafari
+grounation music. Three drums: bass (KK), funde (GH - steady pulse), and
+repeater (PR - improvised). The bass drum is called the "thunder."
+
+HH: |................|
+OH: |................|
+RD: |................|
+CP: |................|
+SD: |................|
+GH: |x.x.x.x.x.x.x.x.|
+KK: |x.......x.......|
+PR: |x..x.xx.x..x.xx.|
+
+
+=== R06: Ska (Original) ===
+Genre: Ska
+BPM: 100-130
+Swing: Straight
+Difficulty: Intermediate
+Description: The original Jamaican ska from the early 1960s. Think The
+Skatalites, Prince Buster, Desmond Dekker. Offbeat everything — the guitar
+and piano hit on the "and" beats, and the drums support this. The hi-hat
+drives on the offbeat 8ths. Fast and joyful.
+
+HH: |..x...x...x...x.|
+OH: |................|
+RD: |x.x.x.x.x.x.x.x.|
+CP: |................|
+SD: |....x.......x...|
+GH: |................|
+KK: |x.......x.......|
+PR: |..x...x...x...x.|
+
+
+=== R07: Rocksteady ===
+Genre: Rocksteady
+BPM: 75-95
+Swing: Straight
+Difficulty: Beginner
+Description: The bridge between ska and reggae (1966-68). Think Alton Ellis,
+The Heptones, Toots & The Maytals. Slower than ska, more relaxed. The bass
+becomes more prominent. The drumming is gentler, with the hi-hat settling
+into a steadier pattern.
+
+HH: |x.x.x.x.x.x.x.x.|
+OH: |................|
+RD: |................|
+CP: |................|
+SD: |....x.......x...|
+GH: |..g.......g.....|
+KK: |x.......x.......|
+PR: |................|
+
+
+=== R08: Lovers Rock ===
+Genre: Lovers Rock
+BPM: 68-82
+Swing: 55%
+Difficulty: Beginner
+Description: Gentle, romantic reggae. Think Gregory Isaacs "Night Nurse,"
+Dennis Brown, Janet Kay. UK-originated subgenre. Soft, warm, intimate
+drumming. The kick is gentle, the snare is a soft rimshot, and the
+overall feel is tender and laid-back.
+
+HH: |x.x.x.x.x.x.x.x.|
+OH: |..x.......x.....|
+RD: |................|
+CP: |................|
+SD: |................|
+GH: |....g.......g...|
+KK: |........x.......|
+PR: |....x.......x...|
+
+
+=== R09: Dub ===
+Genre: Dub
+BPM: 65-80
+Swing: Straight
+Difficulty: Intermediate
+Description: King Tubby, Lee "Scratch" Perry, Scientist. Dub is reggae sent
+through a mixing board as an instrument. HEAVY reverb and delay on everything.
+The kick is deep and dubby, the snare is drenched in spring reverb with
+long delay tails. Sparse — let the effects fill the space.
+
+HH: |x.x...x.x.x...x.|
+OH: |......x.......x.|
+RD: |................|
+CP: |................|
+SD: |........x.......|
+GH: |................|
+KK: |x...........x...|
+PR: |........x.......|
+
+NOTE: Apply HEAVY spring reverb (2-3 seconds) and dub delay (dotted 8th)
+to snare and percussion. The effects ARE the music.
+
+
+=== R10: Dancehall (90s Digital) ===
+Genre: Dancehall (90s)
+BPM: 90-105
+Swing: Straight
+Difficulty: Intermediate
+Description: Shabba Ranks, Buju Banton, Bounty Killer, Beenie Man. Think
+"Sleng Teng" riddim (the first digital reggae), "Bam Bam," "Diwali" riddim.
+Digital production on Casio keyboards and Roland drum machines. Harder and
+faster than roots reggae.
+
+HH: |x.x.x.x.x.x.x.x.|
+OH: |..............x.|
+RD: |................|
+CP: |....x.......x...|
+SD: |....x.......x...|
+GH: |................|
+KK: |x..x....x..x....|
+PR: |..x...x...x...x.|
+
+
+=== R11: Dancehall (Modern) ===
+Genre: Modern Dancehall
+BPM: 100-115
+Swing: Straight
+Difficulty: Intermediate
+Description: Popcaan, Vybz Kartel, Shenseea, Skeng. Modern dancehall with
+trap influence. Faster, more complex than 90s dancehall. 808-style bass
+with dancehall rhythmic patterns. The percussion is more layered and the
+kick patterns show hip-hop influence.
+
+HH: |x.xxx.x.x.xxx.x.|
+OH: |................|
+RD: |................|
+CP: |....x.......x...|
+SD: |....x.......x...|
+GH: |................|
+KK: |x..x..x.x..x.x..|
+PR: |..x.x.x...x.x.x.|
+
+
+=== R12: Ragga ===
+Genre: Ragga / Raggamuffin
+BPM: 95-110
+Swing: Straight
+Difficulty: Intermediate
+Description: Digital, aggressive dancehall. Think Cutty Ranks, Supercat, early
+Sean Paul. Fully digital production with harder-hitting drums. The kick is
+punchy and the snare snaps. More aggressive than traditional dancehall with
+a rawer edge.
+
+HH: |x.x.x.x.x.x.x.x.|
+OH: |..x.........x...|
+RD: |................|
+CP: |....X.......X...|
+SD: |....x.......x...|
+GH: |................|
+KK: |x..x..x.x.x..x.|
+PR: |x...x.x.x...x.x.|
+
+
+=== R13: Jungle / DnB Reggae Crossover — 32 STEPS ===
+Genre: Jungle Reggae / Ragga Jungle
+BPM: 160-170
+Swing: Straight
+Difficulty: Advanced
+Description: Ragga jungle: reggae vocals and basslines over jungle breakbeats.
+Think Congo Natty (Rebel MC), Shy FX "Original Nuttah," General Levy
+"Incredible." Amen break sped up with reggae vocal chops and sub bass.
+The cross-rhythm between DnB speed and reggae feel is the magic.
+
+     |beat 1          |beat 2          |beat 3          |beat 4          |
+HH:  |x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.|
+OH:  |......x...............x.........|
+RD:  |................................|
+CP:  |........x...............x......|
+SD:  |........x...............x......|
+GH:  |..g.g.....g.g.g...g.g.....g.g.g.|
+KK:  |x...........x.x.x.........x.x.|
+PR:  |................................|
+
+
+=== R14: Reggae-Hip Hop Fusion ===
+Genre: Reggae / Hip-Hop Fusion
+BPM: 80-95
+Swing: 56%
+Difficulty: Intermediate
+Description: Damian Marley, Nas & Damian "Distant Relatives," Major Lazer
+pre-EDM era. Reggae rhythmic patterns with hip-hop production and boom bap
+sensibility. The one-drop feel meets boom bap snare placement. Best of
+both worlds.
+
+HH: |x.x.x.x.x.x.x.x.|
+OH: |..............x.|
+RD: |................|
+CP: |................|
+SD: |....x.......x...|
+GH: |..g.......g.....|
+KK: |x.....x.x..x....|
+PR: |........x.......|
+
+
+=== R15: Mento (Jamaican Folk) ===
+Genre: Mento
+BPM: 100-130
+Swing: 60%
+Difficulty: Intermediate
+Description: Pre-ska Jamaican folk music, the root of it all. Think The Jolly
+Boys, Count Lasher, Lord Flea. Caribbean shuffle with calypso and African
+influences. Played with hand drums, rumba box, banjo, and bamboo sax. The
+shuffle swing is essential — this is Caribbean music at its most joyful.
+
+HH: |................|
+OH: |................|
+RD: |................|
+CP: |................|
+SD: |................|
+GH: |x.x.x.x.x.x.x.x.|
+KK: |x.....x.x.....x.|
+PR: |x.xx.xx.x.xx.xx.|
+
+
+=== R16: Dub Step Reggae (Modern Fusion) ===
+Genre: Reggae-Dub / Modern
+BPM: 70-80
+Swing: Straight
+Difficulty: Intermediate
+Description: Modern production meets classic dub. Think The Bug, Mala, early
+Digital Mystikz. UK sound system culture bridging Jamaican dub with British
+bass music. The half-time, heavy sub-bass approach of dubstep married to
+reggae's rhythmic DNA. Apply heavy sub-bass and delay.
+
+HH: |x...x...x...x...|
+OH: |..x.......x.....|
+RD: |................|
+CP: |................|
+SD: |........x.......|
+GH: |....g.......g...|
+KK: |x...........x...|
+PR: |........x.......|
+
+
+================================================================================
+================================================================================
+==                                                                            ==
+==                    P A T T E R N   I N D E X                               ==
+==                                                                            ==
+================================================================================
+================================================================================
+
+TOTAL PATTERNS: 135
+
+ELECTRONIC (30):
+  E01  Classic House
+  E02  Deep House
+  E03  Tech House
+  E04  Acid House
+  E05  Chicago House
+  E06  Progressive House
+  E07  Minimal House (Micro-House)
+  E08  Afro-House
+  E09  Jackin' House
+  E10  French House
+  E11  Detroit Techno
+  E12  Berlin Techno
+  E13  Minimal Techno
+  E14  Hard Techno
+  E15  Dub Techno
+  E16  Industrial Techno
+  E17  Drum and Bass (Two-Step) — 32 steps
+  E18  Liquid DnB — 32 steps
+  E19  Neurofunk — 32 steps
+  E20  Jungle (Amen Break) — 32 steps
+  E21  Breakbeat (Big Beat)
+  E22  Trance
+  E23  Dubstep (Half-Time)
+  E24  Future Bass
+  E25  IDM (Aphex Twin Style)
+  E26  Ambient Techno
+  E27  EBM (Electronic Body Music)
+  E28  Synthwave / Retrowave
+  E29  Vaporwave
+  E30  Footwork / Juke
+
+POP (22):
+  P01  Standard Pop (Motown)
+  P02  Pop-Rock
+  P03  Pop Ballad
+  P04  80s Pop (LinnDrum Feel)
+  P05  80s Synth-Pop
+  P06  90s Pop (R&B Influenced)
+  P07  2000s Pop-Punk (Blink-182 Era)
+  P08  Modern Pop (2020s Trap-Influenced)
+  P09  Indie Pop
+  P10  K-Pop (Standard)
+  P11  K-Pop (Drop Section)
+  P12  K-Pop (Hip-Hop Verse)
+  P13  City Pop (Japanese)
+  P14  Teen Pop / Bubblegum
+  P15  Soft Rock
+  P16  Power Ballad (Half-Time Section)
+  P17  Power Ballad (Full Chorus)
+  P18  Electropop
+  P19  Dream Pop
+  P20  Disco-Pop
+  P21  Pop with Latin Influence
+  P22  Pop-EDM Crossover
+
+FUNK (21):
+  F01  Classic Funk — "Funky Drummer"
+  F02  Tower of Power Groove
+  F03  Parliament-Funkadelic
+  F04  Sly Stone — "Thank You"
+  F05  Meters Groove (Zigaboo Modeliste)
+  F06  Prince-Style Funk
+  F07  Funk Shuffle (Purdie Shuffle)
+  F08  Disco-Funk (Nile Rodgers Era)
+  F09  Go-Go (Chuck Brown)
+  F10  Funk-Rock (RHCP / Chad Smith)
+  F11  Modern Funk (Vulfpeck / Daft Punk)
+  F12  Minneapolis Sound
+  F13  Slap-Bass Funk Groove
+  F14  Funk with Open Hi-Hat Accents
+  F15  Funk Half-Time (Stevie Wonder)
+  F16  Synth-Funk (Zapp / Roger Troutman)
+  F17  Funk Breakbeat (Sample Source)
+  F18  Neo-Funk (Bruno Mars / Anderson .Paak)
+  F19  Afro-Funk (Fela Kuti / Tony Allen)
+  F20  Bayou Funk (New Orleans Second Line)
+  F21  Funk-Fusion (Herbie Hancock "Chameleon")
+
+HIP-HOP (26):
+  H01  Boom Bap Classic (90s NYC)
+  H02  Boom Bap with Ghost Notes
+  H03  Boom Bap with Swing (Native Tongues)
+  H04  East Coast Layered (RZA / Wu-Tang)
+  H05  West Coast G-Funk (Dr. Dre)
+  H06  Dirty South / Crunk (Lil Jon)
+  H07  Trap (Basic)
+  H08  Trap (Advanced Hi-Hats)
+  H09  Trap (Metro Boomin Style)
+  H10  Drill (Chicago)
+  H11  UK Drill
+  H12  Brooklyn Drill
+  H13  Lo-Fi Hip-Hop
+  H14  J Dilla Style (Drunk Drums)
+  H15  Madlib Style (Dusty Chops)
+  H16  Phonk (Memphis)
+  H17  Cloud Rap
+  H18  Conscious / Backpack Rap
+  H19  Chopped & Screwed
+  H20  Bounce (New Orleans Triggerman)
+  H21  Hyphy (Bay Area)
+  H22  Afroswing (UK)
+  H23  Grime
+  H24  UK Garage / 2-Step
+  H25  Jersey Club
+  H26  Boom Bap (Hard Knock — Premier Style)
+
+REGGAE (16):
+  R01  One Drop (Basic)
+  R02  One Drop (Variation with Ghost Notes)
+  R03  Rockers (Sly Dunbar Style)
+  R04  Steppers
+  R05  Nyahbinghi
+  R06  Ska (Original)
+  R07  Rocksteady
+  R08  Lovers Rock
+  R09  Dub
+  R10  Dancehall (90s Digital)
+  R11  Dancehall (Modern)
+  R12  Ragga
+  R13  Jungle / DnB Reggae Crossover — 32 steps
+  R14  Reggae-Hip Hop Fusion
+  R15  Mento (Jamaican Folk)
+  R16  Dub Step Reggae (Modern Fusion)
+
+
+================================================================================
+==                        IMPLEMENTATION NOTES                                ==
+================================================================================
+
+PARSING THE FORMAT:
+  - Each pattern block starts with "=== [ID]: [Name] ==="
+  - Metadata lines: Genre, BPM, Swing, Difficulty, Description
+  - Grid lines: [TRACK]: |[16 characters]|
+  - Characters map to steps 1-16 (16th notes in one 4/4 bar)
+  - 32-step patterns have 32 characters between pipes
+
+VELOCITY MAPPING SUGGESTION:
+  x (normal hit)   -> velocity 100-110 (out of 127)
+  X (accent)       -> velocity 120-127
+  g (ghost note)   -> velocity 30-50
+  o (open hi-hat)  -> trigger open hat sample, velocity 90-100
+
+SWING IMPLEMENTATION:
+  - "Straight" = no swing, all 16th notes evenly spaced
+  - Percentage values: 50% = straight, 67% = full triplet shuffle
+  - Apply swing by delaying every even-numbered 16th note
+  - Example: 55% swing delays even 16ths by ~10% of a 16th note duration
+  - 60% swing delays even 16ths by ~20% (medium shuffle)
+  - 65% swing delays even 16ths by ~34% (heavy triplet shuffle)
+
+CHANNEL MAPPING FOR WEB AUDIO:
+  HH -> high-frequency, short decay (closed hi-hat sample)
+  OH -> high-frequency, longer decay (open hi-hat sample)
+  RD -> high-frequency, long sustain (ride cymbal sample)
+  CP -> mid-frequency, short-medium decay (clap/handclap sample)
+  SD -> mid-frequency, medium decay (snare drum sample)
+  GH -> same snare sample at low velocity (or separate ghost sample)
+  KK -> low-frequency, medium decay (kick drum / 808 sample)
+  PR -> varies by genre (cowbell, rimshot, conga, shaker, tambourine)
+
+################################################################################
+#                          END OF PATTERN LIBRARY                             #
+################################################################################
