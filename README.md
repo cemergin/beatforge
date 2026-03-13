@@ -1,6 +1,6 @@
 # BeatForge
 
-A browser-based rhythm playground that starts as a metronome and evolves into a drum machine. Two modes share one audio engine: **Practice** for daily musician use, **Studio** for beat creation. A **Library** lets users explore 350+ world rhythms with their cultural stories.
+A browser-based rhythm playground that starts as a metronome and evolves into a drum machine. Two modes share one audio engine: **Practice** for daily musician use, **Studio** for beat creation. A **Library** lets users explore 650+ world rhythms with their cultural stories.
 
 Works offline. No install. No signup. No backend. Open source.
 
@@ -22,14 +22,15 @@ Start here to navigate the corpus:
 
 | File | What it covers |
 |------|---------------|
-| [`research/INDEX.md`](research/INDEX.md) | Master catalog of all 30+ documents with line counts and summaries |
+| [`research/INDEX.md`](research/INDEX.md) | Master catalog of all 50+ documents with line counts and summaries |
 | [`research/TOPIC-INDEX.md`](research/TOPIC-INDEX.md) | Concept-to-file cross-reference (Web Audio, clave, tabla, Amapiano, etc.) |
 | [`research/PATTERN-INDEX.md`](research/PATTERN-INDEX.md) | Every notated pattern searchable by region, genre, time signature, difficulty |
 
-### Patterns (350+ notated rhythms)
+### Patterns (650+ notated rhythms)
 
 All playable patterns live in [`research/patterns/`](research/patterns/):
 
+#### Original library
 | File | Patterns | Coverage |
 |------|----------|----------|
 | [`western-genres.md`](research/patterns/western-genres.md) | 211 | Rock, pop, funk, jazz, hip-hop, house, techno, DnB, Afrobeats, Amapiano, reggaeton, breakbeats, fills, rudiments |
@@ -38,6 +39,26 @@ All playable patterns live in [`research/patterns/`](research/patterns/):
 | [`world-cross-cultural.md`](research/patterns/world-cross-cultural.md) | 50+ | West African bell patterns, Afro-Cuban clave/cascara/bembe, salsa ensembles, cross-rhythms |
 | [`gamelan-southeast-asian.md`](research/patterns/gamelan-southeast-asian.md) | 20+ | Javanese gamelan colotomic structures (lancaran through gendhing), Balinese kotekan interlocking |
 | [`supplementary.txt`](research/patterns/supplementary.txt) | — | Additional pattern data in text format |
+
+#### Expanded global coverage
+| File | Patterns | Coverage |
+|------|----------|----------|
+| [`latin-caribbean.md`](research/patterns/latin-caribbean.md) | ~43 | Cuban (mambo, cha-cha-chá, guaguancó, timba, comparsa), Puerto Rican (bomba, plena), Dominican (merengue, bachata), Colombian (vallenato, champeta, currulao), Mexican (son jarocho, huapango, norteño), Haitian (kompa, rara, vodou), Trinidadian (calypso, soca), Brazilian (pagode, samba-reggae, forró) |
+| [`iberian-flamenco.md`](research/patterns/iberian-flamenco.md) | ~18 | Flamenco (bulería, soleá, seguiriya, tangos, rumba, alegrías, fandango), Portuguese (fado, corridinho), Basque (zortziko, txalaparta) |
+| [`north-east-african.md`](research/patterns/north-east-african.md) | ~20 | Gnawa (Morocco), Algerian raï, Ethiopian (eskista, tizita, kebero), Somali dhaanto, Swahili taarab, Sufi dhikr |
+| [`modern-african.md`](research/patterns/modern-african.md) | ~25 | Soukous, highlife, jùjú, fuji, mbalax, makossa, bikutsi, kwaito, gqom, shangaan electro, benga, kuduro, semba, kizomba, singeli |
+| [`celtic-european.md`](research/patterns/celtic-european.md) | ~20 | Irish bodhrán (reel, jig, slip jig), Scottish strathspey, Scandinavian polska, Romani čoček, klezmer (freylekhs, bulgar, hora), Hungarian csárdás, gypsy jazz |
+| [`central-asian-pacific.md`](research/patterns/central-asian-pacific.md) | ~24 | Uzbek doira, Uyghur muqam, Afghan attan, Polynesian slit drum, Maori haka, Hawaiian pahu, Aboriginal clapsticks/didgeridoo, powwow drum |
+| [`south-asian-expanded.md`](research/patterns/south-asian-expanded.md) | ~35 | Expanded Indian talas (deepchandi, dhamar, addha), bhangra dhol, Carnatic gati/konnakol, qawwali, Sri Lankan, Nepali, Bangladeshi, Thai piphat, Filipino kulintang |
+| [`caucasus-mediterranean.md`](research/patterns/caucasus-mediterranean.md) | ~15 | Georgian (khorumi, acharuli), Armenian (kochari, yarkhushta), Azerbaijani, lezginka, Cretan (syrtos, pentozali), Sicilian tamburello, Indo-Caribbean chutney, Sufi dhikr |
+| [`global-traditions.md`](research/patterns/global-traditions.md) | ~42 | Broad coverage across all regions (some overlap with specialized files) |
+
+#### Electronic & internet-born
+| File | Patterns | Coverage |
+|------|----------|----------|
+| [`global-electronic.md`](research/patterns/global-electronic.md) | ~35 | Budots, funkot, vinahouse, manyao, tribal guarachero, baile funk, UK drill, Jersey club, footwork/juke, gabber, hardstyle, ballroom/vogue, moombahton |
+| [`underground-electronic.md`](research/patterns/underground-electronic.md) | ~30 | Mahraganat (Egypt), electronic dabke, desi bass, Shanghai bass, guaracha, Russian hardbass, Romanian minimal, disco polo, turbofolk, afro-house, zouk bass |
+| [`internet-born.md`](research/patterns/internet-born.md) | ~24 | Vaporwave, future funk, lo-fi hip-hop, nightcore, hyperpop, drift phonk, Brazilian phonk, SoundCloud rap, bedroom pop, footwork, mashcore |
 
 ### Technical references
 
@@ -53,10 +74,11 @@ Implementation guides in [`research/technical/`](research/technical/):
 | [`turkish-rhythmic-systems-reference.md`](research/technical/turkish-rhythmic-systems-reference.md) | 1,452 | Ottoman usul system, Dum/Tek/Ka vocabulary, compound meters |
 | [`drum-machine-practice-methodology.md`](research/technical/drum-machine-practice-methodology.md) | 1,336 | Deliberate practice, speed training, rudiments, polyrhythms, konnakol |
 
-### Musicology (16 cultural traditions)
+### Musicology (25 cultural traditions & scenes)
 
 Deep historical, social, and musical context in [`research/musicology/`](research/musicology/):
 
+#### Traditional & regional
 | Region | File |
 |--------|------|
 | West Africa (Ghana, Nigeria, Senegal, Guinea, Mali) | [`west-african-traditions.md`](research/musicology/west-african-traditions.md) |
@@ -74,17 +96,31 @@ Deep historical, social, and musical context in [`research/musicology/`](researc
 | Mongolia | [`mongolian-traditions.md`](research/musicology/mongolian-traditions.md) |
 | Gamelan & Southeast Asia | [`gamelan-southeast-asian.md`](research/musicology/gamelan-southeast-asian.md) |
 | Vietnam, Cambodia, Malaysia | [`vietnam-cambodia-malaysia.md`](research/musicology/vietnam-cambodia-malaysia.md) |
-| Electronic, hip-hop, funk, reggae | [`electronic-hiphop-funk-reggae.md`](research/musicology/electronic-hiphop-funk-reggae.md) |
+| Iberian (flamenco, fado, Basque) | [`iberian-traditions.md`](research/musicology/iberian-traditions.md) |
+| North & East African (Gnawa, raï, Ethiopian, Swahili coast) | [`north-east-african-traditions.md`](research/musicology/north-east-african-traditions.md) |
+| Celtic & European (bodhrán, polska, Romani, klezmer) | [`celtic-european-traditions.md`](research/musicology/celtic-european-traditions.md) |
+| Central Asian & Pacific (doira, muqam, Polynesian, powwow) | [`central-asian-pacific-traditions.md`](research/musicology/central-asian-pacific-traditions.md) |
+| Caucasus & Mediterranean (Georgian, Armenian, Cretan, Sufi) | [`caucasus-mediterranean-traditions.md`](research/musicology/caucasus-mediterranean-traditions.md) |
+
+#### Modern, electronic & internet-born
+| Scene | File |
+|-------|------|
+| Electronic, hip-hop, funk, reggae (foundations) | [`electronic-hiphop-funk-reggae.md`](research/musicology/electronic-hiphop-funk-reggae.md) |
+| Modern African genres (soukous→singeli, kwaito→gqom) | [`modern-african-genres.md`](research/musicology/modern-african-genres.md) |
+| Global electronic scenes (budots, funkot, drill, footwork, hardstyle) | [`global-electronic-scenes.md`](research/musicology/global-electronic-scenes.md) |
+| Underground electronic (mahraganat, hardbass, Bassiani, desi bass) | [`underground-electronic-movements.md`](research/musicology/underground-electronic-movements.md) |
+| Internet-born genres (vaporwave, phonk, hyperpop, lo-fi, platform-native) | [`internet-born-genres.md`](research/musicology/internet-born-genres.md) |
 
 ### Design research
 
-UI/UX and visual design in [`research/design/`](research/design/):
+UI/UX, visual design, and sound architecture in [`research/design/`](research/design/):
 
 | File | What it covers |
 |------|---------------|
 | [`instrument-hardware-ui-design.md`](research/design/instrument-hardware-ui-design.md) | Physical drum machine UI/UX (TR-808, SP-404, MPC, Digitakt) |
 | [`music-software-ui-design.md`](research/design/music-software-ui-design.md) | Software drum machine UI patterns (Ableton, FL Studio, web apps) |
 | [`music-visual-design-systems.md`](research/design/music-visual-design-systems.md) | Color, typography, visual language for music tools |
+| [`world-percussion-sound-design.md`](research/design/world-percussion-sound-design.md) | 6 percussion families, 35+ synthesized voice types, 12 world kit presets, sampler architecture |
 | [`brainstorm-notes.md`](research/design/brainstorm-notes.md) | Product design session notes and interview transcript |
 
 ---
@@ -131,7 +167,7 @@ This repo is structured for easy navigation by LLMs and code agents.
 1. **Orientation:** This README
 2. **Product spec:** [`docs/2026-03-12-beatforge-product-design.md`](docs/2026-03-12-beatforge-product-design.md)
 3. **Find a concept:** [`research/TOPIC-INDEX.md`](research/TOPIC-INDEX.md) — maps every concept to exact file paths and line numbers
-4. **Find a pattern:** [`research/PATTERN-INDEX.md`](research/PATTERN-INDEX.md) — searchable table of all 350+ patterns by region, genre, time signature, difficulty
+4. **Find a pattern:** [`research/PATTERN-INDEX.md`](research/PATTERN-INDEX.md) — searchable table of 650+ patterns by region, genre, time signature, difficulty
 5. **Catalog all docs:** [`research/INDEX.md`](research/INDEX.md) — every document with line counts and content summaries
 
 ### Navigation rules
@@ -153,13 +189,27 @@ beatforge/
     ├── INDEX.md                             ← Master document catalog
     ├── TOPIC-INDEX.md                       ← Concept → file lookup
     ├── PATTERN-INDEX.md                     ← Pattern search by region/genre/meter
-    ├── patterns/                            ← All notated rhythms
-    │   ├── western-genres.md                   (211 patterns)
-    │   ├── turkish-arabic-indian.md            (~70 patterns)
-    │   ├── african-ensembles.md                (~30+ ensemble patterns)
-    │   ├── world-cross-cultural.md             (50+ cross-cultural)
-    │   ├── gamelan-southeast-asian.md          (20+ colotomic structures)
+    │
+    ├── patterns/                            ← 650+ notated rhythms
+    │   ├── western-genres.md                   (211 — rock through electronic)
+    │   ├── turkish-arabic-indian.md            (~70 — usul, iqa'at, tala)
+    │   ├── african-ensembles.md                (~30+ — Ewe, Mande, Yoruba)
+    │   ├── world-cross-cultural.md             (50+ — W.African, Afro-Cuban)
+    │   ├── gamelan-southeast-asian.md          (20+ — colotomic structures)
+    │   ├── latin-caribbean.md                  (~43 — bomba to kompa)
+    │   ├── iberian-flamenco.md                 (~18 — bulería to zortziko)
+    │   ├── north-east-african.md               (~20 — gnawa to taarab)
+    │   ├── modern-african.md                   (~25 — soukous to singeli)
+    │   ├── celtic-european.md                  (~20 — bodhrán to klezmer)
+    │   ├── central-asian-pacific.md            (~24 — doira to powwow)
+    │   ├── south-asian-expanded.md             (~35 — bhangra to kulintang)
+    │   ├── caucasus-mediterranean.md           (~15 — lezginka to dhikr)
+    │   ├── global-traditions.md                (~42 — broad cross-regional)
+    │   ├── global-electronic.md                (~35 — budots to hardstyle)
+    │   ├── underground-electronic.md           (~30 — mahraganat to hardbass)
+    │   ├── internet-born.md                    (~24 — vaporwave to hyperpop)
     │   └── supplementary.txt
+    │
     ├── technical/                            ← Implementation references
     │   ├── web-audio-dsp-reference.md
     │   ├── WEB_AUDIO_REFERENCE.md
@@ -168,7 +218,8 @@ beatforge/
     │   ├── drum-machine-keyboard-reference.md
     │   ├── turkish-rhythmic-systems-reference.md
     │   └── drum-machine-practice-methodology.md
-    ├── musicology/                           ← 16 cultural tradition deep dives
+    │
+    ├── musicology/                           ← 25 cultural & scene deep dives
     │   ├── west-african-traditions.md
     │   ├── afro-cuban-caribbean-latin.md
     │   ├── brazilian-traditions.md
@@ -184,11 +235,22 @@ beatforge/
     │   ├── mongolian-traditions.md
     │   ├── gamelan-southeast-asian.md
     │   ├── vietnam-cambodia-malaysia.md
-    │   └── electronic-hiphop-funk-reggae.md
-    └── design/                               ← UI/UX design research
+    │   ├── iberian-traditions.md               ← NEW
+    │   ├── north-east-african-traditions.md    ← NEW
+    │   ├── celtic-european-traditions.md       ← NEW
+    │   ├── central-asian-pacific-traditions.md ← NEW
+    │   ├── caucasus-mediterranean-traditions.md ← NEW
+    │   ├── modern-african-genres.md            ← NEW
+    │   ├── electronic-hiphop-funk-reggae.md
+    │   ├── global-electronic-scenes.md         ← NEW
+    │   ├── underground-electronic-movements.md ← NEW
+    │   └── internet-born-genres.md             ← NEW
+    │
+    └── design/                               ← UI/UX & sound design
         ├── instrument-hardware-ui-design.md
         ├── music-software-ui-design.md
         ├── music-visual-design-systems.md
+        ├── world-percussion-sound-design.md    ← NEW (6 families, 35+ voices)
         └── brainstorm-notes.md
 ```
 
