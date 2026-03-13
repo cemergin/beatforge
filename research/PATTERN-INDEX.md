@@ -174,6 +174,43 @@
 | 208 | Trance | `patterns/western-genres.md` | Trance | 4/4 | 136-142 | Beginner |
 | 209 | Electro | `patterns/western-genres.md` | Electro | 4/4 | 110-130 | Beginner |
 
+### Electronic Music History (additional patterns)
+
+| # | Pattern | File | Sub-Genre | Time Sig | BPM | Difficulty |
+|---|---------|------|-----------|----------|-----|------------|
+| 1 | Synth-Pop Classic | `patterns/electronic-history.md` | Synth-Pop | 4/4 | 118-126 | Beginner |
+| 2 | Blue Monday Style | `patterns/electronic-history.md` | Synth-Pop/Proto-Dance | 4/4 | 130 | Intermediate |
+| 3 | Gary Numan Style | `patterns/electronic-history.md` | Synth-Pop | 4/4 | 114-120 | Beginner |
+| 4 | EBM Basic | `patterns/electronic-history.md` | EBM | 4/4 | 120-135 | Beginner |
+| 5 | Industrial Stomp | `patterns/electronic-history.md` | Industrial | 4/4 | 100-130 | Intermediate |
+| 6 | Dark Electro | `patterns/electronic-history.md` | Industrial/Dark Electro | 4/4 | 115-130 | Intermediate |
+| 7 | Italo Disco | `patterns/electronic-history.md` | Italo Disco | 4/4 | 118-128 | Beginner |
+| 8 | Hi-NRG | `patterns/electronic-history.md` | Hi-NRG | 4/4 | 128-140 | Beginner |
+| 9 | Deep House | `patterns/electronic-history.md` | Deep House | 4/4 | 118-122 | Beginner |
+| 10 | Garage House | `patterns/electronic-history.md` | Garage House | 4/4 | 120-128 | Intermediate |
+| 11 | French Touch | `patterns/electronic-history.md` | French House | 4/4 | 122-128 | Intermediate |
+| 12 | Minimal Techno | `patterns/electronic-history.md` | Minimal Techno | 4/4 | 125-132 | Intermediate |
+| 13 | Microhouse | `patterns/electronic-history.md` | Microhouse | 4/4 | 120-128 | Intermediate |
+| 14 | Ambient House | `patterns/electronic-history.md` | Ambient House | 4/4 | 100-115 | Beginner |
+| 15 | Trip-Hop | `patterns/electronic-history.md` | Trip-Hop | 4/4 | 70-90 | Intermediate |
+| 16 | Progressive Trance | `patterns/electronic-history.md` | Prog Trance | 4/4 | 130-138 | Intermediate |
+| 17 | Goa/Psytrance | `patterns/electronic-history.md` | Psytrance | 4/4 | 140-150 | Intermediate |
+| 18 | Gabber | `patterns/electronic-history.md` | Gabber/Hardcore | 4/4 | 160-190 | Intermediate |
+| 19 | Happy Hardcore | `patterns/electronic-history.md` | Happy Hardcore | 4/4 | 165-180 | Beginner |
+| 20 | Motorik/Neu! | `patterns/electronic-history.md` | Krautrock | 4/4 | 110-130 | Beginner |
+| 21 | Berlin School | `patterns/electronic-history.md` | Berlin School Electronic | 4/4 | 120-140 | Intermediate |
+| 22 | Melodic Techno | `patterns/electronic-history.md` | Melodic Techno | 4/4 | 122-130 | Intermediate |
+| 23 | Organic/Afro House | `patterns/electronic-history.md` | Organic House | 4/4 | 118-125 | Intermediate |
+| 24 | Hard Techno Revival | `patterns/electronic-history.md` | Hard Techno | 4/4 | 140-155 | Intermediate |
+| 25 | Breaks Revival | `patterns/electronic-history.md` | Breakbeat/Breaks | 4/4 | 130-140 | Intermediate |
+| 26 | Neo-Rave | `patterns/electronic-history.md` | Neo-Rave | 4/4 | 138-150 | Intermediate |
+| 27 | Lo-Fi House | `patterns/electronic-history.md` | Lo-Fi House | 4/4 | 115-125 | Beginner |
+| 28 | Electro (1980s) | `patterns/electronic-history.md` | Electro | 4/4 | 108-130 | Intermediate |
+| 29 | Eurodance | `patterns/electronic-history.md` | Eurodance | 4/4 | 130-145 | Beginner |
+| 30 | EDM/Big Room | `patterns/electronic-history.md` | EDM | 4/4 | 126-132 | Beginner |
+| 31 | Balearic/Sunset | `patterns/electronic-history.md` | Balearic | 4/4 | 112-122 | Beginner |
+| 32 | Berghain-Style | `patterns/electronic-history.md` | Berlin Techno | 4/4 | 128-138 | Intermediate |
+
 ### Breakbeats & Programmed Classics
 
 | # | Pattern | File | Source | BPM | Difficulty |

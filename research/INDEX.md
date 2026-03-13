@@ -1,6 +1,6 @@
 # BeatForge Research Corpus — Master Index
 
-**Total: ~45,290 lines | 27 documents**
+**Total: ~46,728 lines | 29 documents**
 **Last updated: March 13, 2026**
 
 ---
@@ -58,6 +58,7 @@ When searching this corpus:
 | 11 | World Cross-Cultural | `patterns/world-cross-cultural.md` | 50+ | West African (standard bell pattern, Gahu, Kpanlogo, Highlife, djembe accompaniment, cross-rhythms), Afro-Cuban/Caribbean (son clave, rumba clave, tresillo, cascara, bembe bell, Mozambique, songo, full salsa ensemble) |
 | 12 | Gamelan & SE Asian | `patterns/gamelan-southeast-asian.md` | 20+ | Javanese gamelan: origins/mythology, court traditions, cosmology, tuning (slendro/pelog), colotomic structure, full notation for lancaran, ketawang, ladrang, merong/gendhing, srepegan, sampak, ayak-ayakan. Balinese: kotekan interlocking, kendang patterns |
 | 13 | Supplementary | `patterns/supplementary.txt` | — | Additional pattern data in text format |
+| 13a | Electronic History Patterns | `patterns/electronic-history.md` | 32 | Synth-pop (Depeche Mode, New Order, Gary Numan), EBM/industrial (DAF, NIN, Skinny Puppy), Italo disco, Hi-NRG, deep house, garage house, French touch, minimal techno, microhouse, ambient house, trip-hop, progressive trance, psytrance, gabber, happy hardcore, motorik, Berlin School, melodic techno, organic/Afro house, hard techno revival, breaks revival, neo-rave, lo-fi house, electro, Eurodance, EDM/big room, Balearic, Berghain-style |
 
 ### Musicology (`musicology/`)
 
@@ -78,6 +79,7 @@ When searching this corpus:
 | 26 | Gamelan & SE Asian | `musicology/gamelan-southeast-asian.md` | 721 | Javanese gamelan cultural deep dive (sacred origins, kraton tradition, halus/kasar aesthetics, wayang kulit), Balinese gamelan, Thai music, Myanmar, Vietnam, Philippines, Indonesia beyond gamelan |
 | 27 | Vietnam/Cambodia/Malaysia | `musicology/vietnam-cambodia-malaysia.md` | 948 | Dong Son bronze drums, Chinese influence (1000 years), Champa kingdom, nha nhac (Hue court music), ca tru, cheo theater, hat boi, Cambodian (Khmer classical, pinpeat, apsara), Malaysian (gamelan Melayu, kompang, joget) |
 | 28 | Electronic/Hip-Hop/Funk/Reggae | `musicology/electronic-hiphop-funk-reggae.md` | 900 | James Brown and "The One," African roots of funk, New Orleans funk (Prof. Longhair, Meters, second line), Parliament-Funkadelic, hip-hop (breakbeats, sampling, MPC, Dilla), electronic music (TR-808/909, house, techno, DnB), reggae/dub/dancehall |
+| 29a | Electronic Music History | `musicology/electronic-music-history.md` | 626 | Complete electronic music genealogy: pre-history (musique concrète, Moog, Buchla), synth-pop, industrial/EBM, Italo disco/Hi-NRG, deep house/garage, ambient, French touch, minimal techno, Berlin School, instruments timeline, movements (Second Summer of Love, superclub era, Ibiza), current landscape (2024-2026), AI in production, modular synth revival |
 
 ### Design Research (`design/`)
 
@@ -111,6 +113,7 @@ research/
 │   ├── african-ensembles.md          (~30+ full ensemble patterns)
 │   ├── world-cross-cultural.md       (50+ cross-cultural patterns)
 │   ├── gamelan-southeast-asian.md    (20+ colotomic structures)
+│   ├── electronic-history.md          (32 patterns from electronic history)
 │   └── supplementary.txt
 ├── musicology/                       ← Cultural/historical deep dives
 │   ├── west-african-traditions.md
@@ -128,7 +131,10 @@ research/
 │   ├── mongolian-traditions.md
 │   ├── gamelan-southeast-asian.md
 │   ├── vietnam-cambodia-malaysia.md
-│   └── electronic-hiphop-funk-reggae.md
+│   ├── electronic-hiphop-funk-reggae.md
+│   ├── electronic-music-history.md
+│   ├── global-electronic-scenes.md
+│   └── underground-electronic-movements.md
 └── design/                           ← UI/UX design research
     ├── instrument-hardware-ui-design.md
     ├── music-software-ui-design.md

@@ -434,6 +434,34 @@
 - **Trance**: `patterns/western-genres.md` pattern 208 (lines 2757-2766)
 - **IDM**: aspects in math rock and fusion sections
 - **History/context**: `musicology/electronic-hiphop-funk-reggae.md` (TR-808, TR-909, house/techno origins)
+- **Complete electronic music history** (pre-history through 2026): `musicology/electronic-music-history.md`
+  - Early pioneers (musique concrète, Moog, Buchla, BBC Radiophonic Workshop): Part I §1-3
+  - Synth-pop (Depeche Mode, New Order, Human League, Gary Numan): Part II §5
+  - Industrial/EBM (Throbbing Gristle, DAF, Front 242, NIN): Part II §6
+  - Italo disco / Hi-NRG (Robotnick, Bobby O, Patrick Cowley): Part II §7
+  - Deep house / garage house (Larry Heard, Kerri Chandler, Masters at Work): Part II §8
+  - Ambient (Eno, The Orb, KLF, Aphex Twin): Part II §9
+  - French touch / filter house (Daft Punk, Cassius): Part II §10
+  - Minimal techno / microhouse (Richie Hawtin, Villalobos, Kompakt): Part II §11
+  - Berlin School / progressive electronic (Tangerine Dream, Jarre, Vangelis): Part I §4
+  - Instruments genealogy (synth + drum machine timeline tables): Part IV §16
+  - Movements (Second Summer of Love, superclub era, Ibiza, Berlin): Part III §12-15
+  - Current landscape 2024-2026 (post-pandemic, AI, modular revival, genre map): Part V §17-18
+  - Queer culture and electronic music: Part VII §22
+- **Electronic patterns** (32 additional): `patterns/electronic-history.md`
+  - Synth-pop, EBM, industrial, Italo disco, Hi-NRG, deep house, garage house, French touch, minimal techno, microhouse, ambient house, trip-hop, progressive trance, psytrance, gabber, happy hardcore, motorik, Berlin School, melodic techno, organic house, hard techno revival, breaks revival, neo-rave, lo-fi house, electro (1980s), Eurodance, EDM/big room, Balearic, Berghain-style
+- **Global/regional electronic scenes**: `musicology/global-electronic-scenes.md`
+  - SE Asian (budots, funkot, vinahouse, manyao, electronic mor lam): Part I
+  - Latin American (reggaeton evolution, tribal guarachero, cumbia digital, baile funk): Part II
+  - African (amapiano, Afrobeats production, gqom, gengetone, singeli): Part III
+- **Underground electronic movements**: `musicology/underground-electronic-movements.md`
+  - MENA (mahraganat, electronic dabke, shamstep, Iranian underground): §MENA
+  - South Asian (Indian bass, Mumbai grime, Pakistani electronic): §South Asia
+  - East/SE Asian (Shanghai/Beijing, Thai electronic, Cambodian space disco): §East Asia
+  - Latin underground (ZZK/digital folklore, neo-perreo, guaracha, sonidero): §Latin America
+  - African underground (balani show, logobi, Afro-house, shangaan electro, kuduro): §Africa
+  - Eastern European (disco polo, Russian hardbass, rominimal, Georgian techno): §Eastern Europe
+  - Experimental (hyperpop, deconstructed club): §Experimental
 
 ### Hip-Hop
 - **Boom bap**: `patterns/western-genres.md` patterns 151-152 (lines 2001-2023)
