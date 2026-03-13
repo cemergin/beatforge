@@ -207,9 +207,93 @@ Alternative models exist. **SoundCloud** has experimented with a **user-centric*
 
 ---
 
+## 8. The Algorithmic Playlist Myth: Modern Payola
+
+The streaming era's most powerful gatekeeping mechanism is the **playlist** — and the most important thing to understand about playlists is that they are far less "algorithmic" than platforms claim.
+
+### The Anatomy of a Spotify Playlist
+
+Spotify operates several categories of playlists, each with different levels of human and algorithmic curation:
+
+**1. Algorithmic/Personalized Playlists** (Discover Weekly, Release Radar, Daily Mix):
+These are genuinely driven by machine learning models that analyze listening history, skip rates, save rates, and collaborative filtering (users who listen to X also listen to Y). However, even these playlists are shaped by the data they draw from — and that data is influenced by all the non-algorithmic factors below.
+
+**2. Editorial Playlists** (RapCaviar, Today's Top Hits, Peaceful Piano, New Music Friday):
+These are the most powerful playlists on the platform. **Today's Top Hits** alone has over **33 million followers**. **RapCaviar** has over **15 million**. Placement on these playlists can generate **millions of streams** in a week.
+
+These playlists are curated by **human editors** — Spotify employees who decide which songs are added, in what position, and for how long. The process is officially based on "editorial judgment" and "musical quality." In practice, it is influenced by:
+
+- **Label relationships**: The three major labels (UMG, Sony, Warner) collectively provide approximately 65-70% of Spotify's catalog and an even higher proportion of its most-streamed content. Spotify's business depends on maintaining good relationships with these labels. Major-label releases routinely receive preferential editorial playlist placement.
+- **Playlist pitching**: Spotify's "Spotify for Artists" platform allows labels and artists to pitch songs for playlist consideration. Major labels employ **teams** of playlist pitchers whose sole job is to cultivate relationships with Spotify's editorial staff. Independent artists can also pitch, but they lack the institutional relationships and volume of pitches that give major labels an advantage.
+- **Pre-release hype campaigns**: Labels coordinate press campaigns, social media pushes, and radio promotion timed to coincide with playlist pitching, creating the impression of organic momentum that makes editors more likely to add a song.
+- **Exclusive deals**: Spotify has reportedly offered labels favorable terms in exchange for timed exclusives, early access to releases, or preferential promotion of specific artists.
+
+**3. "Mood" and "Activity" Playlists** (Deep Focus, Chill Hits, Workout, Cooking):
+These are the most controversial category. Investigations by journalists (particularly **Music Business Worldwide** and **Louder**) have revealed that many of these playlists feature tracks by **pseudonymous artists** — acts with generic names, no social media presence, no touring history, and no identifiable human behind them. The suspicion, supported by circumstantial evidence, is that Spotify commissions or co-owns these recordings, allowing the platform to fill playlists with music for which it pays **lower royalty rates** (or no royalties at all, if Spotify is both the platform and the rights-holder).
+
+In 2023, Spotify introduced a "Discovery Mode" feature in which labels and artists can accept a **lower royalty rate** in exchange for algorithmic boost — essentially paying for promotion by accepting less money per stream. Critics immediately labeled this **"payola with a discount."**
+
+### The Label Leverage Machine
+
+The major labels' influence over streaming playlists operates through several mechanisms:
+
+**Portfolio pressure**: A major label doesn't pitch one song at a time. It pitches its entire release calendar. The implicit (and sometimes explicit) message: "Put our priority artist on your top playlist, and we'll also give you exclusive access to [bigger artist]'s next single." This portfolio leverage is impossible for independent artists to replicate.
+
+**Market access data**: Major labels share data with Spotify about upcoming releases, marketing spend, and projected demand. This information helps Spotify's editorial team predict which songs are likely to be successful — creating a self-fulfilling prophecy where songs predicted to succeed (because they have major-label marketing behind them) receive playlist placement that ensures they do succeed.
+
+**Advertising and media**: Labels spend enormous sums on Spotify advertising (banner ads, sponsored playlists, video takeovers). This advertising revenue creates a financial relationship between label and platform that operates alongside (and inevitably influences) the editorial relationship.
+
+**Direct financial relationships**: Spotify pays labels large lump-sum advances (in addition to per-stream royalties) as part of licensing agreements. These advances, which are not publicly disclosed in their details, create a financial interdependence that makes truly independent editorial judgment difficult.
+
+### Apple Music, YouTube Music, Amazon Music, Tidal
+
+Spotify is not unique. Every major streaming platform operates with similar dynamics:
+
+- **Apple Music**: Relies more heavily on human curation (led by global editorial director **Rachel Newman** and former Beats/Apple executive **Zane Lowe**). Apple's financial independence from music-industry revenue (Apple Music is a small part of Apple's business) theoretically gives it more editorial independence, but label relationships still matter for access to exclusive releases and early premieres.
+- **YouTube Music**: Complicated by YouTube's dual role as a user-generated content platform and a licensed streaming service. The algorithm is powerful but heavily influenced by external traffic (a song that goes viral on TikTok or Instagram will be boosted by YouTube's recommendation engine regardless of label relationships).
+- **Amazon Music**: Leverages Amazon's broader retail and advertising ecosystem. Labels can tie music promotion to Amazon's advertising platform in ways that blur the line between editorial and commercial.
+- **Tidal**: Originally positioned as an artist-owned alternative (Jay-Z, Beyoncé, Rihanna were initial investors), Tidal's editorial independence was limited by its small market share, which made it dependent on the same major-label catalog as every other platform. Jack Dorsey's Square (now Block) acquired a majority stake in 2021.
+
+### The Historical Parallel: Radio Payola Redux
+
+The parallels with 1950s radio payola are striking:
+
+| 1950s Radio | 2020s Streaming |
+|-------------|-----------------|
+| DJs chose what to play | Editors/algorithms choose playlists |
+| Labels paid DJs cash/gifts | Labels use relationships, data, advertising, deals |
+| Payola was illegal but universal | Playlist influence is legal and universal |
+| A hit required radio play | A hit requires playlist placement |
+| Independent artists couldn't afford payola | Independent artists can't match label pitch infrastructure |
+| Congressional hearings exposed the system | Journalism has exposed it, but no regulation |
+| Alan Freed (champion of Black music) was destroyed | Independent curators have been marginalized |
+
+The key difference: 1950s payola was **illegal** (and prosecuted selectively). Modern playlist influence operates through **legal** channels — relationship management, advertising spend, data sharing, and contractual arrangements. The effect is similar: the artists who get heard are disproportionately those backed by organizations with the resources to navigate the gatekeeping system.
+
+### The "Fake Artist" Controversy
+
+Since 2017, multiple investigations have examined the phenomenon of "fake artists" or "ghost artists" on streaming platforms — tracks credited to artists who don't appear to exist as real people:
+
+- **Music Business Worldwide** (2017) identified dozens of tracks on major Spotify playlists credited to artists with no online presence, social media, or touring history
+- Many of these tracks appeared on mood/activity playlists with millions of followers
+- The production quality was professional but generic — exactly the kind of inoffensive background music these playlists require
+- The suspicion: these tracks are produced by studios working directly with (or for) streaming platforms, allowing the platform to reduce its royalty obligations (since it effectively pays royalties to itself or to producers at below-market rates)
+
+Spotify has denied commissioning music directly but has not provided convincing explanations for the presence of these tracks on its most prominent playlists. The controversy highlights a fundamental conflict of interest: the platform that distributes music and pays royalties has a financial incentive to minimize those royalty payments.
+
+### What This Means for Artists
+
+The playlist economy creates a two-tier system:
+- **Major-label artists**: Access to playlist pitching infrastructure, label relationships with editorial teams, advertising budgets, portfolio leverage. Playlist placement is achievable (though not guaranteed).
+- **Independent artists**: Can pitch through Spotify for Artists, but lack institutional relationships, advertising budgets, and portfolio leverage. Playlist placement is possible but statistically unlikely.
+
+The practical result: **playlist gatekeeping has replaced radio gatekeeping** as the primary mechanism by which the music industry determines what most people hear. The technology has changed; the power dynamics have not.
+
+---
+
 # Part II: THE DEATH OF THE BIG BAND — How Economics Reshapes Ensembles
 
-## 8. The Big Band Collapse (1942–1955)
+## 9. The Big Band Collapse (1942–1955)
 
 The dissolution of the big band era is one of the most dramatic examples of economic forces reshaping musical form. In 1940, big bands dominated American popular music: **Benny Goodman**, **Duke Ellington**, **Count Basie**, **Glenn Miller**, and dozens of others led ensembles of 12-20 musicians that filled ballrooms, theaters, and radio broadcasts. By 1955, the big band was effectively dead as a commercial format.
 
@@ -240,7 +324,7 @@ This had profound **rhythmic consequences**. In a big band, the rhythm section s
 
 ---
 
-## 9. The DJ Replaces the Band (1970s–2000s)
+## 10. The DJ Replaces the Band (1970s–2000s)
 
 The same economic logic that killed the big band eventually came for the rock band. The rise of the DJ as the primary figure in dance music is, at its core, a story of **labor economics**.
 
@@ -273,7 +357,7 @@ The irony is acute: electronic dance music, which emerged from Black and queer c
 
 ---
 
-## 10. The Band Economy in the Streaming Era
+## 11. The Band Economy in the Streaming Era
 
 The economics of being in a band have become progressively more challenging:
 
@@ -293,7 +377,7 @@ The proportion of hit songs performed by **solo artists** (including producer-ar
 
 # Part III: COPYRIGHT — The Double-Edged Sword
 
-## 11. The Origin of Music Copyright
+## 12. The Origin of Music Copyright
 
 Modern music copyright emerged from a specific historical moment: the passage of the **Copyright Act of 1909** in the United States, which established that musical compositions (but not recordings) were protected property. The distinction between the **composition** (melody and lyrics, written on paper) and the **recording** (the specific performance captured on a medium) has shaped music economics ever since.
 
@@ -303,7 +387,7 @@ The **Sound Recording Act of 1971** finally extended copyright protection to rec
 
 ---
 
-## 12. How Copyright Promotes Creativity
+## 13. How Copyright Promotes Creativity
 
 ### The Positive Case
 
@@ -327,7 +411,7 @@ Copyright's defenders argue — with some justification — that it serves sever
 
 ---
 
-## 13. How Copyright Hinders Creativity
+## 14. How Copyright Hinders Creativity
 
 ### The Chilling Effect on Sampling
 
@@ -376,7 +460,134 @@ For a platform like BeatForge, this means:
 
 ---
 
-## 14. Who Owns What: The Label vs. Artist Economy
+## 15. The Jamaica Counter-Example: How Loose Copyright Created a Musical Superpower
+
+If the United States demonstrates how strict copyright can stifle creativity, **Jamaica** demonstrates the opposite: how the near-absence of copyright enforcement can produce one of the most creatively productive music cultures in human history.
+
+### The Riddim Economy
+
+Jamaica's contribution to global popular music — ska, rocksteady, reggae, dub, dancehall, ragga, and their descendants — is staggeringly disproportionate to the island's size (population: ~3 million). A significant reason for this productivity is Jamaica's **riddim culture**, an economic and creative system that is fundamentally incompatible with conventional copyright thinking.
+
+A **riddim** (Jamaican Patois for "rhythm") is a backing track — a bass line, drum pattern, and chord progression — that functions as a shared musical commons. A producer creates a riddim, and then **dozens or even hundreds of different artists record their own vocal performances over it**. Each vocal performance is a separate song, released as a separate single, often competing with other songs on the same riddim for attention in the dancehall.
+
+This is the system that produced the phenomenon the user asks about: why the same songs were "sung by multiple singers." They weren't covers — they were different songs built on the same instrumental foundation. The riddim was the platform; the vocalist was the application.
+
+### How It Works Economically
+
+In the Jamaican system:
+
+1. **The producer creates a riddim** — a backing track, typically built in a studio with session musicians or (from the 1980s onward) programmed on equipment. The producer owns the riddim.
+2. **The producer "voices" (records) multiple artists over it** — sometimes 20, 30, or 50+ different vocalists on the same riddim. Each artist typically pays a flat fee for studio time or receives no upfront payment, expecting to earn from sound-system plays and performance bookings.
+3. **Each voiced track is released as a separate single** — often on 7-inch vinyl with the vocal on the A-side and a dub version (instrumental/remix) on the B-side.
+4. **Sound systems** (mobile DJ operations that are the backbone of Jamaican music culture) play the various versions in competition, and the market determines which vocal "cuts" (versions) rise to prominence.
+5. **The riddim itself is freely reused.** If a riddim proves popular, other producers may re-record it (with slightly different arrangements) and voice new artists over it. The original producer has no practical mechanism — and often no desire — to prevent this.
+
+### The Great Riddims: Case Studies
+
+Some riddims have been used for hundreds of different songs spanning decades:
+
+**The Sleng Teng Riddim (1985):**
+Created by **Wayne Smith** and producer **King Jammy** using a preset rhythm on the **Casio MT-40** keyboard (a consumer-grade instrument costing approximately $100), the Sleng Teng riddim is widely considered the track that launched the digital dancehall era. The original song, "Under Mi Sleng Teng," was a massive hit. But the riddim itself was subsequently used for an estimated **300+ different vocal recordings** by different artists. Each of these was a commercially released single. Under strict copyright law, every one of them would have required licensing from Wayne Smith and King Jammy. In practice, no such licensing occurred. The result was not poverty for the creators — King Jammy became one of the most powerful figures in Jamaican music — but an explosion of creative output that would have been impossible under a licensing regime.
+
+**The Real Rock Riddim (1967/1970s-present):**
+Originally recorded by **Sound Dimension** (the Studio One house band) for producer **Coxsone Dodd**, the Real Rock riddim has been used for an estimated **500+ recordings** over nearly six decades. It was first a rocksteady track, then adapted for reggae, then dancehall, then digital dancehall. Artists from every era of Jamaican music have voiced over it. It is, in effect, a piece of musical infrastructure — as fundamental to Jamaican music as the 12-bar blues is to American music, but with the crucial difference that specific recordings of the riddim (not just the abstract chord progression) are freely reused.
+
+**The Stalag Riddim (1973/1985-present):**
+Based on a recording by **Ansel Collins** for Winston Riley's Techniques label, the Stalag riddim became one of the most used in dancehall history after **Sister Nancy's** "Bam Bam" (1982) popularized it. It has been voiced by hundreds of artists and was notably sampled by **Kanye West** ("Famous"), **The Weeknd**, and numerous hip-hop and electronic producers — at which point, ironically, American copyright law made its reuse vastly more complicated and expensive than it had ever been in Jamaica.
+
+**Other prolific riddims include:**
+- **Diseases Riddim** (Sly & Robbie): 100+ recordings
+- **Drum Song Riddim**: 80+ recordings
+- **Fade Away Riddim**: 100+ recordings
+- **Bam Bam Riddim**: evolved through multiple producers, 150+ recordings
+- **Diwali Riddim** (Steven "Lenky" Marsden, 2002): 50+ voicings in its first year alone, including Sean Paul's "Get Busy" (global #1 hit)
+
+### Why This System Produces More Music
+
+The riddim system's creative productivity has several economic explanations:
+
+**1. Zero marginal cost for new songs.** Once a riddim exists, the cost of creating a new song on it is limited to studio time for a vocal recording (often 1-2 hours). Compare this to the cost of recording a song from scratch in the American/European model: studio time for instrumental tracking, mixing, mastering, often $5,000-$50,000+ per track. The riddim system reduces the per-song production cost by 90%+.
+
+**2. Risk distribution.** A producer who voices 30 artists over one riddim is making 30 bets, not one. If 2-3 of those tracks become hits, the riddim is profitable. In the conventional model, each track represents a separate, concentrated bet.
+
+**3. Network effects.** A popular riddim attracts better artists, whose performances attract more listeners, who demand more versions, which attract more artists. The riddim becomes a **platform** — an economic concept that wouldn't be named for decades but that Jamaican producers intuitively understood.
+
+**4. Creative competition.** When 30 vocalists voice the same riddim, they are in direct creative competition — same instrumental, different vocal performances. This drives innovation in vocal delivery, lyrical content, and melodic invention. Dancehall's extraordinary vocal creativity — the toasting, the singjay style, the lyrical gymnastics — is partly a product of this competitive pressure.
+
+**5. Audience development.** Listeners who love one version of a riddim are natural audiences for other versions. The riddim functions as a discovery mechanism — a listener who encounters a riddim through one artist is likely to explore other voicings, exposing them to artists they might not otherwise have found.
+
+### The Copyright Counterfactual
+
+What would have happened if Jamaica had enforced American-style copyright on riddims?
+
+The answer is clear from examples where it was attempted. When Jamaican music intersected with the American and British music industries — as when dancehall artists sought international distribution in the 1990s-2000s — the riddim system collided with copyright regimes that couldn't accommodate it. International labels demanded exclusive rights to riddims; Jamaican producers and artists accustomed to a shared commons system found these demands incomprehensible and economically destructive.
+
+The result was a bifurcated system: Jamaican music continued to operate on riddim-culture principles domestically while international releases were forced into conventional copyright structures. The domestic system continued to produce vastly more music per capita than any other country; the international releases were fewer, more expensive to produce, and — many observers argue — less creative.
+
+### Lessons for Other Traditions
+
+Jamaica is not the only example. Several other musical traditions have thrived under loose copyright:
+
+- **American blues**: Before the copyright formalization of the 1960s-70s, blues songs were treated as communal property. A 12-bar blues progression with standard lyrical themes was voiced by dozens of artists, each bringing their own interpretation. Robert Johnson's "Sweet Home Chicago" has been recorded by hundreds of artists — under strict contemporary copyright enforcement, many of these versions would require licensing.
+- **West African griot tradition**: Songs belong to lineages and communities, not individuals. A griot's version of an epic is their performance, not their property.
+- **Irish/Scottish folk tradition**: Traditional songs are freely performed, adapted, and reinterpreted. The concept of "owning" "Danny Boy" or "The Fields of Athenry" would be absurd within the tradition.
+- **Early American country**: The Carter Family, Jimmie Rodgers, and their contemporaries freely borrowed melodies, lyrics, and arrangements from traditional sources and from each other.
+- **Open-source software**: The most productive software development in history (Linux, Apache, Python, etc.) operates on principles closer to riddim culture than to copyright maximalism — shared foundations, individual contributions, communal benefit.
+
+### The Dub Dimension
+
+Jamaica's loose copyright environment also enabled **dub** — arguably the most influential production technique in modern music. Dub producers like **King Tubby**, **Lee "Scratch" Perry**, and **Scientist** took existing recordings and radically transformed them in the mixing studio: stripping out vocals, emphasizing bass and drums, adding echo and reverb, creating entirely new works from existing material.
+
+Under strict copyright, every dub remix would require the original artist's permission and a licensing fee. In practice, dub producers worked with (and sometimes without) the consent of the original artists, treating recordings as raw material for further creation. The result was an entirely new art form — one that directly influenced hip-hop (sampling and remixing), electronic music (the producer-as-artist concept), and virtually every genre that uses studio manipulation as a creative tool.
+
+King Tubby, who is now recognized as one of the most important figures in the history of recorded music, operated out of a small studio in the Waterhouse neighborhood of Kingston. He was not wealthy. He did not own the copyrights to the recordings he transformed. He was murdered in 1989 at the age of 48, outside his studio. The economic returns from his innovations flowed primarily to the labels that distributed the music he created — a pattern that will be familiar from every other section of this report.
+
+---
+
+## 16. The Versioning Tradition: Why Classics Were Sung by Everyone
+
+The Jamaica example connects to a broader historical pattern that deserves explicit treatment: the **versioning tradition** that existed across popular music before copyright enforcement became aggressive.
+
+### The Pre-Copyright Norm
+
+Before the mid-20th century, it was entirely normal for multiple artists to record the same song — not as deliberate "covers" in the modern sense, but as part of a competitive marketplace where songs were **common material** and performances were the product.
+
+In the 1920s-40s, a hit song might be recorded simultaneously by 5-10 different artists:
+- "St. Louis Blues" (W.C. Handy, 1914) was recorded by **Bessie Smith**, **Louis Armstrong**, **Cab Calloway**, **Rudy Vallée**, **Ethel Waters**, and dozens of others — each version competing for the same audience
+- "Stardust" (Hoagy Carmichael, 1927) has been recorded over **1,500 times** by different artists
+- Tin Pan Alley songwriters wrote songs for **the market**, not for specific artists. The song was the product; the performance was the marketing.
+
+This system produced an extraordinary diversity of interpretations. When 10 artists record the same song, listeners can compare performances directly — vocal phrasing, rhythmic interpretation, arrangement choices. This comparative listening was a form of musical education for audiences and a form of competitive pressure for artists. You had to bring something distinctive to a song that everyone else was also singing.
+
+### What Changed: The Rise of the Singer-Songwriter and Exclusivity
+
+The shift began in the 1960s with the rise of the **singer-songwriter** model. When **Bob Dylan**, **Joni Mitchell**, **Carole King**, and their contemporaries wrote and performed their own material, the song and the artist became fused. "Blowin' in the Wind" was Dylan's song in a way that "Stardust" was nobody's song. Cover versions still happened, but they were now understood as **interpretations** of someone else's work rather than as independent products.
+
+Simultaneously, **record labels began demanding exclusivity**. A signed artist's recordings were the label's property, and labels had no interest in competing versions reaching the market. The label system killed the versioning tradition not through copyright law per se but through **contractual control** — artists couldn't record songs that competing labels' artists had already recorded, because the labels wouldn't allow it.
+
+### Rock and Roll's Multiple Recordings
+
+The transition is visible in the early rock and roll era:
+- "Hound Dog" was recorded by **Big Mama Thornton** (1952, the original) and **Elvis Presley** (1956, the hit) — different labels, different markets, different audiences
+- "Twist and Shout" was recorded by **the Top Notes** (1961), **the Isley Brothers** (1962), and **the Beatles** (1963) — each version found its own audience
+- "Louie Louie" was recorded by **Richard Berry** (1957), **the Kingsmen** (1963), and reportedly **1,600+ other artists** — the most covered rock song in history
+
+By the 1970s, this practice had largely ceased. Songs were "owned" by specific artists in both the legal and cultural sense. A cover version was now a statement — a tribute, a reinterpretation, a commentary — rather than standard market behavior.
+
+### The Loss
+
+The end of the versioning tradition represents a genuine creative loss. When multiple artists recorded the same material:
+- **Musical diversity increased** — different artists brought different rhythmic feels, different cultural backgrounds, different vocal approaches to the same material
+- **Audiences developed comparative listening skills** — they could hear what made one performance better than another
+- **Songwriters were valued as craftspeople** — the Tin Pan Alley system, whatever its flaws, recognized that a well-constructed song was a durable asset that could sustain hundreds of performances
+- **Artists had lower barriers to entry** — you didn't need to be a songwriter to be a recording artist; you needed to be a compelling performer
+- **Rhythmic innovation accelerated** — when the melody and lyrics were fixed, the primary variable was *how* you played it, which put rhythmic interpretation and arrangement at the center of artistic expression
+
+Jamaica's riddim culture preserved this tradition. It is, in a very real sense, the last surviving version of a system that once characterized all of Western popular music — and arguably produced more creative music, per capita, than any system that replaced it.
+
+---
+
+## 17. Who Owns What: The Label vs. Artist Economy
 
 ### The Standard Record Deal
 
@@ -448,7 +659,7 @@ The three major labels — **Universal Music Group** (owned by Vivendi), **Sony 
 
 # Part IV: GEOGRAPHY AS ECONOMICS — Why Scenes Emerge Where They Do
 
-## 15. The Cheap Rent Theory of Musical Innovation
+## 18. The Cheap Rent Theory of Musical Innovation
 
 A striking pattern in music history: **the most innovative scenes emerge in cities with cheap rent**. This is not coincidental. It is economic causation.
 
@@ -492,7 +703,7 @@ This cycle has played out in New York (Lower East Side, Williamsburg, Bushwick),
 
 # Part V: TECHNOLOGY AS ECONOMICS — Tools That Changed Who Could Make Music
 
-## 16. Democratization and Its Discontents
+## 19. Democratization and Its Discontents
 
 Each major technological shift in music production has lowered the barrier to entry, expanded the number of people who can make music, and changed the economic dynamics of the industry.
 
@@ -536,7 +747,7 @@ The rhythmic consequence is significant for BeatForge: quantization created the 
 
 ---
 
-## 17. The Internet and Production Cycles
+## 20. The Internet and Production Cycles
 
 ### The Compression of Creative Time
 
@@ -564,7 +775,7 @@ The album cycle of the vinyl/CD era gave artists **2-3 years** between releases.
 
 # Part VI: THE FESTIVAL ECONOMY — Live Music as Last Resort
 
-## 18. Why Touring Is Now the Primary Revenue Source
+## 21. Why Touring Is Now the Primary Revenue Source
 
 As recording revenue collapsed, **live performance** became the primary income source for most professional musicians. This represents a return to the pre-recording era, when all music income was performance-based.
 
@@ -594,7 +805,7 @@ The live music industry has its own power structure:
 
 # Part VII: CURRENT STATE AND FUTURE TRAJECTORIES
 
-## 19. The AI Disruption (2023–Present)
+## 22. The AI Disruption (2023–Present)
 
 AI-generated music represents the next wave of economic disruption:
 
@@ -612,7 +823,7 @@ As of 2025-2026, the legal status of AI-generated music is unresolved:
 - But it also democratizes music creation further — enabling people with musical ideas but limited technical skills to realize them
 - The likely outcome is a further bifurcation: AI-generated music for functional purposes (background music, content creation, advertising) and human-created music for cultural/artistic purposes
 
-## 20. The Subscription Economy and Its Discontents
+## 23. The Subscription Economy and Its Discontents
 
 The streaming model is facing increasing criticism:
 - **Artist payment**: Ongoing protests and proposals for reform (user-centric payment, higher per-stream rates)
@@ -620,7 +831,7 @@ The streaming model is facing increasing criticism:
 - **"Fake artists"**: Spotify has been caught placing tracks by pseudonymous artists (allegedly commissioned by the platform) on popular playlists, diluting the per-stream payment pool
 - **Alternative models**: Bandcamp (artist-direct sales with 85/15 split), Patreon (subscription-based fan support), and NFTs (briefly fashionable, now largely abandoned) represent attempts to create more equitable economic structures
 
-## 21. The Three-Major-Label Oligopoly
+## 24. The Three-Major-Label Oligopoly
 
 The music industry's power structure has consolidated dramatically:
 

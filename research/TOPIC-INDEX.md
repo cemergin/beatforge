@@ -567,19 +567,36 @@
   - DJ replacing bands (labor arbitrage → superstar economy): Part II §9
   - Band economics in streaming era: Part II §10
   - Copyright origins (1909 Act, composition vs recording): Part III §11
-  - Copyright promoting creativity (incentives, moral rights, PROs): Part III §12
-  - Copyright hindering creativity (sampling law, Blurred Lines, term extension): Part III §13
-  - Label vs artist economics (standard deals, 360 deals, master ownership, Taylor Swift): Part III §14
-  - Revenue distribution table (who gets what from $10): Part III §14
-  - Geography of innovation (cheap rent theory — Detroit, Berlin, Bristol, Bronx): Part IV §15
-  - Gentrification cycle: Part IV §15
-  - Democratization of production (home studio cost timeline): Part V §16
-  - Auto-tune/quantization as economic tools: Part V §16
-  - Internet production cycles and TikTok effect: Part V §17
-  - Festival economy and Live Nation monopoly: Part VI §18
-  - AI disruption: Part VII §19
-  - Three-major-label oligopoly: Part VII §21
-  - Catalog as investment asset class: Part VII §21
+  - Algorithmic playlist myth / modern payola (how playlists really work): Part I §8
+    - Editorial vs algorithmic playlists, label relationships, playlist pitching
+    - Fake artists / ghost artists controversy
+    - Discovery Mode as "payola with a discount"
+    - Historical parallel: 1950s radio payola table
+    - Platform comparison (Spotify, Apple Music, YouTube, Tidal)
+  - Copyright promoting creativity (incentives, moral rights, PROs): Part III §13
+  - Copyright hindering creativity (sampling law, Blurred Lines, term extension): Part III §14
+  - Jamaica counter-example (how loose copyright created a musical superpower): Part III §15
+    - Riddim culture economics (zero marginal cost, risk distribution, network effects)
+    - Great riddims case studies (Sleng Teng, Real Rock, Stalag, Diwali)
+    - Copyright counterfactual analysis
+    - Dub as product of loose copyright (King Tubby, Lee Perry, Scientist)
+    - Parallels: blues, griot tradition, Irish folk, open-source software
+  - Versioning tradition (why classics were sung by everyone): Part III §16
+    - Pre-copyright norm (Tin Pan Alley, multiple recordings)
+    - Rise of singer-songwriter and exclusivity
+    - Rock and roll transition (Hound Dog, Twist and Shout, Louie Louie)
+    - Creative losses from end of versioning
+  - Label vs artist economics (standard deals, 360 deals, master ownership, Taylor Swift): Part III §17
+  - Revenue distribution table (who gets what from $10): Part III §17
+  - Geography of innovation (cheap rent theory — Detroit, Berlin, Bristol, Bronx): Part IV §18
+  - Gentrification cycle: Part IV §18
+  - Democratization of production (home studio cost timeline): Part V §19
+  - Auto-tune/quantization as economic tools: Part V §19
+  - Internet production cycles and TikTok effect: Part V §20
+  - Festival economy and Live Nation monopoly: Part VI §21
+  - AI disruption: Part VII §22
+  - Three-major-label oligopoly: Part VII §24
+  - Catalog as investment asset class: Part VII §24
 
 ---
 
