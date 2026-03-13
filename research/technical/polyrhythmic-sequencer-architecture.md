@@ -57,6 +57,32 @@ interface AtomicPattern {
 
   /** Group color assignments (maps group index to color) */
   groupColors?: string[];
+
+  /** Whether this track is the timeline / reference pattern.
+   *  In West African music, the bell pattern is the structural anchor
+   *  that all other parts are conceived against. In Afro-Cuban music,
+   *  the clave serves this role. In gamelan, the gong cycle.
+   *
+   *  UI behavior when isReference = true:
+   *  - Always displayed as the top track (pinned)
+   *  - Visually highlighted (thicker border, distinct background)
+   *  - Other tracks' beat grouping can optionally snap to the
+   *    reference pattern's accent structure
+   *  - Cannot be muted accidentally (requires confirmation)
+   *  - In Library mode, the reference track gets a label explaining
+   *    its cultural role ("Bell pattern — structural timeline")
+   *
+   *  Only one track per stack should be marked isReference.
+   *  Engine behavior is identical — this is purely a UI/UX concept. */
+  isReference?: boolean;
+
+  /** Optional: link to a complementary interlocking partner.
+   *  In Balinese kotekan, Haitian Rara, Andean panpipes, Shona mbira,
+   *  and Basque txalaparta, two tracks interlock to form a composite.
+   *  When set, the UI renders a faint "composite" ghost row showing
+   *  the union of both tracks' hits. Purely visual — the engine
+   *  plays both tracks independently as normal. */
+  interlockingPartnerId?: string;
 }
 
 interface Hit {
@@ -92,13 +118,14 @@ interface Hit {
 }
 ```
 
-**Ewe bell pattern (12 steps, 12/8):**
+**Ewe bell pattern (12 steps, 12/8) — reference/timeline track:**
 ```typescript
 {
   id: "bell-ewe",
   instrument: "bell",
   stepCount: 12,
   stepsPerBeat: 3, // triplet subdivision (4 beats × 3 = 12)
+  isReference: true, // ← this IS the timeline — all other parts orient to it
   steps: [
     { velocity: 110 }, null, { velocity: 90 },
     null, { velocity: 90 }, null,
@@ -623,6 +650,12 @@ Users can **click** to change groupings. Tapping on a group boundary in the grid
 | **Song mode** | Verse → Chorus → Bridge | Chain with repeatCount per link |
 | **Speed trainer** | Same pattern, BPM increases | Chain with same pattern, different tempos per link |
 | **Cross-rhythm** (3:4, 5:4, 7:4) | Different cycle lengths | Stack: one track at 3, another at 4 |
+| **Timeline/bell pattern** (W. African, Afro-Cuban) | One track is the structural reference | `isReference: true` on bell/clave track; UI pins it, highlights it |
+| **Interlocking/kotekan** (Balinese, Rara, Shona, Andean) | Two parts form one composite | `interlockingPartnerId` links two tracks; UI shows composite ghost row |
+| **Hemiola/sesquiáltera** (Latin, Balkan, African) | 3:2 dual-meter feel | Two tracks with different beatGrouping (3+3 vs 2+2+2) over same stepCount |
+| **Nadai bhedam** (Carnatic) | Different subdivisions layered | Tracks with different stepsPerBeat (e.g., 4 vs 3) in same stack |
+| **Konnakol syllables** (Carnatic) | Rhythmic solfege pedagogy | Pattern metadata + Library mode cultural annotations |
+| **Talking drum** (Yoruba dundun) | Pitch-rhythm — melodic drum | Beyond sequencer scope (pitch contour, not pattern); noted for future |
 
 ## 8. Progressive Disclosure
 
