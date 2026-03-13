@@ -62,6 +62,22 @@
 - **WAM Events** (MIDI, automation, transport, SysEx, MPE, OSC): `technical/WEB_AUDIO_REFERENCE.md` Section 4 (lines 282-388)
 - **Creating a plugin from scratch** (SDK, project structure, index.js, processor.js): `technical/WEB_AUDIO_REFERENCE.md` Section 5 (lines 390-500+)
 
+### Polyrhythmic Sequencer Architecture
+- **Complete design document**: `technical/polyrhythmic-sequencer-architecture.md`
+  - AtomicPattern data model (variable stepCount, stepsPerBeat, beatGrouping, micro-timing, probability): Part II §2
+  - Stack operator (simultaneous polyrhythm, LCM super-cycle calculation): Part II §3
+  - Chain operator (sequential composition — Zencir, song mode): Part II §3
+  - Scheduling engine (cursor-per-track, lookahead scheduler, TypeScript): Part III §4
+  - Swing/shuffle per-track implementation: Part III §4
+  - UI visualization strategies (linear grid, circular/radial, chain view): Part IV §5
+  - Beat grouping system (color-coded, interactive): Part V §6
+  - World rhythm coverage table (what traditions this handles): Part VI §7
+  - Progressive disclosure (4 levels from basic to full polyrhythm): Part VI §8
+  - Performance analysis (memory, scheduling, audio timing): Part VII §9
+  - JSON pattern format (compatible with research notation): Part VII §10
+  - Euclidean rhythm generation (Bjorklund algorithm): Part VII §11
+  - Phase mapping (which features in which phase): Part VIII §12
+
 ### PWA (Progressive Web App)
 - **Web App Manifest** (all fields, icons, shortcuts, screenshots): `technical/pwa-audio-reference.md` Section 1.1 (lines 8-190)
 - **Service Worker** (lifecycle: install, activate, fetch): `technical/pwa-audio-reference.md` Section 1.2 (lines 192-313)

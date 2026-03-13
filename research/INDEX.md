@@ -1,6 +1,6 @@
 # BeatForge Research Corpus — Master Index
 
-**Total: ~47,618 lines | 30 documents**
+**Total: ~48,417 lines | 31 documents**
 **Last updated: March 13, 2026**
 
 ---
@@ -47,6 +47,7 @@ When searching this corpus:
 | 5 | Keyboard Control Reference | `technical/drum-machine-keyboard-reference.md` | 1,860 | QWERTY-to-pad mapping (Ableton, FL Studio, custom), keyboard shortcuts for production, JavaScript keydown implementation, velocity layers, focus management, accessibility |
 | 6 | Turkish Rhythmic Systems | `technical/turkish-rhythmic-systems-reference.md` | 1,452 | Ottoman usul system, Düm/Tek/Ka stroke vocabulary, simple to compound meters (2/4 through 120 beats), Usul vs Western meter, notation systems, regional folk rhythms |
 | 7 | Practice Methodology | `technical/drum-machine-practice-methodology.md` | 1,336 | Deliberate practice theory (Ericsson), speed training protocols, random mute exercises, 40 PAS rudiments, polyrhythm training, odd meter acclimation, konnakol, groove templates, spaced repetition |
+| 7a | Polyrhythmic Sequencer Architecture | `technical/polyrhythmic-sequencer-architecture.md` | 799 | Universal rhythm engine design: atomic patterns (variable step count, stepsPerBeat, beat grouping, micro-timing), stack operator (polyrhythm via independent cursors, LCM super-cycle), chain operator (Zencir/song mode), scheduling engine (TypeScript), UI visualization (linear/circular/chain views), progressive disclosure (4 levels), JSON pattern format, Euclidean rhythm generation, phase mapping |
 
 ### Pattern Libraries (`patterns/`)
 
@@ -107,7 +108,8 @@ research/
 │   ├── pwa-audio-reference.md
 │   ├── drum-machine-keyboard-reference.md
 │   ├── turkish-rhythmic-systems-reference.md
-│   └── drum-machine-practice-methodology.md
+│   ├── drum-machine-practice-methodology.md
+│   └── polyrhythmic-sequencer-architecture.md
 ├── patterns/                         ← Notated rhythm patterns
 │   ├── western-genres.md             (211 patterns)
 │   ├── turkish-arabic-indian.md      (~70 patterns)
