@@ -108,29 +108,48 @@ Two complementary data structures: pattern-level metadata and a knowledge graph.
 
 ### 4a. Pattern Metadata
 
-Each pattern JSON (already defined in the product spec §9.1) gains these content fields:
+The content fields merge directly into the existing `Pattern` interface from product spec §9.1. This replaces the existing `culturalNote` and `story` fields with richer equivalents, and adds new fields for graph connectivity:
 
 ```typescript
-interface PatternContent {
-  /** Layer 1: One-line cultural anchor (~80 chars) */
+// These fields are ADDED to the existing Pattern interface (product spec §9.1).
+// They replace: culturalNote → tagline, story → story (now markdown with links).
+// Existing fields (id, name, origin, timeSignature, bpm, tracks, etc.) are unchanged.
+
+interface Pattern {
+  // ... all existing fields from product spec §9.1 ...
+
+  /** Layer 1: One-line cultural anchor (~80 chars).
+   *  Replaces the old `culturalNote` field. */
   tagline: string;
 
-  /** Layer 2: Story card (2-3 paragraphs, markdown with internal links) */
+  /** Layer 2: Story card (2-3 paragraphs, markdown with internal links).
+   *  Replaces the old `story` field. Now expects markdown with
+   *  internal links like [The Riddim Economy](#riddim-economy). */
   story: string;
 
-  /** Tags for search, filtering, and connection discovery */
+  /** Tags for search, filtering, and connection discovery.
+   *  Extends the existing `tags` field with richer vocabulary. */
   tags: string[];
 
-  /** Reference to the tradition this pattern belongs to */
-  tradition: string; // ID into knowledge graph
+  /** ID into knowledge graph — links to a Tradition entity.
+   *  This is a graph ID (e.g., "ottoman-folk"), NOT the human-readable
+   *  label from origin.tradition. The display name comes from the
+   *  Tradition entity's `title` field.
+   *  Note: origin.region/subregion/tradition remain for display;
+   *  this field adds graph connectivity. */
+  traditionId: string;
 
-  /** Geographic origin */
-  region: string; // ID into knowledge graph
+  /** ID into knowledge graph Region entity.
+   *  Links to the Region hierarchy for geographic navigation.
+   *  Note: origin.region/subregion remain for simple display;
+   *  this field adds hierarchical graph connectivity. */
+  regionId: string;
 
   /** Traditional instruments associated with this pattern */
   instruments: string[];
 
-  /** IDs of directly related patterns (variants, family members) */
+  /** IDs of directly related patterns (variants, family members).
+   *  Extends the existing `relatedPatterns` field. */
   relatedPatterns: string[];
 
   /** IDs of themes/articles this pattern connects to */
@@ -152,6 +171,8 @@ type ContentType =
   | "technical";    // Instruments, technology, production
 ```
 
+**Migration note:** The product spec's `origin.region`, `origin.subregion`, and `origin.tradition` fields remain for human-readable display. The new `traditionId` and `regionId` fields add graph connectivity. Both coexist — display fields for the UI, ID fields for the knowledge graph.
+
 ### 4b. Knowledge Graph
 
 A separate JSON structure that ships with the app. Three entity types:
@@ -172,8 +193,11 @@ interface Tradition {
 interface Article {
   id: string;
   title: string;
+  /** Primary type for filtering. Use tags[] for finer categorization. */
   type: "thematic" | "econopolitics" | "instrument-history"
-      | "geographic-connection" | "movement";
+      | "geographic-connection" | "movement" | "production" | "social";
+  /** Additional categorization tags (e.g., ["copyright", "streaming"]) */
+  typeTags: string[];
   tagline: string;        // For article cards
   story: string;          // Full article, markdown
   patterns: string[];     // Pattern IDs referenced
@@ -186,7 +210,7 @@ interface Trail {
   id: string;
   title: string;
   tagline: string;        // One-line hook
-  coverColor: string;     // Visual identity
+  coverColor: string;     // From the BeatForge palette: mode accents (#e17055, #6c5ce7, #00b894) or beat grouping colors. Constrained to the design system.
   /** Ordered sequence of stops on the trail.
    *  Each stop is a node in the graph (pattern, tradition,
    *  or article) with optional editorial glue text. */
@@ -217,6 +241,12 @@ interface Region {
   name: string;
   parentRegion?: string;  // For nesting: "turkey-thrace" → "turkey" → "mediterranean"
   traditions: string[];
+  /** Brief description for the region filter/sidebar (1-2 sentences) */
+  tagline?: string;
+  /** Optional longer description shown when region is selected as filter.
+   *  Regions are primarily navigation, not content destinations —
+   *  but a brief contextual note improves the browsing experience. */
+  description?: string;
 }
 ```
 
@@ -237,6 +267,18 @@ The graph supports these typed relationships:
 | Trail | `contains` | Pattern/Tradition/Article | (ordered sequence) |
 
 All relationships are stored as ID arrays on the source entity. The graph is fully traversable in both directions at build time (invert the relationships to generate back-links).
+
+**Backlink generation:** A Node.js pre-build script reads the knowledge graph JSON, computes inverse relationships (e.g., for every `Article.patterns` entry, add the article ID to the pattern's `featuredInArticles` list), and writes an enriched `knowledge-graph.json` to the static assets directory. This runs as part of the Vite build pipeline (`vite.config.ts` plugin or `prebuild` npm script). Backlinks are never computed at runtime in the browser.
+
+**Search implementation:** Client-side full-text search via [MiniSearch](https://lucaong.github.io/minisearch/) (lightweight, ~6KB gzipped). The search index is built at build time from pattern names, taglines, stories, tags, tradition titles, article titles, and region names. The pre-built index ships as a static JSON file alongside the knowledge graph. Expected index size: ~200-400KB for 380+ patterns with stories — well within PWA budget.
+
+**Full article assembly:** A pattern's "full article" page (Layer 3) is a **composite view** assembled at render time from multiple sources:
+1. The pattern's own `story` field (the story card — always shown first)
+2. Relevant sections from its parent Tradition's `story` (pulled via `traditionId`)
+3. Article entities linked via `themes` (shown as "Rabbit Holes" section)
+4. Related patterns (from `relatedPatterns` IDs)
+
+This means no separate "full article" entity is needed per pattern — the full article page is a **view** that assembles content from the graph. This keeps the data model DRY and ensures updates to a Tradition's story automatically update all patterns belonging to it.
 
 ---
 
@@ -259,6 +301,8 @@ The instrument remains primary. Content appears as contextual enrichment:
 **Story Card:** Expandable via a small "Learn more" or book icon. Slides in as a panel (right side on desktop, bottom sheet on mobile). Contains the 2-3 paragraph story with hyperlinks. Links navigate to Library mode.
 
 ### 5b. Library Mode (All 4 Layers)
+
+**Layout change from product spec:** This replaces the 3-column Library layout from product spec §8.1 (region sidebar | pattern cards | detail panel) with a trails-first layout. The region sidebar becomes a filter mechanism (dropdown or chip bar), not a primary column. The detail panel is replaced by dedicated full-article pages. This is a deliberate deviation — the brainstorming process determined that thematic trails and hypertext navigation better serve the educational mission than geographic browsing.
 
 Library mode is the content hub. Three entry points:
 
@@ -452,10 +496,13 @@ The four-layer system and knowledge graph are new additions that the product spe
 
 ---
 
-## 9. Open Questions
+## 9. Design Decisions
+
+1. **Offline:** The full knowledge graph ships with the PWA as static JSON. At ~380 patterns with stories, this is estimated at 1-3 MB — acceptable for the offline-first constraint and well within modern PWA budgets.
+
+## 10. Open Questions
 
 1. **Trail authoring:** Should trails be hand-authored JSON (editorial control, labor-intensive) or generated from the knowledge graph with editorial review (scalable, less control)?
 2. **Internationalization:** Should content be translatable? The storyteller voice is hard to translate well. Start English-only, plan for translation later?
 3. **Community contributions:** How do users suggest corrections, additions, or new stories? GitHub PRs on the content JSON? An in-app feedback mechanism?
 4. **Content licensing:** Research files cite academic sources. Do we need to rephrase to avoid any copyright issues with adapted content? (Probably yes — the voice change naturally handles this.)
-5. **Offline:** Does the full knowledge graph ship with the PWA, or is it fetched on demand? Given the "offline-first" constraint, it should ship. At ~380 patterns with stories, this is probably 1-3 MB of JSON — acceptable.
