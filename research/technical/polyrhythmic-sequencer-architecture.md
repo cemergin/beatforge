@@ -22,6 +22,8 @@ These are not separate features. They are two views of the same underlying model
 
 A standard 16-step drum pattern is the degenerate case: all tracks have length 16, and there's one node in the graph.
 
+This model is not invented — it's how real percussion traditions already work. Ottoman usul notation separates **düm** (bass tone) and **tek** (rim tone) as two independent voices over the same cycle. Gamelan colotomic notation separates gong, kenong, kempul, and ketuk as layers at different densities. West African ensemble notation separates bell, shaker, and each drum as independent patterns. The AtomicPattern model simply makes this universal: every instrument voice is its own track, with its own step count and subdivision.
+
 ---
 
 # Part II: THE ATOMIC PATTERN
@@ -38,8 +40,13 @@ interface AtomicPattern {
   /** Instrument/voice this pattern controls */
   instrument: InstrumentId;
 
-  /** Number of steps in one cycle of this pattern */
-  stepCount: number;
+  /** Number of steps in one cycle of this pattern.
+   *  Range: 1–256. Max 256 is sufficient for the longest traditional
+   *  forms (gamelan gongan, Ottoman Zencir laid flat) while keeping
+   *  the UI manageable. Users can always use the fractional stepsPerBeat
+   *  approach or chain mode for longer forms, but a flat 256-step grid
+   *  is available if preferred. */
+  stepCount: number; // 1–256
 
   /** How many steps constitute one beat (for tempo calculation).
    *  Controls the relationship between step advancement and tempo.
