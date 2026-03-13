@@ -1,6 +1,6 @@
 # BeatForge Research Corpus — Master Index
 
-**Total: ~46,728 lines | 29 documents**
+**Total: ~47,407 lines | 30 documents**
 **Last updated: March 13, 2026**
 
 ---
@@ -80,6 +80,7 @@ When searching this corpus:
 | 27 | Vietnam/Cambodia/Malaysia | `musicology/vietnam-cambodia-malaysia.md` | 948 | Dong Son bronze drums, Chinese influence (1000 years), Champa kingdom, nha nhac (Hue court music), ca tru, cheo theater, hat boi, Cambodian (Khmer classical, pinpeat, apsara), Malaysian (gamelan Melayu, kompang, joget) |
 | 28 | Electronic/Hip-Hop/Funk/Reggae | `musicology/electronic-hiphop-funk-reggae.md` | 900 | James Brown and "The One," African roots of funk, New Orleans funk (Prof. Longhair, Meters, second line), Parliament-Funkadelic, hip-hop (breakbeats, sampling, MPC, Dilla), electronic music (TR-808/909, house, techno, DnB), reggae/dub/dancehall |
 | 29a | Electronic Music History | `musicology/electronic-music-history.md` | 626 | Complete electronic music genealogy: pre-history (musique concrète, Moog, Buchla), synth-pop, industrial/EBM, Italo disco/Hi-NRG, deep house/garage, ambient, French touch, minimal techno, Berlin School, instruments timeline, movements (Second Summer of Love, superclub era, Ibiza), current landscape (2024-2026), AI in production, modular synth revival |
+| 29b | Econopolitics of Music | `musicology/econopolitics-of-music.md` | 679 | How economics/technology shaped musical form: format as destiny (78rpm→45→LP→CD→MP3→streaming), big band death (AFM ban, entertainment tax), DJ replacing bands, copyright (sampling law, Blurred Lines, term extension), label vs. artist economics (360 deals, master ownership, streaming royalties), geography of innovation (cheap rent theory), production democratization, TikTok effect, AI disruption, festival economy, three-label oligopoly |
 
 ### Design Research (`design/`)
 
@@ -133,6 +134,7 @@ research/
 │   ├── vietnam-cambodia-malaysia.md
 │   ├── electronic-hiphop-funk-reggae.md
 │   ├── electronic-music-history.md
+│   ├── econopolitics-of-music.md
 │   ├── global-electronic-scenes.md
 │   └── underground-electronic-movements.md
 └── design/                           ← UI/UX design research

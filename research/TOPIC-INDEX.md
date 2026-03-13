@@ -555,6 +555,32 @@
 - **Amen Break, Funky Drummer, Apache, Impeach the President, Think, and more**: `patterns/western-genres.md` Section 6 (patterns 179-188, lines 2373-2498)
 - **Programmed Classics** (Blue Monday, Pacific State, Strings of Life, Acid Tracks): Section 7 (patterns 189-194, lines 2501-2577)
 
+### Econopolitics / Music Industry / Copyright
+- **Complete treatment**: `musicology/econopolitics-of-music.md`
+  - Format as destiny (78rpm → 45 → LP → CD → MP3 → streaming): Part I §1-7
+  - Jukebox economy and payola: Part I §3
+  - LP and the album cycle: Part I §4
+  - CD bloat and loudness war: Part I §5
+  - Napster, piracy, and industry collapse: Part I §6
+  - Streaming economics (per-stream rates, pro-rata model, playlist-bait): Part I §7
+  - Big band death (AFM ban, entertainment tax, TV): Part II §8
+  - DJ replacing bands (labor arbitrage → superstar economy): Part II §9
+  - Band economics in streaming era: Part II §10
+  - Copyright origins (1909 Act, composition vs recording): Part III §11
+  - Copyright promoting creativity (incentives, moral rights, PROs): Part III §12
+  - Copyright hindering creativity (sampling law, Blurred Lines, term extension): Part III §13
+  - Label vs artist economics (standard deals, 360 deals, master ownership, Taylor Swift): Part III §14
+  - Revenue distribution table (who gets what from $10): Part III §14
+  - Geography of innovation (cheap rent theory — Detroit, Berlin, Bristol, Bronx): Part IV §15
+  - Gentrification cycle: Part IV §15
+  - Democratization of production (home studio cost timeline): Part V §16
+  - Auto-tune/quantization as economic tools: Part V §16
+  - Internet production cycles and TikTok effect: Part V §17
+  - Festival economy and Live Nation monopoly: Part VI §18
+  - AI disruption: Part VII §19
+  - Three-major-label oligopoly: Part VII §21
+  - Catalog as investment asset class: Part VII §21
+
 ---
 
 ## F. PRACTICE & EDUCATION
