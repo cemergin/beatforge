@@ -176,6 +176,17 @@ export function PatternDetail({
             </section>
           )}
 
+          {pattern.sources && pattern.sources.length > 0 && (
+            <section className="bf-detail-section">
+              <h3 className="bf-detail-h">Sources</h3>
+              <ul className="bf-detail-sources">
+                {pattern.sources.map((src) => (
+                  <li key={src}>{src}</li>
+                ))}
+              </ul>
+            </section>
+          )}
+
           <section className="bf-detail-section">
             <h3 className="bf-detail-h">Related</h3>
             <RelatedRow

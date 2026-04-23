@@ -293,24 +293,40 @@ export function Studio({
     if (partial.default !== undefined) setBpm(partial.default);
   }, []);
 
+  // Count-in timer ref so stop / unmount / pattern-change can cancel it,
+  // preventing a ghost "countingIn=false" setter firing after unmount.
+  const countInTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const clearCountInTimer = useCallback(() => {
+    if (countInTimerRef.current !== null) {
+      clearTimeout(countInTimerRef.current);
+      countInTimerRef.current = null;
+    }
+  }, []);
+  useEffect(() => clearCountInTimer, [clearCountInTimer]);
+
   const togglePlay = useCallback(async () => {
     await engine.ensureCtx();
     if (playing) {
       engine.stop();
       setPlaying(false);
       setCountingIn(false);
+      clearCountInTimer();
     } else {
       if (bpm < trainerCfg.from && trainerOn) setBpm(trainerCfg.from);
       engine.setBpm(bpm);
       engine.start(countInBars);
       setPlaying(true);
+      clearCountInTimer();
       if (countInBars > 0) {
         setCountingIn(true);
         const barSec = draft.steps * (60 / bpm);
-        setTimeout(() => setCountingIn(false), countInBars * barSec * 1000);
+        countInTimerRef.current = setTimeout(() => {
+          setCountingIn(false);
+          countInTimerRef.current = null;
+        }, countInBars * barSec * 1000);
       }
     }
-  }, [engine, playing, bpm, countInBars, draft.steps, trainerOn, trainerCfg.from]);
+  }, [engine, playing, bpm, countInBars, draft.steps, trainerOn, trainerCfg.from, clearCountInTimer]);
 
   // Edits.
   const toggleCell = useCallback((tr: VoiceId, step: number) => {

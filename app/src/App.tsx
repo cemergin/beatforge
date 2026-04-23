@@ -10,6 +10,7 @@ import { deserializePattern } from './patterns/serialize';
 import { loadAllSafe } from './lib/db';
 import { getMasterVolume } from './lib/storage';
 import { logError } from './lib/errors';
+import { UpdateBanner } from './components/UpdateBanner';
 import './styles/app.css';
 
 type Theme = 'warm' | 'noir' | 'paper';
@@ -322,6 +323,7 @@ export default function App() {
       {DEV_MODE && tab === '_patterns' && (
         <PatternsSandbox engine={engine} />
       )}
+      <UpdateBanner />
     </div>
   );
 }
