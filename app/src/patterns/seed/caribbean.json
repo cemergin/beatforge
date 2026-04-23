@@ -2608,5 +2608,123 @@
       "calypso",
       "soca"
     ]
+  },
+  {
+    "id": "jamaica-rockers-steady",
+    "name": "Rockers (4-on-floor / Sly Dunbar)",
+    "origin": "Jamaica",
+    "tradition": "Reggae",
+    "genre": "popular",
+    "timeSig": "4/4",
+    "grouping": [
+      4,
+      4,
+      4,
+      4
+    ],
+    "stepUnit": 16,
+    "steps": 16,
+    "bpm": {
+      "default": 320,
+      "min": 280,
+      "max": 380
+    },
+    "difficulty": "beginner",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0
+      ],
+      "SN": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "HH": [
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1
+      ],
+      "CP": [
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        2,
+        0
+      ]
+    },
+    "defaultKit": "727",
+    "country": "JM",
+    "region": "caribbean",
+    "tags": [
+      "reggae",
+      "rockers",
+      "four-on-floor",
+      "variant",
+      "sly-dunbar"
+    ],
+    "instruments": [
+      "drums",
+      "bass",
+      "skank guitar"
+    ],
+    "swingable": false,
+    "story": "The militant rockers style Sly Dunbar drove onto Black Uhuru records \u2014 kick on all four beats, cross-stick on 3. Where the classic rockers (see jamaica-rockers) sits behind the beat on 1 and 3, this variant pushes forward with continuous quarter-note momentum.",
+    "relatedIds": [
+      "jamaica-one-drop",
+      "jamaica-rockers",
+      "jamaica-steppers"
+    ]
   }
 ]

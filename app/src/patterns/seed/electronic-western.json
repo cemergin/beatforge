@@ -4907,5 +4907,102 @@
     ],
     "swingable": false,
     "story": "Frankfurt and Ibiza \u2014 four-on-the-floor under supersaw pads, built for hands-in-the-air moments. Paul van Dyk, Ti\u00ebsto, Armin."
+  },
+  {
+    "id": "country-two-step-modern",
+    "name": "Country Two-Step (modern 4-on-floor)",
+    "origin": "Nashville",
+    "tradition": "Modern country radio production",
+    "genre": "popular",
+    "timeSig": "4/4",
+    "grouping": [
+      4,
+      4,
+      4,
+      4
+    ],
+    "stepUnit": 16,
+    "steps": 16,
+    "bpm": {
+      "default": 520,
+      "min": 480,
+      "max": 640
+    },
+    "difficulty": "beginner",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0
+      ],
+      "SN": [
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0
+      ],
+      "HH": [
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1
+      ]
+    },
+    "defaultKit": "707",
+    "country": "US",
+    "region": "electronic-western",
+    "tags": [
+      "country",
+      "two-step",
+      "four-on-floor",
+      "modern",
+      "variant"
+    ],
+    "instruments": [
+      "drum kit",
+      "pedal steel"
+    ],
+    "swingable": false,
+    "story": "The traditional Bob Wills honky-tonk shuffle (see country-two-step) has kick on beats 1 and 3. From about the mid-2000s onward, Nashville production moved the kick to four-on-the-floor so country singles could translate to dance floors and pop radio \u2014 the boom-chick became a thump-thump-thump-thump with the snare riding above.",
+    "relatedIds": [
+      "country-two-step"
+    ]
   }
 ]

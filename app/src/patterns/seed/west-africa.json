@@ -3529,5 +3529,97 @@
       "lamba",
       "sabar"
     ]
+  },
+  {
+    "id": "bembe-68-yoruba",
+    "name": "Bemb\u00e9 6/8 (Yoruba rotation)",
+    "origin": "Nigeria / Cuba",
+    "tradition": "Yoruba orisha / Afro-Cuban",
+    "genre": "devotional",
+    "timeSig": "12/8",
+    "grouping": [
+      3,
+      3,
+      3,
+      3
+    ],
+    "stepUnit": 8,
+    "steps": 12,
+    "bpm": {
+      "default": 230,
+      "min": 180,
+      "max": 300
+    },
+    "difficulty": "intermediate",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        2,
+        0,
+        0,
+        2,
+        0,
+        0,
+        2,
+        0,
+        0
+      ],
+      "SN": [
+        0,
+        0,
+        1,
+        0,
+        0,
+        2,
+        0,
+        1,
+        0,
+        0,
+        2,
+        0
+      ],
+      "HH": [
+        2,
+        0,
+        2,
+        2,
+        0,
+        2,
+        0,
+        2,
+        0,
+        2,
+        2,
+        0
+      ]
+    },
+    "defaultKit": "727",
+    "region": "west-africa",
+    "tags": [
+      "bell",
+      "12-8",
+      "orisha",
+      "yoruba",
+      "variant"
+    ],
+    "instruments": [
+      "agog\u00f4",
+      "bata",
+      "shekere"
+    ],
+    "swingable": false,
+    "story": "One of two common rotations of the 7-stroke bell. Where the Mande/Ewe form (see bembe-68) places its strokes at 0,2,4,5,7,9,10, the Yoruba rotation starts on a different pulse of the same underlying pattern and is heard across West African orisha ceremony and, after the Middle Passage, in Cuban Santer\u00eda.",
+    "relatedIds": [
+      "agbekor",
+      "atsiagbekor",
+      "bembe",
+      "bembe-68",
+      "bomba-holande",
+      "buleria",
+      "ijexa",
+      "rumba-columbia"
+    ]
   }
 ]

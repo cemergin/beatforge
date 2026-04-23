@@ -3070,5 +3070,105 @@
       "rumba-clave-3-2",
       "yambu"
     ]
+  },
+  {
+    "id": "cascara-shell",
+    "name": "C\u00e1scara (full timbale shell)",
+    "origin": "Cuba",
+    "tradition": "Salsa timbale shell pattern",
+    "genre": "folk-dance",
+    "timeSig": "4/4",
+    "grouping": [
+      4,
+      4,
+      4,
+      4
+    ],
+    "stepUnit": 16,
+    "steps": 16,
+    "bpm": {
+      "default": 220,
+      "min": 160,
+      "max": 320
+    },
+    "difficulty": "intermediate",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "SN": [
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0
+      ],
+      "HH": [
+        2,
+        0,
+        2,
+        0,
+        2,
+        2,
+        0,
+        2,
+        2,
+        0,
+        2,
+        2,
+        0,
+        2,
+        0,
+        2
+      ]
+    },
+    "defaultKit": "727",
+    "country": "CU",
+    "region": "cuba-afrocaribbean",
+    "tags": [
+      "cuban",
+      "cascara",
+      "timbale",
+      "salsa",
+      "variant",
+      "dense"
+    ],
+    "instruments": [
+      "timbales",
+      "palitos",
+      "cowbell"
+    ],
+    "swingable": true,
+    "story": "The real c\u00e1scara \u2014 the 11-stroke figure a timbalero plays on the shell of the timbales during son montuno sections. The simplified version (see cascara) reduces this to backbeat snare for drum-kit translation; this is the dense original that rides next to the clave and cowbell.",
+    "relatedIds": [
+      "cascara",
+      "mambo"
+    ]
   }
 ]

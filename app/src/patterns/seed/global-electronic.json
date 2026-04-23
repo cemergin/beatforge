@@ -2477,5 +2477,238 @@
     ],
     "swingable": false,
     "story": "UK 2020s fusion \u2014 hyperpop's sheen, dubstep's bass weight and tech-house's driving four-on-the-floor, collapsed into festival drops."
+  },
+  {
+    "id": "moombahton-chill",
+    "name": "Moombahton (slow-house)",
+    "origin": "DC / Amsterdam",
+    "tradition": "Moombahton chill / Dave Nada beach form",
+    "genre": "electronic",
+    "timeSig": "4/4",
+    "grouping": [
+      4,
+      4,
+      4,
+      4
+    ],
+    "stepUnit": 16,
+    "steps": 16,
+    "bpm": {
+      "default": 432,
+      "min": 420,
+      "max": 448
+    },
+    "difficulty": "beginner",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0
+      ],
+      "SN": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0
+      ],
+      "HH": [
+        1,
+        0,
+        2,
+        0,
+        1,
+        0,
+        2,
+        0,
+        1,
+        0,
+        2,
+        0,
+        1,
+        0,
+        2,
+        0
+      ],
+      "CP": [
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0
+      ]
+    },
+    "defaultKit": "808",
+    "country": "US",
+    "region": "global-electronic",
+    "tags": [
+      "moombahton",
+      "four-on-floor",
+      "chill",
+      "variant"
+    ],
+    "instruments": [
+      "808",
+      "drum machine"
+    ],
+    "swingable": false,
+    "story": "Dave Nada slowed Dutch house records to 108 BPM at a Bethesda basement party in 2009 and moombahton was born. The dembow-forward variant (see moombahton) became the club-banger form; this slow-house variant \u2014 four-on-floor over languid tropical percussion \u2014 stayed closer to its ancestor and became the poolside mid-2010s sound.",
+    "relatedIds": [
+      "big-room-house",
+      "moombahton",
+      "reggaeton-dembow",
+      "tribal-guarachero"
+    ]
+  },
+  {
+    "id": "jersey-club-squeak",
+    "name": "Jersey Club (bed-squeak dense)",
+    "origin": "Newark, New Jersey",
+    "tradition": "Jersey club dense kick",
+    "genre": "electronic",
+    "timeSig": "4/4",
+    "grouping": [
+      4,
+      4,
+      4,
+      4
+    ],
+    "stepUnit": 16,
+    "steps": 16,
+    "bpm": {
+      "default": 540,
+      "min": 520,
+      "max": 560
+    },
+    "difficulty": "advanced",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        2,
+        2,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        2,
+        2,
+        0,
+        0,
+        0
+      ],
+      "SN": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "HH": [
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1
+      ],
+      "CP": [
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0
+      ]
+    },
+    "defaultKit": "808",
+    "country": "US",
+    "region": "global-electronic",
+    "tags": [
+      "jersey-club",
+      "bed-squeak",
+      "dense",
+      "variant"
+    ],
+    "instruments": [
+      "808",
+      "vocal chop",
+      "bed squeak"
+    ],
+    "swingable": false,
+    "story": "The other Jersey club kick template \u2014 Tim Dolla / Uniiqu3 era \u2014 crams tresillo clusters against the backbeat and rides 16th-note bed squeaks in the kicks themselves. Less formal than the canonical two-quarters-plus-tresillo (see jersey-club); the squeak IS the groove.",
+    "relatedIds": [
+      "hiphop-jersey-club",
+      "jersey-club"
+    ]
   }
 ]

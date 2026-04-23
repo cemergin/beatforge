@@ -2158,5 +2158,107 @@
       "curcuna",
       "curcuna-fast"
     ]
+  },
+  {
+    "id": "maqsoum-shaabi",
+    "name": "Maqsoum (shaabi / street variant)",
+    "origin": "Egypt (Cairo)",
+    "tradition": "Egyptian shaabi / wedding",
+    "genre": "popular",
+    "timeSig": "4/4",
+    "grouping": [
+      4,
+      4,
+      4,
+      4
+    ],
+    "stepUnit": 16,
+    "steps": 16,
+    "bpm": {
+      "default": 480,
+      "min": 400,
+      "max": 560
+    },
+    "difficulty": "beginner",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "SN": [
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        2,
+        0
+      ],
+      "HH": [
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1
+      ]
+    },
+    "defaultKit": "frameDrum",
+    "country": "EG",
+    "region": "arabic-swana",
+    "tags": [
+      "maqsoum",
+      "shaabi",
+      "variant",
+      "wedding"
+    ],
+    "instruments": [
+      "darbuka",
+      "riqq",
+      "tabla baladi"
+    ],
+    "swingable": false,
+    "story": "Same bones as the classical maqsoum (see maqsoum) \u2014 doums on 1 and 3, teks filling \u2014 but with an extra tek on the \"a of 4\" that anticipates bar 1. It's the version you hear at weddings and from shaabi drummers more than in the conservatory. The tek acts like a pickup.",
+    "relatedIds": [
+      "chiftetelli",
+      "mahraganat",
+      "maqsoum",
+      "rai-electric",
+      "shaabi-egyptian",
+      "taarab"
+    ]
   }
 ]
