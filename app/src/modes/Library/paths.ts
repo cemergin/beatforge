@@ -186,6 +186,25 @@ export const STARTER_PATHS: StarterPath[] = [
     ],
   },
 
+  // ── Microtiming / feel ─────────────────────────────────────────────
+  {
+    id: 'the-swing-spectrum',
+    title: 'The Swing Spectrum',
+    subtitle: 'Straight → shuffled → fully swung, across traditions',
+    context:
+      "Swing isn't a jazz thing — it's a microtiming dimension every tradition tunes differently. The strokes on the page can be identical; where they actually land is the culture. Start straight with Detroit techno, walk the dial up through Cuban son, funk, and Dilla-style lag, then cross into explicit triplet territory: rockabilly shuffle, blues shuffle, Purdie half-time, and full jazz swing. The last four are 12/8 patterns — the triplet isn't a swing setting, it's baked into the grid.",
+    patternIds: [
+      'techno-detroit',       // 0.50 — straight reference
+      'son-clave',            // 0.52 — Cuban behind-the-beat
+      'funk-funky-drummer',   // 0.55 — the Clyde Stubblefield push
+      'lofi-hiphop-standard', // 0.58 — J Dilla lag
+      'shuffle-rock',         // 12/8 pulse — rockabilly
+      'blues-shuffle',        // 12/8 ding-a ride — electric blues
+      'half-time-shuffle',    // 12/8 half-time — Purdie / Porcaro
+      'jazz-swing-medium',    // 4/4 at 0.67 — full triplet, jazz comping
+    ],
+  },
+
   // ── Polyrhythm + rhythmic technique ───────────────────────────────
   {
     id: 'polyrhythm-progression',

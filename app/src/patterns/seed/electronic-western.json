@@ -5016,5 +5016,264 @@
     "relatedIds": [
       "country-two-step"
     ]
+  },
+  {
+    "id": "blues-shuffle",
+    "name": "Blues Shuffle",
+    "origin": "Chicago / Texas",
+    "tradition": "Electric blues",
+    "genre": "popular",
+    "timeSig": "12/8",
+    "grouping": [
+      3,
+      3,
+      3,
+      3
+    ],
+    "stepUnit": 8,
+    "steps": 12,
+    "bpm": {
+      "default": 240,
+      "min": 140,
+      "max": 360
+    },
+    "difficulty": "beginner",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "SN": [
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0
+      ],
+      "HH": [
+        2,
+        0,
+        1,
+        2,
+        0,
+        1,
+        2,
+        0,
+        1,
+        2,
+        0,
+        1
+      ]
+    },
+    "defaultKit": "909",
+    "region": "electronic-western",
+    "country": "US",
+    "tags": [
+      "blues",
+      "shuffle",
+      "12-8",
+      "triplet",
+      "ride"
+    ],
+    "instruments": [
+      "drum kit",
+      "walking bass"
+    ],
+    "swingable": false,
+    "story": "The 'ding-a ding-a' ride \u2014 hi-hat on the first and third of every triplet, kick on beats 1 and 3, snare on 2 and 4. Muddy Waters, B.B. King, Buddy Guy, SRV all built their grooves on this skeleton. The triplet feel is EXPLICIT in 12/8 \u2014 four dotted-quarter beats, each subdivided into three eighths. No swing slider needed; the microtiming is in the notation itself.",
+    "relatedIds": [
+      "shuffle-rock",
+      "half-time-shuffle",
+      "jazz-shuffle-purdie"
+    ]
+  },
+  {
+    "id": "shuffle-rock",
+    "name": "Shuffle Rock (rockabilly)",
+    "origin": "Memphis / St. Louis",
+    "tradition": "Rockabilly / early rock'n'roll",
+    "genre": "popular",
+    "timeSig": "12/8",
+    "grouping": [
+      3,
+      3,
+      3,
+      3
+    ],
+    "stepUnit": 8,
+    "steps": 12,
+    "bpm": {
+      "default": 280,
+      "min": 180,
+      "max": 420
+    },
+    "difficulty": "beginner",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "SN": [
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0
+      ],
+      "HH": [
+        2,
+        0,
+        0,
+        2,
+        0,
+        0,
+        2,
+        0,
+        0,
+        2,
+        0,
+        0
+      ]
+    },
+    "defaultKit": "909",
+    "region": "electronic-western",
+    "country": "US",
+    "tags": [
+      "rock",
+      "shuffle",
+      "rockabilly",
+      "triplet",
+      "12-8"
+    ],
+    "instruments": [
+      "drum kit"
+    ],
+    "swingable": false,
+    "story": "Chuck Berry, Jerry Lee Lewis, early Elvis. Same triplet subdivision as blues-shuffle, but the hi-hat doesn't spell out the shuffle \u2014 it just marks the dotted-quarter pulse. The triplet feel lives under the surface, giving rockabilly its rolling gallop without the explicit 'ding-a ding-a' of Chicago blues.",
+    "relatedIds": [
+      "blues-shuffle",
+      "half-time-shuffle"
+    ]
+  },
+  {
+    "id": "half-time-shuffle",
+    "name": "Half-Time Shuffle (Purdie/Porcaro)",
+    "origin": "NYC / LA session drumming",
+    "tradition": "R&B, soft rock, studio pocket",
+    "genre": "popular",
+    "timeSig": "12/8",
+    "grouping": [
+      3,
+      3,
+      3,
+      3
+    ],
+    "stepUnit": 8,
+    "steps": 12,
+    "bpm": {
+      "default": 200,
+      "min": 140,
+      "max": 280
+    },
+    "difficulty": "intermediate",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "SN": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "HH": [
+        2,
+        1,
+        2,
+        2,
+        1,
+        2,
+        2,
+        1,
+        2,
+        2,
+        1,
+        2
+      ]
+    },
+    "defaultKit": "909",
+    "region": "electronic-western",
+    "country": "US",
+    "tags": [
+      "shuffle",
+      "half-time",
+      "purdie",
+      "porcaro",
+      "pocket",
+      "12-8"
+    ],
+    "instruments": [
+      "drum kit"
+    ],
+    "swingable": false,
+    "story": "Bernard Purdie's 'Babylon Sisters' groove, Jeff Porcaro's 'Rosanna' groove \u2014 two of the most imitated drum patterns in R&B and soft rock. The shuffle is there (triplet subdivisions, ghosted hi-hat), but the snare hits only on beat 3 instead of 2 and 4. That halving of the backbeat is why it feels so deep \u2014 the rhythm breathes twice as slowly while the hi-hat stays busy underneath.",
+    "relatedIds": [
+      "blues-shuffle",
+      "shuffle-rock",
+      "jazz-shuffle-purdie"
+    ]
   }
 ]
