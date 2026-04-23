@@ -11,6 +11,10 @@
 
 import { trackMeta, type KitId, type Pattern, type Velocity, type VoiceId } from '../patterns/types';
 import { buildVoiceCtx, kitRecipes } from './kits';
+// Vite's explicit `?worker` import emits a dedicated chunk with correct
+// JS MIME — avoids the `new URL()` pattern falling back to an inlined
+// data URL tagged `video/mp2t` because the source file has a .ts ext.
+import SchedulerWorker from './scheduler-worker.ts?worker';
 
 type BarListener = (bar: number) => void;
 
@@ -62,6 +66,11 @@ export class AudioEngine {
   // the event loop for 100+ms on a slow device. 300ms horizon survives that.
   private readonly lookaheadMs = 15;
   private readonly scheduleAheadS = 0.30;
+  // Tick cadence lives in a Worker when available (immune to React /
+  // devtools / background-tab throttling). timerId is the setTimeout
+  // fallback when Worker construction fails.
+  private worker: Worker | null = null;
+  private workerFailed = false;
   private timerId: ReturnType<typeof setTimeout> | null = null;
   private nextNoteTimes: Record<string, number> = {};
   private nextIdx: Record<string, number> = {};
@@ -239,7 +248,28 @@ export class AudioEngine {
       this.overlayNextIdx = 0;
     }
 
+    this.ensureWorker();
+    if (this.worker) {
+      this.worker.postMessage({ type: 'start', intervalMs: this.lookaheadMs });
+    }
+    // Fire an immediate tick() to fill the buffer before the first worker
+    // message arrives (~15ms delay). The worker/timeout chain takes over
+    // from there.
     this.tick();
+  }
+
+  /** Lazily construct the scheduler worker. Falls back to setTimeout on
+   * failure (older browsers, certain embed contexts, test environments). */
+  private ensureWorker(): void {
+    if (this.worker || this.workerFailed) return;
+    try {
+      const w = new SchedulerWorker();
+      w.onmessage = () => this.tick();
+      w.onerror = () => { /* swallow; tick() fallback handles continuity */ };
+      this.worker = w;
+    } catch {
+      this.workerFailed = true;
+    }
   }
 
   // Neutral count-in click — kit-independent (always a wood-like tick).
@@ -288,7 +318,13 @@ export class AudioEngine {
 
   stop(): void {
     this.running = false;
-    if (this.timerId) clearTimeout(this.timerId);
+    if (this.timerId) {
+      clearTimeout(this.timerId);
+      this.timerId = null;
+    }
+    if (this.worker) {
+      this.worker.postMessage({ type: 'stop' });
+    }
   }
 
   // Bar (main division) seconds — BPM = steps/min at main rate (spec §4.2).
@@ -387,7 +423,11 @@ export class AudioEngine {
       this.nextBarTime = this.startTime + (barIndex + 1) * barSec;
     }
 
-    this.timerId = setTimeout(this.tick, this.lookaheadMs);
+    // Re-arm only when the worker isn't available — it drives the cadence
+    // otherwise via postMessage('tick').
+    if (!this.worker) {
+      this.timerId = setTimeout(this.tick, this.lookaheadMs);
+    }
   };
 
   private trigger(voice: VoiceId, when: number, velLevel: Velocity, stepIdx: number): void {
