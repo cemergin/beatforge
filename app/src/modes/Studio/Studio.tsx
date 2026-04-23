@@ -194,16 +194,16 @@ export function Studio({
     else engine.setOverlay(null);
   }, [engine, overlaySubdivisions]);
 
-  // Bar-boundary callback — trainer + stop-after.
+  // Bar-boundary callback — trainer + stop-after. Uses subscribe API
+  // so Practice and Studio coexist without stripping each other's handler.
   useEffect(() => {
-    engine.onBar = (bar) => {
+    return engine.subscribeOnBar((bar) => {
       setTrainerBar(bar);
       if (stopAfter.mode === 'cycles' && bar >= stopAfter.value) {
         engine.stop();
         setPlaying(false);
       }
-    };
-    return () => { engine.onBar = null; };
+    });
   }, [engine, stopAfter]);
 
   // Stop-after time mode.
@@ -251,7 +251,11 @@ export function Studio({
         const intervals: number[] = [];
         for (let i = 1; i < next.length; i++) intervals.push(next[i] - next[i - 1]);
         const sorted = [...intervals].sort((a, b) => a - b);
-        const median = sorted[Math.floor(sorted.length / 2)];
+        // True median: average the two middle values for even length.
+        const mid = Math.floor(sorted.length / 2);
+        const median = sorted.length % 2 === 0
+          ? (sorted[mid - 1] + sorted[mid]) / 2
+          : sorted[mid];
         const tapBpm = Math.round(60_000 / median);
         setBpm(Math.max(30, Math.min(800, tapBpm)));
       }

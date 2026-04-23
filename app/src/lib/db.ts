@@ -37,6 +37,12 @@ export async function saveUserPattern(p: UserPattern): Promise<void> {
 
 export async function deleteUserPattern(id: string): Promise<void> {
   await db.userPatterns.delete(id);
+  // GC any kit override tied to this pattern — prevents bf_kit_overrides
+  // from accumulating stale ids as user patterns churn.
+  try {
+    const { clearKitOverride } = await import('./storage');
+    clearKitOverride(id);
+  } catch { /* storage unreachable — already warned there */ }
 }
 
 export async function listUserPatterns(): Promise<UserPattern[]> {

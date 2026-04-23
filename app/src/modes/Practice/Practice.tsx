@@ -118,16 +118,17 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
     return () => cancelAnimationFrame(raf);
   }, [engine]);
 
-  // Bar-boundary callback → trainer bar counter + stop-after check
+  // Bar-boundary callback → trainer bar counter + stop-after check.
+  // Uses subscribe API so multiple modes can own their own handler
+  // without clobbering each other on tab switches.
   useEffect(() => {
-    engine.onBar = (bar: number) => {
+    return engine.subscribeOnBar((bar: number) => {
       setTrainerBar(bar);
       if (stopAfter.mode === 'cycles' && bar >= stopAfter.value) {
         engine.stop();
         setPlaying(false);
       }
-    };
-    return () => { engine.onBar = null; };
+    });
   }, [engine, stopAfter]);
 
   // Stop-after time mode (pure wall-clock, tracked while playing)
@@ -338,17 +339,22 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
 
   const groupingOptions = useMemo(() => {
     const canon = pattern.grouping;
+    // Cap enumeration early — a grouping of length 8+ has 40k+ perms
+    // and would freeze the tab. The UI only shows 6 options anyway.
+    const MAX_RESULTS = 6;
     const out = new Set<string>();
-    const permute = (a: number[], m: number[] = []): void => {
-      if (a.length === 0) { out.add(m.join(',')); return; }
+    const permute = (a: number[], m: number[] = []): boolean => {
+      if (out.size >= MAX_RESULTS) return true;
+      if (a.length === 0) { out.add(m.join(',')); return out.size >= MAX_RESULTS; }
       for (let i = 0; i < a.length; i++) {
         const cur = [...a];
         const nx = cur.splice(i, 1);
-        permute(cur, m.concat(nx));
+        if (permute(cur, m.concat(nx))) return true;
       }
+      return false;
     };
     permute(canon);
-    return [...out].slice(0, 6).map((s) => s.split(',').map(Number));
+    return [...out].map((s) => s.split(',').map(Number));
   }, [pattern]);
 
   // Clone the seed track into session-local state; never mutate the seed.
