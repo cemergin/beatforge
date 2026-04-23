@@ -2,7 +2,7 @@
   {
     "id": "lancaran",
     "name": "Lancaran",
-    "origin": "Indonesia · Java",
+    "origin": "Indonesia \u00b7 Java",
     "tradition": "Javanese gamelan",
     "genre": "classical",
     "timeSig": "16/4",
@@ -82,7 +82,6 @@
         0,
         0,
         0,
-        0,
         2,
         0,
         0,
@@ -91,7 +90,8 @@
         0,
         0,
         0,
-        2
+        2,
+        0
       ],
       "CP": [
         2,
@@ -128,12 +128,12 @@
       "saron"
     ],
     "swingable": false,
-    "story": "The shortest standard Javanese gongan — lively and fast. The gong ageng closes the 16-beat cycle, kenong marks each kenongan, and kempul fills in the middle."
+    "story": "The shortest standard Javanese gongan \u2014 lively and fast. The gong ageng closes the 16-beat cycle, kenong marks each kenongan, and kempul fills in the middle."
   },
   {
     "id": "kotekan",
     "name": "Kotekan",
-    "origin": "Indonesia · Bali",
+    "origin": "Indonesia \u00b7 Bali",
     "tradition": "Balinese gamelan",
     "genre": "classical",
     "timeSig": "4/4",
@@ -240,12 +240,12 @@
       "gong"
     ],
     "swingable": false,
-    "story": "The interlocking heart of Balinese kebyar — polos falls on the beat, sangsih between them. Alone each is incomplete; together they sound twice as fast as either can play."
+    "story": "The interlocking heart of Balinese kebyar \u2014 polos falls on the beat, sangsih between them. Alone each is incomplete; together they sound twice as fast as either can play."
   },
   {
     "id": "gendhing-sederhana",
     "name": "Gendhing Sederhana",
-    "origin": "Indonesia · Java",
+    "origin": "Indonesia \u00b7 Java",
     "tradition": "Javanese court gamelan",
     "genre": "classical",
     "timeSig": "16/4",
@@ -352,12 +352,12 @@
       "kempyang"
     ],
     "swingable": false,
-    "story": "A simple gendhing — the meditative, introspective form heard in kraton court music and behind vocal and dance performance. The gong breathes slowly."
+    "story": "A simple gendhing \u2014 the meditative, introspective form heard in kraton court music and behind vocal and dance performance. The gong breathes slowly."
   },
   {
     "id": "ketawang",
     "name": "Ketawang",
-    "origin": "Indonesia · Java",
+    "origin": "Indonesia \u00b7 Java",
     "tradition": "Javanese court gamelan",
     "genre": "classical",
     "timeSig": "16/4",
@@ -443,10 +443,10 @@
         0,
         0,
         0,
+        2,
         0,
         0,
-        0,
-        2
+        0
       ],
       "CP": [
         1,
@@ -484,7 +484,7 @@
       "kempyang"
     ],
     "swingable": false,
-    "story": "A stately 16-beat gongan — two kenongan of 8 beats, the first with kempul silent (wela). Accompanies pesindhen singing and slow refined dance.",
+    "story": "A stately 16-beat gongan \u2014 two kenongan of 8 beats, the first with kempul silent (wela). Accompanies pesindhen singing and slow refined dance.",
     "relatedIds": [
       "gendhing-sederhana",
       "ladrang"
@@ -493,7 +493,7 @@
   {
     "id": "ladrang",
     "name": "Ladrang",
-    "origin": "Indonesia · Java",
+    "origin": "Indonesia \u00b7 Java",
     "tradition": "Javanese court gamelan",
     "genre": "classical",
     "timeSig": "32/4",
@@ -627,6 +627,7 @@
         0,
         0,
         0,
+        2,
         0,
         0,
         0,
@@ -638,15 +639,14 @@
         0,
         0,
         0,
+        0,
+        0,
+        0,
+        0,
         2,
         0,
         0,
-        0,
-        2,
-        0,
-        0,
-        0,
-        2
+        0
       ],
       "CP": [
         1,
@@ -700,7 +700,7 @@
       "kempyang"
     ],
     "swingable": false,
-    "story": "The most versatile Javanese gongan — four kenongan of 8 beats, 32 in total. Half the classical repertoire is cast in ladrang form; the gong takes its long breath.",
+    "story": "The most versatile Javanese gongan \u2014 four kenongan of 8 beats, 32 in total. Half the classical repertoire is cast in ladrang form; the gong takes its long breath.",
     "relatedIds": [
       "ketawang",
       "merong"
@@ -709,7 +709,7 @@
   {
     "id": "merong",
     "name": "Merong Gendhing",
-    "origin": "Indonesia · Java",
+    "origin": "Indonesia \u00b7 Java",
     "tradition": "Javanese kraton gendhing",
     "genre": "classical",
     "timeSig": "64/4",
@@ -1010,7 +1010,7 @@
       "kempyang"
     ],
     "swingable": false,
-    "story": "The opening of a large gendhing — 64 beats per gongan, so slow a single cycle can last many minutes. Kraton time: the gong marks the closing of a world, not a bar.",
+    "story": "The opening of a large gendhing \u2014 64 beats per gongan, so slow a single cycle can last many minutes. Kraton time: the gong marks the closing of a world, not a bar.",
     "relatedIds": [
       "ladrang",
       "gendhing-sederhana"
@@ -1019,7 +1019,7 @@
   {
     "id": "kebyar",
     "name": "Gong Kebyar",
-    "origin": "Indonesia · Bali",
+    "origin": "Indonesia \u00b7 Bali",
     "tradition": "Balinese gamelan",
     "genre": "classical",
     "timeSig": "4/4",
@@ -1146,7 +1146,7 @@
       "kendang"
     ],
     "swingable": false,
-    "story": "Kebyar means \"to burst open\" — the virtuosic, explosive 20th-century Balinese style. Sudden pianissimo-to-fortissimo angsel breaks and lightning kotekan define the ensemble.",
+    "story": "Kebyar means \"to burst open\" \u2014 the virtuosic, explosive 20th-century Balinese style. Sudden pianissimo-to-fortissimo angsel breaks and lightning kotekan define the ensemble.",
     "relatedIds": [
       "kotekan"
     ]
@@ -1154,7 +1154,7 @@
   {
     "id": "baris",
     "name": "Baris",
-    "origin": "Indonesia · Bali",
+    "origin": "Indonesia \u00b7 Bali",
     "tradition": "Balinese warrior dance",
     "genre": "ceremonial",
     "timeSig": "4/4",
@@ -1280,7 +1280,7 @@
       "reyong"
     ],
     "swingable": false,
-    "story": "The warrior's solo — every flick of the eye and trembling finger cued by the paired lanang-wadon drums. Dancer and drummer improvise as one body.",
+    "story": "The warrior's solo \u2014 every flick of the eye and trembling finger cued by the paired lanang-wadon drums. Dancer and drummer improvise as one body.",
     "relatedIds": [
       "kebyar",
       "topeng"
@@ -1289,7 +1289,7 @@
   {
     "id": "topeng",
     "name": "Topeng",
-    "origin": "Indonesia · Bali",
+    "origin": "Indonesia \u00b7 Bali",
     "tradition": "Balinese mask dance-drama",
     "genre": "ceremonial",
     "timeSig": "4/4",
@@ -1415,7 +1415,7 @@
       "gong"
     ],
     "swingable": false,
-    "story": "Masked dance-drama performed at temple ceremonies — each character (strong king, old minister, trickster) has its own walk, and the drum tracks every footfall.",
+    "story": "Masked dance-drama performed at temple ceremonies \u2014 each character (strong king, old minister, trickster) has its own walk, and the drum tracks every footfall.",
     "relatedIds": [
       "baris"
     ]
@@ -1423,7 +1423,7 @@
   {
     "id": "kendang-sunda",
     "name": "Kendang Sunda",
-    "origin": "Indonesia · West Java",
+    "origin": "Indonesia \u00b7 West Java",
     "tradition": "Sundanese jaipongan",
     "genre": "folk-dance",
     "timeSig": "4/4",
@@ -1550,7 +1550,7 @@
       "gong"
     ],
     "swingable": false,
-    "story": "The syncopated drum conversation of West Java — jaipongan mixed village pencak silat rhythms with gamelan degung in the 1970s and took Indonesian dance floors by storm.",
+    "story": "The syncopated drum conversation of West Java \u2014 jaipongan mixed village pencak silat rhythms with gamelan degung in the 1970s and took Indonesian dance floors by storm.",
     "relatedIds": [
       "gamelan-degung"
     ]
@@ -1558,7 +1558,7 @@
   {
     "id": "gamelan-degung",
     "name": "Gamelan Degung",
-    "origin": "Indonesia · West Java",
+    "origin": "Indonesia \u00b7 West Java",
     "tradition": "Sundanese court gamelan",
     "genre": "classical",
     "timeSig": "8/4",
@@ -1643,7 +1643,7 @@
       "suling"
     ],
     "swingable": false,
-    "story": "The small, refined court gamelan of the Sundanese regents — sweeter and more intimate than Javanese kraton gamelan. A circle of bonang and a bamboo suling over a soft gong.",
+    "story": "The small, refined court gamelan of the Sundanese regents \u2014 sweeter and more intimate than Javanese kraton gamelan. A circle of bonang and a bamboo suling over a soft gong.",
     "relatedIds": [
       "kendang-sunda"
     ]
@@ -1651,7 +1651,7 @@
   {
     "id": "semar-pegulingan",
     "name": "Semar Pegulingan",
-    "origin": "Indonesia · Bali",
+    "origin": "Indonesia \u00b7 Bali",
     "tradition": "Balinese palace gamelan",
     "genre": "classical",
     "timeSig": "16/4",
@@ -1778,7 +1778,7 @@
       "suling"
     ],
     "swingable": false,
-    "story": "Named for Semar, the god of love — the sweet 7-tone pelog gamelan that once played near royal sleeping chambers. Delicate, intricate, intimate, softer than any kebyar.",
+    "story": "Named for Semar, the god of love \u2014 the sweet 7-tone pelog gamelan that once played near royal sleeping chambers. Delicate, intricate, intimate, softer than any kebyar.",
     "relatedIds": [
       "gendhing-sederhana"
     ]
@@ -1915,6 +1915,6 @@
       "mong"
     ],
     "swingable": false,
-    "story": "The central Thai classical ensemble — accompanies khon masked drama and royal ritual. The ching finger cymbals keep time; the taphon barrel drum leads; the mong gong closes each natab cycle."
+    "story": "The central Thai classical ensemble \u2014 accompanies khon masked drama and royal ritual. The ching finger cymbals keep time; the taphon barrel drum leads; the mong gong closes each natab cycle."
   }
 ]

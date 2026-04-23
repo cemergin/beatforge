@@ -2,7 +2,7 @@
   {
     "id": "budots",
     "name": "Budots",
-    "origin": "Philippines · Davao",
+    "origin": "Philippines \u00b7 Davao",
     "tradition": "Filipino street techno",
     "genre": "electronic",
     "timeSig": "4/4",
@@ -110,12 +110,12 @@
       "vocal chop"
     ],
     "swingable": false,
-    "story": "Davao wedding-DJ street techno — four-on-the-floor under a \"tiw ti-ti-tiw\" whistle hook. Went global on TikTok in 2024."
+    "story": "Davao wedding-DJ street techno \u2014 four-on-the-floor under a \"tiw ti-ti-tiw\" whistle hook. Went global on TikTok in 2024."
   },
   {
     "id": "funkot",
     "name": "Funkot",
-    "origin": "Indonesia · Jakarta",
+    "origin": "Indonesia \u00b7 Jakarta",
     "tradition": "Funky Kota",
     "genre": "electronic",
     "timeSig": "4/4",
@@ -222,12 +222,12 @@
       "amen break"
     ],
     "swingable": false,
-    "story": "Indonesia's hyper-speed house — koplo triplet kicks inherited from dangdut, cowbell on every beat, one of the fastest dance genres on the planet."
+    "story": "Indonesia's hyper-speed house \u2014 koplo triplet kicks inherited from dangdut, cowbell on every beat, one of the fastest dance genres on the planet."
   },
   {
     "id": "vinahouse",
     "name": "Vinahouse",
-    "origin": "Vietnam · HCMC",
+    "origin": "Vietnam \u00b7 HCMC",
     "tradition": "Vietnamese club",
     "genre": "electronic",
     "timeSig": "4/4",
@@ -334,12 +334,12 @@
       "shaker"
     ],
     "swingable": false,
-    "story": "Vietnam's ubiquitous club sound — offbeat hats bouncing over four-on-the-floor with a shaker carpet, engineered for nonstop DJ blends."
+    "story": "Vietnam's ubiquitous club sound \u2014 offbeat hats bouncing over four-on-the-floor with a shaker carpet, engineered for nonstop DJ blends."
   },
   {
     "id": "manyao",
     "name": "Manyao",
-    "origin": "China · Taiwan · Malaysia",
+    "origin": "China \u00b7 Taiwan \u00b7 Malaysia",
     "tradition": "Mandopop club EDM",
     "genre": "electronic",
     "timeSig": "4/4",
@@ -446,12 +446,12 @@
       "808"
     ],
     "swingable": false,
-    "story": "Mandopop vocals dropped into sidechained supersaws and Melbourne-bounce off-beat bass — remix culture for mainland Chinese nightclubs."
+    "story": "Mandopop vocals dropped into sidechained supersaws and Melbourne-bounce off-beat bass \u2014 remix culture for mainland Chinese nightclubs."
   },
   {
     "id": "tribal-guarachero",
     "name": "Tribal Guarachero",
-    "origin": "Mexico · Monterrey",
+    "origin": "Mexico \u00b7 Monterrey",
     "tradition": "3Ball / tribal guarachero",
     "genre": "electronic",
     "timeSig": "4/4",
@@ -558,7 +558,7 @@
       "aztec flute"
     ],
     "swingable": false,
-    "story": "3Ball MTY's Monterrey fusion — pre-Hispanic percussion and Aztec flute samples cascading over house kicks, pointy boots optional.",
+    "story": "3Ball MTY's Monterrey fusion \u2014 pre-Hispanic percussion and Aztec flute samples cascading over house kicks, pointy boots optional.",
     "relatedIds": [
       "guaracha-aleteo",
       "reggaeton-dembow",
@@ -567,8 +567,8 @@
   },
   {
     "id": "baile-funk-tamborzao",
-    "name": "Baile Funk (Tamborzão)",
-    "origin": "Brazil · Rio de Janeiro",
+    "name": "Baile Funk (Tamborz\u00e3o)",
+    "origin": "Brazil \u00b7 Rio de Janeiro",
     "tradition": "Funk carioca",
     "genre": "electronic",
     "timeSig": "4/4",
@@ -675,7 +675,7 @@
       "mc"
     ],
     "swingable": false,
-    "story": "Rio favela bass music — the tamborzão beat fuses capoeira, maculelê and candomblé through 808 drum machines. Space left for the MC to command the baile.",
+    "story": "Rio favela bass music \u2014 the tamborz\u00e3o beat fuses capoeira, maculel\u00ea and candombl\u00e9 through 808 drum machines. Space left for the MC to command the baile.",
     "relatedIds": [
       "phonk-brazilian",
       "phonk-fish",
@@ -686,7 +686,7 @@
   {
     "id": "uk-drill",
     "name": "UK Drill",
-    "origin": "UK · South London",
+    "origin": "UK \u00b7 South London",
     "tradition": "UK drill",
     "genre": "hip-hop",
     "timeSig": "4/4",
@@ -794,7 +794,7 @@
       "sliding bass"
     ],
     "swingable": false,
-    "story": "South London's adaptation of Chicago drill — sliding 808 bass, bouncing triplet-vs-straight hi-hats and the defining rap sound of 2020s Europe.",
+    "story": "South London's adaptation of Chicago drill \u2014 sliding 808 bass, bouncing triplet-vs-straight hi-hats and the defining rap sound of 2020s Europe.",
     "relatedIds": [
       "hiphop-uk-drill",
       "ny-drill",
@@ -804,7 +804,7 @@
   {
     "id": "ny-drill",
     "name": "Brooklyn Drill",
-    "origin": "USA · Brooklyn",
+    "origin": "USA \u00b7 Brooklyn",
     "tradition": "Brooklyn drill",
     "genre": "hip-hop",
     "timeSig": "4/4",
@@ -911,7 +911,7 @@
       "sliding bass"
     ],
     "swingable": false,
-    "story": "The Brooklyn answer to UK drill — Pop Smoke, Sheff G and Fivio Foreign dragging sliding 808s and half-time snares into New York city grime.",
+    "story": "The Brooklyn answer to UK drill \u2014 Pop Smoke, Sheff G and Fivio Foreign dragging sliding 808s and half-time snares into New York city grime.",
     "relatedIds": [
       "hiphop-uk-drill"
     ]
@@ -919,7 +919,7 @@
   {
     "id": "chicago-drill",
     "name": "Chicago Drill",
-    "origin": "USA · Chicago",
+    "origin": "USA \u00b7 Chicago",
     "tradition": "Chicago drill",
     "genre": "hip-hop",
     "timeSig": "4/4",
@@ -1034,7 +1034,7 @@
   {
     "id": "jersey-club",
     "name": "Jersey Club Bounce",
-    "origin": "USA · Newark",
+    "origin": "USA \u00b7 Newark",
     "tradition": "Jersey club",
     "genre": "electronic",
     "timeSig": "4/4",
@@ -1141,7 +1141,7 @@
       "bed squeak"
     ],
     "swingable": false,
-    "story": "Newark's rapid-fire revolution — Tapp's signature kick (two quarters then a tresillo cluster) plus vocal chop chants plus choreography. Pure bounce.",
+    "story": "Newark's rapid-fire revolution \u2014 Tapp's signature kick (two quarters then a tresillo cluster) plus vocal chop chants plus choreography. Pure bounce.",
     "relatedIds": [
       "hiphop-jersey-club"
     ]
@@ -1149,7 +1149,7 @@
   {
     "id": "footwork-juke",
     "name": "Footwork / Juke",
-    "origin": "USA · Chicago",
+    "origin": "USA \u00b7 Chicago",
     "tradition": "Chicago footwork",
     "genre": "electronic",
     "timeSig": "4/4",
@@ -1264,8 +1264,8 @@
   {
     "id": "ballroom-vogue",
     "name": "Ballroom / Vogue",
-    "origin": "USA · New York",
-    "tradition": "Ball culture · vogue",
+    "origin": "USA \u00b7 New York",
+    "tradition": "Ball culture \u00b7 vogue",
     "genre": "electronic",
     "timeSig": "4/4",
     "grouping": [
@@ -1371,12 +1371,12 @@
       "snap"
     ],
     "swingable": false,
-    "story": "The beat of ball culture — MAW's 1991 \"Ha Dance\" crash cues the dips. Runway walks, battles and Paris Is Burning on a four-on-the-floor."
+    "story": "The beat of ball culture \u2014 MAW's 1991 \"Ha Dance\" crash cues the dips. Runway walks, battles and Paris Is Burning on a four-on-the-floor."
   },
   {
     "id": "moombahton",
     "name": "Moombahton",
-    "origin": "USA · Washington DC",
+    "origin": "USA \u00b7 Washington DC",
     "tradition": "Moombahton",
     "genre": "electronic",
     "timeSig": "4/4",
@@ -1400,17 +1400,17 @@
         0,
         0,
         0,
-        2,
-        0,
-        0,
-        0,
-        2,
-        0,
         0,
         0,
         2,
         0,
+        2,
         0,
+        0,
+        0,
+        0,
+        0,
+        2,
         0
       ],
       "SN": [
@@ -1418,8 +1418,6 @@
         0,
         0,
         0,
-        0,
-        0,
         2,
         0,
         0,
@@ -1429,6 +1427,8 @@
         0,
         0,
         2,
+        0,
+        0,
         0
       ],
       "HH": [
@@ -1492,7 +1492,7 @@
   {
     "id": "gabber",
     "name": "Gabber",
-    "origin": "Netherlands · Rotterdam",
+    "origin": "Netherlands \u00b7 Rotterdam",
     "tradition": "Dutch hardcore",
     "genre": "electronic",
     "timeSig": "4/4",
@@ -1598,7 +1598,7 @@
       "hoover synth"
     ],
     "swingable": false,
-    "story": "Rotterdam's sonic assault — the kick is the genre, so distorted it becomes a melodic bass tone. Thunderdome, Paul Elstak, Neophyte."
+    "story": "Rotterdam's sonic assault \u2014 the kick is the genre, so distorted it becomes a melodic bass tone. Thunderdome, Paul Elstak, Neophyte."
   },
   {
     "id": "hardstyle",
@@ -1696,7 +1696,7 @@
   {
     "id": "happy-hardcore",
     "name": "Happy Hardcore",
-    "origin": "UK · Netherlands",
+    "origin": "UK \u00b7 Netherlands",
     "tradition": "Happy hardcore",
     "genre": "electronic",
     "timeSig": "4/4",
@@ -1803,7 +1803,7 @@
       "rave vocal"
     ],
     "swingable": false,
-    "story": "Gabber's euphoric sibling — same punishing speed, but replace the aggression with major-key pianos and hands-in-the-air rave hooks."
+    "story": "Gabber's euphoric sibling \u2014 same punishing speed, but replace the aggression with major-key pianos and hands-in-the-air rave hooks."
   },
   {
     "id": "industrial-hardcore",
@@ -1914,7 +1914,7 @@
       "industrial noise"
     ],
     "swingable": false,
-    "story": "Gabber's darker cousin — machine-shop noise, doomcore atmospheres and mechanical snare rolls under 180+ BPM industrial kicks.",
+    "story": "Gabber's darker cousin \u2014 machine-shop noise, doomcore atmospheres and mechanical snare rolls under 180+ BPM industrial kicks.",
     "relatedIds": [
       "gabber"
     ]
@@ -1922,7 +1922,7 @@
   {
     "id": "tropical-house",
     "name": "Tropical House",
-    "origin": "Norway · Global",
+    "origin": "Norway \u00b7 Global",
     "tradition": "Tropical house",
     "genre": "electronic",
     "timeSig": "4/4",
@@ -2028,7 +2028,7 @@
       "shaker"
     ],
     "swingable": false,
-    "story": "Kygo-era festival reggaeton-adjacent deep house — marimba pianos, shaker carpets and a laid-back four-on-the-floor made for beach cabana sunsets."
+    "story": "Kygo-era festival reggaeton-adjacent deep house \u2014 marimba pianos, shaker carpets and a laid-back four-on-the-floor made for beach cabana sunsets."
   },
   {
     "id": "future-bass",
@@ -2140,12 +2140,12 @@
       "808"
     ],
     "swingable": false,
-    "story": "Flume and San Holo territory — chopped vocal stabs and detuned supersaws over a half-time trap pulse. Heart-shaped eyes, melting drops."
+    "story": "Flume and San Holo territory \u2014 chopped vocal stabs and detuned supersaws over a half-time trap pulse. Heart-shaped eyes, melting drops."
   },
   {
     "id": "trap-edm",
     "name": "Trap EDM",
-    "origin": "USA · Global",
+    "origin": "USA \u00b7 Global",
     "tradition": "Festival trap",
     "genre": "electronic",
     "timeSig": "4/4",
@@ -2252,7 +2252,7 @@
       "brass stab"
     ],
     "swingable": false,
-    "story": "Baauer, RL Grime, Flosstradamus — Atlanta trap scaled to festival mainstage volume. 808 detonations under hi-hat skitter and airhorn drops."
+    "story": "Baauer, RL Grime, Flosstradamus \u2014 Atlanta trap scaled to festival mainstage volume. 808 detonations under hi-hat skitter and airhorn drops."
   },
   {
     "id": "big-room-house",
@@ -2364,7 +2364,7 @@
       "stadium fx"
     ],
     "swingable": false,
-    "story": "Hardwell, Martin Garrix, Ultra mainstage festivals — the peak EDM sound of 2012-2015. Four-on-the-floor with a stadium kick and snare roll into the drop."
+    "story": "Hardwell, Martin Garrix, Ultra mainstage festivals \u2014 the peak EDM sound of 2012-2015. Four-on-the-floor with a stadium kick and snare roll into the drop."
   },
   {
     "id": "hyper-tech",
@@ -2476,6 +2476,6 @@
       "vocal chop"
     ],
     "swingable": false,
-    "story": "UK 2020s fusion — hyperpop's sheen, dubstep's bass weight and tech-house's driving four-on-the-floor, collapsed into festival drops."
+    "story": "UK 2020s fusion \u2014 hyperpop's sheen, dubstep's bass weight and tech-house's driving four-on-the-floor, collapsed into festival drops."
   }
 ]

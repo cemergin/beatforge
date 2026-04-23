@@ -2,7 +2,7 @@
   {
     "id": "tintal",
     "name": "Tintal",
-    "origin": "India · Hindustani",
+    "origin": "India \u00b7 Hindustani",
     "tradition": "Tabla cycle",
     "genre": "classical",
     "timeSig": "16/4",
@@ -102,7 +102,7 @@
   {
     "id": "dadra",
     "name": "Dadra",
-    "origin": "India · Hindustani",
+    "origin": "India \u00b7 Hindustani",
     "tradition": "Light classical / film",
     "genre": "classical",
     "timeSig": "6/4",
@@ -123,7 +123,7 @@
         2,
         0,
         0,
-        2,
+        0,
         0,
         0
       ],
@@ -131,7 +131,7 @@
         0,
         2,
         1,
-        0,
+        1,
         2,
         1
       ],
@@ -159,7 +159,7 @@
       "sarangi"
     ],
     "swingable": false,
-    "story": "A gentle 6-beat cycle that lilts like a waltz — the signature groove of thumri, bhajans, and romantic Bollywood ballads.",
+    "story": "A gentle 6-beat cycle that lilts like a waltz \u2014 the signature groove of thumri, bhajans, and romantic Bollywood ballads.",
     "relatedIds": [
       "keherwa",
       "reng",
@@ -170,7 +170,7 @@
   {
     "id": "rupak",
     "name": "Rupak Tal",
-    "origin": "India · Hindustani",
+    "origin": "India \u00b7 Hindustani",
     "tradition": "Tabla cycle",
     "genre": "classical",
     "timeSig": "7/4",
@@ -198,7 +198,7 @@
         0
       ],
       "SN": [
-        2,
+        1,
         1,
         1,
         0,
@@ -231,12 +231,12 @@
       "sitar"
     ],
     "swingable": false,
-    "story": "Rupak is unusual — the first beat (sam) is actually a khali (empty) stroke. The cycle starts weak and resolves inward."
+    "story": "Rupak is unusual \u2014 the first beat (sam) is actually a khali (empty) stroke. The cycle starts weak and resolves inward."
   },
   {
     "id": "ektal",
     "name": "Ektal",
-    "origin": "India · Hindustani",
+    "origin": "India \u00b7 Hindustani",
     "tradition": "Vilambit khayal",
     "genre": "classical",
     "timeSig": "12/4",
@@ -259,31 +259,31 @@
     "tracks": {
       "KK": [
         2,
-        0,
         2,
         0,
         0,
-        0,
+        2,
+        1,
         0,
         0,
         2,
-        0,
+        1,
         2,
-        0
+        1
       ],
       "SN": [
         0,
         0,
-        0,
-        0,
         2,
+        1,
         0,
+        1,
         2,
-        0,
+        1,
         0,
         1,
         0,
-        0
+        1
       ],
       "HH": [
         2,
@@ -315,12 +315,12 @@
       "voice"
     ],
     "swingable": false,
-    "story": "12 beats, six vibhags. At vilambit tempo each beat becomes a canvas — the master tabla player elaborates endlessly between the landmarks."
+    "story": "12 beats, six vibhags. At vilambit tempo each beat becomes a canvas \u2014 the master tabla player elaborates endlessly between the landmarks."
   },
   {
     "id": "jhaptal",
     "name": "Jhaptal",
-    "origin": "India · Hindustani",
+    "origin": "India \u00b7 Hindustani",
     "tradition": "Tabla cycle",
     "genre": "classical",
     "timeSig": "10/4",
@@ -342,13 +342,13 @@
       "KK": [
         2,
         0,
+        2,
+        1,
+        0,
+        0,
         0,
         2,
-        0,
-        2,
-        0,
-        0,
-        2,
+        1,
         0
       ],
       "SN": [
@@ -357,7 +357,7 @@
         0,
         0,
         1,
-        0,
+        2,
         1,
         0,
         0,
@@ -391,7 +391,7 @@
       "voice"
     ],
     "swingable": false,
-    "story": "10 beats grouped 2+3+2+3 — the same skeleton as Ottoman Curcuna, but arrived at through a completely different tradition.",
+    "story": "10 beats grouped 2+3+2+3 \u2014 the same skeleton as Ottoman Curcuna, but arrived at through a completely different tradition.",
     "relatedIds": [
       "curcuna"
     ]
@@ -399,7 +399,7 @@
   {
     "id": "keherwa",
     "name": "Keherwa",
-    "origin": "India · Hindustani",
+    "origin": "India \u00b7 Hindustani",
     "tradition": "Folk / light classical",
     "genre": "popular",
     "timeSig": "4/4",
@@ -418,12 +418,12 @@
     "tracks": {
       "KK": [
         2,
+        2,
+        0,
         0,
         0,
         0,
         2,
-        0,
-        0,
         0
       ],
       "SN": [
@@ -431,9 +431,9 @@
         0,
         2,
         1,
-        0,
-        0,
         2,
+        1,
+        0,
         1
       ],
       "HH": [
@@ -463,7 +463,7 @@
       "harmonium"
     ],
     "swingable": false,
-    "story": "The most common tala in Indian light music — bhajans, ghazals, qawwalis, and half the Bollywood catalogue rest on this 8-beat foundation.",
+    "story": "The most common tala in Indian light music \u2014 bhajans, ghazals, qawwalis, and half the Bollywood catalogue rest on this 8-beat foundation.",
     "relatedIds": [
       "qawwali",
       "bollywood-classic",
@@ -474,7 +474,7 @@
   {
     "id": "deepchandi",
     "name": "Deepchandi",
-    "origin": "India · Hindustani",
+    "origin": "India \u00b7 Hindustani",
     "tradition": "Thumri / romantic classical",
     "genre": "classical",
     "timeSig": "14/4",
@@ -496,34 +496,34 @@
       "KK": [
         2,
         0,
-        2,
-        0,
-        0,
-        0,
-        2,
         0,
         0,
         0,
         0,
         0,
         2,
+        0,
+        0,
+        2,
+        0,
+        0,
         0
       ],
       "SN": [
         0,
-        0,
-        0,
-        0,
         1,
-        0,
-        0,
-        0,
-        0,
+        2,
+        1,
+        1,
         2,
         1,
         0,
+        2,
         0,
-        0
+        0,
+        1,
+        2,
+        1
       ],
       "HH": [
         2,
@@ -557,12 +557,12 @@
       "voice"
     ],
     "swingable": false,
-    "story": "A majestic 14-beat tala for thumri and romantic classical forms — the alternating 3+4 grouping creates a long, lilting rocking cycle."
+    "story": "A majestic 14-beat tala for thumri and romantic classical forms \u2014 the alternating 3+4 grouping creates a long, lilting rocking cycle."
   },
   {
     "id": "chautal",
     "name": "Chautal",
-    "origin": "India · Hindustani",
+    "origin": "India \u00b7 Hindustani",
     "tradition": "Dhrupad",
     "genre": "classical",
     "timeSig": "12/4",
@@ -585,30 +585,30 @@
     "tracks": {
       "KK": [
         2,
-        0,
         2,
-        0,
-        0,
-        0,
-        2,
-        0,
-        2,
-        0,
-        0,
-        0
-      ],
-      "SN": [
-        0,
-        0,
         0,
         0,
         2,
         1,
         0,
         0,
+        2,
+        1,
+        2,
+        1
+      ],
+      "SN": [
         0,
         0,
         2,
+        1,
+        0,
+        1,
+        2,
+        1,
+        0,
+        1,
+        0,
         1
       ],
       "HH": [
@@ -640,12 +640,12 @@
       "voice"
     ],
     "swingable": false,
-    "story": "The 12-beat cycle of dhrupad — India's oldest surviving classical vocal form, played on the thunderous pakhawaj rather than tabla."
+    "story": "The 12-beat cycle of dhrupad \u2014 India's oldest surviving classical vocal form, played on the thunderous pakhawaj rather than tabla."
   },
   {
     "id": "adi-tala",
     "name": "Adi Tala",
-    "origin": "India · Carnatic",
+    "origin": "India \u00b7 Carnatic",
     "tradition": "South Indian classical",
     "genre": "classical",
     "timeSig": "8/4",
@@ -733,12 +733,12 @@
       "veena"
     ],
     "swingable": false,
-    "story": "The most common Carnatic tala — \"adi\" means \"first\" or \"primary.\" 8 beats: laghu, drutam, drutam. The bedrock of South Indian classical music."
+    "story": "The most common Carnatic tala \u2014 \"adi\" means \"first\" or \"primary.\" 8 beats: laghu, drutam, drutam. The bedrock of South Indian classical music."
   },
   {
     "id": "khanda-chapu",
     "name": "Khanda Chapu",
-    "origin": "India · Carnatic",
+    "origin": "India \u00b7 Carnatic",
     "tradition": "South Indian classical",
     "genre": "classical",
     "timeSig": "5/4",
@@ -808,12 +808,12 @@
       "voice"
     ],
     "swingable": false,
-    "story": "\"Khanda\" means five. A 5-beat Carnatic tala grouped 2+1+2 — uneven, with a distinctive hop at the single-beat middle."
+    "story": "\"Khanda\" means five. A 5-beat Carnatic tala grouped 2+1+2 \u2014 uneven, with a distinctive hop at the single-beat middle."
   },
   {
     "id": "sultaal",
     "name": "Sultaal",
-    "origin": "India · Hindustani",
+    "origin": "India \u00b7 Hindustani",
     "tradition": "Dhrupad / pakhawaj",
     "genre": "classical",
     "timeSig": "10/4",
@@ -835,25 +835,25 @@
     "tracks": {
       "KK": [
         2,
-        0,
         2,
         0,
         0,
-        0,
+        2,
+        1,
         0,
         0,
         2,
-        0
+        1
       ],
       "SN": [
         0,
         0,
-        0,
-        0,
         2,
+        1,
         0,
+        1,
         2,
-        0,
+        1,
         0,
         1
       ],
@@ -884,7 +884,7 @@
       "voice"
     ],
     "swingable": false,
-    "story": "10 beats in five equal vibhags of 2 — a martial, processional cousin to Jhaptal. The perfect symmetry gives Sultaal the grandeur of Dhrupad.",
+    "story": "10 beats in five equal vibhags of 2 \u2014 a martial, processional cousin to Jhaptal. The perfect symmetry gives Sultaal the grandeur of Dhrupad.",
     "relatedIds": [
       "jhaptal",
       "chautal"
@@ -893,7 +893,7 @@
   {
     "id": "dhamar",
     "name": "Dhamar",
-    "origin": "India · Hindustani",
+    "origin": "India \u00b7 Hindustani",
     "tradition": "Dhrupad (Holi songs)",
     "genre": "classical",
     "timeSig": "14/4",
@@ -976,7 +976,7 @@
       "rudra veena"
     ],
     "swingable": false,
-    "story": "14 beats grouped 5+2+3+4 — the tala of Dhamar songs celebrating Krishna playing Holi. The stumbling asymmetry captures the joyful chaos of the festival of colors.",
+    "story": "14 beats grouped 5+2+3+4 \u2014 the tala of Dhamar songs celebrating Krishna playing Holi. The stumbling asymmetry captures the joyful chaos of the festival of colors.",
     "relatedIds": [
       "chautal",
       "deepchandi"
@@ -985,7 +985,7 @@
   {
     "id": "addha-tintal",
     "name": "Addha (Drut Tintal)",
-    "origin": "India · Hindustani",
+    "origin": "India \u00b7 Hindustani",
     "tradition": "Fast khayal",
     "genre": "classical",
     "timeSig": "16/4",
@@ -1009,11 +1009,11 @@
         0,
         0,
         0,
-        0,
-        0,
         2,
         0,
         2,
+        0,
+        0,
         0,
         0,
         0,
@@ -1026,18 +1026,18 @@
         0,
         0,
         2,
+        1,
         0,
+        0,
+        1,
+        0,
+        2,
+        1,
         2,
         0,
         0,
         0,
-        0,
-        0,
-        2,
-        0,
-        2,
-        0,
-        0,
+        1,
         0
       ],
       "HH": [
@@ -1074,7 +1074,7 @@
       "voice"
     ],
     "swingable": false,
-    "story": "Tintal at breakneck speed. The bols shorten to \"Dha Dhi Ta Dha\" — crisp syllables that articulate cleanly as singer and tabla trade virtuosic volleys.",
+    "story": "Tintal at breakneck speed. The bols shorten to \"Dha Dhi Ta Dha\" \u2014 crisp syllables that articulate cleanly as singer and tabla trade virtuosic volleys.",
     "relatedIds": [
       "tintal"
     ]
@@ -1082,7 +1082,7 @@
   {
     "id": "jhumra",
     "name": "Jhumra",
-    "origin": "India · Hindustani",
+    "origin": "India \u00b7 Hindustani",
     "tradition": "Vilambit khayal",
     "genre": "classical",
     "timeSig": "14/4",
@@ -1104,34 +1104,34 @@
       "KK": [
         2,
         0,
+        0,
+        0,
+        0,
+        1,
+        1,
         2,
         0,
-        2,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
         0,
         2,
+        0,
+        1,
         0
       ],
       "SN": [
         0,
-        0,
-        0,
-        0,
-        0,
+        1,
         2,
         1,
+        1,
         0,
+        0,
+        0,
+        1,
         2,
         0,
-        2,
+        1,
         0,
-        0,
-        0
+        2
       ],
       "HH": [
         2,
@@ -1165,7 +1165,7 @@
       "voice"
     ],
     "swingable": false,
-    "story": "A rare 14-beat Hindustani tala shaped like Deepchandi (3+4+3+4) but stretched glacially slow — each matra breathes for seconds, giving the vocalist endless space to ornament.",
+    "story": "A rare 14-beat Hindustani tala shaped like Deepchandi (3+4+3+4) but stretched glacially slow \u2014 each matra breathes for seconds, giving the vocalist endless space to ornament.",
     "relatedIds": [
       "deepchandi",
       "ektal"
@@ -1174,7 +1174,7 @@
   {
     "id": "tilwada",
     "name": "Tilwada",
-    "origin": "India · Hindustani",
+    "origin": "India \u00b7 Hindustani",
     "tradition": "Medium khayal",
     "genre": "classical",
     "timeSig": "16/4",
@@ -1262,7 +1262,7 @@
       "voice"
     ],
     "swingable": false,
-    "story": "A 16-beat cousin of Tintal — same vibhag skeleton but the theka is denser, filled with connecting strokes. The tabla breathes between the singer's long-held notes.",
+    "story": "A 16-beat cousin of Tintal \u2014 same vibhag skeleton but the theka is denser, filled with connecting strokes. The tabla breathes between the singer's long-held notes.",
     "relatedIds": [
       "tintal"
     ]
@@ -1270,7 +1270,7 @@
   {
     "id": "teevra",
     "name": "Teevra",
-    "origin": "India · Hindustani",
+    "origin": "India \u00b7 Hindustani",
     "tradition": "Pakhawaj / dhrupad",
     "genre": "classical",
     "timeSig": "7/4",
@@ -1330,7 +1330,7 @@
       "voice"
     ],
     "swingable": false,
-    "story": "A 7-beat pakhawaj tala grouped 3+2+2. \"Teevra\" means sharp or intense — the asymmetry lends dhrupad compositions a bracing, forward lean.",
+    "story": "A 7-beat pakhawaj tala grouped 3+2+2. \"Teevra\" means sharp or intense \u2014 the asymmetry lends dhrupad compositions a bracing, forward lean.",
     "relatedIds": [
       "rupak",
       "misra-chapu"
@@ -1339,7 +1339,7 @@
   {
     "id": "punjabi-tal",
     "name": "Punjabi Tal",
-    "origin": "India · Hindustani",
+    "origin": "India \u00b7 Hindustani",
     "tradition": "Sikh kirtan / light classical",
     "genre": "devotional",
     "timeSig": "16/4",
@@ -1437,7 +1437,7 @@
   {
     "id": "misra-chapu",
     "name": "Misra Chapu",
-    "origin": "India · Carnatic",
+    "origin": "India \u00b7 Carnatic",
     "tradition": "South Indian classical",
     "genre": "classical",
     "timeSig": "7/4",
@@ -1519,7 +1519,7 @@
       "voice"
     ],
     "swingable": false,
-    "story": "\"Misra\" means mixed — tisra (3) blended with chatusra (2+2). Kept with waves only, the tala floats in suspension, a hypnotic lilt beloved in Bharatanatyam choreography.",
+    "story": "\"Misra\" means mixed \u2014 tisra (3) blended with chatusra (2+2). Kept with waves only, the tala floats in suspension, a hypnotic lilt beloved in Bharatanatyam choreography.",
     "relatedIds": [
       "khanda-chapu",
       "rupak"
@@ -1528,7 +1528,7 @@
   {
     "id": "rupaka-tala",
     "name": "Rupaka Tala",
-    "origin": "India · Carnatic",
+    "origin": "India \u00b7 Carnatic",
     "tradition": "South Indian classical",
     "genre": "classical",
     "timeSig": "3/4",
@@ -1575,7 +1575,7 @@
       "veena"
     ],
     "swingable": false,
-    "story": "The second most common Carnatic tala after Adi. Drutam (1) plus laghu (2) creates a brisk triple-time cycle — the engine behind many Tyagaraja kritis.",
+    "story": "The second most common Carnatic tala after Adi. Drutam (1) plus laghu (2) creates a brisk triple-time cycle \u2014 the engine behind many Tyagaraja kritis.",
     "relatedIds": [
       "adi-tala"
     ]
@@ -1583,7 +1583,7 @@
   {
     "id": "eka-tala",
     "name": "Eka Tala",
-    "origin": "India · Carnatic",
+    "origin": "India \u00b7 Carnatic",
     "tradition": "South Indian classical",
     "genre": "classical",
     "timeSig": "4/4",
@@ -1632,7 +1632,7 @@
       "voice"
     ],
     "swingable": false,
-    "story": "\"Eka\" means one — a single laghu of 4 counts. The shortest Carnatic tala, used for devotional songs and learning exercises where the cycle turns over every bar.",
+    "story": "\"Eka\" means one \u2014 a single laghu of 4 counts. The shortest Carnatic tala, used for devotional songs and learning exercises where the cycle turns over every bar.",
     "relatedIds": [
       "adi-tala",
       "rupaka-tala"
@@ -1640,8 +1640,8 @@
   },
   {
     "id": "konnakol-takadimi",
-    "name": "Konnakol · Ta-Ka-Di-Mi",
-    "origin": "India · Carnatic",
+    "name": "Konnakol \u00b7 Ta-Ka-Di-Mi",
+    "origin": "India \u00b7 Carnatic",
     "tradition": "Vocal percussion (solkattu)",
     "genre": "classical",
     "timeSig": "4/4",
@@ -1729,7 +1729,7 @@
       "mridangam"
     ],
     "swingable": false,
-    "story": "Chatusra gati — four syllables per beat. \"Ta-Ka-Di-Mi\" is the default subdivision of Carnatic music, spoken, clapped, and drummed as the foundation of all rhythmic training.",
+    "story": "Chatusra gati \u2014 four syllables per beat. \"Ta-Ka-Di-Mi\" is the default subdivision of Carnatic music, spoken, clapped, and drummed as the foundation of all rhythmic training.",
     "relatedIds": [
       "adi-tala",
       "konnakol-takita"
@@ -1737,8 +1737,8 @@
   },
   {
     "id": "konnakol-takita",
-    "name": "Konnakol · Ta-Ki-Ta",
-    "origin": "India · Carnatic",
+    "name": "Konnakol \u00b7 Ta-Ki-Ta",
+    "origin": "India \u00b7 Carnatic",
     "tradition": "Vocal percussion (solkattu)",
     "genre": "classical",
     "timeSig": "12/8",
@@ -1815,15 +1815,15 @@
       "mridangam"
     ],
     "swingable": false,
-    "story": "Tisra gati — three syllables per beat. \"Ta-Ki-Ta\" is the triplet engine of Carnatic music, the gateway to polyrhythmic math and the lilting swing of South Indian groove.",
+    "story": "Tisra gati \u2014 three syllables per beat. \"Ta-Ki-Ta\" is the triplet engine of Carnatic music, the gateway to polyrhythmic math and the lilting swing of South Indian groove.",
     "relatedIds": [
       "konnakol-takadimi"
     ]
   },
   {
     "id": "bhangra",
-    "name": "Bhangra · Chaal",
-    "origin": "India / Pakistan · Punjab",
+    "name": "Bhangra \u00b7 Chaal",
+    "origin": "India / Pakistan \u00b7 Punjab",
     "tradition": "Dhol folk dance",
     "genre": "folk-dance",
     "timeSig": "4/4",
@@ -1913,7 +1913,7 @@
       "algoza"
     ],
     "swingable": false,
-    "story": "The thunderous dhol groove of Punjab. \"Chaal\" means walk — dagga heavy stick on the bass head, tilli thin stick on the treble. The half-time feel sounds faster as the dance accelerates.",
+    "story": "The thunderous dhol groove of Punjab. \"Chaal\" means walk \u2014 dagga heavy stick on the bass head, tilli thin stick on the treble. The half-time feel sounds faster as the dance accelerates.",
     "relatedIds": [
       "punjabi-tal",
       "dhamaal-sufi"
@@ -1922,7 +1922,7 @@
   {
     "id": "garba",
     "name": "Garba",
-    "origin": "India · Gujarat",
+    "origin": "India \u00b7 Gujarat",
     "tradition": "Navratri festival dance",
     "genre": "folk-dance",
     "timeSig": "4/4",
@@ -2030,7 +2030,7 @@
       "manjira"
     ],
     "swingable": false,
-    "story": "Danced in concentric circles around a clay lamp during the nine nights of Navratri. The tempo builds through the night — UNESCO inscribed Garba as Intangible Cultural Heritage in 2023.",
+    "story": "Danced in concentric circles around a clay lamp during the nine nights of Navratri. The tempo builds through the night \u2014 UNESCO inscribed Garba as Intangible Cultural Heritage in 2023.",
     "relatedIds": [
       "dandiya-raas",
       "bhangra"
@@ -2039,7 +2039,7 @@
   {
     "id": "dandiya-raas",
     "name": "Dandiya Raas",
-    "origin": "India · Gujarat",
+    "origin": "India \u00b7 Gujarat",
     "tradition": "Stick dance",
     "genre": "folk-dance",
     "timeSig": "4/4",
@@ -2128,7 +2128,7 @@
       "harmonium"
     ],
     "swingable": false,
-    "story": "The late-night escalation of Garba — partners face off striking decorated sticks in a \"ta-ta, ta-ta-ta\" pattern. Pure exhilaration as the circles break into partner formations.",
+    "story": "The late-night escalation of Garba \u2014 partners face off striking decorated sticks in a \"ta-ta, ta-ta-ta\" pattern. Pure exhilaration as the circles break into partner formations.",
     "relatedIds": [
       "garba"
     ]
@@ -2136,7 +2136,7 @@
   {
     "id": "lavani",
     "name": "Lavani",
-    "origin": "India · Maharashtra",
+    "origin": "India \u00b7 Maharashtra",
     "tradition": "Theatrical folk dance",
     "genre": "folk-dance",
     "timeSig": "4/4",
@@ -2225,12 +2225,12 @@
       "ghungroo"
     ],
     "swingable": false,
-    "story": "Maharashtra's galloping dholki rhythm for Lavani — poetry, song, and dance fused. Ankle bells (ghungroo) interlock with the drum while the performer spins relentlessly."
+    "story": "Maharashtra's galloping dholki rhythm for Lavani \u2014 poetry, song, and dance fused. Ankle bells (ghungroo) interlock with the drum while the performer spins relentlessly."
   },
   {
     "id": "kalbelia",
     "name": "Kalbelia",
-    "origin": "India · Rajasthan",
+    "origin": "India \u00b7 Rajasthan",
     "tradition": "Snake-charmer dance",
     "genre": "folk-dance",
     "timeSig": "4/4",
@@ -2319,7 +2319,7 @@
       "khartal"
     ],
     "swingable": false,
-    "story": "The sinuous Rajasthani dance of the Kalbeliya community — movement mimics the serpent. UNESCO-listed. The pungi (snake-charmer's pipe) sings over a dholak driving in uneven accents.",
+    "story": "The sinuous Rajasthani dance of the Kalbeliya community \u2014 movement mimics the serpent. UNESCO-listed. The pungi (snake-charmer's pipe) sings over a dholak driving in uneven accents.",
     "relatedIds": [
       "rajasthani-manganiar"
     ]
@@ -2327,7 +2327,7 @@
   {
     "id": "qawwali",
     "name": "Qawwali",
-    "origin": "India / Pakistan · Sufi",
+    "origin": "India / Pakistan \u00b7 Sufi",
     "tradition": "Sufi devotional",
     "genre": "devotional",
     "timeSig": "4/4",
@@ -2355,11 +2355,11 @@
         0,
         2,
         0,
+        0,
+        0,
+        0,
+        0,
         2,
-        0,
-        0,
-        0,
-        0,
         0,
         0,
         0
@@ -2368,16 +2368,16 @@
         0,
         0,
         2,
-        0,
-        0,
-        0,
+        1,
         0,
         0,
         0,
         0,
         2,
-        0,
+        1,
         2,
+        1,
+        0,
         0,
         2,
         0
@@ -2435,7 +2435,7 @@
       "handclaps"
     ],
     "swingable": false,
-    "story": "The propulsive Sufi devotional groove of the shrines — Keherwa tala driven hard, with group handclaps riding the 2 and 4. Nusrat Fateh Ali Khan carried this rhythm to the world.",
+    "story": "The propulsive Sufi devotional groove of the shrines \u2014 Keherwa tala driven hard, with group handclaps riding the 2 and 4. Nusrat Fateh Ali Khan carried this rhythm to the world.",
     "relatedIds": [
       "keherwa",
       "dhamaal-sufi"
@@ -2443,8 +2443,8 @@
   },
   {
     "id": "bollywood-classic",
-    "name": "Bollywood · Classic 4/4",
-    "origin": "India · Mumbai",
+    "name": "Bollywood \u00b7 Classic 4/4",
+    "origin": "India \u00b7 Mumbai",
     "tradition": "Hindi film music",
     "genre": "popular",
     "timeSig": "4/4",
@@ -2535,7 +2535,7 @@
       "strings"
     ],
     "swingable": false,
-    "story": "The timeless Bollywood groove from the golden era through today — Keherwa tala stretched into a punchy, cinematic 16-step pattern that carries half the Hindi film catalogue.",
+    "story": "The timeless Bollywood groove from the golden era through today \u2014 Keherwa tala stretched into a punchy, cinematic 16-step pattern that carries half the Hindi film catalogue.",
     "relatedIds": [
       "keherwa"
     ]
@@ -2543,7 +2543,7 @@
   {
     "id": "rajasthani-manganiar",
     "name": "Rajasthani Manganiar",
-    "origin": "India · Rajasthan",
+    "origin": "India \u00b7 Rajasthan",
     "tradition": "Thar desert folk",
     "genre": "folk-dance",
     "timeSig": "4/4",
@@ -2633,7 +2633,7 @@
       "kamaicha"
     ],
     "swingable": false,
-    "story": "The hereditary Manganiar musicians of the Thar Desert — dholak pulse underneath the shimmering clack of khartal wooden castanets. Centuries of Rajput patronage, now a global concert tradition.",
+    "story": "The hereditary Manganiar musicians of the Thar Desert \u2014 dholak pulse underneath the shimmering clack of khartal wooden castanets. Centuries of Rajput patronage, now a global concert tradition.",
     "relatedIds": [
       "kalbelia"
     ]
@@ -2641,7 +2641,7 @@
   {
     "id": "dhamaal-sufi",
     "name": "Dhamaal",
-    "origin": "Pakistan · Sufi",
+    "origin": "Pakistan \u00b7 Sufi",
     "tradition": "Sufi ecstatic dance",
     "genre": "devotional",
     "timeSig": "4/4",
@@ -2730,7 +2730,7 @@
       "handclaps"
     ],
     "swingable": false,
-    "story": "The ecstatic Sufi dhol rhythm of the shrines — associated with Shah Hussain's urs in Lahore. Devotees spin themselves into trance as the dhol's heavy stick drives the circle harder and harder.",
+    "story": "The ecstatic Sufi dhol rhythm of the shrines \u2014 associated with Shah Hussain's urs in Lahore. Devotees spin themselves into trance as the dhol's heavy stick drives the circle harder and harder.",
     "relatedIds": [
       "bhangra",
       "qawwali"
@@ -2739,7 +2739,7 @@
   {
     "id": "ghoomar",
     "name": "Ghoomar",
-    "origin": "India · Rajasthan",
+    "origin": "India \u00b7 Rajasthan",
     "tradition": "Spinning dance",
     "genre": "folk-dance",
     "timeSig": "4/4",
@@ -2828,7 +2828,7 @@
       "harmonium"
     ],
     "swingable": false,
-    "story": "The Rajput women's spinning dance — wide circular steps in flowing skirts, performed at weddings and festivals. Elegant and graceful where Bhangra is thunderous.",
+    "story": "The Rajput women's spinning dance \u2014 wide circular steps in flowing skirts, performed at weddings and festivals. Elegant and graceful where Bhangra is thunderous.",
     "relatedIds": [
       "kalbelia",
       "rajasthani-manganiar"
@@ -2837,7 +2837,7 @@
   {
     "id": "rupaka-chapu",
     "name": "Rupaka Chapu",
-    "origin": "India · Carnatic",
+    "origin": "India \u00b7 Carnatic",
     "tradition": "South Indian classical",
     "genre": "classical",
     "timeSig": "3/8",
@@ -2894,7 +2894,7 @@
       "ghatam"
     ],
     "swingable": false,
-    "story": "Rupaka Chapu is the hand-waved form of Rupaka — two waves and a clap across 6 sub-beats. Ubiquitous in Tyagaraja kritis and bhajan accompaniment; faster and lighter than the full 3-beat laghu form.",
+    "story": "Rupaka Chapu is the hand-waved form of Rupaka \u2014 two waves and a clap across 6 sub-beats. Ubiquitous in Tyagaraja kritis and bhajan accompaniment; faster and lighter than the full 3-beat laghu form.",
     "relatedIds": [
       "rupaka-tala",
       "misra-chapu",
@@ -2903,8 +2903,8 @@
   },
   {
     "id": "adi-4-kalai",
-    "name": "Adi Tala · 4 Kalai",
-    "origin": "India · Carnatic",
+    "name": "Adi Tala \u00b7 4 Kalai",
+    "origin": "India \u00b7 Carnatic",
     "tradition": "Vilambit Carnatic",
     "genre": "classical",
     "timeSig": "32/4",
@@ -3046,7 +3046,7 @@
       "voice"
     ],
     "swingable": false,
-    "story": "Adi tala stretched to 4-kalai — each of the 8 beats expanded into 4 subunits, giving 32 matras per cycle. The vilambit canvas of South Indian ragam-tanam-pallavi exploration.",
+    "story": "Adi tala stretched to 4-kalai \u2014 each of the 8 beats expanded into 4 subunits, giving 32 matras per cycle. The vilambit canvas of South Indian ragam-tanam-pallavi exploration.",
     "relatedIds": [
       "adi-tala",
       "ektal"
@@ -3055,7 +3055,7 @@
   {
     "id": "sankeerna-chapu",
     "name": "Sankeerna Chapu",
-    "origin": "India · Carnatic",
+    "origin": "India \u00b7 Carnatic",
     "tradition": "South Indian classical",
     "genre": "classical",
     "timeSig": "9/8",
@@ -3123,7 +3123,7 @@
       "voice"
     ],
     "swingable": false,
-    "story": "\"Sankeerna\" means compound of 4+5 or 4+2+3. The rarest of the chapu talas — a 9-beat asymmetric cycle that tilts forward then resolves into a settled close.",
+    "story": "\"Sankeerna\" means compound of 4+5 or 4+2+3. The rarest of the chapu talas \u2014 a 9-beat asymmetric cycle that tilts forward then resolves into a settled close.",
     "relatedIds": [
       "misra-chapu",
       "khanda-chapu",
@@ -3133,7 +3133,7 @@
   {
     "id": "tisra-jati-chapu",
     "name": "Tisra Jati Chapu",
-    "origin": "India · Carnatic",
+    "origin": "India \u00b7 Carnatic",
     "tradition": "South Indian classical",
     "genre": "classical",
     "timeSig": "3/4",
@@ -3190,7 +3190,7 @@
       "voice"
     ],
     "swingable": false,
-    "story": "A 3-beat chapu — the smallest of the hand-waved cycles. Pulse is wave-wave-clap in tisra feel, lending Bharatanatyam sequences a propulsive triplet lift.",
+    "story": "A 3-beat chapu \u2014 the smallest of the hand-waved cycles. Pulse is wave-wave-clap in tisra feel, lending Bharatanatyam sequences a propulsive triplet lift.",
     "relatedIds": [
       "rupaka-chapu",
       "rupaka-tala",
@@ -3199,8 +3199,8 @@
   },
   {
     "id": "tisra-adi",
-    "name": "Adi Tala · Tisra Gati",
-    "origin": "India · Carnatic",
+    "name": "Adi Tala \u00b7 Tisra Gati",
+    "origin": "India \u00b7 Carnatic",
     "tradition": "Carnatic gati variation",
     "genre": "classical",
     "timeSig": "24/8",
@@ -3318,7 +3318,7 @@
       "voice"
     ],
     "swingable": false,
-    "story": "Adi tala reshaped into tisra gati — 8 beats × 3 subdivisions = 24 matras. The Carnatic equivalent of a permanent triplet swing over the same foundational cycle.",
+    "story": "Adi tala reshaped into tisra gati \u2014 8 beats \u00d7 3 subdivisions = 24 matras. The Carnatic equivalent of a permanent triplet swing over the same foundational cycle.",
     "relatedIds": [
       "adi-tala",
       "konnakol-takita"
@@ -3326,8 +3326,8 @@
   },
   {
     "id": "khanda-gati-adi",
-    "name": "Adi Tala · Khanda Gati",
-    "origin": "India · Carnatic",
+    "name": "Adi Tala \u00b7 Khanda Gati",
+    "origin": "India \u00b7 Carnatic",
     "tradition": "Carnatic gati variation",
     "genre": "classical",
     "timeSig": "40/16",
@@ -3493,7 +3493,7 @@
       "voice"
     ],
     "swingable": false,
-    "story": "Adi tala in khanda gati — 8 beats × 5 subdivisions = 40 aksharas. Five syllables per beat (\"Ta Di Ki Na Tom\") produce a rhythmic tension with no parallel in Western meter.",
+    "story": "Adi tala in khanda gati \u2014 8 beats \u00d7 5 subdivisions = 40 aksharas. Five syllables per beat (\"Ta Di Ki Na Tom\") produce a rhythmic tension with no parallel in Western meter.",
     "relatedIds": [
       "adi-tala",
       "tisra-adi",
@@ -3502,8 +3502,8 @@
   },
   {
     "id": "misra-gati-adi",
-    "name": "Adi Tala · Misra Gati",
-    "origin": "India · Carnatic",
+    "name": "Adi Tala \u00b7 Misra Gati",
+    "origin": "India \u00b7 Carnatic",
     "tradition": "Carnatic gati variation",
     "genre": "classical",
     "timeSig": "56/16",
@@ -3717,7 +3717,7 @@
       "voice"
     ],
     "swingable": false,
-    "story": "Adi in misra gati — 8 beats × 7 aksharas = 56 subdivisions. The virtuoso's playground: konnakol syllables \"Ta Ka Di Mi Ta Ki Ta\" loop seven-deep per beat.",
+    "story": "Adi in misra gati \u2014 8 beats \u00d7 7 aksharas = 56 subdivisions. The virtuoso's playground: konnakol syllables \"Ta Ka Di Mi Ta Ki Ta\" loop seven-deep per beat.",
     "relatedIds": [
       "adi-tala",
       "tisra-adi",
@@ -3728,7 +3728,7 @@
   {
     "id": "baul-bengal",
     "name": "Baul",
-    "origin": "India · Bengal / Bangladesh",
+    "origin": "India \u00b7 Bengal / Bangladesh",
     "tradition": "Bengali mystic folk",
     "genre": "devotional",
     "timeSig": "4/4",
@@ -3818,7 +3818,7 @@
       "ankle bells"
     ],
     "swingable": false,
-    "story": "The wandering Bauls of Bengal sing with dubki hand-drum, one-string ektara, and ankle bells — a rejection of caste and creed in song. UNESCO Masterpiece of Oral Heritage (2005).",
+    "story": "The wandering Bauls of Bengal sing with dubki hand-drum, one-string ektara, and ankle bells \u2014 a rejection of caste and creed in song. UNESCO Masterpiece of Oral Heritage (2005).",
     "relatedIds": [
       "keherwa",
       "qawwali"
@@ -3826,8 +3826,8 @@
   },
   {
     "id": "baul-68",
-    "name": "Baul · 6/8",
-    "origin": "India · Bengal / Bangladesh",
+    "name": "Baul \u00b7 6/8",
+    "origin": "India \u00b7 Bengal / Bangladesh",
     "tradition": "Bengali mystic folk (compound)",
     "genre": "devotional",
     "timeSig": "6/8",
@@ -3884,7 +3884,7 @@
       "dotara"
     ],
     "swingable": false,
-    "story": "The meditative 6/8 Baul sway — the dubki rocks while the ektara drone holds steady. A Lalon Shah song in this feel opens into timelessness.",
+    "story": "The meditative 6/8 Baul sway \u2014 the dubki rocks while the ektara drone holds steady. A Lalon Shah song in this feel opens into timelessness.",
     "relatedIds": [
       "baul-bengal",
       "dadra"
@@ -3892,8 +3892,8 @@
   },
   {
     "id": "qaida-tabla",
-    "name": "Qaida · Delhi Theme",
-    "origin": "India · Hindustani",
+    "name": "Qaida \u00b7 Delhi Theme",
+    "origin": "India \u00b7 Hindustani",
     "tradition": "Tabla compositional form",
     "genre": "classical",
     "timeSig": "16/4",
@@ -4031,7 +4031,7 @@
       "voice"
     ],
     "swingable": false,
-    "story": "A kayda is the spine of modern tabla solo — a theme stated on \"dha\" strokes, then permuted endlessly through open/closed bayan variants. This is the Delhi gharana's template, the grammar every gharana inherits.",
+    "story": "A kayda is the spine of modern tabla solo \u2014 a theme stated on \"dha\" strokes, then permuted endlessly through open/closed bayan variants. This is the Delhi gharana's template, the grammar every gharana inherits.",
     "relatedIds": [
       "tintal",
       "peshkar-tabla",
@@ -4040,8 +4040,8 @@
   },
   {
     "id": "peshkar-tabla",
-    "name": "Peshkar · Tabla Opening",
-    "origin": "India · Hindustani",
+    "name": "Peshkar \u00b7 Tabla Opening",
+    "origin": "India \u00b7 Hindustani",
     "tradition": "Tabla solo opening movement",
     "genre": "classical",
     "timeSig": "16/4",
@@ -4128,7 +4128,7 @@
       "tabla"
     ],
     "swingable": false,
-    "story": "The opening movement of a tabla solo. Peshkar means \"to present\" — the artist unveils the tala's character slowly, stating themes that may never fully establish before transforming. A musical invocation.",
+    "story": "The opening movement of a tabla solo. Peshkar means \"to present\" \u2014 the artist unveils the tala's character slowly, stating themes that may never fully establish before transforming. A musical invocation.",
     "relatedIds": [
       "qaida-tabla",
       "tintal"
@@ -4136,8 +4136,8 @@
   },
   {
     "id": "tihai-3cycle",
-    "name": "Tihai · Sam Landing",
-    "origin": "India · Hindustani",
+    "name": "Tihai \u00b7 Sam Landing",
+    "origin": "India \u00b7 Hindustani",
     "tradition": "Rhythmic cadence device",
     "genre": "classical",
     "timeSig": "16/4",
@@ -4227,7 +4227,7 @@
       "voice"
     ],
     "swingable": false,
-    "story": "A tihai is a phrase repeated three times so the last stroke lands precisely on sam. 5 matras × 3 = 15, plus the arrival = 16. The mathematical inevitability of resolution made audible.",
+    "story": "A tihai is a phrase repeated three times so the last stroke lands precisely on sam. 5 matras \u00d7 3 = 15, plus the arrival = 16. The mathematical inevitability of resolution made audible.",
     "relatedIds": [
       "tintal",
       "qaida-tabla",
@@ -4236,8 +4236,8 @@
   },
   {
     "id": "rela-tabla",
-    "name": "Rela · Fast Tabla",
-    "origin": "India · Hindustani",
+    "name": "Rela \u00b7 Fast Tabla",
+    "origin": "India \u00b7 Hindustani",
     "tradition": "Tabla flowing form",
     "genre": "classical",
     "timeSig": "16/4",
@@ -4326,7 +4326,7 @@
       "sitar"
     ],
     "swingable": false,
-    "story": "The rela shares the kayda's structure but runs at breakneck tempo — a continuous torrent of bols, a test of stamina and clarity. The Farrukhabad gharana lives for this moment.",
+    "story": "The rela shares the kayda's structure but runs at breakneck tempo \u2014 a continuous torrent of bols, a test of stamina and clarity. The Farrukhabad gharana lives for this moment.",
     "relatedIds": [
       "qaida-tabla",
       "addha-tintal"
@@ -4334,8 +4334,8 @@
   },
   {
     "id": "gat-tabla",
-    "name": "Gat · Lucknow Composition",
-    "origin": "India · Hindustani",
+    "name": "Gat \u00b7 Lucknow Composition",
+    "origin": "India \u00b7 Hindustani",
     "tradition": "Lucknow tabla composition",
     "genre": "classical",
     "timeSig": "16/4",
@@ -4424,7 +4424,7 @@
       "kathak dancer"
     ],
     "swingable": false,
-    "story": "The gat is a fixed tabla composition from the Lucknow gharana — Kathak dance's rhythmic partner. The open-palm bolder strokes evoke the bells on the dancer's ankles.",
+    "story": "The gat is a fixed tabla composition from the Lucknow gharana \u2014 Kathak dance's rhythmic partner. The open-palm bolder strokes evoke the bells on the dancer's ankles.",
     "relatedIds": [
       "tintal",
       "qaida-tabla",
@@ -4434,7 +4434,7 @@
   {
     "id": "matta-tal",
     "name": "Matta Tal",
-    "origin": "India · Hindustani",
+    "origin": "India \u00b7 Hindustani",
     "tradition": "Pakhawaj / dhrupad",
     "genre": "classical",
     "timeSig": "9/4",

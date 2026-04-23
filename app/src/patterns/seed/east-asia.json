@@ -26,8 +26,6 @@
         0,
         0,
         0,
-        0,
-        0,
         2,
         0,
         0,
@@ -35,6 +33,8 @@
         2,
         0,
         0,
+        0,
+        2,
         0,
         0,
         0
@@ -43,19 +43,19 @@
         0,
         0,
         1,
-        2,
+        1,
         0,
         0,
         1,
-        2,
+        1,
         0,
         0,
         1,
-        2,
+        1,
         0,
         0,
         1,
-        2
+        1
       ],
       "HH": [
         2,
@@ -91,11 +91,11 @@
       "chappa"
     ],
     "swingable": false,
-    "story": "The \"don-ka don-ka\" jiuchi that underlies nearly every matsuri festival piece — odaiko center hits, shime rim answers, the heartbeat of Japanese ensemble drumming."
+    "story": "The \"don-ka don-ka\" jiuchi that underlies nearly every matsuri festival piece \u2014 odaiko center hits, shime rim answers, the heartbeat of Japanese ensemble drumming."
   },
   {
     "id": "samulnori",
-    "name": "Samulnori · Jajinmori",
+    "name": "Samulnori \u00b7 Jajinmori",
     "origin": "Korea",
     "tradition": "Four-instrument percussion",
     "genre": "folk-dance",
@@ -188,11 +188,11 @@
       "jing"
     ],
     "swingable": false,
-    "story": "Kim Duk-soo's 1978 reinvention of outdoor pungmul drumming for the concert stage — small gong leads, hourglass janggu answers, barrel buk and great jing ground the cycle."
+    "story": "Kim Duk-soo's 1978 reinvention of outdoor pungmul drumming for the concert stage \u2014 small gong leads, hourglass janggu answers, barrel buk and great jing ground the cycle."
   },
   {
     "id": "taiko-matsuri",
-    "name": "Taiko · Matsuri",
+    "name": "Taiko \u00b7 Matsuri",
     "origin": "Japan",
     "tradition": "Festival kumi-daiko",
     "genre": "ceremonial",
@@ -282,7 +282,7 @@
       "kane"
     ],
     "swingable": false,
-    "story": "The quintessential festival rhythm: \"DON doko don DON\" — heavy accents on the odaiko creating the joyful, driving feel that carries floats through streets during matsuri.",
+    "story": "The quintessential festival rhythm: \"DON doko don DON\" \u2014 heavy accents on the odaiko creating the joyful, driving feel that carries floats through streets during matsuri.",
     "relatedIds": [
       "taiko-base",
       "yatai-bayashi"
@@ -291,7 +291,7 @@
   {
     "id": "yatai-bayashi",
     "name": "Yatai-bayashi",
-    "origin": "Japan · Chichibu",
+    "origin": "Japan \u00b7 Chichibu",
     "tradition": "Festival float drumming",
     "genre": "ceremonial",
     "timeSig": "4/4",
@@ -380,7 +380,7 @@
       "shinobue"
     ],
     "swingable": false,
-    "story": "The relentless float-drumming rhythm of Chichibu's night festival — traditionally played lying on your back under the yatai cart, arms pounding overhead. Endurance as devotion.",
+    "story": "The relentless float-drumming rhythm of Chichibu's night festival \u2014 traditionally played lying on your back under the yatai cart, arms pounding overhead. Endurance as devotion.",
     "relatedIds": [
       "taiko-matsuri"
     ]
@@ -479,7 +479,7 @@
       "kkwaenggwari"
     ],
     "swingable": false,
-    "story": "A moderate 12/8 changdan — the most common folk cycle, swaying and dance-like. Vocalized \"deong-gi-deok kung deo-reo-reo-reo\" — the rhythmic DNA of countless Korean folk songs.",
+    "story": "A moderate 12/8 changdan \u2014 the most common folk cycle, swaying and dance-like. Vocalized \"deong-gi-deok kung deo-reo-reo-reo\" \u2014 the rhythmic DNA of countless Korean folk songs.",
     "relatedIds": [
       "samulnori",
       "semachi"
@@ -554,7 +554,7 @@
       "kkwaenggwari"
     ],
     "swingable": false,
-    "story": "A 9/8 changdan — three groups of three, lighter and more buoyant than gutgeori. Central to shaman music and folk songs with spiritual themes.",
+    "story": "A 9/8 changdan \u2014 three groups of three, lighter and more buoyant than gutgeori. Central to shaman music and folk songs with spiritual themes.",
     "relatedIds": [
       "gutgeori",
       "samulnori"
@@ -639,7 +639,7 @@
       "kkwaenggwari"
     ],
     "swingable": false,
-    "story": "\"Whirling\" — the fastest standard changdan, used for climactic passages of pansori and sanjo. Overwhelming rhythmic intensity as the gosu drummer drives the singer to catharsis.",
+    "story": "\"Whirling\" \u2014 the fastest standard changdan, used for climactic passages of pansori and sanjo. Overwhelming rhythmic intensity as the gosu drummer drives the singer to catharsis.",
     "relatedIds": [
       "samulnori",
       "gutgeori"
@@ -648,7 +648,7 @@
   {
     "id": "lion-dance",
     "name": "Lion Dance",
-    "origin": "China · Cantonese",
+    "origin": "China \u00b7 Cantonese",
     "tradition": "Martial-arts lion dance",
     "genre": "ceremonial",
     "timeSig": "4/4",
@@ -737,7 +737,7 @@
       "xiaobo"
     ],
     "swingable": false,
-    "story": "The walking-prowling pattern: the lion follows the drum. Big tanggu drum leads, gong and cymbal answer — every martial arts school has its own vocabulary, but the head-swaying rhythm is universal."
+    "story": "The walking-prowling pattern: the lion follows the drum. Big tanggu drum leads, gong and cymbal answer \u2014 every martial arts school has its own vocabulary, but the head-swaying rhythm is universal."
   },
   {
     "id": "bon-odori",
@@ -833,7 +833,7 @@
       "shinobue"
     ],
     "swingable": false,
-    "story": "The Obon dance rhythm — a taiko drummer on a raised yagura scaffold at the circle's center, providing the heartbeat for a community welcoming ancestral spirits home. Insistent, hypnotic, built to sustain hours.",
+    "story": "The Obon dance rhythm \u2014 a taiko drummer on a raised yagura scaffold at the circle's center, providing the heartbeat for a community welcoming ancestral spirits home. Insistent, hypnotic, built to sustain hours.",
     "relatedIds": [
       "taiko-base",
       "taiko-matsuri"
@@ -841,8 +841,8 @@
   },
   {
     "id": "jingju-opera",
-    "name": "Jingju · Opera Entrance",
-    "origin": "China · Beijing",
+    "name": "Jingju \u00b7 Opera Entrance",
+    "origin": "China \u00b7 Beijing",
     "tradition": "Peking opera percussion",
     "genre": "ceremonial",
     "timeSig": "4/4",
@@ -950,7 +950,7 @@
       "xiaoluo"
     ],
     "swingable": false,
-    "story": "The bangu drum-master conducts the entire opera — paiban clapper marks the beat, daluo gong punctuates entrances, xiaoluo answers. Every pattern cues a specific dramatic action. Percussion as command language.",
+    "story": "The bangu drum-master conducts the entire opera \u2014 paiban clapper marks the beat, daluo gong punctuates entrances, xiaoluo answers. Every pattern cues a specific dramatic action. Percussion as command language.",
     "relatedIds": [
       "lion-dance"
     ]

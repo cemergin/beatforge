@@ -1,8 +1,8 @@
 [
   {
     "id": "buleria",
-    "name": "Bulería",
-    "origin": "Spain · Jerez",
+    "name": "Buler\u00eda",
+    "origin": "Spain \u00b7 Jerez",
     "tradition": "Flamenco fiesta",
     "genre": "folk-dance",
     "timeSig": "12/8",
@@ -25,7 +25,7 @@
       "KK": [
         0,
         0,
-        2,
+        0,
         0,
         0,
         2,
@@ -37,7 +37,6 @@
         0
       ],
       "SN": [
-        2,
         0,
         0,
         2,
@@ -48,7 +47,8 @@
         2,
         0,
         2,
-        0
+        0,
+        2
       ],
       "HH": [
         2,
@@ -75,12 +75,12 @@
       "fiesta"
     ],
     "instruments": [
-      "cajón",
+      "caj\u00f3n",
       "palmas",
       "guitarra"
     ],
     "swingable": false,
-    "story": "The fastest flamenco palo — the climax of any Gitano fiesta in Jerez. Accents fall on 3, 6, 8, 10, and 12, but phrases typically start on beat 12 itself.",
+    "story": "The fastest flamenco palo \u2014 the climax of any Gitano fiesta in Jerez. Accents fall on 3, 6, 8, 10, and 12, but phrases typically start on beat 12 itself.",
     "relatedIds": [
       "solea",
       "bembe",
@@ -90,8 +90,8 @@
   },
   {
     "id": "solea",
-    "name": "Soleá",
-    "origin": "Spain · Seville / Cádiz",
+    "name": "Sole\u00e1",
+    "origin": "Spain \u00b7 Seville / C\u00e1diz",
     "tradition": "Cante jondo",
     "genre": "folk-dance",
     "timeSig": "12/8",
@@ -164,12 +164,12 @@
       "deep"
     ],
     "instruments": [
-      "cajón",
+      "caj\u00f3n",
       "palmas",
       "guitarra"
     ],
     "swingable": false,
-    "story": "The \"mother\" of flamenco — slow, dignified, deeply emotional. Same 12-beat accent pattern as bulería but at half the speed and twice the weight.",
+    "story": "The \"mother\" of flamenco \u2014 slow, dignified, deeply emotional. Same 12-beat accent pattern as buler\u00eda but at half the speed and twice the weight.",
     "relatedIds": [
       "buleria",
       "bembe",
@@ -181,7 +181,7 @@
   {
     "id": "tangos-flamenco",
     "name": "Tangos (Flamenco)",
-    "origin": "Spain · Cádiz / Seville",
+    "origin": "Spain \u00b7 C\u00e1diz / Seville",
     "tradition": "Flamenco palo",
     "genre": "folk-dance",
     "timeSig": "4/4",
@@ -209,13 +209,13 @@
         0,
         0,
         0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
         2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
         0
       ],
       "SN": [
@@ -265,17 +265,17 @@
       "dance"
     ],
     "instruments": [
-      "cajón",
+      "caj\u00f3n",
       "palmas",
       "guitarra"
     ],
     "swingable": false,
-    "story": "Not Argentine tango — the flamenco tangos of Cádiz and Triana. The first beat of each group is subdued; beats 2, 3, 4 carry the drive."
+    "story": "Not Argentine tango \u2014 the flamenco tangos of C\u00e1diz and Triana. The first beat of each group is subdued; beats 2, 3, 4 carry the drive."
   },
   {
     "id": "seguiriya",
     "name": "Seguiriya",
-    "origin": "Spain · Cádiz / Jerez",
+    "origin": "Spain \u00b7 C\u00e1diz / Jerez",
     "tradition": "Cante jondo",
     "genre": "folk-dance",
     "timeSig": "12/8",
@@ -349,20 +349,20 @@
       "limping"
     ],
     "instruments": [
-      "cajón",
+      "caj\u00f3n",
       "palmas",
       "guitarra"
     ],
     "swingable": false,
-    "story": "The other pillar of cante jondo alongside soleá — where soleá is regal, seguiriya is anguished. Accents on 1, 3, 5, 8, 11 create a limping 2+2+3+3+2 that never settles.",
+    "story": "The other pillar of cante jondo alongside sole\u00e1 \u2014 where sole\u00e1 is regal, seguiriya is anguished. Accents on 1, 3, 5, 8, 11 create a limping 2+2+3+3+2 that never settles.",
     "relatedIds": [
       "solea"
     ]
   },
   {
     "id": "alegrias",
-    "name": "Alegrías",
-    "origin": "Spain · Cádiz",
+    "name": "Alegr\u00edas",
+    "origin": "Spain \u00b7 C\u00e1diz",
     "tradition": "Cantinas flamenco",
     "genre": "folk-dance",
     "timeSig": "12/8",
@@ -436,12 +436,12 @@
       "major-key"
     ],
     "instruments": [
-      "cajón",
+      "caj\u00f3n",
       "palmas",
       "guitarra"
     ],
     "swingable": false,
-    "story": "Alegrías means \"joys\" — the signature palo of Cádiz. Same soleá compás, but bright, maritime, in a major key. Born when Aragonese jota mixed with Cádiz music during the Peninsular War.",
+    "story": "Alegr\u00edas means \"joys\" \u2014 the signature palo of C\u00e1diz. Same sole\u00e1 comp\u00e1s, but bright, maritime, in a major key. Born when Aragonese jota mixed with C\u00e1diz music during the Peninsular War.",
     "relatedIds": [
       "solea",
       "buleria"
@@ -450,7 +450,7 @@
   {
     "id": "rumba-flamenca",
     "name": "Rumba Flamenca",
-    "origin": "Spain · Andalusia",
+    "origin": "Spain \u00b7 Andalusia",
     "tradition": "Flamenco ida y vuelta",
     "genre": "folk-dance",
     "timeSig": "4/4",
@@ -535,12 +535,12 @@
       "ida-y-vuelta"
     ],
     "instruments": [
-      "cajón",
+      "caj\u00f3n",
       "palmas",
       "guitarra"
     ],
     "swingable": false,
-    "story": "The most internationally famous flamenco groove — Gipsy Kings territory. A 3+3+2 tresillo from Cuba married to tangos compás, strummed with the ventilador fan technique.",
+    "story": "The most internationally famous flamenco groove \u2014 Gipsy Kings territory. A 3+3+2 tresillo from Cuba married to tangos comp\u00e1s, strummed with the ventilador fan technique.",
     "relatedIds": [
       "tangos-flamenco",
       "son-clave",
@@ -551,7 +551,7 @@
   {
     "id": "fandango-huelva",
     "name": "Fandango de Huelva",
-    "origin": "Spain · Huelva",
+    "origin": "Spain \u00b7 Huelva",
     "tradition": "Village festive palo",
     "genre": "folk-dance",
     "timeSig": "3/4",
@@ -604,17 +604,17 @@
       "huelva"
     ],
     "instruments": [
-      "cajón",
+      "caj\u00f3n",
       "palmas",
       "guitarra"
     ],
     "swingable": false,
-    "story": "The only fandangos with a strict compás — every village of Huelva has its own. Six beats, accents on 3 and 5, the guitar rasgueo matching the palmas exactly."
+    "story": "The only fandangos with a strict comp\u00e1s \u2014 every village of Huelva has its own. Six beats, accents on 3 and 5, the guitar rasgueo matching the palmas exactly."
   },
   {
     "id": "martinete",
     "name": "Martinete",
-    "origin": "Spain · Triana",
+    "origin": "Spain \u00b7 Triana",
     "tradition": "Forge cante",
     "genre": "folk-dance",
     "timeSig": "4/4",
@@ -704,12 +704,12 @@
       "voz"
     ],
     "swingable": false,
-    "story": "A cante of the forges — sung a palo seco over hammer on anvil, no guitar. Gitano blacksmiths in Triana turned their workday into this heavy 4/4 lament."
+    "story": "A cante of the forges \u2014 sung a palo seco over hammer on anvil, no guitar. Gitano blacksmiths in Triana turned their workday into this heavy 4/4 lament."
   },
   {
     "id": "taranta",
     "name": "Taranta",
-    "origin": "Spain · Linares · Almería",
+    "origin": "Spain \u00b7 Linares \u00b7 Almer\u00eda",
     "tradition": "Miners' cante",
     "genre": "folk-dance",
     "timeSig": "4/4",
@@ -795,15 +795,15 @@
     "instruments": [
       "guitarra",
       "palmas",
-      "cajón"
+      "caj\u00f3n"
     ],
     "swingable": false,
-    "story": "From the mining towns of the Levante — dark, modal, full of coal-dust melancholy. Sung free over a guitar, but the accompanying baile takes a slow 4/4 pulse."
+    "story": "From the mining towns of the Levante \u2014 dark, modal, full of coal-dust melancholy. Sung free over a guitar, but the accompanying baile takes a slow 4/4 pulse."
   },
   {
     "id": "milonga-flamenca",
     "name": "Milonga",
-    "origin": "Spain / Argentina · Cádiz",
+    "origin": "Spain / Argentina \u00b7 C\u00e1diz",
     "tradition": "Ida y vuelta palo",
     "genre": "folk-dance",
     "timeSig": "2/4",
@@ -861,12 +861,12 @@
       "river-plate"
     ],
     "instruments": [
-      "cajón",
+      "caj\u00f3n",
       "palmas",
       "guitarra"
     ],
     "swingable": false,
-    "story": "The Spanish-Argentine round-trip — the Rio de la Plata milonga reimagined as a flamenco palo. Habanera-bass undertow under the cajón, saudade in the melody.",
+    "story": "The Spanish-Argentine round-trip \u2014 the Rio de la Plata milonga reimagined as a flamenco palo. Habanera-bass undertow under the caj\u00f3n, saudade in the melody.",
     "relatedIds": [
       "tangos-flamenco",
       "danzon",
@@ -876,7 +876,7 @@
   {
     "id": "zambra",
     "name": "Zambra",
-    "origin": "Spain · Granada · Sacromonte",
+    "origin": "Spain \u00b7 Granada \u00b7 Sacromonte",
     "tradition": "Moorish-Gitano cante",
     "genre": "folk-dance",
     "timeSig": "4/4",
@@ -961,13 +961,13 @@
       "cave"
     ],
     "instruments": [
-      "cajón",
+      "caj\u00f3n",
       "palmas",
       "guitarra",
-      "castañuelas"
+      "casta\u00f1uelas"
     ],
     "swingable": false,
-    "story": "The cave-dance of Sacromonte — Moorish wedding music preserved by Granada's Gitanos after the Reconquista. A hypnotic tangos cousin with a Maghrebi shimmer.",
+    "story": "The cave-dance of Sacromonte \u2014 Moorish wedding music preserved by Granada's Gitanos after the Reconquista. A hypnotic tangos cousin with a Maghrebi shimmer.",
     "relatedIds": [
       "tangos-flamenco",
       "chaabi-moroccan",
@@ -977,8 +977,8 @@
   {
     "id": "verdiales",
     "name": "Verdiales",
-    "origin": "Spain · Málaga",
-    "tradition": "Málaga fandango",
+    "origin": "Spain \u00b7 M\u00e1laga",
+    "tradition": "M\u00e1laga fandango",
     "genre": "folk-dance",
     "timeSig": "3/4",
     "grouping": [
@@ -1031,14 +1031,14 @@
       "panda"
     ],
     "instruments": [
-      "violín",
+      "viol\u00edn",
       "guitarra",
       "pandero",
       "platillos",
       "palmas"
     ],
     "swingable": false,
-    "story": "The wildest fandango — played by pandas of violin, guitar, cymbals, and tambourines in the mountains above Málaga. Dense, rattling, a village party rhythm.",
+    "story": "The wildest fandango \u2014 played by pandas of violin, guitar, cymbals, and tambourines in the mountains above M\u00e1laga. Dense, rattling, a village party rhythm.",
     "relatedIds": [
       "fandango-huelva"
     ]
@@ -1046,7 +1046,7 @@
   {
     "id": "peteneras",
     "name": "Peteneras",
-    "origin": "Spain · Cádiz · Paterna de Rivera",
+    "origin": "Spain \u00b7 C\u00e1diz \u00b7 Paterna de Rivera",
     "tradition": "Flamenco palo",
     "genre": "folk-dance",
     "timeSig": "12/8",
@@ -1120,20 +1120,20 @@
       "funeral"
     ],
     "instruments": [
-      "cajón",
+      "caj\u00f3n",
       "palmas",
       "guitarra"
     ],
     "swingable": false,
-    "story": "A 12-beat palo reputed to be cursed — many cantaores refuse to sing it. Starts with two threes before the familiar soleá tail, giving it an uncanny tilt.",
+    "story": "A 12-beat palo reputed to be cursed \u2014 many cantaores refuse to sing it. Starts with two threes before the familiar sole\u00e1 tail, giving it an uncanny tilt.",
     "relatedIds": [
       "solea"
     ]
   },
   {
     "id": "garrotin",
-    "name": "Garrotín",
-    "origin": "Spain · Asturias → Andalusia",
+    "name": "Garrot\u00edn",
+    "origin": "Spain \u00b7 Asturias \u2192 Andalusia",
     "tradition": "Flamenco palo",
     "genre": "folk-dance",
     "timeSig": "4/4",
@@ -1217,13 +1217,13 @@
       "playful"
     ],
     "instruments": [
-      "cajón",
+      "caj\u00f3n",
       "palmas",
       "guitarra",
       "sombrero"
     ],
     "swingable": false,
-    "story": "An Asturian street dance adopted by flamenco Gitanos around 1900 — same family as tangos, but lighter, playful, traditionally danced with a hat.",
+    "story": "An Asturian street dance adopted by flamenco Gitanos around 1900 \u2014 same family as tangos, but lighter, playful, traditionally danced with a hat.",
     "relatedIds": [
       "tangos-flamenco"
     ]
@@ -1231,7 +1231,7 @@
   {
     "id": "colombianas",
     "name": "Colombianas",
-    "origin": "Spain · Andalusia",
+    "origin": "Spain \u00b7 Andalusia",
     "tradition": "Flamenco ida y vuelta",
     "genre": "folk-dance",
     "timeSig": "4/4",
@@ -1315,12 +1315,12 @@
       "pepe-marchena"
     ],
     "instruments": [
-      "cajón",
+      "caj\u00f3n",
       "palmas",
       "guitarra"
     ],
     "swingable": false,
-    "story": "An invented round-trip palo — Pepe Marchena wrote it in the 1930s to evoke an imagined Colombia. Tangos bones, rumba tresillo, a postcard rhythm that stuck.",
+    "story": "An invented round-trip palo \u2014 Pepe Marchena wrote it in the 1930s to evoke an imagined Colombia. Tangos bones, rumba tresillo, a postcard rhythm that stuck.",
     "relatedIds": [
       "rumba-flamenca",
       "tangos-flamenco",
@@ -1330,7 +1330,7 @@
   {
     "id": "farruca",
     "name": "Farruca",
-    "origin": "Spain · Andalusia (Galician origin)",
+    "origin": "Spain \u00b7 Andalusia (Galician origin)",
     "tradition": "Masculine flamenco palo",
     "genre": "folk-dance",
     "timeSig": "4/4",
@@ -1415,12 +1415,12 @@
       "a-minor"
     ],
     "instruments": [
-      "cajón",
+      "caj\u00f3n",
       "palmas",
       "guitarra"
     ],
     "swingable": false,
-    "story": "The baile masculino — a dark, martial 4/4 in A minor traditionally danced only by men. Likely Galician in origin; every farruca eventually accelerates into tangos.",
+    "story": "The baile masculino \u2014 a dark, martial 4/4 in A minor traditionally danced only by men. Likely Galician in origin; every farruca eventually accelerates into tangos.",
     "relatedIds": [
       "tangos-flamenco",
       "garrotin",
@@ -1430,7 +1430,7 @@
   {
     "id": "tientos",
     "name": "Tientos",
-    "origin": "Spain · Cádiz / Seville",
+    "origin": "Spain \u00b7 C\u00e1diz / Seville",
     "tradition": "Slow tangos (cante hondo)",
     "genre": "folk-dance",
     "timeSig": "4/4",
@@ -1515,12 +1515,12 @@
       "accelerando"
     ],
     "instruments": [
-      "cajón",
+      "caj\u00f3n",
       "palmas",
       "guitarra"
     ],
     "swingable": false,
-    "story": "Slow-tempo tangos — sensual, hypnotic, pregnant with ghost notes. Every tientos accelerates into full tangos by the end, a dramatic arc from contemplation to release.",
+    "story": "Slow-tempo tangos \u2014 sensual, hypnotic, pregnant with ghost notes. Every tientos accelerates into full tangos by the end, a dramatic arc from contemplation to release.",
     "relatedIds": [
       "tangos-flamenco",
       "solea"
@@ -1528,9 +1528,9 @@
   },
   {
     "id": "cantinas",
-    "name": "Cantiñas",
-    "origin": "Spain · Cádiz",
-    "tradition": "Cantiñas family",
+    "name": "Canti\u00f1as",
+    "origin": "Spain \u00b7 C\u00e1diz",
+    "tradition": "Canti\u00f1as family",
     "genre": "folk-dance",
     "timeSig": "12/8",
     "grouping": [
@@ -1571,11 +1571,11 @@
         0,
         2,
         0,
-        1,
         2,
         0,
         2,
-        0
+        0,
+        2
       ],
       "HH": [
         2,
@@ -1602,12 +1602,12 @@
       "festive"
     ],
     "instruments": [
-      "cajón",
+      "caj\u00f3n",
       "palmas",
       "guitarra"
     ],
     "swingable": false,
-    "story": "The Cádiz cantiñas family — a light, maritime palo group that shares the alegrías compás but includes romeras, mirabrás, and caracoles as sub-tunes woven together.",
+    "story": "The C\u00e1diz canti\u00f1as family \u2014 a light, maritime palo group that shares the alegr\u00edas comp\u00e1s but includes romeras, mirabr\u00e1s, and caracoles as sub-tunes woven together.",
     "relatedIds": [
       "alegrias",
       "romeras",
@@ -1618,7 +1618,7 @@
   {
     "id": "romeras",
     "name": "Romeras",
-    "origin": "Spain · Cádiz",
+    "origin": "Spain \u00b7 C\u00e1diz",
     "tradition": "Cantinas sub-palo",
     "genre": "folk-dance",
     "timeSig": "12/8",
@@ -1692,12 +1692,12 @@
       "romero-el-tuerto"
     ],
     "instruments": [
-      "cajón",
+      "caj\u00f3n",
       "palmas",
       "guitarra"
     ],
     "swingable": false,
-    "story": "A cantinas sub-palo created by Romero el Tuerto in 19th-century Cádiz — major key, brighter than alegrías, with a distinctive lilt on the last two threes of the compás.",
+    "story": "A cantinas sub-palo created by Romero el Tuerto in 19th-century C\u00e1diz \u2014 major key, brighter than alegr\u00edas, with a distinctive lilt on the last two threes of the comp\u00e1s.",
     "relatedIds": [
       "cantinas",
       "alegrias"
@@ -1706,7 +1706,7 @@
   {
     "id": "fado-menor",
     "name": "Fado Menor",
-    "origin": "Portugal · Lisbon",
+    "origin": "Portugal \u00b7 Lisbon",
     "tradition": "Lisbon minor-key fado",
     "genre": "popular",
     "timeSig": "4/4",
@@ -1795,15 +1795,15 @@
       "viola de fado"
     ],
     "swingable": false,
-    "story": "The minor-key Lisbon fado — Amália Rodrigues's home key. Slow, tragic, open harmonies; the voice floats free of the beat while the guitarra holds the pulse.",
+    "story": "The minor-key Lisbon fado \u2014 Am\u00e1lia Rodrigues's home key. Slow, tragic, open harmonies; the voice floats free of the beat while the guitarra holds the pulse.",
     "relatedIds": [
       "milonga-flamenca"
     ]
   },
   {
     "id": "muineira",
-    "name": "Muiñeira",
-    "origin": "Spain · Galicia",
+    "name": "Mui\u00f1eira",
+    "origin": "Spain \u00b7 Galicia",
     "tradition": "Galician gaita dance",
     "genre": "folk-dance",
     "timeSig": "6/8",
@@ -1861,7 +1861,7 @@
       "tamboril"
     ],
     "swingable": false,
-    "story": "\"The miller's dance\" — Galicia's 6/8 answer to the Irish jig, played on the gaita gallega bagpipe. The bridge between Iberian and Celtic musical worlds.",
+    "story": "\"The miller's dance\" \u2014 Galicia's 6/8 answer to the Irish jig, played on the gaita gallega bagpipe. The bridge between Iberian and Celtic musical worlds.",
     "relatedIds": [
       "jig",
       "slide",
@@ -1871,7 +1871,7 @@
   {
     "id": "sardana",
     "name": "Sardana",
-    "origin": "Spain · Catalonia",
+    "origin": "Spain \u00b7 Catalonia",
     "tradition": "Catalan circle dance",
     "genre": "folk-dance",
     "timeSig": "6/8",
@@ -1927,10 +1927,10 @@
       "tenora",
       "tible",
       "flabiol",
-      "tamborí"
+      "tambor\u00ed"
     ],
     "swingable": false,
-    "story": "Catalonia's national dance — danced in closed circles to the cobla ensemble's oboe-reed \"tenora.\" Modest on the surface, intricately counted by dancers in silent subdivisions.",
+    "story": "Catalonia's national dance \u2014 danced in closed circles to the cobla ensemble's oboe-reed \"tenora.\" Modest on the surface, intricately counted by dancers in silent subdivisions.",
     "relatedIds": [
       "muineira"
     ]
@@ -1938,7 +1938,7 @@
   {
     "id": "jota-aragonesa",
     "name": "Jota Aragonesa",
-    "origin": "Spain · Aragon",
+    "origin": "Spain \u00b7 Aragon",
     "tradition": "Aragonese national dance",
     "genre": "folk-dance",
     "timeSig": "3/4",
@@ -1992,12 +1992,12 @@
       "rondalla"
     ],
     "instruments": [
-      "castañuelas",
+      "casta\u00f1uelas",
       "bandurria",
       "guitarra"
     ],
     "swingable": false,
-    "story": "The jota of Aragon — high jumps, castanets, arms raised. A 3/4 that accelerates throughout, and the mother that bequeathed alegrías its flamenco compás.",
+    "story": "The jota of Aragon \u2014 high jumps, castanets, arms raised. A 3/4 that accelerates throughout, and the mother that bequeathed alegr\u00edas its flamenco comp\u00e1s.",
     "relatedIds": [
       "alegrias",
       "fandango-huelva",
@@ -2007,7 +2007,7 @@
   {
     "id": "corri-corri",
     "name": "Corri-Corri",
-    "origin": "Spain · Asturias",
+    "origin": "Spain \u00b7 Asturias",
     "tradition": "Asturian ritual dance",
     "genre": "folk-dance",
     "timeSig": "6/8",
@@ -2064,7 +2064,7 @@
       "gaita asturiana"
     ],
     "swingable": false,
-    "story": "An ancient Asturian women's line-dance — performed without men, only tambourines and voices. Pre-Christian roots still visible in the ritual geometry of the steps.",
+    "story": "An ancient Asturian women's line-dance \u2014 performed without men, only tambourines and voices. Pre-Christian roots still visible in the ritual geometry of the steps.",
     "relatedIds": [
       "muineira"
     ]
@@ -2072,7 +2072,7 @@
   {
     "id": "zortziko",
     "name": "Zortziko",
-    "origin": "Spain · Basque Country",
+    "origin": "Spain \u00b7 Basque Country",
     "tradition": "Basque asymmetric dance",
     "genre": "folk-dance",
     "timeSig": "5/8",
@@ -2127,7 +2127,7 @@
       "trikitixa"
     ],
     "swingable": false,
-    "story": "The Basque 5/8 — one of Europe's few traditional asymmetric meters outside the Balkans. Ravel and Sarasate wrote zortzikos; the Basques have danced them for centuries.",
+    "story": "The Basque 5/8 \u2014 one of Europe's few traditional asymmetric meters outside the Balkans. Ravel and Sarasate wrote zortzikos; the Basques have danced them for centuries.",
     "relatedIds": [
       "pajdusko",
       "aksak"

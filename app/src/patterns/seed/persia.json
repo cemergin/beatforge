@@ -59,7 +59,7 @@
       "tar"
     ],
     "swingable": false,
-    "story": "The dance finale of a Persian dastgah suite — light, playful, a release after the meditative avaz sections."
+    "story": "The dance finale of a Persian dastgah suite \u2014 light, playful, a release after the meditative avaz sections."
   },
   {
     "id": "tasnif-4-4",
@@ -152,7 +152,7 @@
       "setar"
     ],
     "swingable": false,
-    "story": "The metric art-song form at the heart of Persian classical music — a poem set within a rhythmic cycle, where tombak and voice weave together."
+    "story": "The metric art-song form at the heart of Persian classical music \u2014 a poem set within a rhythmic cycle, where tombak and voice weave together."
   },
   {
     "id": "chaharmezrab",
@@ -213,7 +213,7 @@
       "tar"
     ],
     "swingable": false,
-    "story": "\"Four-plectrum-strokes\" — a fast, virtuosic instrumental étude built on a repeating rhythmic cell, used to display technique in a dastgah."
+    "story": "\"Four-plectrum-strokes\" \u2014 a fast, virtuosic instrumental \u00e9tude built on a repeating rhythmic cell, used to display technique in a dastgah."
   },
   {
     "id": "kereshmeh",
@@ -275,7 +275,7 @@
       "tar"
     ],
     "swingable": false,
-    "story": "The name means a coquettish glance — two toms leaning into the first half of the bar, two baks rocking the second back. A purely Persian gesture, distinct from every Arabic and Turkish cousin."
+    "story": "The name means a coquettish glance \u2014 two toms leaning into the first half of the bar, two baks rocking the second back. A purely Persian gesture, distinct from every Arabic and Turkish cousin."
   },
   {
     "id": "reng-basic",
@@ -337,7 +337,7 @@
       "tar"
     ],
     "swingable": false,
-    "story": "The simplest reng — two strokes per half-bar, light on the feet. Toward the end of a radif performance the tombak drops this figure and the ensemble finally exhales into dance.",
+    "story": "The simplest reng \u2014 two strokes per half-bar, light on the feet. Toward the end of a radif performance the tombak drops this figure and the ensemble finally exhales into dance.",
     "relatedIds": [
       "reng"
     ]
@@ -402,7 +402,7 @@
       "tar"
     ],
     "swingable": false,
-    "story": "Reng wound up to concert-finale speed — tom on 1 and 4, doubled baks filling every gap. A tombak player will sweat through this one before the applause arrives.",
+    "story": "Reng wound up to concert-finale speed \u2014 tom on 1 and 4, doubled baks filling every gap. A tombak player will sweat through this one before the applause arrives.",
     "relatedIds": [
       "reng",
       "reng-basic"
@@ -468,7 +468,7 @@
       "kamancheh"
     ],
     "swingable": false,
-    "story": "When the avaz finally gathers itself into meter, this is how the Shur dastgah enters zarbi time — contemplative, bowed-low, still steeped in Shur's mystical longing."
+    "story": "When the avaz finally gathers itself into meter, this is how the Shur dastgah enters zarbi time \u2014 contemplative, bowed-low, still steeped in Shur's mystical longing."
   },
   {
     "id": "zarbi-chahargah",
@@ -530,7 +530,7 @@
       "kamancheh"
     ],
     "swingable": false,
-    "story": "Chahargah's augmented intervals demand intensity — and its zarbi pattern answers with relentless compound pulse. The dastgah that moves fastest toward climax.",
+    "story": "Chahargah's augmented intervals demand intensity \u2014 and its zarbi pattern answers with relentless compound pulse. The dastgah that moves fastest toward climax.",
     "relatedIds": [
       "zarbi-shur"
     ]
@@ -595,12 +595,12 @@
       "ney"
     ],
     "swingable": false,
-    "story": "Mahur is the sunlit dastgah — structurally cognate with a Western major scale, emotionally buoyant. In its metric moments the tombak sets this buoyant 6/8 and the melody skips across it."
+    "story": "Mahur is the sunlit dastgah \u2014 structurally cognate with a Western major scale, emotionally buoyant. In its metric moments the tombak sets this buoyant 6/8 and the melody skips across it."
   },
   {
     "id": "kurdish-7-8",
     "name": "Kurdish 7/8",
-    "origin": "Iran · Kurdistan",
+    "origin": "Iran \u00b7 Kurdistan",
     "tradition": "Kurdish folk",
     "genre": "folk-dance",
     "timeSig": "7/8",
@@ -624,7 +624,7 @@
         0,
         2,
         0,
-        0,
+        2,
         0
       ],
       "SN": [
@@ -661,7 +661,7 @@
       "shamshal"
     ],
     "swingable": false,
-    "story": "The asymmetric lilt of Kurdish folk — daf shimmering behind a tanbur drone. Played at Nowruz, sung for lost villages, stomped under the hem of a thousand-year-old line dance.",
+    "story": "The asymmetric lilt of Kurdish folk \u2014 daf shimmering behind a tanbur drone. Played at Nowruz, sung for lost villages, stomped under the hem of a thousand-year-old line dance.",
     "relatedIds": [
       "devri-hindi",
       "kalamatianos",
@@ -672,7 +672,7 @@
   {
     "id": "daf-zikr",
     "name": "Daf Zikr",
-    "origin": "Iran · Kurdistan",
+    "origin": "Iran \u00b7 Kurdistan",
     "tradition": "Sufi dhikr ceremony",
     "genre": "devotional",
     "timeSig": "4/4",
@@ -762,7 +762,7 @@
       "voice"
     ],
     "swingable": false,
-    "story": "The Qadiri dervish lifts the daf, ringlets shimmering, and begins the long ascent toward ecstasy. Slow invocation at 60 BPM, relentless drive at 140 — the same pattern, carrying the zikr up the mountain.",
+    "story": "The Qadiri dervish lifts the daf, ringlets shimmering, and begins the long ascent toward ecstasy. Slow invocation at 60 BPM, relentless drive at 140 \u2014 the same pattern, carrying the zikr up the mountain.",
     "relatedIds": [
       "sufi-dhikr-circular",
       "sufi-dhikr-sudan",
@@ -773,7 +773,7 @@
   {
     "id": "bandari",
     "name": "Bandari",
-    "origin": "Iran · Hormozgan · Bushehr",
+    "origin": "Iran \u00b7 Hormozgan \u00b7 Bushehr",
     "tradition": "Afro-Iranian Gulf",
     "genre": "folk-dance",
     "timeSig": "6/8",
@@ -831,7 +831,7 @@
       "jofti"
     ],
     "swingable": false,
-    "story": "A Bushehr wedding — dohol, kaser, and the cymbals of the tus cutting through. Bandari is the African strand woven into Persian music, carrying zar healing rites across the Indian Ocean and depositing them on Iran's southern shore.",
+    "story": "A Bushehr wedding \u2014 dohol, kaser, and the cymbals of the tus cutting through. Bandari is the African strand woven into Persian music, carrying zar healing rites across the Indian Ocean and depositing them on Iran's southern shore.",
     "relatedIds": [
       "persian-tehran-club",
       "stambali",
@@ -932,7 +932,7 @@
       "santur"
     ],
     "swingable": false,
-    "story": "The formal overture that opens a dastgah performance — a stately instrumental procession through the mode's key gushehs before the soloist takes over. Slow, ensemble-wide, tombak keeping time for everyone.",
+    "story": "The formal overture that opens a dastgah performance \u2014 a stately instrumental procession through the mode's key gushehs before the soloist takes over. Slow, ensemble-wide, tombak keeping time for everyone.",
     "relatedIds": [
       "tasnif-4-4"
     ]
