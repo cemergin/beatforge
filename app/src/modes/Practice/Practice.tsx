@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { AudioEngine } from '../../audio/engine';
-import type { KitId, Pattern, VoiceId } from '../../patterns/types';
+import type { KitId, Pattern, Track, Velocity, VoiceId } from '../../patterns/types';
 import { trackMeta } from '../../patterns/types';
 import { PATTERNS, patternById } from '../../patterns/seed';
 import {
@@ -51,9 +51,17 @@ interface Props {
 
 export function Practice({ engine, patternId, onPatternChange }: Props) {
   const setPatternId = onPatternChange;
-  const pattern: Pattern = useMemo(
+  const seedPattern: Pattern = useMemo(
     () => patternById(patternId) ?? PATTERNS[0],
     [patternId],
+  );
+  // Track-level overrides applied to the seed pattern for the current
+  // session. Cleared on pattern change. Keeps the imported seed object
+  // immutable (Library previews + other modes see the pristine version).
+  const [editedTracks, setEditedTracks] = useState<Partial<Record<VoiceId, Track>>>({});
+  const pattern: Pattern = useMemo(
+    () => ({ ...seedPattern, tracks: { ...seedPattern.tracks, ...editedTracks } }),
+    [seedPattern, editedTracks],
   );
 
   const [playing, setPlaying] = useState(false);
@@ -139,6 +147,8 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
     engine.stop();
     setPlaying(false);
     setCountingIn(false);
+    clearCountInTimer();
+    setEditedTracks({});   // revert any in-place cell edits — seed is immutable
     engine.loadPattern({ ...pattern, grouping: pattern.grouping });
     setBpm(pattern.bpm.default);
     setGrouping(pattern.grouping);
@@ -247,24 +257,46 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
     return Math.round(60_000 / medianMs);
   }, [tapTimes]);
 
+  // Stored count-in timer so stop/pattern-change/unmount can cancel it.
+  const countInTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const clearCountInTimer = useCallback(() => {
+    if (countInTimerRef.current !== null) {
+      clearTimeout(countInTimerRef.current);
+      countInTimerRef.current = null;
+    }
+  }, []);
+  useEffect(() => clearCountInTimer, [clearCountInTimer]);
+
   const toggle = useCallback(async () => {
-    await engine.ensureCtx();
+    try {
+      await engine.ensureCtx();
+    } catch (err) {
+      // iOS Safari / autoplay-blocked — surface in console for now, keep
+      // Play button responsive.
+      console.warn('[BeatForge] Audio context failed to start', err);
+      return;
+    }
     if (playing) {
       engine.stop();
       setPlaying(false);
       setCountingIn(false);
+      clearCountInTimer();
     } else {
       if (bpm < trainerCfg.from && trainerOn) setBpm(trainerCfg.from);
       engine.setBpm(bpm);
       engine.start(countInBars);
       setPlaying(true);
+      clearCountInTimer();
       if (countInBars > 0) {
         setCountingIn(true);
         const barSec = pattern.steps * (60 / bpm);
-        setTimeout(() => setCountingIn(false), countInBars * barSec * 1000);
+        countInTimerRef.current = setTimeout(() => {
+          setCountingIn(false);
+          countInTimerRef.current = null;
+        }, countInBars * barSec * 1000);
       }
     }
-  }, [engine, playing, bpm, trainerOn, trainerCfg.from, countInBars, pattern.steps]);
+  }, [engine, playing, bpm, trainerOn, trainerCfg.from, countInBars, pattern.steps, clearCountInTimer]);
 
   // Keyboard shortcuts — Space for play/stop, 1-9 for highlights,
   // T for tap-tempo, S for toggle star.
@@ -319,14 +351,20 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
     return [...out].slice(0, 6).map((s) => s.split(',').map(Number));
   }, [pattern]);
 
+  // Clone the seed track into session-local state; never mutate the seed.
+  // (Bug fix — prior version did arr[s] = ... which corrupted the shared
+  // imported PATTERNS object.)
   const toggleStep = useCallback((tr: VoiceId, s: number) => {
-    const td = pattern.tracks[tr];
-    if (!td) return;
-    const arr = Array.isArray(td) ? td : td.pattern;
-    arr[s] = arr[s] === 0 ? 2 : arr[s] === 2 ? 1 : 0;
-    setCursors((c) => ({ ...c }));
-    engine.loadPattern({ ...pattern, grouping });
-  }, [engine, pattern, grouping]);
+    setEditedTracks((prev) => {
+      const current = prev[tr] ?? seedPattern.tracks[tr];
+      if (!current) return prev;
+      const srcArr: Velocity[] = Array.isArray(current) ? current : current.pattern;
+      const nextArr: Velocity[] = srcArr.slice();
+      nextArr[s] = (nextArr[s] === 0 ? 2 : nextArr[s] === 2 ? 1 : 0) as Velocity;
+      const newTrack = Array.isArray(current) ? nextArr : { ...current, pattern: nextArr };
+      return { ...prev, [tr]: newTrack };
+    });
+  }, [seedPattern]);
 
   const grid = {
     circular: <CircularGrid pattern={{ ...pattern, grouping }} cursors={cursors} size={440} onToggle={toggleStep} />,

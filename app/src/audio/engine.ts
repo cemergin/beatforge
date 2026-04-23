@@ -12,6 +12,8 @@
 
 import { trackMeta, type KitId, type Pattern, type Velocity, type VoiceId } from '../patterns/types';
 
+type BarListener = (bar: number) => void;
+
 export class AudioEngine {
   ctx: AudioContext | null = null;
   master: GainNode | null = null;
@@ -33,8 +35,25 @@ export class AudioEngine {
   cursors: Record<string, number> = {};   // last-triggered step per track
   bar = 0;
 
-  // Bar-boundary callback (for trainer cycle counting, stop-after).
-  onBar: ((bar: number) => void) | null = null;
+  // Bar-boundary listeners. Multiple modes can subscribe concurrently —
+  // prevents the "last-mode-wins" race where Practice unmount stripped
+  // Studio's handler.
+  private barListeners = new Set<BarListener>();
+
+  /** Subscribe to bar-boundary events. Returns unsubscribe fn. */
+  subscribeOnBar(fn: BarListener): () => void {
+    this.barListeners.add(fn);
+    return () => { this.barListeners.delete(fn); };
+  }
+
+  /** Legacy single-listener shim. Prefer subscribeOnBar(). */
+  private legacyBarListener: BarListener | null = null;
+  get onBar(): BarListener | null { return this.legacyBarListener; }
+  set onBar(fn: BarListener | null) {
+    if (this.legacyBarListener) this.barListeners.delete(this.legacyBarListener);
+    this.legacyBarListener = fn;
+    if (fn) this.barListeners.add(fn);
+  }
 
   private readonly lookaheadMs = 25;
   private readonly scheduleAheadS = 0.12;
@@ -97,10 +116,17 @@ export class AudioEngine {
   setBpm(b: number): void { this.bpm = b; }
 
   // Master volume 0..1; persists via the master gain node.
+  // Uses a short linear ramp to avoid the click/pop of an abrupt gain jump.
   private masterVolume = 0.85;
   setMasterVolume(v: number): void {
     this.masterVolume = Math.max(0, Math.min(1, v));
-    if (this.master) this.master.gain.value = this.masterVolume;
+    if (this.master && this.ctx) {
+      const now = this.ctx.currentTime;
+      const g = this.master.gain;
+      g.cancelScheduledValues(now);
+      g.setValueAtTime(g.value, now);
+      g.linearRampToValueAtTime(this.masterVolume, now + 0.015);
+    }
   }
   getMasterVolume(): number { return this.masterVolume; }
   setSwing(s: number): void { this.swing = s; }
@@ -214,10 +240,17 @@ export class AudioEngine {
   }
 
   setOverlay(cfg: { subdivisions: number } | null): void {
+    // Refuse invalid subdivision counts — prevents div-by-zero in tick().
+    if (cfg && (!Number.isFinite(cfg.subdivisions) || cfg.subdivisions <= 0)) {
+      this.overlay = null;
+      return;
+    }
     this.overlay = cfg;
     if (this.running && this.ctx && cfg) {
-      // Re-sync overlay to the nearest upcoming bar boundary
-      this.overlayNextTime = Math.max(this.ctx.currentTime, this.nextBarTime - this.barSeconds());
+      // Snap to the next bar boundary (nextBarTime), not the previous one.
+      // The old code subtracted barSeconds() which yielded a past timestamp
+      // and forced a catch-up burst of immediate clicks.
+      this.overlayNextTime = Math.max(this.ctx.currentTime + 0.02, this.nextBarTime);
       this.overlayNextIdx = 0;
     }
   }
@@ -244,6 +277,9 @@ export class AudioEngine {
       const trackData = p.tracks[tr];
       if (!trackData) continue;
       const meta = trackMeta(trackData, p.steps);
+      // Guard against malformed data causing div-by-zero → infinite loop.
+      if (!Number.isFinite(meta.subdivisions) || meta.subdivisions <= 0) continue;
+      if (!meta.pattern || meta.pattern.length === 0) continue;
       const stepSec = barSec / meta.subdivisions;
       const isMainDivision = meta.subdivisions === p.steps;
 
@@ -295,7 +331,14 @@ export class AudioEngine {
       if (barIndex > 0) {
         const b = barIndex;
         const delayMs = Math.max(0, (tBar - this.ctx.currentTime) * 1000);
-        setTimeout(() => { this.bar = b; this.onBar?.(b); }, delayMs);
+        setTimeout(() => {
+          this.bar = b;
+          // Dispatch to every subscriber. Snapshot to iterate so listeners
+          // can safely unsubscribe during callback.
+          for (const fn of [...this.barListeners]) {
+            try { fn(b); } catch { /* isolate — one bad listener shouldn't kill the rest */ }
+          }
+        }, delayMs);
       }
       this.nextBarTime += barSec;
     }
