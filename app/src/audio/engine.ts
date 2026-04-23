@@ -25,6 +25,9 @@ export class AudioEngine {
   swing = 0.5;
   strongAmp = 1.0;
   weakAmp = 0.5;
+  // Per-group accent multipliers (spec §9 v1.3). Indexed by grouping
+  // position; multiplies on top of strong/weak. Default 1.0 per group.
+  groupAmps: number[] = [];
 
   // Public state for visuals (read each frame via rAF).
   cursors: Record<string, number> = {};   // last-triggered step per track
@@ -96,6 +99,28 @@ export class AudioEngine {
   setAccents(strong: number, weak: number): void {
     this.strongAmp = strong;
     this.weakAmp = weak;
+  }
+
+  // Per-group accent multipliers — array indexed by grouping position
+  // (0 = first group). Values outside the grouping range default to 1.0.
+  setGroupAccents(amps: number[]): void {
+    this.groupAmps = amps.slice();
+  }
+
+  private groupAmpForStep(idx: number): number {
+    const p = this.pattern;
+    if (!p || !this.groupAmps.length) return 1;
+    const grouping = p.grouping;
+    if (!grouping || grouping.length === 0) return 1;
+    // Steps in a track cycle may exceed pattern.steps for short loops;
+    // fold into the bar, then walk grouping to find the owning group.
+    const folded = ((idx % p.steps) + p.steps) % p.steps;
+    let acc = 0;
+    for (let g = 0; g < grouping.length; g++) {
+      acc += grouping[g];
+      if (folded < acc) return this.groupAmps[g] ?? 1;
+    }
+    return this.groupAmps[grouping.length - 1] ?? 1;
   }
 
   loadPattern(p: Pattern): void {
@@ -225,7 +250,9 @@ export class AudioEngine {
 
         const idx = this.nextIdx[tr] % meta.cycle;
         const vel = meta.pattern[idx];
-        if (vel > 0) this.trigger(tr, tPlay, vel);
+        // Per-group accents only meaningful on main-division tracks —
+        // polyrhythm tracks don't align to the grouping.
+        if (vel > 0) this.trigger(tr, tPlay, vel, isMainDivision ? idx : -1);
 
         // Visual cursor updates "now playing" step immediately
         // (audio may fire slightly in the future; visual lag is <=120ms).
@@ -262,9 +289,10 @@ export class AudioEngine {
     this.timerId = setTimeout(this.tick, this.lookaheadMs);
   };
 
-  private trigger(voice: VoiceId, when: number, velLevel: Velocity): void {
-    const amp = velLevel === 2 ? this.strongAmp : this.weakAmp;
-    kitVoice(this, voice, when, amp);
+  private trigger(voice: VoiceId, when: number, velLevel: Velocity, stepIdx: number): void {
+    const base = velLevel === 2 ? this.strongAmp : this.weakAmp;
+    const groupMul = stepIdx >= 0 ? this.groupAmpForStep(stepIdx) : 1;
+    kitVoice(this, voice, when, base * groupMul);
   }
 
   // Helpers exposed to kit synthesis — node creation + routing.

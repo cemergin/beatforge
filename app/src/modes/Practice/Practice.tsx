@@ -1,19 +1,42 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { AudioEngine } from '../../audio/engine';
 import type { KitId, Pattern, VoiceId } from '../../patterns/types';
 import { trackMeta } from '../../patterns/types';
 import { PATTERNS, patternById } from '../../patterns/seed';
-import { getHighlights, getRecent, isHighlighted, pushRecent, toggleHighlight } from '../../lib/storage';
+import {
+  clearKitOverride,
+  getHighlights,
+  getKitOverride,
+  getRecent,
+  isHighlighted,
+  pushRecent,
+  setKitOverride,
+  toggleHighlight,
+} from '../../lib/storage';
 import { BeatDots } from '../../components/BeatDots';
 import { CircularGrid } from '../../components/CircularGrid';
 import { LinearGrid } from '../../components/LinearGrid';
 import { PillGrid } from '../../components/PillGrid';
+import { GROUP_COLORS } from '../../components/visual-helpers';
 import { Trainer, type TrainerCfg } from './Trainer';
 
 type View = 'circular' | 'linear' | 'pill';
 
 const ALL_KITS: KitId[] = ['808', '909', '707', '727', 'frameDrum', 'tabla', 'gamelan'];
-const OVERLAY_OPTIONS = [0, 3, 4, 5, 7];
+// Spec §9 v1.3 — expanded polyrhythm overlay subdivision options.
+// 3/4/6/8 are common; 5/7/9/12 are marked experimental.
+const OVERLAY_OPTIONS = [0, 3, 4, 5, 6, 7, 8, 9, 12];
+const OVERLAY_EXPERIMENTAL = new Set([5, 7, 9, 12]);
+
+// Per-group accent slider range (multipliers on top of strong/weak).
+const GROUP_AMP_MIN = 0.5;
+const GROUP_AMP_MAX = 1.3;
+const GROUP_AMP_DEFAULT = 1.0;
+
+// Tap-tempo behavior
+const TAP_WINDOW = 8;      // keep last N taps
+const TAP_MIN_TAPS = 2;     // need at least 2 taps to infer BPM
+const TAP_RESET_MS = 2000;  // reset if gap > 2s
 
 type StopAfterMode = 'off' | 'cycles' | 'time';
 interface StopAfter { mode: StopAfterMode; value: number }
@@ -34,7 +57,10 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
   const [playing, setPlaying] = useState(false);
   const [bpm, setBpm] = useState(pattern.bpm.default);
   const [cursors, setCursors] = useState<Record<string, number>>({});
-  const [kitOverride, setKitOverride] = useState<KitId | null>(null);
+  // Kit override is hydrated from localStorage per-pattern (spec §9 v1.3).
+  const [kitOverride, setKitOverrideState] = useState<KitId | null>(
+    () => getKitOverride(pattern.id),
+  );
   const activeKit: KitId = kitOverride ?? pattern.defaultKit;
 
   const [view, setView] = useState<View>(
@@ -58,6 +84,17 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
 
   const [highlights, setHighlights] = useState<string[]>(() => getHighlights());
   const [recent, setRecent] = useState<string[]>(() => getRecent());
+
+  // Per-group accent multipliers — one per grouping position, resets
+  // when the pattern's grouping changes.
+  const [groupAmps, setGroupAmps] = useState<number[]>(
+    () => pattern.grouping.map(() => GROUP_AMP_DEFAULT),
+  );
+
+  // Tap-tempo — rolling buffer of tap timestamps (ms).
+  const [tapTimes, setTapTimes] = useState<number[]>([]);
+  const tapTimesRef = useRef<number[]>([]);
+  tapTimesRef.current = tapTimes;
 
   // rAF cursor polling
   useEffect(() => {
@@ -92,12 +129,15 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
     return () => clearTimeout(id);
   }, [playing, engine, stopAfter]);
 
-  // Pattern change → load + reset trainer + kit override + push recent
+  // Pattern change → load + reset trainer + hydrate kit override +
+  // reset per-group accents + push recent.
   useEffect(() => {
     engine.loadPattern({ ...pattern, grouping: pattern.grouping });
     setBpm(pattern.bpm.default);
     setGrouping(pattern.grouping);
-    setKitOverride(null);
+    setKitOverrideState(getKitOverride(pattern.id));
+    setGroupAmps(pattern.grouping.map(() => GROUP_AMP_DEFAULT));
+    setTapTimes([]);
     localStorage.setItem('bf_pattern', pattern.id);
     setTrainerBar(0);
     setRecent(pushRecent(pattern.id));
@@ -107,6 +147,19 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
   useEffect(() => {
     engine.loadPattern({ ...pattern, grouping });
   }, [engine, pattern, grouping]);
+
+  // Keep per-group accents length aligned with current grouping length.
+  useEffect(() => {
+    setGroupAmps((cur) => {
+      if (cur.length === grouping.length) return cur;
+      return grouping.map((_, i) => cur[i] ?? GROUP_AMP_DEFAULT);
+    });
+  }, [grouping]);
+
+  // Push per-group accents to engine whenever they change.
+  useEffect(() => {
+    engine.setGroupAccents(groupAmps);
+  }, [engine, groupAmps]);
 
   useEffect(() => { engine.setBpm(bpm); }, [engine, bpm]);
   useEffect(() => { engine.setKit(activeKit); }, [engine, activeKit]);
@@ -142,6 +195,51 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
     return () => clearInterval(iv);
   }, [trainerOn, trainerCfg, playing]);
 
+  // Tap tempo — median interval of last 4-8 taps sets BPM.
+  // Reset if the gap since last tap > TAP_RESET_MS.
+  const handleTap = useCallback(() => {
+    const now = performance.now();
+    const prev = tapTimesRef.current;
+    const last = prev[prev.length - 1];
+    const base = last !== undefined && (now - last) > TAP_RESET_MS ? [] : prev;
+    const next = [...base, now].slice(-TAP_WINDOW);
+    setTapTimes(next);
+    if (next.length < TAP_MIN_TAPS) return;
+
+    // Use last 4-8 taps — compute intervals then median.
+    const window = next.slice(-Math.min(TAP_WINDOW, next.length));
+    const intervals: number[] = [];
+    for (let i = 1; i < window.length; i++) intervals.push(window[i] - window[i - 1]);
+    const sorted = [...intervals].sort((a, b) => a - b);
+    const mid = sorted.length >> 1;
+    const medianMs = sorted.length % 2 === 0
+      ? (sorted[mid - 1] + sorted[mid]) / 2
+      : sorted[mid];
+    if (medianMs <= 0) return;
+
+    const rawBpm = 60_000 / medianMs;
+    const minBpm = pattern.bpm.min ?? 30;
+    const maxBpm = pattern.bpm.max ?? 800;
+    const clamped = Math.max(minBpm, Math.min(maxBpm, Math.round(rawBpm)));
+    setBpm(clamped);
+  }, [pattern.bpm.min, pattern.bpm.max]);
+
+  const resetTaps = useCallback(() => setTapTimes([]), []);
+
+  const tapBpm = useMemo(() => {
+    if (tapTimes.length < 2) return null;
+    const window = tapTimes.slice(-Math.min(TAP_WINDOW, tapTimes.length));
+    const intervals: number[] = [];
+    for (let i = 1; i < window.length; i++) intervals.push(window[i] - window[i - 1]);
+    const sorted = [...intervals].sort((a, b) => a - b);
+    const mid = sorted.length >> 1;
+    const medianMs = sorted.length % 2 === 0
+      ? (sorted[mid - 1] + sorted[mid]) / 2
+      : sorted[mid];
+    if (medianMs <= 0) return null;
+    return Math.round(60_000 / medianMs);
+  }, [tapTimes]);
+
   const toggle = useCallback(async () => {
     await engine.ensureCtx();
     if (playing) {
@@ -161,7 +259,8 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
     }
   }, [engine, playing, bpm, trainerOn, trainerCfg.from, countInBars, pattern.steps]);
 
-  // Keyboard shortcuts — Space for play/stop, 1-9 for highlights
+  // Keyboard shortcuts — Space for play/stop, 1-9 for highlights,
+  // T for tap-tempo, S for toggle star.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       const t = e.target as HTMLElement;
@@ -169,6 +268,11 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
       if (e.code === 'Space') {
         e.preventDefault();
         toggle();
+        return;
+      }
+      if (e.key.toLowerCase() === 't' && !e.metaKey && !e.ctrlKey && !e.altKey && !e.repeat) {
+        e.preventDefault();
+        handleTap();
         return;
       }
       if (e.key >= '1' && e.key <= '9') {
@@ -182,7 +286,7 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [toggle, patternId]);
+  }, [toggle, patternId, handleTap, setPatternId]);
 
   const curStep = useMemo(() => {
     const firstTrack = Object.keys(pattern.tracks)[0];
@@ -394,6 +498,48 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
       </section>
 
       <aside className="bf-right">
+        <div className="bf-panel bf-tap-panel">
+          <div className="bf-panel-head">
+            <span>tap tempo</span>
+            {tapBpm != null && (
+              <span className="bf-tap-preview" title="Median BPM from recent taps">
+                {tapBpm} bpm
+              </span>
+            )}
+          </div>
+          <div className="bf-tap-row">
+            <button
+              className={`bf-tap-btn ${tapTimes.length > 0 ? 'armed' : ''}`}
+              onClick={handleTap}
+              title="Tap repeatedly to set BPM — or press T"
+              aria-label="Tap to set tempo"
+            >
+              tap
+              <span className="bf-tap-hint">T</span>
+            </button>
+            <div className="bf-tap-meta">
+              <span className="bf-mini-label">
+                {tapTimes.length === 0
+                  ? 'tap 4+ times'
+                  : tapTimes.length === 1
+                    ? 'keep tapping…'
+                    : `${tapTimes.length} tap${tapTimes.length === 1 ? '' : 's'}`}
+              </span>
+              {tapTimes.length > 0 && (
+                <button className="bf-tap-reset" onClick={resetTaps}>reset</button>
+              )}
+            </div>
+            <div className="bf-tap-pips" aria-hidden="true">
+              {Array.from({ length: TAP_WINDOW }).map((_, i) => (
+                <span
+                  key={i}
+                  className={`bf-tap-pip ${i < Math.min(tapTimes.length, TAP_WINDOW) ? 'on' : ''}`}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+
         <Trainer
           cfg={trainerCfg}
           setCfg={setTrainerCfg}
@@ -402,6 +548,55 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
           bar={trainerBar}
           bpm={bpm}
         />
+
+        <div className="bf-panel bf-group-accents-panel">
+          <div className="bf-panel-head">
+            <span>per-group accents</span>
+            {groupAmps.some((a) => Math.abs(a - GROUP_AMP_DEFAULT) > 0.001) && (
+              <button
+                className="bf-group-accents-reset"
+                onClick={() => setGroupAmps(grouping.map(() => GROUP_AMP_DEFAULT))}
+                title="Reset all group accents to 1.0"
+              >
+                ⤺ reset
+              </button>
+            )}
+          </div>
+          {grouping.map((len, gi) => {
+            const color = GROUP_COLORS[gi % GROUP_COLORS.length];
+            const amp = groupAmps[gi] ?? GROUP_AMP_DEFAULT;
+            return (
+              <div className="bf-row bf-group-accents-row" key={gi}>
+                <span
+                  className="bf-group-accents-swatch"
+                  style={{ background: color }}
+                  aria-hidden="true"
+                />
+                <label className="bf-group-accents-label">
+                  g{gi + 1}
+                  <span className="bf-group-accents-len">·{len}</span>
+                </label>
+                <input
+                  type="range"
+                  min={GROUP_AMP_MIN * 100}
+                  max={GROUP_AMP_MAX * 100}
+                  value={Math.round(amp * 100)}
+                  onChange={(e) => {
+                    const v = Number(e.target.value) / 100;
+                    setGroupAmps((cur) => {
+                      const n = cur.slice();
+                      n[gi] = v;
+                      return n;
+                    });
+                  }}
+                  aria-label={`Group ${gi + 1} accent`}
+                />
+                <span className="bf-val">{amp.toFixed(2)}×</span>
+              </div>
+            );
+          })}
+          <div className="bf-mini-label">multiplies on top of strong/weak</div>
+        </div>
 
         <div className="bf-panel">
           <div className="bf-panel-head">count-in</div>
@@ -462,18 +657,18 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
 
         <div className="bf-panel">
           <div className="bf-panel-head">polyrhythm overlay</div>
-          <div className="bf-seg">
+          <div className="bf-seg wrap">
             {OVERLAY_OPTIONS.map((n) => (
               <button
                 key={n}
                 className={overlaySubdivisions === n ? 'on' : ''}
                 onClick={() => setOverlaySubdivisions(n)}
                 title={n === 0 ? 'Off'
-                  : n === 5 || n === 7 ? `${n} over main (experimental)`
+                  : OVERLAY_EXPERIMENTAL.has(n) ? `${n} over main (experimental)`
                   : `${n} over main`}
               >
                 {n === 0 ? 'off' : `${n}`}
-                {(n === 5 || n === 7) && <sup className="bf-exp">exp</sup>}
+                {OVERLAY_EXPERIMENTAL.has(n) && <sup className="bf-exp">exp</sup>}
               </button>
             ))}
           </div>
@@ -532,7 +727,10 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
             {kitOverride && (
               <button
                 className="bf-kit-reset"
-                onClick={() => setKitOverride(null)}
+                onClick={() => {
+                  clearKitOverride(pattern.id);
+                  setKitOverrideState(null);
+                }}
                 title={`Reset to pattern default: ${pattern.defaultKit}`}
               >
                 ⤺ {pattern.defaultKit}
@@ -544,7 +742,15 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
               <button
                 key={k}
                 className={`bf-kit-btn ${activeKit === k ? 'on' : ''}`}
-                onClick={() => setKitOverride(k === pattern.defaultKit ? null : k)}
+                onClick={() => {
+                  if (k === pattern.defaultKit) {
+                    clearKitOverride(pattern.id);
+                    setKitOverrideState(null);
+                  } else {
+                    setKitOverride(pattern.id, k);
+                    setKitOverrideState(k);
+                  }
+                }}
               >
                 {k === 'frameDrum' ? 'frame' : k}
               </button>

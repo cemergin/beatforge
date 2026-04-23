@@ -1228,3 +1228,221 @@ input[type="number"] { font: inherit; color: inherit; }
 }
 
 .bf-bpm-hero.sm { padding: 10px 12px; }
+
+/* ── Tap tempo (v1.3) ── */
+.bf-tap-panel { }
+.bf-tap-preview {
+  font-family: var(--mono); font-size: 11px; font-weight: 700;
+  color: var(--fg); letter-spacing: 0.04em; text-transform: none;
+}
+.bf-tap-row { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 10px; }
+.bf-tap-btn {
+  grid-row: 1 / span 2;
+  position: relative;
+  min-width: 72px; min-height: 72px;
+  background: var(--bg-sunk);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  font-family: var(--mono); font-size: 14px; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--fg);
+  display: flex; align-items: center; justify-content: center;
+  user-select: none;
+  transition: transform 0.06s ease-out, background 0.12s, border-color 0.12s;
+}
+.bf-tap-btn:hover { border-color: var(--accent); }
+.bf-tap-btn:active { transform: scale(0.96); background: var(--accent); color: #fff; }
+.bf-tap-btn.armed { border-color: var(--accent); }
+.bf-tap-hint {
+  position: absolute; top: 4px; right: 6px;
+  font-size: 9px; color: var(--muted); font-weight: 600; letter-spacing: 0.08em;
+}
+.bf-tap-meta { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
+.bf-tap-reset {
+  font-family: var(--mono); font-size: 10px; color: var(--muted);
+  background: none; padding: 2px 6px; border-radius: 4px;
+  letter-spacing: 0.08em; text-transform: uppercase;
+}
+.bf-tap-reset:hover { color: var(--fg); background: var(--bg-sunk); }
+.bf-tap-pips { display: flex; gap: 3px; align-items: center; }
+.bf-tap-pip {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--bg-sunk); border: 1px solid var(--line);
+  transition: background 0.12s, border-color 0.12s;
+}
+.bf-tap-pip.on { background: var(--accent); border-color: var(--accent); }
+
+/* ── Per-group accents (v1.3) ── */
+.bf-group-accents-panel .bf-group-accents-row { gap: 8px; }
+.bf-group-accents-swatch {
+  width: 10px; height: 10px; border-radius: 50%;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 1px var(--line);
+}
+.bf-group-accents-label {
+  font-family: var(--mono); font-size: 11px; color: var(--fg);
+  min-width: 34px; font-weight: 600;
+  display: flex; align-items: baseline; gap: 3px;
+}
+.bf-group-accents-len { color: var(--muted); font-size: 10px; font-weight: 400; }
+.bf-group-accents-reset {
+  font-family: var(--mono); font-size: 10px; color: var(--muted);
+  background: none; padding: 2px 6px; border-radius: 4px;
+  letter-spacing: 0.06em; text-transform: none;
+}
+.bf-group-accents-reset:hover { color: var(--fg); background: var(--bg-sunk); }
+
+/* ── Region intro card (Library > World Map) ───────────────── */
+.bf-worldmap-wrap { display: flex; flex-direction: column; gap: 12px; }
+
+.bf-wm-blob.is-active {
+  box-shadow: var(--shadow);
+  transform: translateY(-1px);
+}
+
+.bf-region-intro-card {
+  border: 1.5px solid var(--line);
+  border-radius: 14px;
+  background: var(--bg-2);
+  padding: 14px 18px 12px;
+  box-shadow: var(--shadow);
+  animation: bf-region-intro-in 0.2s ease-out;
+}
+@keyframes bf-region-intro-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.bf-region-intro-head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: 12px; margin-bottom: 6px;
+}
+.bf-region-intro-title {
+  font-family: var(--serif);
+  font-size: 18px; font-weight: 700;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+.bf-region-intro-close {
+  font-family: var(--mono);
+  font-size: 18px; line-height: 1;
+  color: var(--muted);
+  padding: 2px 8px;
+  border-radius: 6px;
+  transition: color 0.1s, background 0.1s;
+}
+.bf-region-intro-close:hover { color: var(--fg); background: var(--bg-sunk); }
+.bf-region-intro-body {
+  margin: 0 0 10px;
+  font-size: 14px; line-height: 1.55;
+  color: var(--fg);
+  max-width: 72ch;
+}
+.bf-region-intro-meta {
+  display: flex; flex-direction: column; gap: 4px;
+  margin: 8px 0 0; padding-top: 10px;
+  border-top: 1px solid var(--line);
+}
+.bf-region-intro-row {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 12px;
+  font-size: 12px;
+  align-items: baseline;
+}
+.bf-region-intro-row dt {
+  font-family: var(--mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  margin: 0;
+}
+.bf-region-intro-row dd {
+  margin: 0;
+  color: var(--fg);
+}
+
+@media (max-width: 600px) {
+  .bf-region-intro-row {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+}
+
+/* Dev-only: Patterns Sandbox (spec section 5.4). Scoped so it never leaks
+   into production when the _patterns tab is gated off. */
+.bf-sandbox-card {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 14px 16px;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.bf-sandbox-card.approved { border-color: var(--grp-2); }
+.bf-sandbox-card.rejected { border-color: var(--grp-1); opacity: 0.55; }
+.bf-sandbox-card.needs-fix { border-color: var(--muted); border-style: dashed; }
+.bf-sandbox-card.error { border-color: var(--grp-1); color: var(--grp-1); }
+.bf-sandbox-card.muted { color: var(--muted); font-style: italic; }
+.bf-sandbox-card-head {
+  display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;
+}
+.bf-sandbox-name {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 16px;
+}
+.bf-verdict {
+  font-size: 20px;
+  line-height: 1;
+  font-family: var(--mono);
+}
+.bf-verdict-approved { color: var(--grp-2); }
+.bf-verdict-rejected { color: var(--grp-1); }
+.bf-verdict-needs-fix { color: var(--muted); }
+.bf-verdict-pending { color: var(--line); }
+.bf-sandbox-actions { display: flex; flex-wrap: wrap; gap: 6px; }
+.bf-sandbox-promote {
+  display: flex; gap: 10px; align-items: center; flex-wrap: wrap;
+  padding: 8px 10px;
+  background: color-mix(in srgb, var(--grp-2) 10%, var(--bg));
+  border-radius: 6px;
+}
+.bf-sandbox-warnings {
+  list-style: none;
+  margin: 0; padding: 6px 10px;
+  background: color-mix(in srgb, var(--grp-1) 8%, var(--bg));
+  border-radius: 6px;
+  font-size: 12px;
+  color: var(--grp-1);
+}
+.bf-sandbox-warnings li { padding: 2px 0; }
+.bf-sandbox-checklist {
+  font-size: 11px;
+  color: var(--muted);
+  border-top: 1px dashed var(--line);
+  padding-top: 8px;
+}
+.bf-sandbox-checklist ul { margin: 4px 0 0; padding-left: 18px; }
+.bf-sandbox-raw {
+  border-top: 1px dashed var(--line);
+  padding-top: 8px;
+  font-size: 11px;
+}
+.bf-sandbox-raw pre {
+  max-height: 240px;
+  overflow: auto;
+  background: color-mix(in srgb, var(--fg) 5%, var(--bg));
+  padding: 8px;
+  border-radius: 4px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.bf-sandbox-counts {
+  display: flex; gap: 14px;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--fg);
+}
+

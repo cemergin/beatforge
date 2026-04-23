@@ -3,13 +3,16 @@ import { AudioEngine } from './audio/engine';
 import { Practice } from './modes/Practice/Practice';
 import { Library } from './modes/Library/Library';
 import { Studio } from './modes/Studio/Studio';
+import { PatternsSandbox } from './modes/_Patterns/PatternsSandbox';
 import type { KitId, Pattern } from './patterns/types';
 import { registerPatternSource } from './patterns/seed';
 import { loadAllSafe } from './lib/db';
 import './styles/app.css';
 
 type Theme = 'warm' | 'noir' | 'paper';
-type Tab = 'practice' | 'studio' | 'library';
+type Tab = 'practice' | 'studio' | 'library' | '_patterns';
+
+const DEV_MODE = import.meta.env.DEV;
 
 export default function App() {
   const engineRef = useRef<AudioEngine | null>(null);
@@ -25,6 +28,8 @@ export default function App() {
   const [tab, setTab] = useState<Tab>(() => {
     const t = localStorage.getItem('bf_tab');
     if (t === 'library' || t === 'studio' || t === 'practice') return t;
+    // _patterns is dev-only — never restore it in production builds.
+    if (t === '_patterns' && DEV_MODE) return '_patterns';
     return 'practice';
   });
 
@@ -124,6 +129,16 @@ export default function App() {
           >
             Library
           </button>
+          {DEV_MODE && (
+            <button
+              className={`bf-chip ${tab === '_patterns' ? 'on' : 'ghost'}`}
+              onClick={() => switchTab('_patterns')}
+              type="button"
+              title="Dev-only: pattern migration sandbox"
+            >
+              _patterns
+            </button>
+          )}
         </nav>
         <div className="bf-topright">
           {tab === 'practice' && (
@@ -168,6 +183,9 @@ export default function App() {
           onLoadInPractice={loadInPractice}
           onOpenInStudio={openInStudio}
         />
+      )}
+      {DEV_MODE && tab === '_patterns' && (
+        <PatternsSandbox engine={engine} />
       )}
     </div>
   );
