@@ -203,14 +203,14 @@ describe('AudioEngine.loadPattern() hot swap', () => {
 
     const withSnare = fourFour();
     withSnare.tracks = {
-      SD: [0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0],
+      SN: [0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0],
     };
     e.loadPattern(withSnare);
 
     expect(inner.nextIdx.KK).toBeUndefined();  // pruned
-    expect(inner.nextIdx.SD).toBe(0);           // initialised
-    expect(inner.nextNoteTimes.SD).toBe(3.14);  // at next bar
-    expect(inner.cursors.SD).toBe(-1);
+    expect(inner.nextIdx.SN).toBe(0);           // initialised
+    expect(inner.nextNoteTimes.SN).toBe(3.14);  // at next bar
+    expect(inner.cursors.SN).toBe(-1);
   });
 });
 

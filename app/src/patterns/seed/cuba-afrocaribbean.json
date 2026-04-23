@@ -25,14 +25,14 @@
         2,
         0,
         0,
-        0,
+        2,
         0,
         0,
         2,
         0,
         0,
         0,
-        2,
+        0,
         0,
         0,
         0,
@@ -44,13 +44,13 @@
         0,
         0,
         0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
         2,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
         0,
         2,
         0,
@@ -101,8 +101,8 @@
   },
   {
     "id": "bembe",
-    "name": "Bembé",
-    "origin": "Cuba · Yoruba diaspora",
+    "name": "Bemb\u00e9",
+    "origin": "Cuba \u00b7 Yoruba diaspora",
     "tradition": "Sacred bell pattern",
     "genre": "devotional",
     "timeSig": "12/8",
@@ -178,7 +178,7 @@
       "bata"
     ],
     "swingable": false,
-    "story": "The 12/8 bell that underlies bembé, abakuá, and half the West African diaspora.",
+    "story": "The 12/8 bell that underlies bemb\u00e9, abaku\u00e1, and half the West African diaspora.",
     "relatedIds": [
       "bembe-68",
       "agbekor",
@@ -213,6 +213,7 @@
         2,
         0,
         0,
+        2,
         0,
         0,
         0,
@@ -221,7 +222,6 @@
         0,
         0,
         0,
-        2,
         0,
         0,
         0,
@@ -232,13 +232,13 @@
         0,
         0,
         0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
         2,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
         0,
         2,
         0,
@@ -278,7 +278,7 @@
       "palitos"
     ],
     "swingable": true,
-    "story": "Rumba's clave — the three-side's last stroke comes one 16th later than son. That delay is everything.",
+    "story": "Rumba's clave \u2014 the three-side's last stroke comes one 16th later than son. That delay is everything.",
     "relatedIds": [
       "son-clave",
       "guaguanco",
@@ -288,7 +288,7 @@
   {
     "id": "bolero",
     "name": "Bolero Cubano",
-    "origin": "Cuba · Santiago",
+    "origin": "Cuba \u00b7 Santiago",
     "tradition": "Afro-Cuban ballad",
     "genre": "popular",
     "timeSig": "4/4",
@@ -376,11 +376,11 @@
       "maracas"
     ],
     "swingable": false,
-    "story": "The Cuban ballad — slow, tender, and built around the trova tradition of moonlit guitar serenades."
+    "story": "The Cuban ballad \u2014 slow, tender, and built around the trova tradition of moonlit guitar serenades."
   },
   {
     "id": "cha-cha",
-    "name": "Cha-Cha-Chá",
+    "name": "Cha-Cha-Ch\u00e1",
     "origin": "Cuba",
     "tradition": "Dance hall",
     "genre": "popular",
@@ -464,17 +464,17 @@
       "popular"
     ],
     "instruments": [
-      "güiro",
+      "g\u00fciro",
       "cha-cha bell",
       "congas"
     ],
     "swingable": false,
-    "story": "Violinist Enrique Jorrín slowed the mambo down so everybody could dance. The name comes from dancers' shuffling feet."
+    "story": "Violinist Enrique Jorr\u00edn slowed the mambo down so everybody could dance. The name comes from dancers' shuffling feet."
   },
   {
     "id": "mambo",
     "name": "Mambo",
-    "origin": "Cuba · Havana",
+    "origin": "Cuba \u00b7 Havana",
     "tradition": "Dance hall / salsa",
     "genre": "popular",
     "timeSig": "4/4",
@@ -562,7 +562,7 @@
       "conga"
     ],
     "swingable": true,
-    "story": "The climax section of any salsa arrangement — when the band opens up and the mambo bell takes over.",
+    "story": "The climax section of any salsa arrangement \u2014 when the band opens up and the mambo bell takes over.",
     "relatedIds": [
       "son-clave",
       "soukous",
@@ -571,8 +571,8 @@
   },
   {
     "id": "guaguanco",
-    "name": "Guaguancó",
-    "origin": "Cuba · Havana / Matanzas",
+    "name": "Guaguanc\u00f3",
+    "origin": "Cuba \u00b7 Havana / Matanzas",
     "tradition": "Rumba",
     "genre": "folk-dance",
     "timeSig": "4/4",
@@ -661,7 +661,7 @@
       "palitos"
     ],
     "swingable": false,
-    "story": "The most popular form of rumba — a secular ritual born in Havana courtyards, where a male dancer pursues a female dancer in stylized courtship.",
+    "story": "The most popular form of rumba \u2014 a secular ritual born in Havana courtyards, where a male dancer pursues a female dancer in stylized courtship.",
     "relatedIds": [
       "rumba-clave-3-2",
       "rumba-columbia",
@@ -672,7 +672,7 @@
   {
     "id": "rumba-columbia",
     "name": "Rumba Columbia",
-    "origin": "Cuba · Matanzas",
+    "origin": "Cuba \u00b7 Matanzas",
     "tradition": "Rumba (fast 6/8)",
     "genre": "folk-dance",
     "timeSig": "12/8",
@@ -749,7 +749,7 @@
       "conga"
     ],
     "swingable": false,
-    "story": "The fastest, most virtuosic rumba — a solo male dance of acrobatic and sometimes dangerous moves, rooted in Abakuá sacred rhythms from Calabar.",
+    "story": "The fastest, most virtuosic rumba \u2014 a solo male dance of acrobatic and sometimes dangerous moves, rooted in Abaku\u00e1 sacred rhythms from Calabar.",
     "relatedIds": [
       "bembe",
       "bembe-68",
@@ -760,7 +760,7 @@
   {
     "id": "comparsa",
     "name": "Comparsa",
-    "origin": "Cuba · Santiago",
+    "origin": "Cuba \u00b7 Santiago",
     "tradition": "Carnival procession",
     "genre": "folk-dance",
     "timeSig": "4/4",
@@ -843,16 +843,16 @@
       "street"
     ],
     "instruments": [
-      "sartén",
+      "sart\u00e9n",
       "cowbell",
       "conga"
     ],
     "swingable": false,
-    "story": "The costumed carnival processions of Santiago — frying pans mounted on blocks, cowbells, and a river of drums rolling through the streets."
+    "story": "The costumed carnival processions of Santiago \u2014 frying pans mounted on blocks, cowbells, and a river of drums rolling through the streets."
   },
   {
     "id": "cascara",
-    "name": "Cáscara",
+    "name": "C\u00e1scara",
     "origin": "Cuba",
     "tradition": "Timbale shell pattern",
     "genre": "folk-dance",
@@ -942,7 +942,7 @@
       "cowbell"
     ],
     "swingable": true,
-    "story": "Played on the side of a timbal — slinky, sideways, reserved for mambo verses before the montuno opens up.",
+    "story": "Played on the side of a timbal \u2014 slinky, sideways, reserved for mambo verses before the montuno opens up.",
     "relatedIds": [
       "mambo"
     ]
@@ -970,27 +970,27 @@
     "difficulty": "beginner",
     "tracks": {
       "KK": [
-        2,
         0,
         0,
         0,
-        2,
         0,
         0,
-        0,
-        2,
         0,
         0,
         0,
         2,
         0,
         0,
+        2,
+        0,
+        0,
+        2,
         0
       ],
       "SN": [
         0,
         0,
-        0,
+        2,
         0,
         2,
         0,
@@ -1000,7 +1000,7 @@
         0,
         0,
         0,
-        2,
+        0,
         0,
         0,
         0
@@ -1039,15 +1039,15 @@
       "bongos"
     ],
     "swingable": true,
-    "story": "Son clave flipped — two side first, then three. Most Cuban charts start here because the melodic phrasing anticipates the \"3\" resolution.",
+    "story": "Son clave flipped \u2014 two side first, then three. Most Cuban charts start here because the melodic phrasing anticipates the \"3\" resolution.",
     "relatedIds": [
       "son-clave"
     ]
   },
   {
     "id": "danzon",
-    "name": "Danzón",
-    "origin": "Cuba · Matanzas",
+    "name": "Danz\u00f3n",
+    "origin": "Cuba \u00b7 Matanzas",
     "tradition": "Cuban classical ballroom",
     "genre": "classical",
     "timeSig": "4/4",
@@ -1132,11 +1132,11 @@
     ],
     "instruments": [
       "timbales",
-      "güiro",
+      "g\u00fciro",
       "piano"
     ],
     "swingable": false,
-    "story": "Cuba's national dance in 1879 — a ballroom form built on the cinquillo (3+3+2 sub-divisional cell). The timbale's baqueteo pattern is the rhythmic spine.",
+    "story": "Cuba's national dance in 1879 \u2014 a ballroom form built on the cinquillo (3+3+2 sub-divisional cell). The timbale's baqueteo pattern is the rhythmic spine.",
     "relatedIds": [
       "son-clave",
       "bolero",
@@ -1146,7 +1146,7 @@
   {
     "id": "songo",
     "name": "Songo",
-    "origin": "Cuba · Havana",
+    "origin": "Cuba \u00b7 Havana",
     "tradition": "Los Van Van / Changuito",
     "genre": "popular",
     "timeSig": "4/4",
@@ -1235,7 +1235,7 @@
       "congas"
     ],
     "swingable": true,
-    "story": "Changuito invented songo with Los Van Van in the 1970s — the first Cuban rhythm conceived for the drum set, fusing rumba, son, funk and jazz drumming.",
+    "story": "Changuito invented songo with Los Van Van in the 1970s \u2014 the first Cuban rhythm conceived for the drum set, fusing rumba, son, funk and jazz drumming.",
     "relatedIds": [
       "timba",
       "mambo"
@@ -1333,7 +1333,7 @@
       "kick drum"
     ],
     "swingable": true,
-    "story": "NG La Banda, Los Van Van, Paulito FG — aggressive, funk-influenced, gear-shifting evolution of salsa. The kick drum arrives and the music gets denser.",
+    "story": "NG La Banda, Los Van Van, Paulito FG \u2014 aggressive, funk-influenced, gear-shifting evolution of salsa. The kick drum arrives and the music gets denser.",
     "relatedIds": [
       "songo",
       "mambo"
@@ -1341,8 +1341,8 @@
   },
   {
     "id": "yambu",
-    "name": "Yambú",
-    "origin": "Cuba · Havana / Matanzas",
+    "name": "Yamb\u00fa",
+    "origin": "Cuba \u00b7 Havana / Matanzas",
     "tradition": "Slow rumba",
     "genre": "folk-dance",
     "timeSig": "4/4",
@@ -1422,7 +1422,7 @@
     "tags": [
       "rumba",
       "slow",
-      "cajón",
+      "caj\u00f3n",
       "elders"
     ],
     "instruments": [
@@ -1431,7 +1431,7 @@
       "palitos"
     ],
     "swingable": false,
-    "story": "The oldest and slowest rumba — originally played on wooden shipping-crate cajones, imitating the movements of elderly people. No vacunao, no hurry.",
+    "story": "The oldest and slowest rumba \u2014 originally played on wooden shipping-crate cajones, imitating the movements of elderly people. No vacunao, no hurry.",
     "relatedIds": [
       "guaguanco",
       "rumba-columbia"
@@ -1439,8 +1439,8 @@
   },
   {
     "id": "pilon",
-    "name": "Pilón",
-    "origin": "Cuba · Santiago",
+    "name": "Pil\u00f3n",
+    "origin": "Cuba \u00b7 Santiago",
     "tradition": "1960s Cuban dance craze",
     "genre": "popular",
     "timeSig": "4/4",
@@ -1525,16 +1525,16 @@
     ],
     "instruments": [
       "paila",
-      "güiro",
+      "g\u00fciro",
       "conga"
     ],
     "swingable": false,
-    "story": "Enrique Bonne and Pacho Alonso built a dance craze around the pilón — the mortar used to grind sugar cane. The choreography imitates the pounding motion."
+    "story": "Enrique Bonne and Pacho Alonso built a dance craze around the pil\u00f3n \u2014 the mortar used to grind sugar cane. The choreography imitates the pounding motion."
   },
   {
     "id": "changui",
-    "name": "Changüí",
-    "origin": "Cuba · Guantánamo",
+    "name": "Chang\u00fc\u00ed",
+    "origin": "Cuba \u00b7 Guant\u00e1namo",
     "tradition": "Pre-son rural music",
     "genre": "folk-dance",
     "timeSig": "4/4",
@@ -1614,16 +1614,16 @@
     "tags": [
       "rural",
       "pre-son",
-      "bongó",
-      "marímbula"
+      "bong\u00f3",
+      "mar\u00edmbula"
     ],
     "instruments": [
-      "bongó",
-      "marímbula",
+      "bong\u00f3",
+      "mar\u00edmbula",
       "tres"
     ],
     "swingable": true,
-    "story": "The father of son. In the eastern sugar plantations of Guantánamo the bongó was the timeline — wilder, more improvisatory, more West African than the son that would follow.",
+    "story": "The father of son. In the eastern sugar plantations of Guant\u00e1namo the bong\u00f3 was the timeline \u2014 wilder, more improvisatory, more West African than the son that would follow.",
     "relatedIds": [
       "son-clave",
       "soukous"
@@ -1632,8 +1632,8 @@
   {
     "id": "mozambique",
     "name": "Mozambique",
-    "origin": "Cuba · Havana",
-    "tradition": "Pello el Afrokán carnival",
+    "origin": "Cuba \u00b7 Havana",
+    "tradition": "Pello el Afrok\u00e1n carnival",
     "genre": "folk-dance",
     "timeSig": "4/4",
     "grouping": [
@@ -1721,7 +1721,7 @@
       "bombo"
     ],
     "swingable": false,
-    "story": "Pedro \"Pello el Afrokán\" Izquierdo invented the mozambique for Havana's 1960s carnival. It crossed the straits to Eddie Palmieri and lit up New York salsa.",
+    "story": "Pedro \"Pello el Afrok\u00e1n\" Izquierdo invented the mozambique for Havana's 1960s carnival. It crossed the straits to Eddie Palmieri and lit up New York salsa.",
     "relatedIds": [
       "comparsa",
       "funk-second-line"
@@ -1729,8 +1729,8 @@
   },
   {
     "id": "bomba-sica",
-    "name": "Bomba Sicá",
-    "origin": "Puerto Rico · Loíza / Ponce",
+    "name": "Bomba Sic\u00e1",
+    "origin": "Puerto Rico \u00b7 Lo\u00edza / Ponce",
     "tradition": "Afro-Puerto Rican bomba",
     "genre": "folk-dance",
     "timeSig": "4/4",
@@ -1811,15 +1811,15 @@
       "bomba",
       "tresillo",
       "dancer-drummer",
-      "loíza"
+      "lo\u00edza"
     ],
     "instruments": [
       "buleador",
       "subidor",
-      "cuá"
+      "cu\u00e1"
     ],
     "swingable": false,
-    "story": "The most widespread bomba style, built on the 3-3-2 tresillo. In bomba the dancer leads and the subidor drummer must follow — the conversation is the music.",
+    "story": "The most widespread bomba style, built on the 3-3-2 tresillo. In bomba the dancer leads and the subidor drummer must follow \u2014 the conversation is the music.",
     "relatedIds": [
       "son-clave",
       "rumba-flamenca",
@@ -1828,8 +1828,8 @@
   },
   {
     "id": "bomba-holande",
-    "name": "Bomba Holandé",
-    "origin": "Puerto Rico · Loíza",
+    "name": "Bomba Holand\u00e9",
+    "origin": "Puerto Rico \u00b7 Lo\u00edza",
     "tradition": "Afro-Puerto Rican bomba (6/8)",
     "genre": "folk-dance",
     "timeSig": "12/8",
@@ -1903,10 +1903,10 @@
     "instruments": [
       "buleador",
       "subidor",
-      "cuá"
+      "cu\u00e1"
     ],
     "swingable": false,
-    "story": "The 6/8 bomba that links Puerto Rican tradition back to West Africa. \"Holandé\" may nod to Dutch colonial traders — the rhythm sways like ocean swells.",
+    "story": "The 6/8 bomba that links Puerto Rican tradition back to West Africa. \"Holand\u00e9\" may nod to Dutch colonial traders \u2014 the rhythm sways like ocean swells.",
     "relatedIds": [
       "bomba-sica",
       "bembe",
@@ -1917,7 +1917,7 @@
   {
     "id": "plena",
     "name": "Plena",
-    "origin": "Puerto Rico · Ponce",
+    "origin": "Puerto Rico \u00b7 Ponce",
     "tradition": "Pandero ensemble (the sung newspaper)",
     "genre": "folk-dance",
     "timeSig": "4/4",
@@ -2006,7 +2006,7 @@
       "requinto"
     ],
     "swingable": false,
-    "story": "\"El periódico cantado\" — the sung newspaper. Three hand-held panderos trade rhythms over Ponce's working-class streets, narrating whatever happened this week."
+    "story": "\"El peri\u00f3dico cantado\" \u2014 the sung newspaper. Three hand-held panderos trade rhythms over Ponce's working-class streets, narrating whatever happened this week."
   },
   {
     "id": "merengue",
@@ -2091,16 +2091,16 @@
     "tags": [
       "merengue",
       "tambora",
-      "güira",
+      "g\u00fcira",
       "dominican"
     ],
     "instruments": [
       "tambora",
-      "güira",
+      "g\u00fcira",
       "accordion"
     ],
     "swingable": false,
-    "story": "The national rhythm of the Dominican Republic — tambora and güira against an accordion. Trujillo promoted it as a tool of the state; the country made it a birthright.",
+    "story": "The national rhythm of the Dominican Republic \u2014 tambora and g\u00fcira against an accordion. Trujillo promoted it as a tool of the state; the country made it a birthright.",
     "relatedIds": [
       "bachata",
       "kompa"
@@ -2109,7 +2109,7 @@
   {
     "id": "charanga-francesa",
     "name": "Charanga",
-    "origin": "Cuba · Havana",
+    "origin": "Cuba \u00b7 Havana",
     "tradition": "Charanga francesa (flute-and-violin orchestra)",
     "genre": "popular",
     "timeSig": "4/4",
@@ -2190,17 +2190,17 @@
       "charanga",
       "danzon-lineage",
       "flute",
-      "güiro",
+      "g\u00fciro",
       "elegant"
     ],
     "instruments": [
-      "güiro",
+      "g\u00fciro",
       "timbales",
       "flute",
       "violin"
     ],
     "swingable": true,
-    "story": "The charanga francesa — wooden flute, violins, piano, bass, timbales and güiro — was the elegant Cuban orchestra that birthed danzón, cha-cha and pachanga. Enrique Jorrín's Orquesta América shaped mid-century Havana dancing.",
+    "story": "The charanga francesa \u2014 wooden flute, violins, piano, bass, timbales and g\u00fciro \u2014 was the elegant Cuban orchestra that birthed danz\u00f3n, cha-cha and pachanga. Enrique Jorr\u00edn's Orquesta Am\u00e9rica shaped mid-century Havana dancing.",
     "relatedIds": [
       "cha-cha",
       "danzon"
@@ -2208,9 +2208,9 @@
   },
   {
     "id": "danzon-cha",
-    "name": "Danzón-Chá",
-    "origin": "Cuba · Havana",
-    "tradition": "Danzón third-section chá",
+    "name": "Danz\u00f3n-Ch\u00e1",
+    "origin": "Cuba \u00b7 Havana",
+    "tradition": "Danz\u00f3n third-section ch\u00e1",
     "genre": "classical",
     "timeSig": "4/4",
     "grouping": [
@@ -2294,12 +2294,12 @@
     ],
     "instruments": [
       "timbales",
-      "güiro",
+      "g\u00fciro",
       "piano",
       "flute"
     ],
     "swingable": false,
-    "story": "The slower third section that opens out of a classic danzón — the baqueteo softens and the dancers step wider. The bridge between Cuba's Belle Époque ballroom and Jorrín's cha-cha-chá.",
+    "story": "The slower third section that opens out of a classic danz\u00f3n \u2014 the baqueteo softens and the dancers step wider. The bridge between Cuba's Belle \u00c9poque ballroom and Jorr\u00edn's cha-cha-ch\u00e1.",
     "relatedIds": [
       "danzon",
       "cha-cha",
@@ -2309,7 +2309,7 @@
   {
     "id": "mambo-rumba",
     "name": "Mambo-Rumba",
-    "origin": "Cuba · Havana",
+    "origin": "Cuba \u00b7 Havana",
     "tradition": "Mambo-rumba fusion",
     "genre": "popular",
     "timeSig": "4/4",
@@ -2398,7 +2398,7 @@
       "mambo bell"
     ],
     "swingable": true,
-    "story": "When the Palladium-era big bands brought guaguancó into the mambo arrangement — rumba clave sharpening the mambo's attack while the bell section churns on underneath.",
+    "story": "When the Palladium-era big bands brought guaguanc\u00f3 into the mambo arrangement \u2014 rumba clave sharpening the mambo's attack while the bell section churns on underneath.",
     "relatedIds": [
       "mambo",
       "guaguanco",
@@ -2408,8 +2408,8 @@
   {
     "id": "son-montuno",
     "name": "Son Montuno",
-    "origin": "Cuba · Oriente / Havana",
-    "tradition": "Arsenio Rodríguez conjunto",
+    "origin": "Cuba \u00b7 Oriente / Havana",
+    "tradition": "Arsenio Rodr\u00edguez conjunto",
     "genre": "popular",
     "timeSig": "4/4",
     "grouping": [
@@ -2494,11 +2494,11 @@
     "instruments": [
       "tres",
       "congas",
-      "bongó",
+      "bong\u00f3",
       "piano"
     ],
     "swingable": true,
-    "story": "Arsenio Rodríguez electrified son in the 1940s — added conga, piano, a trumpet section. Montuno is the open call-and-response section where the band gears up. Everything that became salsa passes through here.",
+    "story": "Arsenio Rodr\u00edguez electrified son in the 1940s \u2014 added conga, piano, a trumpet section. Montuno is the open call-and-response section where the band gears up. Everything that became salsa passes through here.",
     "relatedIds": [
       "son-clave",
       "son-clave-2-3",
@@ -2509,7 +2509,7 @@
   {
     "id": "afro-68",
     "name": "Afro 6/8",
-    "origin": "Cuba · Havana",
+    "origin": "Cuba \u00b7 Havana",
     "tradition": "Modern Afro-Cuban 6/8",
     "genre": "popular",
     "timeSig": "12/8",
@@ -2586,7 +2586,7 @@
       "cowbell"
     ],
     "swingable": false,
-    "story": "The modern ensemble's take on the Yoruba bell — bembé translated to drum kit and bass for Afro-Cuban jazz and timba's 6/8 passages. Chucho Valdés, Irakere, Gonzalo Rubalcaba live in this meter.",
+    "story": "The modern ensemble's take on the Yoruba bell \u2014 bemb\u00e9 translated to drum kit and bass for Afro-Cuban jazz and timba's 6/8 passages. Chucho Vald\u00e9s, Irakere, Gonzalo Rubalcaba live in this meter.",
     "relatedIds": [
       "bembe",
       "bembe-68",
@@ -2595,8 +2595,8 @@
   },
   {
     "id": "iyesa",
-    "name": "Iyesá",
-    "origin": "Cuba · Matanzas",
+    "name": "Iyes\u00e1",
+    "origin": "Cuba \u00b7 Matanzas",
     "tradition": "Yoruba-Cuban ritual",
     "genre": "ceremonial",
     "timeSig": "12/8",
@@ -2668,12 +2668,12 @@
       "drums-of-iron"
     ],
     "instruments": [
-      "iyesá drums",
-      "agogô",
-      "chekeré"
+      "iyes\u00e1 drums",
+      "agog\u00f4",
+      "cheker\u00e9"
     ],
     "swingable": false,
-    "story": "The Iyesá are Yoruba descendants in Matanzas whose ritual drums preserve Ijesha regional rhythms from Nigeria. Four single-headed drums tuned by cords, an iron bell on top — a tradition older than recorded Cuba.",
+    "story": "The Iyes\u00e1 are Yoruba descendants in Matanzas whose ritual drums preserve Ijesha regional rhythms from Nigeria. Four single-headed drums tuned by cords, an iron bell on top \u2014 a tradition older than recorded Cuba.",
     "relatedIds": [
       "bembe",
       "bata-shango",
@@ -2682,8 +2682,8 @@
   },
   {
     "id": "abakua",
-    "name": "Abakuá",
-    "origin": "Cuba · Havana / Matanzas",
+    "name": "Abaku\u00e1",
+    "origin": "Cuba \u00b7 Havana / Matanzas",
     "tradition": "Efik/Ejagham secret society",
     "genre": "ceremonial",
     "timeSig": "12/8",
@@ -2756,12 +2756,12 @@
       "nyankue"
     ],
     "instruments": [
-      "bonkó enchemiyá",
-      "obi-apá",
-      "ekón"
+      "bonk\u00f3 enchemiy\u00e1",
+      "obi-ap\u00e1",
+      "ek\u00f3n"
     ],
     "swingable": false,
-    "story": "The only African secret society re-established in the Americas — founded Havana 1836 from the Efik/Ejagham Ekpe. The bonkó enchemiyá lead drum speaks over obi-apá shoulder drums; the sacred ekue friction drum stays hidden.",
+    "story": "The only African secret society re-established in the Americas \u2014 founded Havana 1836 from the Efik/Ejagham Ekpe. The bonk\u00f3 enchemiy\u00e1 lead drum speaks over obi-ap\u00e1 shoulder drums; the sacred ekue friction drum stays hidden.",
     "relatedIds": [
       "rumba-columbia",
       "bembe",
@@ -2771,7 +2771,7 @@
   {
     "id": "palo-kongo",
     "name": "Palo / Yuka",
-    "origin": "Cuba · Pinar del Río",
+    "origin": "Cuba \u00b7 Pinar del R\u00edo",
     "tradition": "Bantu-Kongo secular drumming",
     "genre": "ceremonial",
     "timeSig": "4/4",
@@ -2862,7 +2862,7 @@
       "cachimbo"
     ],
     "swingable": false,
-    "story": "The Kongo-descended yuka drums of western Cuba — \"yuka\" means \"to beat\" in Bantu. Paired with the makuta, they underpin Las Reglas de Congo. Trance-inducing, driving, repetitive — the aesthetic of Central African ritual.",
+    "story": "The Kongo-descended yuka drums of western Cuba \u2014 \"yuka\" means \"to beat\" in Bantu. Paired with the makuta, they underpin Las Reglas de Congo. Trance-inducing, driving, repetitive \u2014 the aesthetic of Central African ritual.",
     "relatedIds": [
       "bembe",
       "abakua",
@@ -2871,8 +2871,8 @@
   },
   {
     "id": "guaguanco-habanero",
-    "name": "Guaguancó Habanero",
-    "origin": "Cuba · Havana",
+    "name": "Guaguanc\u00f3 Habanero",
+    "origin": "Cuba \u00b7 Havana",
     "tradition": "Havana-style rumba",
     "genre": "folk-dance",
     "timeSig": "4/4",
@@ -2963,7 +2963,7 @@
       "palitos"
     ],
     "swingable": false,
-    "story": "The Havana style of guaguancó — faster and more volatile than Matanzas, born in the solares (tenement courtyards) of the capital. Los Papines and Yoruba Andabo define the lineage.",
+    "story": "The Havana style of guaguanc\u00f3 \u2014 faster and more volatile than Matanzas, born in the solares (tenement courtyards) of the capital. Los Papines and Yoruba Andabo define the lineage.",
     "relatedIds": [
       "guaguanco",
       "guaguanco-matanzas",
@@ -2972,8 +2972,8 @@
   },
   {
     "id": "guaguanco-matanzas",
-    "name": "Guaguancó Matancero",
-    "origin": "Cuba · Matanzas",
+    "name": "Guaguanc\u00f3 Matancero",
+    "origin": "Cuba \u00b7 Matanzas",
     "tradition": "Matanzas-style rumba",
     "genre": "folk-dance",
     "timeSig": "4/4",
@@ -3064,7 +3064,7 @@
       "palitos"
     ],
     "swingable": false,
-    "story": "The Matanzas style of guaguancó — slower, more ritualistic, drier timbre on cajones. Los Muñequitos de Matanzas carry this lineage where Havana players push tempo, Matanceros hold the space.",
+    "story": "The Matanzas style of guaguanc\u00f3 \u2014 slower, more ritualistic, drier timbre on cajones. Los Mu\u00f1equitos de Matanzas carry this lineage where Havana players push tempo, Matanceros hold the space.",
     "relatedIds": [
       "guaguanco",
       "rumba-clave-3-2",
