@@ -150,6 +150,49 @@ export class AudioEngine {
     this.kit = k;
     if (this.reverbSend) this.reverbSend.gain.value = kitRecipes[k].reverbSend;
   }
+
+  /** Per-track cursor for what's AUDIBLE right now — not last-scheduled.
+   * The scheduler queues notes up to 300ms into Web Audio's future; the
+   * cursor field (this.cursors) reflects the last-scheduled step, so
+   * reading it from a rAF loop shows the visual cursor 300ms ahead of
+   * the audio. This method computes what step the audio clock is
+   * actually playing by inverting the anchor formula:
+   *
+   *   stepsSinceAnchor = floor((now - anchorTime) / stepSec)
+   *   audibleIdx = (anchorIdx + stepsSinceAnchor) % cycle
+   *
+   * Cheap — O(tracks), called once per frame. Swing is ignored for the
+   * visual (≤34ms visual lag on swung steps, below the perceptibility
+   * threshold for this use case).
+   */
+  audibleCursors(): Record<string, number> {
+    const out: Record<string, number> = {};
+    if (!this.ctx || !this.running) return this.cursors;
+    const now = this.ctx.currentTime;
+    if (now < this.startTime) {
+      // Count-in still running — no track steps audible yet.
+      for (const c of this.trackCaches) out[c.voiceId] = -1;
+      return out;
+    }
+    const beatSec = 60 / this.bpm;
+    for (const c of this.trackCaches) {
+      const tr = c.voiceId;
+      const anchorT = this.anchorTime[tr];
+      const anchorI = this.anchorIdx[tr];
+      if (anchorT === undefined || anchorI === undefined) {
+        out[tr] = this.cursors[tr] ?? -1;
+        continue;
+      }
+      const stepSec = c.stepsPerBar * beatSec;
+      if (stepSec <= 0) { out[tr] = -1; continue; }
+      const stepsSinceAnchor = Math.floor((now - anchorT) / stepSec);
+      const globalIdx = anchorI + stepsSinceAnchor;
+      const cycle = c.cycle;
+      out[tr] = ((globalIdx % cycle) + cycle) % cycle;
+    }
+    return out;
+  }
+
   setBpm(b: number): void {
     // Re-anchor each track so the rate change takes effect from "now"
     // without jumping phase. The anchor-derive formula in tick() computes

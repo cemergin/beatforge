@@ -119,7 +119,7 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
   useEffect(() => {
     let raf = 0;
     const loop = () => {
-      setCursors({ ...engine.cursors });
+      setCursors(engine.audibleCursors());
       raf = requestAnimationFrame(loop);
     };
     raf = requestAnimationFrame(loop);
@@ -663,7 +663,13 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
           cfg={trainerCfg}
           setCfg={setTrainerCfg}
           on={trainerOn}
-          setOn={setTrainerOn}
+          setOn={(next) => {
+            // Turning ON: snap BPM to the trainer's starting tempo so the
+            // user doesn't have to hunt for it — "begin at the bottom,
+            // climb." Turning OFF: leave current BPM alone.
+            setTrainerOn(next);
+            if (next) setBpm(trainerCfg.from);
+          }}
           bar={trainerBar}
           bpm={bpm}
         />

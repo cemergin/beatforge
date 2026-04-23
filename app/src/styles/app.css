@@ -185,6 +185,24 @@ input[type="number"] { font: inherit; color: inherit; }
 .bf-story summary {
   cursor: pointer; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted);
   outline: none; font-weight: 600;
+  display: flex; align-items: center;
+  list-style: none;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+.bf-story summary::-webkit-details-marker { display: none; }
+.bf-story summary::before {
+  content: "▸";
+  display: inline-block;
+  margin-right: 10px;
+  font-size: 11px;
+  color: var(--muted);
+  transition: transform 0.15s;
+  vertical-align: middle;
+  line-height: 1;
+}
+.bf-story[open] summary::before {
+  transform: rotate(90deg);
 }
 .bf-story p { margin: 10px 0 4px; font-size: 13px; line-height: 1.55; color: var(--fg); text-wrap: pretty; }
 
@@ -1268,6 +1286,7 @@ input[type="number"] { font: inherit; color: inherit; }
   color: var(--muted);
   transition: transform 0.15s;
   vertical-align: middle;
+  line-height: 1;
 }
 .bf-lib-zone-collapsible[open] > summary::before {
   transform: rotate(90deg);
@@ -1288,10 +1307,12 @@ input[type="number"] { font: inherit; color: inherit; }
 .bf-pattern-list-summary::before {
   content: "▸";
   display: inline-block;
-  margin-right: 8px;
-  font-size: 9px;
+  margin-right: 10px;
+  font-size: 11px;
   color: var(--muted);
   transition: transform 0.15s;
+  vertical-align: middle;
+  line-height: 1;
 }
 .bf-pattern-list-panel[open] .bf-pattern-list-summary::before {
   transform: rotate(90deg);

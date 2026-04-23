@@ -157,7 +157,7 @@ export function Studio({
   useEffect(() => {
     let raf = 0;
     const loop = () => {
-      setCursors({ ...engine.cursors });
+      setCursors(engine.audibleCursors());
       raf = requestAnimationFrame(loop);
     };
     raf = requestAnimationFrame(loop);
