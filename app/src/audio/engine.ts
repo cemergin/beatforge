@@ -114,17 +114,23 @@ export class AudioEngine {
     const now = this.ctx.currentTime + 0.06;
     const barSec = this.pattern.steps * (60 / this.bpm);
 
-    // Count-in: schedule clicks for N bars, then start pattern after delay.
-    // Count-in clicks fire at `pattern.grouping.length` per bar (pulse level).
+    // Count-in: clicks at the FIRST STEP of each subgroup, with the pattern's
+    // actual grouping. For 2+2+2+3 (9/8) → 4 clicks at step positions 0, 2, 4, 6
+    // — unevenly spaced to reflect the grouping, not evenly spaced over the bar.
     if (countInBars > 0) {
-      const pulsesPerBar = Math.max(1, this.pattern.grouping.length);
-      const pulseSec = barSec / pulsesPerBar;
-      const totalPulses = countInBars * pulsesPerBar;
-      for (let i = 0; i < totalPulses; i++) {
-        const t = now + i * pulseSec;
-        // Beat-one accent on the first pulse of each count-in bar
-        const isBeatOne = i % pulsesPerBar === 0;
-        this.countInClick(t, isBeatOne ? 1.0 : 0.5);
+      const stepSec = barSec / this.pattern.steps;
+      const downbeatSteps: number[] = [];
+      let acc = 0;
+      for (const g of this.pattern.grouping) {
+        downbeatSteps.push(acc);
+        acc += g;
+      }
+      for (let bar = 0; bar < countInBars; bar++) {
+        downbeatSteps.forEach((stepIdx, beatIdx) => {
+          const t = now + bar * barSec + stepIdx * stepSec;
+          // Beat 1 of each bar = strong; other group downbeats = medium
+          this.countInClick(t, beatIdx === 0 ? 1.0 : 0.6);
+        });
       }
     }
 
