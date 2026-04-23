@@ -650,9 +650,9 @@
     "genre": "classical",
     "timeSig": "8/4",
     "grouping": [
+      8,
       4,
-      2,
-      2
+      4
     ],
     "stepUnit": 8,
     "steps": 16,
@@ -743,9 +743,9 @@
     "genre": "classical",
     "timeSig": "5/4",
     "grouping": [
+      4,
       2,
-      1,
-      2
+      4
     ],
     "stepUnit": 8,
     "steps": 10,
@@ -1442,9 +1442,9 @@
     "genre": "classical",
     "timeSig": "7/4",
     "grouping": [
-      3,
-      2,
-      2
+      6,
+      4,
+      4
     ],
     "stepUnit": 8,
     "steps": 14,
@@ -2842,8 +2842,8 @@
     "genre": "classical",
     "timeSig": "3/8",
     "grouping": [
-      1,
-      2
+      2,
+      4
     ],
     "stepUnit": 8,
     "steps": 6,
@@ -3138,8 +3138,8 @@
     "genre": "classical",
     "timeSig": "3/4",
     "grouping": [
-      1,
-      2
+      2,
+      4
     ],
     "stepUnit": 8,
     "steps": 6,
@@ -3898,6 +3898,10 @@
     "genre": "classical",
     "timeSig": "16/4",
     "grouping": [
+      4,
+      4,
+      4,
+      4,
       4,
       4,
       4,

@@ -725,10 +725,10 @@
     "genre": "folk-dance",
     "timeSig": "9/4",
     "grouping": [
-      2,
-      2,
-      2,
-      3
+      4,
+      4,
+      4,
+      6
     ],
     "stepUnit": 8,
     "steps": 18,

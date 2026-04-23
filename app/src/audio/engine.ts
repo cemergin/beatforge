@@ -31,7 +31,8 @@ interface TrackCache {
 export class AudioEngine {
   ctx: AudioContext | null = null;
   master: GainNode | null = null;
-  private reverb: ConvolverNode | null = null;
+  // The reverb ConvolverNode is kept alive by the audio graph (master
+  // chain + reverbReturn both hold it), no class field needed.
   private reverbSend: GainNode | null = null;
 
   kit: KitId = '808';
@@ -105,35 +106,60 @@ export class AudioEngine {
   private overlayNextTime = 0;
   private overlayNextIdx = 0;
 
+  // Race guard: two concurrent play clicks (or play + preview)
+  // fire ensureCtx() simultaneously; without this, both would race
+  // to construct an AudioContext and audio graph. Whoever wins the
+  // second half wins the assignments, orphaning the first graph.
+  private ctxInitPromise: Promise<void> | null = null;
+
   async ensureCtx(): Promise<void> {
-    if (!this.ctx) {
-      const Ctor = window.AudioContext
-        || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
-      this.ctx = new Ctor();
-      this.master = this.ctx.createGain();
-      this.master.gain.value = this.masterVolume;
-
-      const comp = this.ctx.createDynamicsCompressor();
-      comp.threshold.value = -14;
-      comp.ratio.value = 3;
-      comp.attack.value = 0.003;
-      comp.release.value = 0.1;
-      this.master.connect(comp).connect(this.ctx.destination);
-
-      this.reverb = this.ctx.createConvolver();
-      this.reverb.buffer = this.makeImpulse(1.8, 2.2);
-      this.reverbSend = this.ctx.createGain();
-      this.reverbSend.gain.value = kitRecipes[this.kit].reverbSend;
-      this.reverbSend.connect(this.reverb);
-      const reverbReturn = this.ctx.createGain();
-      reverbReturn.gain.value = 0.6;
-      this.reverb.connect(reverbReturn).connect(this.master);
+    if (this.ctx) {
+      if (this.ctx.state === 'suspended') await this.ctx.resume();
+      return;
     }
-    if (this.ctx.state === 'suspended') await this.ctx.resume();
+    if (!this.ctxInitPromise) {
+      this.ctxInitPromise = this.initCtxOnce().finally(() => {
+        // Clear so a later failure (e.g. ctx got closed and needs
+        // rebuilding) doesn't permanently block re-init.
+        this.ctxInitPromise = null;
+      });
+    }
+    await this.ctxInitPromise;
   }
 
-  private makeImpulse(duration: number, decay: number): AudioBuffer {
-    const ctx = this.ctx!;
+  private async initCtxOnce(): Promise<void> {
+    const Ctor = window.AudioContext
+      || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+    const ctx = new Ctor();
+    const master = ctx.createGain();
+    master.gain.value = this.masterVolume;
+
+    const comp = ctx.createDynamicsCompressor();
+    comp.threshold.value = -14;
+    comp.ratio.value = 3;
+    comp.attack.value = 0.003;
+    comp.release.value = 0.1;
+    master.connect(comp).connect(ctx.destination);
+
+    const reverb = ctx.createConvolver();
+    reverb.buffer = this.makeImpulseFor(ctx, 1.8, 2.2);
+    const reverbSend = ctx.createGain();
+    reverbSend.gain.value = kitRecipes[this.kit].reverbSend;
+    reverbSend.connect(reverb);
+    const reverbReturn = ctx.createGain();
+    reverbReturn.gain.value = 0.6;
+    reverb.connect(reverbReturn).connect(master);
+
+    // Commit all references atomically — either we have a full graph
+    // or none of it.
+    this.ctx = ctx;
+    this.master = master;
+    this.reverbSend = reverbSend;
+
+    if (ctx.state === 'suspended') await ctx.resume();
+  }
+
+  private makeImpulseFor(ctx: AudioContext, duration: number, decay: number): AudioBuffer {
     const rate = ctx.sampleRate;
     const length = rate * duration;
     const impulse = ctx.createBuffer(2, length, rate);
@@ -389,28 +415,32 @@ export class AudioEngine {
 
   // Neutral count-in click — kit-independent (always a wood-like tick).
   private countInClick(when: number, amp: number): void {
-    const ctx = this.ctx!;
+    const ctx = this.ctx;
+    const master = this.master;
+    if (!ctx || !master) return; // pre-ensureCtx() call — no-op
     const osc = ctx.createOscillator();
     const g = ctx.createGain();
     osc.frequency.value = amp > 0.8 ? 2200 : 1400;
     g.gain.setValueAtTime(amp * 0.5, when);
     g.gain.exponentialRampToValueAtTime(0.0001, when + 0.03);
     osc.connect(g);
-    g.connect(this.master!);
+    g.connect(master);
     osc.start(when);
     osc.stop(when + 0.05);
   }
 
   // Polyrhythm overlay click — used for the ephemeral practice overlay.
   private overlayClick(when: number): void {
-    const ctx = this.ctx!;
+    const ctx = this.ctx;
+    const master = this.master;
+    if (!ctx || !master) return;
     const osc = ctx.createOscillator();
     const g = ctx.createGain();
     osc.frequency.value = 1800;
     g.gain.setValueAtTime(0.6, when);
     g.gain.exponentialRampToValueAtTime(0.0001, when + 0.04);
     osc.connect(g);
-    g.connect(this.master!);
+    g.connect(master);
     osc.start(when);
     osc.stop(when + 0.05);
   }
@@ -440,6 +470,24 @@ export class AudioEngine {
     if (this.worker) {
       this.worker.postMessage({ type: 'stop' });
     }
+  }
+
+  /** Full teardown — use on unmount / hot-reload / test cleanup. `stop()`
+   * pauses playback but keeps the Worker + AudioContext alive; `dispose()`
+   * lets the GC reclaim them. Safe to call multiple times. */
+  dispose(): void {
+    this.stop();
+    if (this.worker) {
+      this.worker.terminate();
+      this.worker = null;
+    }
+    if (this.ctx && this.ctx.state !== 'closed') {
+      void this.ctx.close();
+    }
+    this.ctx = null;
+    this.master = null;
+    this.reverbSend = null;
+    this.trackCaches = [];
   }
 
   // Bar (main division) seconds — BPM = steps/min at main rate (spec §4.2).

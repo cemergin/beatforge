@@ -67,25 +67,6 @@ function loadRegion(slug: string, raw: unknown): Pattern[] {
       ? String((entry as { id: unknown }).id)
       : `index ${i}`;
     const issues = result.error.issues;
-
-    // Known pre-existing data bug: a handful of seed patterns have
-    // grouping that doesn't sum to steps (e.g. Adi Tala [4,2,2] with
-    // steps 16 — the grouping is beat-level but steps is subdivision-
-    // level). Runtime tolerates this today because seed patterns are
-    // never run through isValidPattern. We warn loudly but keep loading
-    // so this migration preserves shipped behavior byte-for-byte.
-    // TODO(data): fix these 11 patterns and remove this allowlist.
-    const onlyGroupingError =
-      issues.length === 1 &&
-      issues[0].path.join('.') === 'grouping' &&
-      issues[0].message.startsWith('grouping must sum to steps');
-
-    if (onlyGroupingError) {
-      console.warn(`[seed/${slug}] pattern "${id}": grouping does not sum to steps — kept (pre-existing data bug)`);
-      out.push(entry as Pattern);
-      continue;
-    }
-
     const msg = issues
       .map((iss) => `${iss.path.join('.') || '<root>'}: ${iss.message}`)
       .join('; ');

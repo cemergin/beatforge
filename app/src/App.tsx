@@ -43,6 +43,17 @@ export default function App() {
   }
   const engine = engineRef.current;
 
+  // On unmount (HMR, full-tree teardown) release the Worker + ctx so
+  // they don't leak across reloads. React 19 StrictMode double-mounts
+  // in dev; dispose() is idempotent.
+  useEffect(() => {
+    const e = engine;
+    return () => {
+      e.dispose();
+      engineRef.current = null;
+    };
+  }, [engine]);
+
   const [theme, setTheme] = useState<Theme>(
     () => (localStorage.getItem('bf_theme') as Theme) || 'warm',
   );

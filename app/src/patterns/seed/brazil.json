@@ -1252,6 +1252,8 @@
     "timeSig": "2/4",
     "grouping": [
       4,
+      4,
+      4,
       4
     ],
     "stepUnit": 16,
@@ -1350,6 +1352,8 @@
     "genre": "ceremonial",
     "timeSig": "2/4",
     "grouping": [
+      4,
+      4,
       4,
       4
     ],
@@ -1747,6 +1751,8 @@
     "genre": "classical",
     "timeSig": "2/4",
     "grouping": [
+      4,
+      4,
       4,
       4
     ],
