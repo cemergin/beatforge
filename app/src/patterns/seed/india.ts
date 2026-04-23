@@ -25,6 +25,7 @@ export const INDIA_PATTERNS: Pattern[] = [
     instruments: ['tabla', 'sitar', 'sarod'],
     swingable: false,
     story: '16 beats, four vibhags, one of the most common cycles in Hindustani music. The khali on beat 9 is the moment everything relaxes before returning home.',
+    relatedIds: ['addha-tintal', 'tilwada', 'bollywood-classic', 'afghan-tabla-dhol'],
   },
   {
     id: 'dadra',
@@ -50,6 +51,7 @@ export const INDIA_PATTERNS: Pattern[] = [
     instruments: ['tabla', 'harmonium', 'sarangi'],
     swingable: false,
     story: 'A gentle 6-beat cycle that lilts like a waltz — the signature groove of thumri, bhajans, and romantic Bollywood ballads.',
+    relatedIds: ['keherwa', 'reng', 'mahur-68', 'afghan-tabla-dhol'],
   },
   {
     id: 'rupak',
@@ -151,6 +153,7 @@ export const INDIA_PATTERNS: Pattern[] = [
     instruments: ['tabla', 'dholak', 'harmonium'],
     swingable: false,
     story: 'The most common tala in Indian light music — bhajans, ghazals, qawwalis, and half the Bollywood catalogue rest on this 8-beat foundation.',
+    relatedIds: ['qawwali', 'bollywood-classic', 'dadra', 'afghan-tabla-dhol'],
   },
   {
     id: 'deepchandi',

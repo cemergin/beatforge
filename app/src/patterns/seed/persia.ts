@@ -253,6 +253,7 @@ export const PERSIA_PATTERNS: Pattern[] = [
     instruments: ['daf', 'tanbur', 'shamshal'],
     swingable: false,
     story: 'The asymmetric lilt of Kurdish folk — daf shimmering behind a tanbur drone. Played at Nowruz, sung for lost villages, stomped under the hem of a thousand-year-old line dance.',
+    relatedIds: ['devri-hindi', 'kalamatianos', 'lesnoto', 'afghan-attan'],
   },
   {
     id: 'daf-zikr',
@@ -278,6 +279,7 @@ export const PERSIA_PATTERNS: Pattern[] = [
     instruments: ['daf', 'tanbur', 'voice'],
     swingable: false,
     story: 'The Qadiri dervish lifts the daf, ringlets shimmering, and begins the long ascent toward ecstasy. Slow invocation at 60 BPM, relentless drive at 140 — the same pattern, carrying the zikr up the mountain.',
+    relatedIds: ['sufi-dhikr-circular', 'sufi-dhikr-sudan', 'dhamaal-sufi', 'ayoub'],
   },
   {
     id: 'bandari',
@@ -303,6 +305,7 @@ export const PERSIA_PATTERNS: Pattern[] = [
     instruments: ['dohol', 'kaser', 'jofti'],
     swingable: false,
     story: 'A Bushehr wedding — dohol, kaser, and the cymbals of the tus cutting through. Bandari is the African strand woven into Persian music, carrying zar healing rites across the Indian Ocean and depositing them on Iran\'s southern shore.',
+    relatedIds: ['persian-tehran-club', 'stambali', 'gnawa', 'khaliji-saudi'],
   },
   {
     id: 'pishdaramad',

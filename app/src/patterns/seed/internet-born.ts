@@ -52,6 +52,7 @@ export const INTERNET_BORN_PATTERNS: Pattern[] = [
     instruments: ['909', 'sample', 'filter-sweep'],
     swingable: false,
     story: 'Vaporwave\'s dance-floor descendant — 1980s Japanese city pop chopped, pitched up and layered with sidechain-pumped French house drums.',
+    relatedIds: ['vaporwave', 'disco-classic', 'nightcore'],
   },
 
   // ============================================================
@@ -110,6 +111,7 @@ export const INTERNET_BORN_PATTERNS: Pattern[] = [
     instruments: ['909', 'supersaw', 'vocal'],
     swingable: false,
     story: 'A Norwegian school project turned global YouTube genre — any trance track sped 25% with pitch raised to chipmunk pop, paired with anime thumbnails.',
+    relatedIds: ['hyperpop', 'happy-hardcore', 'future-funk', 'trance-classic'],
   },
 
   // ============================================================
@@ -139,6 +141,7 @@ export const INTERNET_BORN_PATTERNS: Pattern[] = [
     instruments: ['808', 'supersaw', 'bitcrush', 'vocal chop'],
     swingable: false,
     story: '100 gecs and PC Music blending trap, happy hardcore, ska-punk and nightcore in a sonic blender set on fire. Genre-shift within the bar is the point.',
+    relatedIds: ['nightcore', 'happy-hardcore', 'hiphop-trap-triplet', 'future-bass'],
   },
 
   // ============================================================
@@ -168,7 +171,7 @@ export const INTERNET_BORN_PATTERNS: Pattern[] = [
     instruments: ['808', 'saturated cowbell'],
     swingable: false,
     story: 'KORDHELL\'s "Murder In My Mind" soundtracked a million car-drift videos — relentless 8th-note cowbells distorted until they dominate the entire mix.',
-    relatedIds: ['hiphop-phonk'],
+    relatedIds: ['hiphop-phonk', 'phonk-brazilian', 'phonk-fish', 'hiphop-trap'],
   },
   {
     id: 'phonk-brazilian',
@@ -195,7 +198,7 @@ export const INTERNET_BORN_PATTERNS: Pattern[] = [
     instruments: ['808', 'cowbell', 'agogo'],
     swingable: false,
     story: 'Drift phonk collides with Rio baile funk — tamborzão kick syncopation under distorted 808 cowbells. Gym TikTok\'s soundtrack of choice.',
-    relatedIds: ['baile-funk-tamborzao', 'phonk-drift'],
+    relatedIds: ['baile-funk-tamborzao', 'phonk-drift', 'hiphop-phonk', 'phonk-fish'],
   },
   {
     id: 'phonk-fish',

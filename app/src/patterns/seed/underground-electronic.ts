@@ -29,7 +29,7 @@ export const UNDERGROUND_ELECTRONIC_PATTERNS: Pattern[] = [
     instruments: ['electric darbuka', 'auto-tune vocal', 'synth'],
     swingable: false,
     story: 'Cairo working-class wedding music — maqsoum patterns run through drum machines with auto-tuned vocals on top. The soundtrack of the 2011 revolution generation.',
-    relatedIds: ['maqsoum', 'shaabi-egyptian'],
+    relatedIds: ['maqsoum', 'shaabi-egyptian', 'shaabi-electronic', 'rai-electric'],
   },
   {
     id: 'dabke-electronic',
@@ -56,7 +56,7 @@ export const UNDERGROUND_ELECTRONIC_PATTERNS: Pattern[] = [
     instruments: ['Korg synth', 'electronic tabla', 'mijwiz'],
     swingable: false,
     story: 'Omar Souleyman and Rizan Sa\'id transformed dabke wedding music into its electric form — galloping triplet-feel kicks built for communal stamping at 170+.',
-    relatedIds: ['dabke', 'dabke-shamaliyya'],
+    relatedIds: ['dabke', 'dabke-shamaliyya', 'mahraganat', 'singeli'],
   },
   {
     id: 'shaabi-electronic',
@@ -110,7 +110,7 @@ export const UNDERGROUND_ELECTRONIC_PATTERNS: Pattern[] = [
     instruments: ['tombak', 'synth', 'santur'],
     swingable: false,
     story: 'Tehran underground house parties and LA diaspora clubs — bandari 6/8 dragged into electronic production with santur samples and auto-tuned Farsi vocals.',
-    relatedIds: ['bandari'],
+    relatedIds: ['bandari', 'reng', 'khaliji-saudi'],
   },
   {
     id: 'turkish-arabesk-remix',
@@ -168,7 +168,7 @@ export const UNDERGROUND_ELECTRONIC_PATTERNS: Pattern[] = [
     instruments: ['808', 'dhol', 'tumbi', 'shehnai'],
     swingable: false,
     story: 'Nucleya\'s Indian bass music — dhol "dha-ge-na-ti-na" patterns translated to kick-snare interaction with 808 sub-bass underneath the bhangra.',
-    relatedIds: ['bhangra'],
+    relatedIds: ['bhangra', 'punjabi-tal', 'hiphop-trap'],
   },
   {
     id: 'shanghai-bass',
@@ -225,6 +225,7 @@ export const UNDERGROUND_ELECTRONIC_PATTERNS: Pattern[] = [
     instruments: ['tribal perc', 'cowbell', 'synth'],
     swingable: false,
     story: 'Colombian tribal-house with cumbia DNA — "aleteo" (fluttering) refers to the twinkling triplet kick clusters mimicking bird-like movements.',
+    relatedIds: ['tribal-guarachero', 'reggaeton-dembow', 'moombahton'],
   },
 
   // ============================================================
@@ -333,6 +334,7 @@ export const UNDERGROUND_ELECTRONIC_PATTERNS: Pattern[] = [
     instruments: ['synth accordion', 'violin', 'darbuka'],
     swingable: false,
     story: 'Ceca Ražnatović\'s realm — Euro-disco 4/4 underneath Balkan folk melisma and microtonal bends. Controversial, omnipresent across the former Yugoslavia.',
+    relatedIds: ['cocek', 'arabesk', 'turkish-arabesk-remix'],
   },
 
   // ============================================================
@@ -363,6 +365,7 @@ export const UNDERGROUND_ELECTRONIC_PATTERNS: Pattern[] = [
     instruments: ['conga', 'bongo', 'shaker', 'pad'],
     swingable: false,
     story: 'Black Coffee\'s Grammy-winning strain of deep, spiritual house — four-on-the-floor with rich African percussion, warm pads and long DJ sets.',
+    relatedIds: ['house-deep', 'amapiano-groove', 'kwaito'],
   },
   {
     id: 'zouk-bass',
@@ -389,7 +392,7 @@ export const UNDERGROUND_ELECTRONIC_PATTERNS: Pattern[] = [
     instruments: ['808', 'tarraxo perc'],
     swingable: false,
     story: 'Buraka Som Sistema-adjacent Lisbon bass — 1980s French Antillean zouk slowed down and filled with heavy UK sub, with triplet-feel hi-hats for tarraxinha dancing.',
-    relatedIds: ['batida'],
+    relatedIds: ['batida', 'kizomba', 'kuduro', 'kompa'],
   },
   {
     id: 'batida',
@@ -416,6 +419,6 @@ export const UNDERGROUND_ELECTRONIC_PATTERNS: Pattern[] = [
     instruments: ['drum machine', 'kuduro perc', 'voice'],
     swingable: false,
     story: 'Príncipe Discos, DJ Marfox, DJ Nigga Fox — Lisbon\'s Angolan-Portuguese diaspora remaking kuduro and tarraxo into futurist club music.',
-    relatedIds: ['zouk-bass'],
+    relatedIds: ['zouk-bass', 'kuduro', 'semba'],
   },
 ];

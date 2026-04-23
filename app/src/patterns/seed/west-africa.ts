@@ -25,6 +25,7 @@ export const WEST_AFRICA_PATTERNS: Pattern[] = [
     instruments: ['gankogui', 'axatse', 'atsimevu'],
     swingable: false,
     story: 'An Anlo Ewe war dance from Ghana, now performed at funerals and festivals. The gankogui bell timeline holds everything together while sogo and atsimevu interlock.',
+    relatedIds: ['bembe-68', 'bembe', 'atsiagbekor', 'bomba-holande', 'buleria'],
   },
   {
     id: 'gahu',
@@ -76,6 +77,7 @@ export const WEST_AFRICA_PATTERNS: Pattern[] = [
     instruments: ['kpanlogo drums', 'nono bell', 'afiri'],
     swingable: false,
     story: 'Invented in 1960s Accra by Ga youth — a conga-based social dance that fused traditional Ga drumming with highlife and rock, now Ghana\'s de facto national rhythm.',
+    relatedIds: ['highlife-ghana', 'azonto'],
   },
   {
     id: 'kuku',
@@ -225,7 +227,7 @@ export const WEST_AFRICA_PATTERNS: Pattern[] = [
     instruments: ['agogô', 'bata', 'shekere'],
     swingable: false,
     story: 'The "standard pattern" — the 12/8 bell timeline that traveled from Yorubaland to Havana to Salvador and anchors half the African diaspora\'s music.',
-    relatedIds: ['bembe'],
+    relatedIds: ['bembe', 'agbekor', 'atsiagbekor', 'rumba-columbia', 'ijexa', 'bomba-holande', 'buleria'],
   },
   {
     id: 'djembe-standard',
@@ -507,7 +509,7 @@ export const WEST_AFRICA_PATTERNS: Pattern[] = [
     instruments: ['iya', 'itotele', 'okonkolo'],
     swingable: false,
     story: 'The fire-and-thunder rhythm for Shango, orisha of lightning. The three-drum Bata trio speaks Yoruba — here we collapse it: okonkolo timeline on HH, iya lead on KK, itotele response on SN.',
-    relatedIds: ['bembe-68'],
+    relatedIds: ['bembe-68', 'bembe', 'ijexa', 'rumba-columbia'],
   },
   {
     id: 'dundun-yoruba',
@@ -583,6 +585,7 @@ export const WEST_AFRICA_PATTERNS: Pattern[] = [
     instruments: ['guitar', 'horns', 'sikyi bell'],
     swingable: true,
     story: 'The sikyi bell timeline runs the whole of Ghanaian highlife — the cosmopolitan, horn-driven sound of E.T. Mensah and the guitar-band era.',
+    relatedIds: ['highlife-nigeria', 'soukous', 'azonto', 'afrobeats-naija'],
   },
   {
     id: 'afrobeat',
@@ -608,6 +611,7 @@ export const WEST_AFRICA_PATTERNS: Pattern[] = [
     instruments: ['drum kit', 'congas', 'shekere'],
     swingable: false,
     story: '"I play the drums as if I am four people." Tony Allen built Afrobeat\'s floating pocket by displacing the snare off the backbeat and weaving the kick around it.',
+    relatedIds: ['afrobeat-tony-allen', 'afrobeats-naija', 'afrobeats-modern', 'highlife-nigeria', 'funk-funky-drummer'],
   },
   {
     id: 'sabar',
@@ -633,5 +637,6 @@ export const WEST_AFRICA_PATTERNS: Pattern[] = [
     instruments: ['nder', 'mbung mbung', 'tungune'],
     swingable: false,
     story: 'The Wolof griot\'s drum family. The lead nder shouts rhythmic "bakks" — spoken-sentence phrases — that the dancers must answer with specific steps.',
+    relatedIds: ['mbalax', 'dundun-yoruba'],
   },
 ];

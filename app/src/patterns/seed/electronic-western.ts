@@ -28,6 +28,7 @@ export const ELECTRONIC_WESTERN_PATTERNS: Pattern[] = [
     instruments: ['MPC', 'SP-1200', 'vinyl'],
     swingable: true,
     story: 'The crunchy, sampled drum break of 1990s New York hip-hop — DJ Premier, Pete Rock, and the SP-1200. Kick, snare, and swung sixteenths on a chopped loop.',
+    relatedIds: ['funk-funky-drummer', 'dnb-amen-break', 'hiphop-lofi', 'rnb-neo-soul-dilla'],
   },
   {
     id: 'four-on-the-floor',
@@ -53,6 +54,7 @@ export const ELECTRONIC_WESTERN_PATTERNS: Pattern[] = [
     instruments: ['TR-909', 'clap', 'hi-hat'],
     swingable: false,
     story: 'Every 909 house record ever — four straight kicks, offbeat hats, clap on 2 and 4. The metronome-to-club pipeline in one bar.',
+    relatedIds: ['house-classic', 'disco-classic', 'techno-detroit', 'jamaica-steppers'],
   },
 
   // ============================================================
@@ -154,6 +156,7 @@ export const ELECTRONIC_WESTERN_PATTERNS: Pattern[] = [
     instruments: ['drum kit', 'hi-hat', 'cowbell'],
     swingable: false,
     story: 'Four-on-the-floor kick with pumping offbeat open hats — the sound of Studio 54, the Bee Gees, and the grandparent of every modern dance beat.',
+    relatedIds: ['house-classic', 'four-on-the-floor', 'makossa', 'future-funk'],
   },
   {
     id: 'country-train-beat',
@@ -282,6 +285,7 @@ export const ELECTRONIC_WESTERN_PATTERNS: Pattern[] = [
     instruments: ['drum kit', 'ghost notes'],
     swingable: true,
     story: 'Clyde Stubblefield\'s 1970 two-bar break for James Brown — the most sampled rhythm in recorded history. Ghost-note lace between the main hits carries the groove.',
+    relatedIds: ['boom-bap', 'afrobeat', 'afrobeat-tony-allen', 'funk-cissy-strut'],
   },
   {
     id: 'funk-cissy-strut',
@@ -332,6 +336,7 @@ export const ELECTRONIC_WESTERN_PATTERNS: Pattern[] = [
     instruments: ['snare', 'bass drum', 'brass band'],
     swingable: true,
     story: 'The syncopated parade rhythm that follows New Orleans brass bands down the street — African and Caribbean accents filtered through a marching drum tradition.',
+    relatedIds: ['son-clave', 'bomba-sica', 'mozambique', 'funk-cissy-strut'],
   },
   {
     id: 'funk-parliament',
@@ -408,6 +413,7 @@ export const ELECTRONIC_WESTERN_PATTERNS: Pattern[] = [
     instruments: ['MPC3000', 'Rhodes', 'bass'],
     swingable: true,
     story: 'J Dilla\'s signature — kick and snare pushed and dragged off the grid so the beat limps with a human wobble. Questlove built Voodoo around it.',
+    relatedIds: ['hiphop-lofi', 'lofi-hiphop-standard', 'boom-bap', 'rnb-neo-soul-ghost'],
   },
   {
     id: 'rnb-neo-soul-ghost',
@@ -593,6 +599,7 @@ export const ELECTRONIC_WESTERN_PATTERNS: Pattern[] = [
     instruments: ['808', 'hi-hat', 'clap'],
     swingable: false,
     story: 'Half-time feel at 140 — snare on beat 3 only, 808 sub-kick booming, skittering hi-hats. The Atlanta template that swallowed pop radio in the 2010s.',
+    relatedIds: ['hiphop-trap-triplet', 'trap-edm', 'future-bass', 'dubstep-classic'],
   },
   {
     id: 'hiphop-trap-triplet',
@@ -618,6 +625,7 @@ export const ELECTRONIC_WESTERN_PATTERNS: Pattern[] = [
     instruments: ['808', 'hi-hat'],
     swingable: false,
     story: 'Hi-hat triplet rolls fired before beats 2 and 4 — Lex Luger, Metro Boomin, the stuttering detail that made trap drums feel alive.',
+    relatedIds: ['hiphop-trap', 'hiphop-uk-drill', 'uk-drill', 'chicago-drill'],
   },
   {
     id: 'hiphop-lofi',
@@ -642,6 +650,7 @@ export const ELECTRONIC_WESTERN_PATTERNS: Pattern[] = [
     instruments: ['MPC', 'vinyl crackle', 'jazz samples'],
     swingable: true,
     story: 'Tape-saturated, swung, and deliberately imperfect — the Nujabes-to-YouTube-radio pipeline that made hip-hop drums into study music.',
+    relatedIds: ['lofi-hiphop-standard', 'boom-bap', 'rnb-neo-soul-dilla'],
   },
   {
     id: 'hiphop-uk-drill',
@@ -667,6 +676,7 @@ export const ELECTRONIC_WESTERN_PATTERNS: Pattern[] = [
     instruments: ['808', 'hi-hat'],
     swingable: false,
     story: 'South London by way of Chicago — sliding 808 bass, off-kilter kicks, and snare rolls. Drill\'s syncopation rewrote the hip-hop rulebook in the late 2010s.',
+    relatedIds: ['uk-drill', 'ny-drill', 'chicago-drill', 'hiphop-trap-triplet'],
   },
   {
     id: 'hiphop-phonk',
@@ -693,6 +703,7 @@ export const ELECTRONIC_WESTERN_PATTERNS: Pattern[] = [
     instruments: ['808', 'cowbell', 'vocal chop'],
     swingable: false,
     story: 'Memphis underground cassette rap looped through the internet and turned into drift-race music. Cowbell on the ands, 808s everywhere.',
+    relatedIds: ['phonk-drift', 'phonk-brazilian', 'phonk-fish'],
   },
   {
     id: 'hiphop-jersey-club',
@@ -719,6 +730,7 @@ export const ELECTRONIC_WESTERN_PATTERNS: Pattern[] = [
     instruments: ['808', 'bed squeak sample'],
     swingable: false,
     story: 'Newark club dance music — triplet kick burst ("bed-squeak") detonating on the ands, quintuplet chants on the breaks. Pure choreographed chaos.',
+    relatedIds: ['jersey-club', 'footwork', 'footwork-juke', 'baile-funk-tamborzao'],
   },
 
   // ============================================================
@@ -748,6 +760,7 @@ export const ELECTRONIC_WESTERN_PATTERNS: Pattern[] = [
     instruments: ['TR-909', 'clap'],
     swingable: false,
     story: 'Frankie Knuckles at the Warehouse — the stripped-down Roland-909 grid that built Chicago house and defined dance music worldwide.',
+    relatedIds: ['four-on-the-floor', 'house-deep', 'techno-detroit', 'kwaito', 'afro-house'],
   },
   {
     id: 'house-deep',
@@ -824,6 +837,7 @@ export const ELECTRONIC_WESTERN_PATTERNS: Pattern[] = [
     instruments: ['TR-909', 'synth'],
     swingable: false,
     story: 'Juan Atkins, Derrick May, Kevin Saunderson — "Strings of Life," "Big Fun." Detroit techno as Black futurism at the end of Motown.',
+    relatedIds: ['four-on-the-floor', 'techno-berlin', 'house-classic'],
   },
   {
     id: 'techno-berlin',
@@ -928,6 +942,7 @@ export const ELECTRONIC_WESTERN_PATTERNS: Pattern[] = [
     instruments: ['sub-bass', 'kit'],
     swingable: false,
     story: '140 BPM with a half-time snare on beat 3 — the South London template behind Skream, Benga, and every wobble bass on earth.',
+    relatedIds: ['uk-garage-2step', 'hiphop-trap', 'future-bass'],
   },
 
   // ============================================================
@@ -957,6 +972,7 @@ export const ELECTRONIC_WESTERN_PATTERNS: Pattern[] = [
     instruments: ['sampled break', 'drum kit'],
     swingable: false,
     story: 'Gregory Coleman\'s six-second drum break on The Winstons\' "Amen, Brother" (1969). Chopped, pitched, and relooped, it became the DNA of jungle, DnB, and half of UK electronic music.',
+    relatedIds: ['dnb-jungle', 'funk-funky-drummer', 'mashcore', 'footwork'],
   },
   {
     id: 'dnb-jungle',
@@ -1012,6 +1028,7 @@ export const ELECTRONIC_WESTERN_PATTERNS: Pattern[] = [
     instruments: ['ride cymbal', 'brushes', 'upright bass'],
     swingable: true,
     story: 'The spang-a-lang ride pattern, hat comping on 2 and 4, feathered bass drum. The backbone of every standard played after 1940.',
+    relatedIds: ['jazz-bebop', 'jazz-waltz', 'jazz-bossa-nova'],
   },
   {
     id: 'jazz-bebop',
@@ -1112,6 +1129,7 @@ export const ELECTRONIC_WESTERN_PATTERNS: Pattern[] = [
     instruments: ['brushes', 'cross-stick', 'nylon guitar'],
     swingable: false,
     story: 'Samba miniaturized for apartment music — Jobim, João Gilberto. Cross-stick clave on top, feathered kick below, hats whispering sixteenths.',
+    relatedIds: ['bossa-nova', 'samba-partido-alto', 'jazz-swing-medium'],
   },
 
   // ============================================================
@@ -1142,6 +1160,7 @@ export const ELECTRONIC_WESTERN_PATTERNS: Pattern[] = [
     instruments: ['drum kit', 'shekere', 'congas'],
     swingable: false,
     story: 'Tony Allen: "without Tony Allen, there would be no Afrobeat." Four limbs acting as four players — Fela Kuti\'s Africa 70 engine room.',
+    relatedIds: ['afrobeat', 'highlife-nigeria', 'afrobeats-naija', 'funk-funky-drummer'],
   },
   {
     id: 'afrobeats-modern',
@@ -1168,6 +1187,7 @@ export const ELECTRONIC_WESTERN_PATTERNS: Pattern[] = [
     instruments: ['drum machine', 'shaker', 'talking drum'],
     swingable: false,
     story: 'Wizkid, Burna Boy, Davido — Lagos pop built on kick bounce, skipping hi-hats, and a layer of handclaps. Global radio since the late 2010s.',
+    relatedIds: ['afrobeats-naija', 'afrobeat', 'amapiano-log-drum', 'bongo-flava'],
   },
   {
     id: 'amapiano-log-drum',
@@ -1194,6 +1214,7 @@ export const ELECTRONIC_WESTERN_PATTERNS: Pattern[] = [
     instruments: ['log drum', 'shaker', 'deep bass'],
     swingable: false,
     story: 'Johannesburg deep house mutated into a bass-heavy sub-genre — shuffling shaker, percussive log drum, and a tempo built for slow-dance soweto.',
+    relatedIds: ['amapiano-groove', 'kwaito', 'afro-house', 'afrobeats-naija'],
   },
   {
     id: 'gqom',
@@ -1220,6 +1241,7 @@ export const ELECTRONIC_WESTERN_PATTERNS: Pattern[] = [
     instruments: ['808', 'percussion'],
     swingable: false,
     story: 'Durban warehouse music — broken kick patterns, cavernous sub, percussive gqom ("drum" in isiZulu) clusters. Taxi-rank rhythm turned global.',
+    relatedIds: ['gqom-durban', 'amapiano-log-drum', 'kwaito'],
   },
   {
     id: 'footwork',
@@ -1246,6 +1268,7 @@ export const ELECTRONIC_WESTERN_PATTERNS: Pattern[] = [
     instruments: ['808', 'vocal chop'],
     swingable: false,
     story: 'DJ Rashad, Traxman — 160 BPM syncopated triplets and broken kicks built for competitive dance battles on the South Side of Chicago.',
+    relatedIds: ['footwork-juke', 'footwork-internet', 'jersey-club', 'dnb-amen-break'],
   },
   // reggaeton-dembow: canonical entry lives in caribbean.ts (region: caribbean).
   {

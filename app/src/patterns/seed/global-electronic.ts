@@ -137,6 +137,7 @@ export const GLOBAL_ELECTRONIC_PATTERNS: Pattern[] = [
     instruments: ['conga', 'timbale', 'aztec flute'],
     swingable: false,
     story: '3Ball MTY\'s Monterrey fusion — pre-Hispanic percussion and Aztec flute samples cascading over house kicks, pointy boots optional.',
+    relatedIds: ['guaracha-aleteo', 'reggaeton-dembow', 'moombahton'],
   },
   {
     id: 'baile-funk-tamborzao',
@@ -163,6 +164,7 @@ export const GLOBAL_ELECTRONIC_PATTERNS: Pattern[] = [
     instruments: ['808', 'tamborzao', 'mc'],
     swingable: false,
     story: 'Rio favela bass music — the tamborzão beat fuses capoeira, maculelê and candomblé through 808 drum machines. Space left for the MC to command the baile.',
+    relatedIds: ['phonk-brazilian', 'phonk-fish', 'maracatu', 'funana'],
   },
 
   // ============================================================
@@ -362,6 +364,7 @@ export const GLOBAL_ELECTRONIC_PATTERNS: Pattern[] = [
     instruments: ['808', 'drum machine'],
     swingable: false,
     story: 'Invented by accident in 2009 when Dave Nada slowed a Dutch-house record to reggaeton tempo. The halfway point between two scenes that refused to collide.',
+    relatedIds: ['reggaeton-dembow', 'big-room-house', 'tribal-guarachero'],
   },
   {
     id: 'gabber',

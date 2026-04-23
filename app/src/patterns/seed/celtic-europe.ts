@@ -126,7 +126,7 @@ export const CELTIC_EUROPE_PATTERNS: Pattern[] = [
     instruments: ['bodhrán', 'fiddle', 'flute'],
     swingable: false,
     story: 'The most graceful Irish form — three threes instead of two, a waltz-lilt with a distinctly Irish roll. Historically a woman\'s soft-shoe solo.',
-    relatedIds: ['jig'],
+    relatedIds: ['jig', 'semachi', 'yuruk-semai'],
   },
   {
     id: 'slide',
@@ -280,6 +280,7 @@ export const CELTIC_EUROPE_PATTERNS: Pattern[] = [
     instruments: ['accordion', 'fiddle', 'guitar'],
     swingable: false,
     story: 'A 19th-century "Scottish" dance invented in Bohemia — bouncy 4/4 with a hop on the fourth beat. Spread through dance halls from Scandinavia to the American frontier.',
+    relatedIds: ['xote', 'bourree'],
   },
   {
     id: 'czardas',
@@ -305,6 +306,7 @@ export const CELTIC_EUROPE_PATTERNS: Pattern[] = [
     instruments: ['violin', 'cimbalom', 'bass'],
     swingable: true,
     story: 'The Hungarian national dance — starts slow and stately (lassú), then explodes into wild accelerando (friss). Built by Romani musicians at Hussar recruiting parties.',
+    relatedIds: ['cocek', 'roman-havasi'],
   },
   {
     id: 'bourree',

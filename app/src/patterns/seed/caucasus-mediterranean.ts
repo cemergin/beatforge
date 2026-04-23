@@ -208,6 +208,7 @@ export const CAUCASUS_MEDITERRANEAN_PATTERNS: Pattern[] = [
     instruments: ['lyra', 'laouto', 'daouli'],
     swingable: false,
     story: '"Five steps" — a fast 3+2+3 showcase for male athletic ability with jumps, spins and aerial feats. Ottoman aksak DNA filtered through Cretan mountains.',
+    relatedIds: ['karsilama', 'aksak', 'zeybek'],
   },
   {
     id: 'sicilian-tamburello',
@@ -258,7 +259,7 @@ export const CAUCASUS_MEDITERRANEAN_PATTERNS: Pattern[] = [
     instruments: ['tamburello', 'violino', 'chitarra battente'],
     swingable: false,
     story: 'The trance rhythm of the tarantate — women bitten by imaginary spiders, danced for days until cured. The pizzica\'s relentless heartbeat built for exorcism.',
-    relatedIds: ['sicilian-tamburello', 'taranta'],
+    relatedIds: ['sicilian-tamburello', 'taranta', 'calabrian-tarantella', 'gnawa-lila', 'sufi-dhikr-circular'],
   },
   {
     id: 'calabrian-tarantella',
@@ -309,6 +310,7 @@ export const CAUCASUS_MEDITERRANEAN_PATTERNS: Pattern[] = [
     instruments: ['bouzouki', 'baglama', 'voice'],
     swingable: false,
     story: 'A masculine solo dance in 9/4 — eyes lowered, arms outstretched, improvising private sorrow over a rebetiko bouzouki. Nobody else steps into the ring.',
+    relatedIds: ['karsilama', 'aksak', 'zeybek', 'hasapiko'],
   },
   {
     id: 'tsifteteli',
@@ -334,7 +336,7 @@ export const CAUCASUS_MEDITERRANEAN_PATTERNS: Pattern[] = [
     instruments: ['bouzouki', 'darbuka', 'ud'],
     swingable: false,
     story: 'The Greek cousin of çiftetelli — Ottoman belly-dance rhythm carried across the Aegean with the refugees of 1923, Americanised through rebetiko cafes.',
-    relatedIds: ['chiftetelli'],
+    relatedIds: ['chiftetelli', 'cocek', 'baladi'],
   },
   {
     id: 'sardinian-ballu-tundu',
@@ -384,6 +386,6 @@ export const CAUCASUS_MEDITERRANEAN_PATTERNS: Pattern[] = [
     instruments: ['daf', 'bendir', 'voice'],
     swingable: false,
     story: 'The dhikr arc — slow meditation accelerating to ecstatic whirling. Daf metal rings shimmer from silence to a continuous wash as brainwaves entrain to the frame drum.',
-    relatedIds: ['daf-zikr'],
+    relatedIds: ['daf-zikr', 'sufi-dhikr-sudan', 'ayoub', 'dhamaal-sufi', 'qawwali'],
   },
 ];

@@ -28,6 +28,7 @@ export const CENTRAL_ASIAN_PACIFIC_PATTERNS: Pattern[] = [
     instruments: ['doira', 'dutar'],
     swingable: false,
     story: 'The foundational "Bum–Bak" alternation every doira student learns. Metal rings shimmer on every edge stroke underneath Uzbek folk song and Shashmaqom.',
+    relatedIds: ['reng', 'khaliji-saudi', 'turkmen-suzme'],
   },
   {
     id: 'uzbek-lapar',
@@ -78,6 +79,7 @@ export const CENTRAL_ASIAN_PACIFIC_PATTERNS: Pattern[] = [
     instruments: ['dumbak', 'dutar', 'gijak'],
     swingable: false,
     story: 'Tajik dumbak (tablak) patterns bridge Persian zarb technique and Central Asian doira language — doum on centre, tek on the edge, ghost notes threading between.',
+    relatedIds: ['tasnif-4-4', 'uzbek-doira-basic', 'maqsoum'],
   },
   {
     id: 'uyghur-muqam-78',
@@ -103,7 +105,7 @@ export const CENTRAL_ASIAN_PACIFIC_PATTERNS: Pattern[] = [
     instruments: ['dap', 'rubab', 'satar'],
     swingable: false,
     story: 'Aqsaq ("limping") 2+2+3 cycle from the Mashrap dance section of the Twelve Muqam. Dap frame drum rings chime on every edge stroke.',
-    relatedIds: ['karsilama'],
+    relatedIds: ['karsilama', 'ruchenitsa', 'horon', 'eleno-mome'],
   },
   {
     id: 'turkmen-suzme',
@@ -154,6 +156,7 @@ export const CENTRAL_ASIAN_PACIFIC_PATTERNS: Pattern[] = [
     instruments: ['dhol', 'sorna'],
     swingable: false,
     story: 'Afghanistan\'s national dance — a 3+2+2 circle that starts dignified and accelerates for hours. The dhol drives the spiral, hundreds of feet answering.',
+    relatedIds: ['kalamatianos', 'lesnoto', 'devri-hindi', 'kurdish-7-8'],
   },
   {
     id: 'afghan-tabla-dhol',
@@ -179,6 +182,7 @@ export const CENTRAL_ASIAN_PACIFIC_PATTERNS: Pattern[] = [
     instruments: ['tabla', 'dhol', 'rubab', 'harmonium'],
     swingable: false,
     story: 'Kabul radio orchestras stacked Indian tabla under Pashtun dhol — Ahmad Zahir, Ustad Sarahang and the soft-power soundtrack of 1970s Afghanistan.',
+    relatedIds: ['keherwa', 'tintal', 'bhangra', 'qawwali'],
   },
   {
     id: 'kyrgyz-komuz',

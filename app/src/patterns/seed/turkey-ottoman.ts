@@ -26,7 +26,7 @@ export const TURKEY_OTTOMAN_PATTERNS: Pattern[] = [
     swingable: false,
     story:
       'Karşılama means "face to face" — the dance has two rows of dancers greeting each other. The 2+2+2+3 grouping gives the whole thing its iconic skip.',
-    relatedIds: ['daichovo'],
+    relatedIds: ['daichovo', 'aksak', 'roman-havasi', 'uyghur-muqam-78', 'zeibekiko'],
   },
   {
     id: 'horon',
@@ -52,7 +52,7 @@ export const TURKEY_OTTOMAN_PATTERNS: Pattern[] = [
     instruments: ['kemençe', 'davul', 'tulum'],
     swingable: false,
     story: 'Horon is the fisherman shaking on a trawler deck. Played at Mach speed on kemençe and davul.',
-    relatedIds: ['ruchenitsa'],
+    relatedIds: ['ruchenitsa', 'eleno-mome', 'trite-puti'],
   },
   {
     id: 'turk-aksagi',
@@ -103,6 +103,7 @@ export const TURKEY_OTTOMAN_PATTERNS: Pattern[] = [
     instruments: ['kudüm', 'bendir', 'ney'],
     swingable: false,
     story: 'Two Türk Aksağıs stacked — 2+3+2+3. The archetypal Ottoman asymmetric.',
+    relatedIds: ['jhaptal', 'samai-thaqil', 'jurjina'],
   },
   {
     id: 'duyek',
@@ -254,7 +255,7 @@ export const TURKEY_OTTOMAN_PATTERNS: Pattern[] = [
     instruments: ['kudüm', 'ud', 'ney'],
     swingable: false,
     story: '"Aksak" literally means limping — nine beats that tilt forward with every measure. The classical, measured sibling of Karşılama, spun slower for refined vocal sarkı.',
-    relatedIds: ['karsilama', 'agir-aksak'],
+    relatedIds: ['karsilama', 'agir-aksak', 'daichovo', 'zeibekiko', 'roman-havasi'],
   },
   {
     id: 'agir-aksak',
@@ -331,7 +332,7 @@ export const TURKEY_OTTOMAN_PATTERNS: Pattern[] = [
     instruments: ['davul', 'zurna', 'bağlama'],
     swingable: false,
     story: 'The solemn warrior dance of the Aegean Zeybeks — crouching, turning, swooping like an eagle. Each movement is deliberate, and the slow 9/8 leaves room for every deliberate step.',
-    relatedIds: ['aksak'],
+    relatedIds: ['aksak', 'karsilama', 'zeibekiko'],
   },
   {
     id: 'halay',
@@ -382,7 +383,7 @@ export const TURKEY_OTTOMAN_PATTERNS: Pattern[] = [
     instruments: ['darbuka', 'clarinet', 'violin'],
     swingable: false,
     story: 'Karşılama pushed into a sweat by an Edirne Romani clarinettist. More syncopation, more grease — the sound of a wedding already four hours deep.',
-    relatedIds: ['karsilama', 'cocek'],
+    relatedIds: ['karsilama', 'cocek', 'daichovo', 'aksak'],
   },
   {
     id: 'kasap-havasi',
@@ -408,7 +409,7 @@ export const TURKEY_OTTOMAN_PATTERNS: Pattern[] = [
     instruments: ['davul', 'zurna', 'darbuka'],
     swingable: false,
     story: 'The butchers\' dance — a stomping Thracian cousin of Karşılama, heavier on the foot, played outdoors where the davul has to cut through open air.',
-    relatedIds: ['karsilama'],
+    relatedIds: ['karsilama', 'hasapiko', 'roman-havasi'],
   },
   {
     id: 'curcuna-fast',
@@ -434,7 +435,7 @@ export const TURKEY_OTTOMAN_PATTERNS: Pattern[] = [
     instruments: ['kudüm', 'ud', 'ney'],
     swingable: false,
     story: 'A faster cousin of Curcuna grouped 3+2+2+3 — the same asymmetric skeleton, but pushed toward semi-classical ensemble playing where it shares territory with Arab Samai Thaqil.',
-    relatedIds: ['curcuna', 'samai-thaqil'],
+    relatedIds: ['curcuna', 'samai-thaqil', 'jurjina'],
   },
   {
     id: 'arabesk',
@@ -460,6 +461,7 @@ export const TURKEY_OTTOMAN_PATTERNS: Pattern[] = [
     instruments: ['darbuka', 'bağlama', 'strings'],
     swingable: false,
     story: 'Orhan Gencebay turning the bağlama toward Cairo, Ibrahim Tatlıses wailing through a cassette radio in a minibus. Heavy, slow, drenched in fate — the music of Istanbul\'s gecekondu migrations.',
+    relatedIds: ['turkish-arabesk-remix', 'maqsoum', 'shaabi-egyptian'],
   },
   {
     id: 'anadolu-rock',

@@ -25,7 +25,7 @@ export const IBERIA_FLAMENCO_PATTERNS: Pattern[] = [
     instruments: ['cajón', 'palmas', 'guitarra'],
     swingable: false,
     story: 'The fastest flamenco palo — the climax of any Gitano fiesta in Jerez. Accents fall on 3, 6, 8, 10, and 12, but phrases typically start on beat 12 itself.',
-    relatedIds: ['solea'],
+    relatedIds: ['solea', 'bembe', 'bembe-68', 'alegrias'],
   },
   {
     id: 'solea',
@@ -51,7 +51,7 @@ export const IBERIA_FLAMENCO_PATTERNS: Pattern[] = [
     instruments: ['cajón', 'palmas', 'guitarra'],
     swingable: false,
     story: 'The "mother" of flamenco — slow, dignified, deeply emotional. Same 12-beat accent pattern as bulería but at half the speed and twice the weight.',
-    relatedIds: ['buleria'],
+    relatedIds: ['buleria', 'bembe', 'bembe-68', 'zambra', 'gnawa'],
   },
   {
     id: 'tangos-flamenco',
@@ -154,7 +154,7 @@ export const IBERIA_FLAMENCO_PATTERNS: Pattern[] = [
     instruments: ['cajón', 'palmas', 'guitarra'],
     swingable: false,
     story: 'The most internationally famous flamenco groove — Gipsy Kings territory. A 3+3+2 tresillo from Cuba married to tangos compás, strummed with the ventilador fan technique.',
-    relatedIds: ['tangos-flamenco'],
+    relatedIds: ['tangos-flamenco', 'son-clave', 'bomba-sica', 'colombianas'],
   },
   {
     id: 'fandango-huelva',
@@ -255,7 +255,7 @@ export const IBERIA_FLAMENCO_PATTERNS: Pattern[] = [
     instruments: ['cajón', 'palmas', 'guitarra'],
     swingable: false,
     story: 'The Spanish-Argentine round-trip — the Rio de la Plata milonga reimagined as a flamenco palo. Habanera-bass undertow under the cajón, saudade in the melody.',
-    relatedIds: ['tangos-flamenco'],
+    relatedIds: ['tangos-flamenco', 'danzon', 'bolero'],
   },
   {
     id: 'zambra',
@@ -281,7 +281,7 @@ export const IBERIA_FLAMENCO_PATTERNS: Pattern[] = [
     instruments: ['cajón', 'palmas', 'guitarra', 'castañuelas'],
     swingable: false,
     story: 'The cave-dance of Sacromonte — Moorish wedding music preserved by Granada\'s Gitanos after the Reconquista. A hypnotic tangos cousin with a Maghrebi shimmer.',
-    relatedIds: ['tangos-flamenco'],
+    relatedIds: ['tangos-flamenco', 'chaabi-moroccan', 'gnawa'],
   },
   {
     id: 'verdiales',
@@ -385,6 +385,6 @@ export const IBERIA_FLAMENCO_PATTERNS: Pattern[] = [
     instruments: ['cajón', 'palmas', 'guitarra'],
     swingable: false,
     story: 'An invented round-trip palo — Pepe Marchena wrote it in the 1930s to evoke an imagined Colombia. Tangos bones, rumba tresillo, a postcard rhythm that stuck.',
-    relatedIds: ['rumba-flamenca', 'tangos-flamenco'],
+    relatedIds: ['rumba-flamenca', 'tangos-flamenco', 'bomba-sica'],
   },
 ];

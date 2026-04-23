@@ -25,6 +25,7 @@ export const CUBA_AFROCARIBBEAN_PATTERNS: Pattern[] = [
     instruments: ['claves', 'congas', 'bongos'],
     swingable: true,
     story: 'The spine of every Cuban son, salsa, and half of Latin music since 1800.',
+    relatedIds: ['bossa-nova', 'samba-partido-alto', 'funk-second-line', 'bomba-sica', 'agbekor'],
   },
   {
     id: 'bembe',
@@ -50,6 +51,7 @@ export const CUBA_AFROCARIBBEAN_PATTERNS: Pattern[] = [
     instruments: ['atoke', 'congas', 'bata'],
     swingable: false,
     story: 'The 12/8 bell that underlies bembé, abakuá, and half the West African diaspora.',
+    relatedIds: ['bembe-68', 'agbekor', 'atsiagbekor', 'buleria', 'ijexa'],
   },
   {
     id: 'rumba-clave-3-2',
@@ -75,7 +77,7 @@ export const CUBA_AFROCARIBBEAN_PATTERNS: Pattern[] = [
     instruments: ['claves', 'congas', 'palitos'],
     swingable: true,
     story: "Rumba's clave — the three-side's last stroke comes one 16th later than son. That delay is everything.",
-    relatedIds: ['son-clave', 'guaguanco'],
+    relatedIds: ['son-clave', 'guaguanco', 'samba-partido-alto'],
   },
   {
     id: 'bolero',
@@ -151,7 +153,7 @@ export const CUBA_AFROCARIBBEAN_PATTERNS: Pattern[] = [
     instruments: ['timbales', 'mambo bell', 'conga'],
     swingable: true,
     story: 'The climax section of any salsa arrangement — when the band opens up and the mambo bell takes over.',
-    relatedIds: ['son-clave'],
+    relatedIds: ['son-clave', 'soukous', 'mozambique'],
   },
   {
     id: 'guaguanco',
@@ -177,7 +179,7 @@ export const CUBA_AFROCARIBBEAN_PATTERNS: Pattern[] = [
     instruments: ['conga', 'claves', 'palitos'],
     swingable: false,
     story: 'The most popular form of rumba — a secular ritual born in Havana courtyards, where a male dancer pursues a female dancer in stylized courtship.',
-    relatedIds: ['rumba-clave-3-2', 'rumba-columbia'],
+    relatedIds: ['rumba-clave-3-2', 'rumba-columbia', 'samba-de-roda', 'yambu'],
   },
   {
     id: 'rumba-columbia',
@@ -203,7 +205,7 @@ export const CUBA_AFROCARIBBEAN_PATTERNS: Pattern[] = [
     instruments: ['quinto', 'guataca', 'conga'],
     swingable: false,
     story: 'The fastest, most virtuosic rumba — a solo male dance of acrobatic and sometimes dangerous moves, rooted in Abakuá sacred rhythms from Calabar.',
-    relatedIds: ['bembe'],
+    relatedIds: ['bembe', 'bembe-68', 'bata-shango', 'agbekor'],
   },
   {
     id: 'comparsa',
@@ -306,6 +308,7 @@ export const CUBA_AFROCARIBBEAN_PATTERNS: Pattern[] = [
     instruments: ['timbales', 'güiro', 'piano'],
     swingable: false,
     story: 'Cuba\'s national dance in 1879 — a ballroom form built on the cinquillo (3+3+2 sub-divisional cell). The timbale\'s baqueteo pattern is the rhythmic spine.',
+    relatedIds: ['son-clave', 'bolero', 'milonga-flamenca'],
   },
   {
     id: 'songo',
@@ -434,7 +437,7 @@ export const CUBA_AFROCARIBBEAN_PATTERNS: Pattern[] = [
     instruments: ['bongó', 'marímbula', 'tres'],
     swingable: true,
     story: 'The father of son. In the eastern sugar plantations of Guantánamo the bongó was the timeline — wilder, more improvisatory, more West African than the son that would follow.',
-    relatedIds: ['son-clave'],
+    relatedIds: ['son-clave', 'soukous'],
   },
   {
     id: 'mozambique',
@@ -460,7 +463,7 @@ export const CUBA_AFROCARIBBEAN_PATTERNS: Pattern[] = [
     instruments: ['bell', 'conga', 'bombo'],
     swingable: false,
     story: 'Pedro "Pello el Afrokán" Izquierdo invented the mozambique for Havana\'s 1960s carnival. It crossed the straits to Eddie Palmieri and lit up New York salsa.',
-    relatedIds: ['comparsa'],
+    relatedIds: ['comparsa', 'funk-second-line'],
   },
   {
     id: 'bomba-sica',
@@ -486,6 +489,7 @@ export const CUBA_AFROCARIBBEAN_PATTERNS: Pattern[] = [
     instruments: ['buleador', 'subidor', 'cuá'],
     swingable: false,
     story: 'The most widespread bomba style, built on the 3-3-2 tresillo. In bomba the dancer leads and the subidor drummer must follow — the conversation is the music.',
+    relatedIds: ['son-clave', 'rumba-flamenca', 'kuduro'],
   },
   {
     id: 'bomba-holande',
@@ -511,7 +515,7 @@ export const CUBA_AFROCARIBBEAN_PATTERNS: Pattern[] = [
     instruments: ['buleador', 'subidor', 'cuá'],
     swingable: false,
     story: 'The 6/8 bomba that links Puerto Rican tradition back to West Africa. "Holandé" may nod to Dutch colonial traders — the rhythm sways like ocean swells.',
-    relatedIds: ['bomba-sica'],
+    relatedIds: ['bomba-sica', 'bembe', 'bembe-68', 'agbekor'],
   },
   {
     id: 'plena',
@@ -562,5 +566,6 @@ export const CUBA_AFROCARIBBEAN_PATTERNS: Pattern[] = [
     instruments: ['tambora', 'güira', 'accordion'],
     swingable: false,
     story: 'The national rhythm of the Dominican Republic — tambora and güira against an accordion. Trujillo promoted it as a tool of the state; the country made it a birthright.',
+    relatedIds: ['bachata', 'kompa'],
   },
 ];

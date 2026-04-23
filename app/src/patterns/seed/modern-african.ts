@@ -26,6 +26,7 @@ export const MODERN_AFRICAN_PATTERNS: Pattern[] = [
     instruments: ['guitar', 'conga', 'cowbell'],
     swingable: true,
     story: 'The rumba-section groove Franco and TPOK Jazz built the Kinshasa sound on. Cuban son records arrived in 1940s Léopoldville, Congolese musicians heard their own music in them, and sent it back out in Lingala.',
+    relatedIds: ['son-clave', 'mambo', 'sebene', 'ndombolo'],
   },
   {
     id: 'sebene',
@@ -134,7 +135,7 @@ export const MODERN_AFRICAN_PATTERNS: Pattern[] = [
     instruments: ['guitar', 'horn', 'conga'],
     swingable: true,
     story: 'The Igbo east\'s take on highlife — guitar-centred, horns on the side, and a bell pattern rolling under it all. Osadebe, Rex Lawson, Oliver De Coque wrote the book.',
-    relatedIds: ['highlife-ghana'],
+    relatedIds: ['highlife-ghana', 'afrobeat', 'afrobeats-naija', 'soukous'],
   },
   {
     id: 'juju',
@@ -242,6 +243,7 @@ export const MODERN_AFRICAN_PATTERNS: Pattern[] = [
     instruments: ['bass guitar', 'drum kit', 'horns'],
     swingable: false,
     story: 'Manu Dibango\'s "Soul Makossa" (1972) is the most sampled African song in history — Michael Jackson, Rihanna, and half of disco owe it royalties. The kick locks with the melodic Cameroonian bass and never lets go.',
+    relatedIds: ['disco-classic', 'afrobeat', 'soukous'],
   },
   {
     id: 'bikutsi',
@@ -295,6 +297,7 @@ export const MODERN_AFRICAN_PATTERNS: Pattern[] = [
     instruments: ['drum machine', 'synth bass', 'sampled vocal'],
     swingable: false,
     story: 'House music dropped to township speed — 100-115 BPM, heavier, lazier, defiantly local. Born in Soweto the year apartheid ended. Arthur Mafokate, Mandoza, Brenda Fassie sang it into the new South Africa.',
+    relatedIds: ['house-classic', 'amapiano-groove', 'amapiano-log-drum', 'afro-house'],
   },
   {
     id: 'gqom-durban',
@@ -453,6 +456,7 @@ export const MODERN_AFRICAN_PATTERNS: Pattern[] = [
     instruments: ['drum machine', 'synth', 'ngoma sample'],
     swingable: false,
     story: 'Dar es Salaam\'s chart sound, filtered through American R&B production and taarab melody. Diamond Platnumz and the Wasafi camp turned the 3+3+2 kick into East Africa\'s default pop clock.',
+    relatedIds: ['taarab', 'afrobeats-naija', 'reggaeton-dembow', 'singeli'],
   },
   {
     id: 'gengetone',
@@ -480,6 +484,7 @@ export const MODERN_AFRICAN_PATTERNS: Pattern[] = [
     instruments: ['drum machine', 'sub bass', 'vocal ad-libs'],
     swingable: false,
     story: 'Nairobi\'s 2018 breakout — rapped in Sheng slang over dem-bow kicks and trap hats. Ethic Entertainment, Sailors Gang, Boondocks Gang: five or six vocalists trading bars with the crowd shouting back.',
+    relatedIds: ['reggaeton-dembow', 'afrobeats-naija', 'bongo-flava'],
   },
   {
     id: 'kuduro',
@@ -506,6 +511,7 @@ export const MODERN_AFRICAN_PATTERNS: Pattern[] = [
     instruments: ['drum machine', 'synth', 'sampled percussion'],
     swingable: false,
     story: '"Hard ass" — born in Luanda\'s musseques during the civil war, made on whatever hardware was around. Tony Amado glued house\'s four-on-the-floor to the tresillo snare and never looked back.',
+    relatedIds: ['batida', 'zouk-bass', 'semba', 'bomba-sica'],
   },
   {
     id: 'semba',
@@ -532,6 +538,7 @@ export const MODERN_AFRICAN_PATTERNS: Pattern[] = [
     instruments: ['guitar', 'reco-reco', 'dikanza', 'drum kit'],
     swingable: true,
     story: 'The Angolan dance — and the word — that crossed the Atlantic with enslaved people and evolved into Brazilian samba. The reco-reco scrape on top of this galloping groove is the same rhythmic DNA.',
+    relatedIds: ['samba-de-roda', 'samba-partido-alto', 'kizomba'],
   },
   {
     id: 'kizomba',
@@ -558,7 +565,7 @@ export const MODERN_AFRICAN_PATTERNS: Pattern[] = [
     instruments: ['drum machine', 'synth bass', 'saxophone'],
     swingable: false,
     story: 'Slowed-down semba crossed with Antillean zouk, built for close partner dancing. The snare pulls gently on the "and" of two — the tiny hook everything else in the song leans on.',
-    relatedIds: ['semba'],
+    relatedIds: ['semba', 'zouk-bass', 'kompa'],
   },
   {
     id: 'funana',
@@ -666,7 +673,7 @@ export const MODERN_AFRICAN_PATTERNS: Pattern[] = [
     instruments: ['drum machine', 'log-drum synth', 'talking drum sample'],
     swingable: false,
     story: 'Distinct from Fela\'s Afrobeat — the modern Nigerian chart template behind Wizkid, Burna Boy, Davido. Tekno\'s "Pana" codified the pon-pon log-drum bounce that now runs half of global pop.',
-    relatedIds: ['afrobeats-modern', 'afrobeat'],
+    relatedIds: ['afrobeats-modern', 'afrobeat', 'highlife-nigeria', 'amapiano-groove', 'bongo-flava'],
   },
   {
     id: 'azonto',
@@ -721,7 +728,7 @@ export const MODERN_AFRICAN_PATTERNS: Pattern[] = [
     instruments: ['drum machine', 'log drum synth', 'shaker', 'piano'],
     swingable: false,
     story: 'The kick sits on the floor, the shaker counts half-notes, and the log drum bounces in the gaps. Kabza De Small and DJ Maphorisa built it from kwaito\'s tempo and deep-house\'s patience.',
-    relatedIds: ['amapiano-log-drum', 'kwaito'],
+    relatedIds: ['amapiano-log-drum', 'kwaito', 'afrobeats-naija', 'house-deep', 'afro-house'],
   },
   {
     id: 'zouglou',

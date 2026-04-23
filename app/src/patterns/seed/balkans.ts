@@ -25,7 +25,7 @@ export const BALKANS_PATTERNS: Pattern[] = [
     instruments: ['gaida', 'kaval', 'tapan'],
     swingable: false,
     story: "Bulgaria's most danced rhythm — \"quick-quick-sloooow\" is how kids learn it.",
-    relatedIds: ['horon'],
+    relatedIds: ['horon', 'eleno-mome', 'trite-puti'],
   },
   {
     id: 'kopanitsa',
@@ -76,7 +76,7 @@ export const BALKANS_PATTERNS: Pattern[] = [
     instruments: ['gaida', 'kaval'],
     swingable: false,
     story: 'Same 2+2+2+3 skeleton as Karşılama but faster, bouncier, pan-flute territory.',
-    relatedIds: ['karsilama'],
+    relatedIds: ['karsilama', 'aksak', 'roman-havasi', 'uyghur-muqam-78'],
   },
   {
     id: 'cocek',
@@ -102,6 +102,7 @@ export const BALKANS_PATTERNS: Pattern[] = [
     instruments: ['zurna', 'tupan', 'clarinet'],
     swingable: false,
     story: 'The signature Romani dance of the Balkans — descended from Ottoman court dance, played on zurna and tupan at weddings.',
+    relatedIds: ['roman-havasi', 'chiftetelli', 'karsilama'],
   },
   {
     id: 'kalamatianos',
@@ -127,6 +128,7 @@ export const BALKANS_PATTERNS: Pattern[] = [
     instruments: ['bouzouki', 'klarino', 'toubeleki'],
     swingable: false,
     story: 'The Greek national circle dance. Long-short-short, everyone holding hands.',
+    relatedIds: ['lesnoto', 'devri-hindi', 'afghan-attan', 'kurdish-7-8'],
   },
   {
     id: 'gankino',
@@ -203,7 +205,7 @@ export const BALKANS_PATTERNS: Pattern[] = [
     instruments: ['gaida', 'tupan', 'kaval'],
     swingable: false,
     story: '"The easy one" — in name only. Long-short-short Macedonian oro, stately and communal, every wedding opens with it.',
-    relatedIds: ['kalamatianos'],
+    relatedIds: ['kalamatianos', 'devri-hindi', 'afghan-attan', 'kurdish-7-8'],
   },
   {
     id: 'syrtos',
@@ -279,6 +281,7 @@ export const BALKANS_PATTERNS: Pattern[] = [
     instruments: ['bouzouki', 'baglama', 'toubeleki'],
     swingable: false,
     story: 'The butchers\' dance of Constantinople — from kasap (Turkish for butcher). The fast version became the Zorba sirtaki the world knows.',
+    relatedIds: ['kasap-havasi', 'cocek'],
   },
   {
     id: 'eleno-mome',

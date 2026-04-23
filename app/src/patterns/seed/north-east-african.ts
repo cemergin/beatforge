@@ -26,7 +26,7 @@ export const NORTH_EAST_AFRICAN_PATTERNS: Pattern[] = [
     instruments: ['guembri', 'qraqeb', 'tbel'],
     swingable: false,
     story: 'The trance-induction phase of a lila — the maâlem pushes tempo from a meditative walk to a full gallop over ten minutes. Start slow and let the Speed Trainer do the work the qraqeb ensemble used to.',
-    relatedIds: ['gnawa'],
+    relatedIds: ['gnawa', 'stambali', 'bembe', 'bembe-68', 'tuareg-tende'],
   },
   {
     id: 'gnawa-banga',
@@ -106,7 +106,7 @@ export const NORTH_EAST_AFRICAN_PATTERNS: Pattern[] = [
     instruments: ['drum machine', 'synthesizer', 'electric bass'],
     swingable: false,
     story: 'Cheb Khaled, Cheb Mami, Rachid Taha — the 1980s Oran generation that fused derbouka patterns with drum machines, funk bass, and pop production. The old maqsum pulse is still there under the kick.',
-    relatedIds: ['rai', 'maqsoum'],
+    relatedIds: ['rai', 'maqsoum', 'mahraganat', 'chaabi-algerian', 'shaabi-electronic'],
   },
   {
     id: 'stambali',
@@ -132,7 +132,7 @@ export const NORTH_EAST_AFRICAN_PATTERNS: Pattern[] = [
     instruments: ['gumbri', 'shqashiq', 'tabla'],
     swingable: false,
     story: 'Tunisia\'s cousin to Moroccan Gnawa — the same West African spiritual technology carried across the Sahara, here on the endangered list. The 4-beat pantheon cycle is the most common; other spirits demand 3- or 5-beat patterns.',
-    relatedIds: ['gnawa', 'gnawa-lila'],
+    relatedIds: ['gnawa', 'gnawa-lila', 'bembe', 'sabar', 'tuareg-tende'],
   },
   {
     id: 'tuareg-tende',
@@ -475,7 +475,7 @@ export const NORTH_EAST_AFRICAN_PATTERNS: Pattern[] = [
     instruments: ['darbuka', 'riqq', 'oud', 'violin'],
     swingable: true,
     story: 'A thousand years of Swahili-coast mixing distilled into a single groove — Arab iqaʿat on the darbuka, Indian-ocean riqq jingles, African swing underneath, Swahili poetry riding all of it.',
-    relatedIds: ['maqsoum'],
+    relatedIds: ['maqsoum', 'bongo-flava', 'baladi', 'chaabi-moroccan'],
   },
   {
     id: 'chakacha',
@@ -527,7 +527,7 @@ export const NORTH_EAST_AFRICAN_PATTERNS: Pattern[] = [
     instruments: ['daluka frame drum', 'tar', 'handclap'],
     swingable: false,
     story: 'The ultimate Speed Trainer rhythm — a Sudanese dhikr circle can start at 60 BPM for the first "Allah" and be shouting at 170 BPM an hour later. The pattern barely changes; the tempo is the ceremony.',
-    relatedIds: ['dhamaal-sufi', 'daf-zikr'],
+    relatedIds: ['dhamaal-sufi', 'daf-zikr', 'ayoub', 'sufi-dhikr-circular', 'qawwali'],
   },
   {
     id: 'nubian-tar',

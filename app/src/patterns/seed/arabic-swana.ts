@@ -25,6 +25,7 @@ export const ARABIC_SWANA_PATTERNS: Pattern[] = [
     instruments: ['darbuka', 'riqq', 'tabla baladi'],
     swingable: false,
     story: 'Dum-tek-tek, dum-tek. If you\'ve heard any Arabic pop song, you\'ve heard this — the most ubiquitous rhythm in the SWANA world.',
+    relatedIds: ['mahraganat', 'rai-electric', 'taarab', 'shaabi-egyptian', 'chiftetelli'],
   },
   {
     id: 'baladi',
@@ -50,7 +51,7 @@ export const ARABIC_SWANA_PATTERNS: Pattern[] = [
     instruments: ['tabla baladi', 'mizmar', 'rebaba'],
     swingable: false,
     story: '"Baladi" means "of the country" — heavier and earthier than Maqsoum thanks to the double doum at the top of the bar.',
-    relatedIds: ['maqsoum'],
+    relatedIds: ['maqsoum', 'saidi', 'shaabi-egyptian'],
   },
   {
     id: 'saidi',
@@ -157,6 +158,7 @@ export const ARABIC_SWANA_PATTERNS: Pattern[] = [
     instruments: ['bendir', 'daf', 'tar'],
     swingable: false,
     story: 'One of the oldest rhythms in SWANA — hypnotic simplicity that drives Sufi dhikr and zar healing ceremonies into trance as the tempo climbs.',
+    relatedIds: ['sufi-dhikr-circular', 'daf-zikr', 'sufi-dhikr-sudan', 'stambali'],
   },
   {
     id: 'samai-thaqil',
@@ -181,6 +183,7 @@ export const ARABIC_SWANA_PATTERNS: Pattern[] = [
     instruments: ['riqq', 'qanun', 'ud'],
     swingable: false,
     story: 'The grand classical rhythm of the samai compositional form — stately, slow, and central to the Arabic wasla suite.',
+    relatedIds: ['curcuna-fast', 'curcuna', 'jurjina'],
   },
   {
     id: 'chiftetelli',
@@ -206,6 +209,7 @@ export const ARABIC_SWANA_PATTERNS: Pattern[] = [
     instruments: ['darbuka', 'ud', 'clarinet'],
     swingable: false,
     story: 'The iconic belly-dance rhythm — "double-stringed," deep in Romani and oriental dance traditions from Istanbul to Athens.',
+    relatedIds: ['tsifteteli', 'cocek', 'roman-havasi'],
   },
   {
     id: 'malfuf',
@@ -306,7 +310,7 @@ export const ARABIC_SWANA_PATTERNS: Pattern[] = [
     instruments: ['darbuka', 'keyboard', 'electric organ'],
     swingable: false,
     story: 'Cairo\'s street music — raw, proud, and unapologetically working-class. Ahmed Adaweyah hollering at a wedding, the tabla busier and more improvisatory than Maqsoum would ever allow.',
-    relatedIds: ['maqsoum'],
+    relatedIds: ['maqsoum', 'mahraganat', 'shaabi-electronic'],
   },
   {
     id: 'dabke',
@@ -331,6 +335,7 @@ export const ARABIC_SWANA_PATTERNS: Pattern[] = [
     instruments: ['tablah', 'mijwiz', 'bouzouk'],
     swingable: false,
     story: 'Linked arms, stomping feet, and a lawweeh waving a handkerchief at the head of the line. The displaced accents dictate exactly where the heel hits the floor — from Beirut to Amman, the sound of a celebration getting serious.',
+    relatedIds: ['dabke-electronic', 'dabke-shamaliyya', 'halay', 'kalamatianos'],
   },
   {
     id: 'dabke-shamaliyya',
@@ -431,6 +436,7 @@ export const ARABIC_SWANA_PATTERNS: Pattern[] = [
     instruments: ['mirwas', 'tabl', 'oud'],
     swingable: false,
     story: 'The compound 6/8 that underlies Gulf music from Riyadh to Manama — samri, ardha, modern Khaliji pop. Its swaying pulse echoes the maritime trade routes that made the region.',
+    relatedIds: ['samri', 'bandari', 'chaabi-moroccan'],
   },
   {
     id: 'samri',
@@ -481,6 +487,7 @@ export const ARABIC_SWANA_PATTERNS: Pattern[] = [
     instruments: ['derbouka', 'bendir', 'oud'],
     swingable: false,
     story: 'Algiers on a Saturday night — the medina leaking into the casbah, a derbouka driving a circle of clapping hands. Distinct from Egyptian shaabi: more Andalusian sway, less Cairo growl.',
+    relatedIds: ['chaabi-moroccan', 'rai'],
   },
   {
     id: 'gnawa',
@@ -506,6 +513,7 @@ export const ARABIC_SWANA_PATTERNS: Pattern[] = [
     instruments: ['qraqeb', 'tbel', 'guembri'],
     swingable: false,
     story: 'Metal qraqeb ringing through a Marrakech night. The lila is a trance — played until dawn to summon mluk spirits and heal the possessed. Sub-Saharan roots surface through every triplet-leaning kick.',
+    relatedIds: ['gnawa-lila', 'gnawa-banga', 'stambali', 'bembe-68', 'sabar'],
   },
   {
     id: 'rai',
@@ -531,6 +539,7 @@ export const ARABIC_SWANA_PATTERNS: Pattern[] = [
     instruments: ['derbouka', 'drum machine', 'synth'],
     swingable: false,
     story: 'Cheb Khaled hollering through a drum machine in an Oran cafe. Derbouka patterns captured in an 1980s rhythm box — the export groove of North African pop, with "Didi" and "Aicha" carrying it worldwide.',
+    relatedIds: ['rai-electric', 'maqsoum', 'chaabi-algerian'],
   },
   {
     id: 'iraqi-choubi',
@@ -581,6 +590,6 @@ export const ARABIC_SWANA_PATTERNS: Pattern[] = [
     instruments: ['santur', 'joza', 'dumbek'],
     swingable: false,
     story: 'The signature rhythm of the Iraqi maqam tradition — 10 beats that rock unlike anything in the Arab world. In a Baghdad chaikhana a chalghi ensemble drops into Jurjina and the whole room settles around the vocalist.',
-    relatedIds: ['samai-thaqil'],
+    relatedIds: ['samai-thaqil', 'curcuna', 'curcuna-fast'],
   },
 ];

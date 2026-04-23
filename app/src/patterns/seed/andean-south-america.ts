@@ -25,6 +25,7 @@ export const ANDEAN_SOUTH_AMERICA_PATTERNS: Pattern[] = [
     instruments: ['bombo andino', 'charango', 'quena'],
     swingable: false,
     story: 'The Andes\' most widespread dance — a pre-Hispanic heartbeat that still fills every highland festival from Cuzco to La Paz. The bounce is quarter-eighth-eighth: long-short-short.',
+    relatedIds: ['carnavalito', 'cueca'],
   },
   {
     id: 'chacarera',
@@ -102,7 +103,7 @@ export const ANDEAN_SOUTH_AMERICA_PATTERNS: Pattern[] = [
     instruments: ['guitar', 'accordion', 'handclaps'],
     swingable: false,
     story: 'Chile\'s national dance (declared 1979). A rooster courts a hen — handkerchiefs wave overhead, feet stamp the sesquiáltera, where 6/8 melody and 3/4 claps occupy the same bar.',
-    relatedIds: ['zamba', 'chacarera'],
+    relatedIds: ['zamba', 'chacarera', 'fandango-huelva', 'verdiales'],
   },
   {
     id: 'carnavalito',

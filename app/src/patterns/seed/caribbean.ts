@@ -25,7 +25,7 @@ export const CARIBBEAN_PATTERNS: Pattern[] = [
     instruments: ['808 kick', 'clap', 'timbale'],
     swingable: false,
     story: 'The dembow riddim that conquered the world — Jamaican dancehall mutated through Panama, Puerto Rico and the DR into the global sound of reggaeton.',
-    relatedIds: ['dancehall'],
+    relatedIds: ['dancehall', 'moombahton', 'bongo-flava', 'gengetone'],
   },
   {
     id: 'dancehall',
@@ -51,6 +51,7 @@ export const CARIBBEAN_PATTERNS: Pattern[] = [
     instruments: ['808', 'syndrum', 'bass'],
     swingable: false,
     story: 'Kingston sound systems, digital riddims, Shabba Ranks and Vybz Kartel. Every modern Caribbean dance pattern traces back here.',
+    relatedIds: ['reggaeton-dembow', 'jamaica-one-drop', 'moombahton'],
   },
   {
     id: 'kompa',
@@ -76,6 +77,7 @@ export const CARIBBEAN_PATTERNS: Pattern[] = [
     instruments: ['tanbou', 'cowbell', 'bass'],
     swingable: false,
     story: 'Nemours Jean-Baptiste\'s 1955 invention — a slow, sensual grind built on cowbell, tanbou, and bass. Haiti\'s national sound, and UNESCO heritage since 2025.',
+    relatedIds: ['zouk-bass', 'kizomba', 'merengue'],
   },
   {
     id: 'soca',
@@ -101,6 +103,7 @@ export const CARIBBEAN_PATTERNS: Pattern[] = [
     instruments: ['drums', 'iron', 'tassa'],
     swingable: false,
     story: 'Lord Shorty\'s 1970s fusion of calypso with East Indian rhythms — the "soul of calypso." The signature hi-hat opens on the last sixteenth of every beat.',
+    relatedIds: ['calypso', 'bhangra'],
   },
   {
     id: 'calypso',
@@ -126,7 +129,7 @@ export const CARIBBEAN_PATTERNS: Pattern[] = [
     instruments: ['drums', 'iron', 'steel pan'],
     swingable: true,
     story: 'Trinidad\'s newspaper of the people — Lord Kitchener and Mighty Sparrow used the form to praise, satirise, and scandalise. The lilt swings around the offbeats.',
-    relatedIds: ['soca'],
+    relatedIds: ['soca', 'mento'],
   },
   {
     id: 'mento',
@@ -152,6 +155,7 @@ export const CARIBBEAN_PATTERNS: Pattern[] = [
     instruments: ['banjo', 'rumba box', 'hand drum'],
     swingable: true,
     story: 'Before ska, before reggae — mento was Jamaica\'s own folk music. Banjo, rumba box, and bawdy social commentary. The Jolly Boys from Port Antonio carried it into the 21st century.',
+    relatedIds: ['calypso', 'ska'],
   },
   {
     id: 'ska',
@@ -178,7 +182,7 @@ export const CARIBBEAN_PATTERNS: Pattern[] = [
     instruments: ['drums', 'guitar chop', 'piano'],
     swingable: false,
     story: 'Jamaica 1962 — the year of independence and the year the offbeat became a national identity. Lloyd Knibb\'s drums turned American R&B inside out.',
-    relatedIds: ['rocksteady', 'jamaica-one-drop'],
+    relatedIds: ['rocksteady', 'jamaica-one-drop', 'ska-classic', 'mento'],
   },
   {
     id: 'rocksteady',
@@ -232,7 +236,7 @@ export const CARIBBEAN_PATTERNS: Pattern[] = [
     instruments: ['drums', 'bass', 'skank guitar'],
     swingable: false,
     story: 'Beat 1 is empty — dropped. Carlton Barrett turned the downbeat\'s absence into gravity itself. Everything leans toward the snare-kick unison on beat 3.',
-    relatedIds: ['rocksteady', 'jamaica-rockers', 'jamaica-steppers'],
+    relatedIds: ['rocksteady', 'jamaica-rockers', 'jamaica-steppers', 'reggae-one-drop', 'samba-reggae'],
   },
   {
     id: 'jamaica-rockers',
@@ -312,5 +316,6 @@ export const CARIBBEAN_PATTERNS: Pattern[] = [
     instruments: ['bongó', 'güira', 'guitar'],
     swingable: false,
     story: 'José Manuel Calderón cut the first bachata in 1962. For decades the Dominican elite dismissed it as cabaret music — until Juan Luis Guerra took it to the world.',
+    relatedIds: ['bolero', 'merengue'],
   },
 ];

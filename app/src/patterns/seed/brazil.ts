@@ -25,7 +25,7 @@ export const BRAZIL_PATTERNS: Pattern[] = [
     instruments: ['nylon guitar', 'brushes', 'surdo'],
     swingable: true,
     story: 'Jobim and João Gilberto slowed samba down, stripped it bare, and dressed it in cool-jazz harmony. The cross-stick traces the partido-alto skeleton.',
-    relatedIds: ['samba-partido-alto'],
+    relatedIds: ['samba-partido-alto', 'jazz-bossa-nova', 'son-clave'],
   },
   {
     id: 'samba-partido-alto',
@@ -51,6 +51,7 @@ export const BRAZIL_PATTERNS: Pattern[] = [
     instruments: ['pandeiro', 'tantã', 'cavaquinho'],
     swingable: true,
     story: 'Older, rootsier samba — circled around improvised verses and hand percussion. The partido-alto pattern became the "Brazilian clave" that crossed into bossa and jazz.',
+    relatedIds: ['son-clave', 'rumba-clave-3-2', 'bossa-nova', 'pagode'],
   },
   {
     id: 'samba-reggae',
@@ -76,6 +77,7 @@ export const BRAZIL_PATTERNS: Pattern[] = [
     instruments: ['surdo', 'repique', 'caixa'],
     swingable: false,
     story: 'Created in 1986 by Neguinho do Samba for Olodum — samba\'s surdo foundation married to reggae\'s tempo, three drums interlocking into a wall of bass through the streets of Salvador.',
+    relatedIds: ['jamaica-one-drop', 'reggae-one-drop', 'ijexa', 'axe'],
   },
   {
     id: 'baiao',
@@ -101,6 +103,7 @@ export const BRAZIL_PATTERNS: Pattern[] = [
     instruments: ['zabumba', 'triangle', 'sanfona'],
     swingable: false,
     story: 'The foundational rhythm of forró, from the arid sertão of Pernambuco — zabumba bass-and-slap, triangle, accordion. Luiz Gonzaga brought it to the whole country.',
+    relatedIds: ['forro', 'xote', 'merengue'],
   },
   {
     id: 'maracatu',
@@ -126,6 +129,7 @@ export const BRAZIL_PATTERNS: Pattern[] = [
     instruments: ['alfaia', 'gongue', 'caixa'],
     swingable: false,
     story: 'One of Brazil\'s oldest Afro-descended traditions — born from the coronation processions of enslaved African "kings and queens" in colonial Pernambuco.',
+    relatedIds: ['ijexa', 'samba-reggae', 'agbekor'],
   },
   {
     id: 'samba-enredo',
@@ -305,7 +309,7 @@ export const BRAZIL_PATTERNS: Pattern[] = [
     instruments: ['agogô', 'atabaque', 'xequerê'],
     swingable: false,
     story: 'The rhythm of the orixá Oxum — goddess of rivers, love, gold. When 10,000 Filhos de Gandhy process through Salvador\'s carnival playing ijexá, the city becomes a trance.',
-    relatedIds: ['samba-reggae'],
+    relatedIds: ['samba-reggae', 'bata-shango', 'bembe-68', 'bembe'],
   },
   {
     id: 'axe',
@@ -383,6 +387,6 @@ export const BRAZIL_PATTERNS: Pattern[] = [
     instruments: ['atabaque', 'pandeiro', 'palmas'],
     swingable: true,
     story: 'The root of all samba. In the Recôncavo villages around the Bay of All Saints, dancers step into a circle one at a time, invited by an umbigada — a belly-bump — to the next. UNESCO Intangible Heritage, 2005.',
-    relatedIds: ['samba-partido-alto', 'samba-enredo'],
+    relatedIds: ['samba-partido-alto', 'samba-enredo', 'semba', 'guaguanco'],
   },
 ];
