@@ -1,22 +1,18 @@
-import { useState } from 'react';
 import type { Pattern, RegionId } from '../../patterns/types';
 import { REGIONS, REGION_BY_ID } from './regions';
 
 interface Props {
   patterns: Pattern[];
+  previewId: RegionId | null;
+  setPreviewId: (id: RegionId | null) => void;
   onPickRegion: (id: RegionId) => void;
 }
 
-export function WorldMap({ patterns, onPickRegion }: Props) {
+export function WorldMap({ patterns, previewId, setPreviewId, onPickRegion }: Props) {
   const counts = patterns.reduce<Record<string, number>>((acc, p) => {
     acc[p.region] = (acc[p.region] ?? 0) + 1;
     return acc;
   }, {});
-
-  // Local preview state — the intro banner pinned above the results grid.
-  // Null means "no region previewed". Separate from filter state so users
-  // can dismiss the banner without clearing their filter.
-  const [previewId, setPreviewId] = useState<RegionId | null>(null);
 
   const handlePick = (id: RegionId) => {
     setPreviewId(id);

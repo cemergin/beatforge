@@ -266,24 +266,34 @@ When the step index is `-1`, `trigger()` passes `groupMul = 1` (see [audio-engin
 
 ### Seed patterns (read-only, shipped with the app)
 
-`src/patterns/seed/index.ts:5-41`:
+Patterns ship as JSON — one file per region under `src/patterns/seed/`. The barrel eagerly globs them in through Vite and runs every entry through the Zod `PatternSchema` at module-load time.
+
+`src/patterns/seed/index.ts` (simplified):
 
 ```ts
-import { TURKEY_OTTOMAN_PATTERNS } from './turkey-ottoman';
-import { BALKANS_PATTERNS } from './balkans';
-import { CUBA_AFROCARIBBEAN_PATTERNS } from './cuba-afrocaribbean';
-// ... 13 more regions
+import { PatternSchema } from '../schema';
 
-export const PATTERNS: Pattern[] = [
-  ...TURKEY_OTTOMAN_PATTERNS,
-  ...BALKANS_PATTERNS,
-  // ...
-];
+const modules = import.meta.glob<unknown[]>('./*.json', {
+  eager: true,
+  import: 'default',
+});
+
+const parsed: Pattern[] = [];
+for (const [path, raw] of Object.entries(modules)) {
+  for (const entry of raw) {
+    const r = PatternSchema.safeParse(entry);
+    if (!r.success) throw new Error(`[seed/${regionOf(path)}] ${describe(r.error)}`);
+    parsed.push(r.data);
+  }
+}
+export const PATTERNS: Pattern[] = parsed;
 ```
 
-One file per region (`turkey-ottoman.ts`, `balkans.ts`, `cuba-afrocaribbean.ts`, `arabic-swana.ts`, `persia.ts`, `india.ts`, `west-africa.ts`, `brazil.ts`, `caribbean.ts`, `iberia-flamenco.ts`, `gamelan-southeast-asia.ts`, `east-asia.ts`, `celtic-europe.ts`, `electronic-western.ts`, `exercise.ts`, `andean-south-america.ts`). Each exports `const <REGION>_PATTERNS: Pattern[] = [...]`.
+One file per region: `turkey-ottoman.json`, `balkans.json`, … `internet-born.json` (23 regions, 526 patterns as of this writing). The barrel enumerates a known `REGION_ORDER` first so `PATTERNS` is deterministic, then falls through to any new JSON alphabetically so new regions can't be silently dropped.
 
-All seed patterns are plain TypeScript literals. No JSON files. The spec §5.4 mentions a Markdown→JSON pipeline, but the shipped code stores patterns as typed literals directly. **Shipped diverges from spec here**: spec describes `patterns/drafts/<region>/<id>.json` → `seed/<region>/<id>.json`; actual code uses `seed/<region>.ts` aggregating literals.
+**Why JSON**: community contributors can add a pattern via a single-file PR editing the region's JSON — no TypeScript knowledge required. The Zod schema (`src/patterns/schema.ts`) is the authoritative shape spec; a malformed submission fails CI with a pattern-id-qualified error like `[seed/india] invalid pattern "new-tala": grouping: grouping must sum to steps`.
+
+The Zod schema is the single source of truth for Pattern validation and is reused in `lib/db.ts` for validating user patterns loaded from IndexedDB.
 
 ### User patterns (IndexedDB)
 
@@ -310,7 +320,7 @@ class BFDatabase extends Dexie {
 
 Studio writes to this table via `saveUserPattern(p)`; there's also `deleteUserPattern`, `listUserPatterns`, `bulkImport` (for the export/import JSON backup feature). `loadAllSafe()` (`db.ts:141-159`) validates each record and returns `{ id, pattern: UserPattern | null, raw }` — corrupted records get a `null` pattern so the UI can offer deletion without crashing.
 
-Validation (`db.ts:68-131`) is hand-rolled type-guards (`isValidPattern`, `isValidUserPattern`). **Shipped diverges from spec here**: spec §5.6 says "Validation via Zod"; actual code uses custom validators. Critical invariants checked: `grouping.sum === steps`, every track value is a valid `Velocity`, `defaultKit` ∈ known kits, etc.
+Validation (`db.ts:isValidPattern`, `isValidUserPattern`) delegates to the Zod schemas (`patterns/schema.ts` — `PatternSchema`, `UserPatternSchema`). Critical invariants checked: `grouping.sum === steps`, every track value is a valid `Velocity`, `defaultKit` ∈ known kits, `bpm.default` is within `[bpm.min, bpm.max]`, etc. The `isValidPattern` / `isValidUserPattern` type-guard signatures are unchanged, so callers stay untouched.
 
 ## The extensibility hook: `registerPatternSource()`
 

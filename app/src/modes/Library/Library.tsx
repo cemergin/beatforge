@@ -51,6 +51,7 @@ export function Library({ engine, onLoadInPractice, onOpenInStudio }: Props) {
   const [groupingSel, setGroupingSel] = useState<string | null>(null);
   const [detailId, setDetailId] = useState<string | null>(null);
   const [activePath, setActivePath] = useState<StarterPath | null>(null);
+  const [regionPreview, setRegionPreview] = useState<RegionId | null>(null);
 
   const [highlights, setHighlights] = useState<string[]>(() => getHighlights());
   const recent = useMemo<string[]>(() => getRecent(), []);
@@ -166,6 +167,7 @@ export function Library({ engine, onLoadInPractice, onOpenInStudio }: Props) {
     setQuery('');
     setFilters(DEFAULT_FILTERS);
     setGroupingSel(null);
+    setRegionPreview(null);
     scrollToResults();
   }, [scrollToResults]);
 
@@ -273,7 +275,12 @@ export function Library({ engine, onLoadInPractice, onOpenInStudio }: Props) {
           <h2 className="bf-zone-title">World Map</h2>
           <span className="bf-zone-sub">Tap a region to filter the results.</span>
         </div>
-        <WorldMap patterns={PATTERNS} onPickRegion={onPickRegion} />
+        <WorldMap
+          patterns={PATTERNS}
+          previewId={regionPreview}
+          setPreviewId={setRegionPreview}
+          onPickRegion={onPickRegion}
+        />
       </section>
 
       {/* Zone 5 — Starter Paths */}
@@ -408,7 +415,7 @@ export function Library({ engine, onLoadInPractice, onOpenInStudio }: Props) {
             </div>
             {filtered.length === 0 ? (
               <div className="bf-lib-empty">
-                Nothing matches these filters. <button className="bf-linkbtn" onClick={() => { setFilters(DEFAULT_FILTERS); setQuery(''); setGroupingSel(null); }} type="button">reset</button>
+                Nothing matches these filters. <button className="bf-linkbtn" onClick={() => { setFilters(DEFAULT_FILTERS); setQuery(''); setGroupingSel(null); setRegionPreview(null); }} type="button">reset</button>
               </div>
             ) : (
               <div className="bf-lib-full-grid">
