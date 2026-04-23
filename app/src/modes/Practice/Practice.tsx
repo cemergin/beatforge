@@ -20,12 +20,12 @@ interface StopAfter { mode: StopAfterMode; value: number }
 
 interface Props {
   engine: AudioEngine;
+  patternId: string;
+  onPatternChange: (id: string) => void;
 }
 
-export function Practice({ engine }: Props) {
-  const [patternId, setPatternId] = useState<string>(
-    () => localStorage.getItem('bf_pattern') || 'karsilama',
-  );
+export function Practice({ engine, patternId, onPatternChange }: Props) {
+  const setPatternId = onPatternChange;
   const pattern: Pattern = useMemo(
     () => patternById(patternId) ?? PATTERNS[0],
     [patternId],

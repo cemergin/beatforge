@@ -1,0 +1,359 @@
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import Fuse from 'fuse.js';
+import type { AudioEngine } from '../../audio/engine';
+import type { Difficulty, Genre, KitId, Pattern, RegionId } from '../../patterns/types';
+import { PATTERNS, patternById } from '../../patterns/seed';
+import { getHighlights, getRecent, toggleHighlight } from '../../lib/storage';
+import { Filters } from './Filters';
+import { DEFAULT_FILTERS, type FilterState } from './filterState';
+import { WorldMap } from './WorldMap';
+import { StarterPaths } from './StarterPaths';
+import { GroupingBrowser } from './GroupingBrowser';
+import { PatternCard } from './PatternCard';
+import { PatternDetail } from './PatternDetail';
+import type { StarterPath } from './paths';
+
+interface Props {
+  engine: AudioEngine;
+  onLoadInPractice: (id: string) => void;
+}
+
+const PATH_PROGRESS_KEY = 'bf_path_progress';
+
+function readPathProgress(): Record<string, number> {
+  try {
+    const raw = localStorage.getItem(PATH_PROGRESS_KEY);
+    if (!raw) return {};
+    const parsed: unknown = JSON.parse(raw);
+    if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+      const out: Record<string, number> = {};
+      for (const [k, v] of Object.entries(parsed as Record<string, unknown>)) {
+        if (typeof v === 'number') out[k] = v;
+      }
+      return out;
+    }
+  } catch { /* ignore */ }
+  return {};
+}
+
+function writePathProgress(p: Record<string, number>): void {
+  try { localStorage.setItem(PATH_PROGRESS_KEY, JSON.stringify(p)); } catch { /* ignore */ }
+}
+
+function normalize(s: string): string {
+  return s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+}
+
+export function Library({ engine, onLoadInPractice }: Props) {
+  const [query, setQuery] = useState('');
+  const [filters, setFilters] = useState<FilterState>(DEFAULT_FILTERS);
+  const [groupingSel, setGroupingSel] = useState<string | null>(null);
+  const [detailId, setDetailId] = useState<string | null>(null);
+
+  const [highlights, setHighlights] = useState<string[]>(() => getHighlights());
+  const recent = useMemo<string[]>(() => getRecent(), []);
+  const [pathProgress, setPathProgress] = useState<Record<string, number>>(
+    () => readPathProgress(),
+  );
+
+  const searchRef = useRef<HTMLInputElement | null>(null);
+  const resultsRef = useRef<HTMLDivElement | null>(null);
+
+  // Stop preview engine when leaving the Library
+  useEffect(() => {
+    return () => { engine.stop(); };
+  }, [engine]);
+
+  // Keyboard — `/` focuses search
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === '/') {
+        const t = e.target as HTMLElement | null;
+        if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+        e.preventDefault();
+        searchRef.current?.focus();
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
+
+  // Fuse index — built once per PATTERNS reference (static in v1).
+  const fuse = useMemo(() => {
+    const searchable = PATTERNS.map((p) => ({
+      p,
+      name: normalize(p.name),
+      origin: normalize(p.origin),
+      tradition: normalize(p.tradition),
+      story: normalize(p.story ?? ''),
+      tags: p.tags.map(normalize).join(' '),
+      instruments: (p.instruments ?? []).map(normalize).join(' '),
+    }));
+    return new Fuse(searchable, {
+      keys: ['name', 'origin', 'tradition', 'story', 'tags', 'instruments'],
+      threshold: 0.35,
+      ignoreLocation: true,
+    });
+  }, []);
+
+  // Facet option lists — derived from PATTERNS.
+  const allMeters = useMemo(
+    () => Array.from(new Set(PATTERNS.map((p) => p.timeSig))).sort(),
+    [],
+  );
+  const allGenres = useMemo<Genre[]>(
+    () => Array.from(new Set(PATTERNS.map((p) => p.genre))).sort() as Genre[],
+    [],
+  );
+  const allKits = useMemo<KitId[]>(
+    () => Array.from(new Set(PATTERNS.map((p) => p.defaultKit))).sort() as KitId[],
+    [],
+  );
+
+  // Apply filters + search to compute the results set.
+  const searched = useMemo<Pattern[]>(() => {
+    const q = normalize(query.trim());
+    if (!q) return PATTERNS;
+    return fuse.search(q).map((r) => r.item.p);
+  }, [query, fuse]);
+
+  const filtered = useMemo<Pattern[]>(() => {
+    return searched.filter((p) => {
+      if (filters.meters.length && !filters.meters.includes(p.timeSig)) return false;
+      if (filters.regions.length && !filters.regions.includes(p.region)) return false;
+      if (filters.genres.length && !filters.genres.includes(p.genre)) return false;
+      if (filters.kits.length && !filters.kits.includes(p.defaultKit)) return false;
+      if (filters.levels.length && !(filters.levels as Difficulty[]).includes(p.difficulty)) return false;
+      if (p.bpm.default < filters.tempo[0] || p.bpm.default > filters.tempo[1]) return false;
+      if (groupingSel && p.grouping.join('+') !== groupingSel) return false;
+      return true;
+    });
+  }, [searched, filters, groupingSel]);
+
+  const scrollToResults = useCallback(() => {
+    requestAnimationFrame(() => {
+      resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }, []);
+
+  const onPickRegion = useCallback((id: RegionId) => {
+    setFilters((prev) => ({
+      ...prev,
+      regions: prev.regions.includes(id) && prev.regions.length === 1 ? [] : [id],
+    }));
+    scrollToResults();
+  }, [scrollToResults]);
+
+  const onPickPath = useCallback((path: StarterPath) => {
+    const known = new Set(PATTERNS.map((p) => p.id));
+    const valid = path.patternIds.filter((id) => known.has(id));
+    if (valid.length === 0) return;
+    const first = valid[0];
+    const next = { ...pathProgress, [path.id]: 0 };
+    setPathProgress(next);
+    writePathProgress(next);
+    onLoadInPractice(first);
+  }, [pathProgress, onLoadInPractice]);
+
+  const surprise = useCallback(() => {
+    const pool = filtered.length > 0 ? filtered : PATTERNS;
+    const pick = pool[Math.floor(Math.random() * pool.length)];
+    onLoadInPractice(pick.id);
+  }, [filtered, onLoadInPractice]);
+
+  const onToggleStar = useCallback((id: string) => {
+    setHighlights(toggleHighlight(id));
+  }, []);
+
+  const detailPattern = detailId ? patternById(detailId) ?? null : null;
+
+  return (
+    <main className="bf-lib-page">
+      {/* Zone 1 — Sticky search header */}
+      <header className="bf-lib-hero">
+        <div>
+          <h1 className="bf-lib-title">Library</h1>
+          <p className="bf-lib-sub">
+            {PATTERNS.length} world rhythms and exercises. Search, browse the map,
+            follow a starter path, or wander by grouping.
+          </p>
+        </div>
+        <div className="bf-lib-search">
+          <input
+            ref={searchRef}
+            className="bf-search-input"
+            placeholder="Search rhythms, origins, tags…  ( / )"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            type="search"
+          />
+        </div>
+      </header>
+
+      {/* Zone 2 — Highlights */}
+      {highlights.length > 0 && (
+        <section className="bf-lib-zone">
+          <div className="bf-strip">
+            <div className="bf-strip-label">⭐ highlights</div>
+            <div className="bf-strip-chips">
+              {highlights.map((id) => {
+                const p = patternById(id);
+                if (!p) return null;
+                return (
+                  <button
+                    key={id}
+                    className="bf-strip-chip"
+                    onClick={() => setDetailId(id)}
+                    type="button"
+                  >
+                    {p.name}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Zone 3 — Recent */}
+      {recent.length >= 2 && (
+        <section className="bf-lib-zone">
+          <div className="bf-strip">
+            <div className="bf-strip-label">recent</div>
+            <div className="bf-strip-chips">
+              {recent.slice(0, 10).map((id) => {
+                const p = patternById(id);
+                if (!p) return null;
+                return (
+                  <button
+                    key={id}
+                    className="bf-strip-chip muted"
+                    onClick={() => setDetailId(id)}
+                    type="button"
+                  >
+                    {p.name}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Zone 4 — World Map */}
+      <section className="bf-lib-zone">
+        <div className="bf-zone-head">
+          <h2 className="bf-zone-title">World Map</h2>
+          <span className="bf-zone-sub">Tap a region to filter the results.</span>
+        </div>
+        <WorldMap patterns={PATTERNS} onPickRegion={onPickRegion} />
+      </section>
+
+      {/* Zone 5 — Starter Paths */}
+      <section className="bf-lib-zone">
+        <div className="bf-zone-head">
+          <h2 className="bf-zone-title">Starter Paths</h2>
+          <span className="bf-zone-sub">Curated sequences — click to load the first pattern.</span>
+        </div>
+        <StarterPaths
+          patterns={PATTERNS}
+          progress={pathProgress}
+          onPickPath={onPickPath}
+        />
+      </section>
+
+      {/* Zone 6 — Filter chip rows */}
+      <section className="bf-lib-zone">
+        <div className="bf-zone-head">
+          <h2 className="bf-zone-title">Filter</h2>
+          <span className="bf-zone-sub">Multi-select inside a row (OR); across rows (AND).</span>
+        </div>
+        <Filters
+          filters={filters}
+          setFilters={setFilters}
+          allMeters={allMeters}
+          allGenres={allGenres}
+          allKits={allKits}
+          count={filtered.length}
+          total={PATTERNS.length}
+        />
+      </section>
+
+      {/* Zone 7 — Grouping Browser */}
+      <section className="bf-lib-zone">
+        <div className="bf-zone-head">
+          <h2 className="bf-zone-title">Browse by Grouping</h2>
+          <span className="bf-zone-sub">
+            Cross-cultural: same pulse, different traditions.
+            {groupingSel && (
+              <>
+                {' '}
+                <button
+                  className="bf-linkbtn"
+                  onClick={() => setGroupingSel(null)}
+                  type="button"
+                >
+                  clear ({groupingSel})
+                </button>
+              </>
+            )}
+          </span>
+        </div>
+        <GroupingBrowser
+          patterns={PATTERNS}
+          selected={groupingSel}
+          onPick={(key) => {
+            setGroupingSel(key);
+            if (key) scrollToResults();
+          }}
+        />
+      </section>
+
+      {/* Zone 8 — Surprise me */}
+      <section className="bf-lib-zone bf-lib-surprise-zone">
+        <button className="bf-chip on" onClick={surprise} type="button">
+          🎲 Surprise me
+        </button>
+        <span className="bf-zone-sub">
+          Loads a random pattern in Practice{filtered.length !== PATTERNS.length ? ' from the filtered set' : ''}.
+        </span>
+      </section>
+
+      {/* Zone 9 — Results grid */}
+      <section className="bf-lib-zone" ref={resultsRef}>
+        <div className="bf-zone-head">
+          <h2 className="bf-zone-title">Results</h2>
+          <span className="bf-zone-sub">{filtered.length} of {PATTERNS.length}</span>
+        </div>
+        {filtered.length === 0 ? (
+          <div className="bf-lib-empty">
+            Nothing matches these filters. <button className="bf-linkbtn" onClick={() => { setFilters(DEFAULT_FILTERS); setQuery(''); setGroupingSel(null); }} type="button">reset</button>
+          </div>
+        ) : (
+          <div className="bf-lib-full-grid">
+            {filtered.map((p) => (
+              <PatternCard
+                key={p.id}
+                pattern={p}
+                starred={highlights.includes(p.id)}
+                onClick={(id) => setDetailId(id)}
+                onToggleStar={onToggleStar}
+              />
+            ))}
+          </div>
+        )}
+      </section>
+
+      {detailPattern && (
+        <PatternDetail
+          key={detailPattern.id}
+          pattern={detailPattern}
+          engine={engine}
+          onClose={() => { engine.stop(); setDetailId(null); }}
+          onOpenPattern={(id) => { engine.stop(); setDetailId(id); }}
+          onLoadInPractice={(id) => { engine.stop(); setDetailId(null); onLoadInPractice(id); }}
+        />
+      )}
+    </main>
+  );
+}
