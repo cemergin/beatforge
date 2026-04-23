@@ -21,6 +21,21 @@ export function PatternDetail({
 }: Props) {
   const [starred, setStarred] = useState<boolean>(() => isHighlighted(pattern.id));
   const [previewing, setPreviewing] = useState(false);
+  const [shareToast, setShareToast] = useState<string | null>(null);
+
+  const copyShareLink = useCallback(async () => {
+    // Build a Practice deep link. BASE_URL respects GitHub Pages `/beatforge/`
+    // in prod and `/` in dev.
+    const base = import.meta.env.BASE_URL || '/';
+    const url = `${window.location.origin}${base}?tab=practice&pattern=${encodeURIComponent(pattern.id)}`;
+    try {
+      await navigator.clipboard.writeText(url);
+      setShareToast('Link copied');
+    } catch {
+      setShareToast('Copy failed');
+    }
+    window.setTimeout(() => setShareToast(null), 1500);
+  }, [pattern.id]);
 
   const related = useMemo(() => ({
     grouping: sameGrouping(pattern, PATTERNS).slice(0, 6),
@@ -197,6 +212,14 @@ export function PatternDetail({
           </button>
           <button
             className="bf-chip ghost"
+            onClick={copyShareLink}
+            type="button"
+            title="Copy shareable Practice link"
+          >
+            Share link
+          </button>
+          <button
+            className="bf-chip ghost"
             onClick={onOpenInStudio ? () => onOpenInStudio(pattern) : undefined}
             disabled={!onOpenInStudio}
             title={onOpenInStudio ? 'Open a remix in Studio' : 'Studio unavailable'}
@@ -206,6 +229,9 @@ export function PatternDetail({
           </button>
         </div>
       </div>
+      {shareToast && (
+        <div className="bf-studio-toast" role="status">{shareToast}</div>
+      )}
     </div>
   );
 }

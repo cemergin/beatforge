@@ -5,7 +5,7 @@ import { Library } from './modes/Library/Library';
 import { Studio } from './modes/Studio/Studio';
 import { PatternsSandbox } from './modes/_Patterns/PatternsSandbox';
 import type { KitId, Pattern } from './patterns/types';
-import { registerPatternSource } from './patterns/seed';
+import { patternById, registerPatternSource } from './patterns/seed';
 import { loadAllSafe } from './lib/db';
 import { getMasterVolume } from './lib/storage';
 import './styles/app.css';
@@ -14,6 +14,25 @@ type Theme = 'warm' | 'noir' | 'paper';
 type Tab = 'practice' | 'studio' | 'library' | '_patterns';
 
 const DEV_MODE = import.meta.env.DEV;
+
+// Parse the current URL into a (tab, pattern) tuple. Unknown values are
+// dropped — the caller falls back to localStorage/defaults.
+function readUrlState(): { tab: Tab | null; pattern: string | null } {
+  const params = new URLSearchParams(window.location.search);
+  const rawTab = params.get('tab');
+  let tab: Tab | null = null;
+  if (rawTab === 'practice' || rawTab === 'studio' || rawTab === 'library') {
+    tab = rawTab;
+  } else if (rawTab === '_patterns' && DEV_MODE) {
+    tab = '_patterns';
+  }
+  const rawPattern = params.get('pattern');
+  // patternById resolves seed patterns + registered user sources. We only
+  // validate seeds here (user patterns load async) — an unknown id falls
+  // through silently.
+  const pattern = rawPattern && patternById(rawPattern) ? rawPattern : null;
+  return { tab, pattern };
+}
 
 export default function App() {
   const engineRef = useRef<AudioEngine | null>(null);
@@ -27,6 +46,9 @@ export default function App() {
   );
 
   const [tab, setTab] = useState<Tab>(() => {
+    // URL first, so shared links are the source of truth on load.
+    const url = readUrlState();
+    if (url.tab) return url.tab;
     const t = localStorage.getItem('bf_tab');
     if (t === 'library' || t === 'studio' || t === 'practice') return t;
     // _patterns is dev-only — never restore it in production builds.
@@ -34,9 +56,11 @@ export default function App() {
     return 'practice';
   });
 
-  const [patternId, setPatternId] = useState<string>(
-    () => localStorage.getItem('bf_pattern') || 'karsilama',
-  );
+  const [patternId, setPatternId] = useState<string>(() => {
+    const url = readUrlState();
+    if (url.pattern) return url.pattern;
+    return localStorage.getItem('bf_pattern') || 'karsilama';
+  });
 
   // Library → Studio handoff: a full Pattern object (seed, read-only).
   const [initialStudioPattern, setInitialStudioPattern] = useState<Pattern | null>(null);
@@ -70,6 +94,33 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem('bf_tab', tab);
   }, [tab]);
+
+  // Reflect (tab, patternId) into the URL without adding a history entry.
+  // pushState would make the back-button traverse tab switches, which feels
+  // broken for a single-page app. Only Practice carries ?pattern=.
+  useEffect(() => {
+    const params = new URLSearchParams();
+    params.set('tab', tab);
+    if (tab === 'practice') params.set('pattern', patternId);
+    const nextSearch = `?${params.toString()}`;
+    // No-op if the URL already matches — prevents replaceState loops when
+    // state echoes back from popstate.
+    if (window.location.search === nextSearch) return;
+    const nextUrl = `${window.location.pathname}${nextSearch}${window.location.hash}`;
+    window.history.replaceState(null, '', nextUrl);
+  }, [tab, patternId]);
+
+  // Browser back/forward: re-read URL and apply to state. The URL-sync effect
+  // above is guarded against no-op replaceState, so this won't loop.
+  useEffect(() => {
+    const onPop = () => {
+      const url = readUrlState();
+      if (url.tab && url.tab !== tab) setTab(url.tab);
+      if (url.pattern && url.pattern !== patternId) setPatternId(url.pattern);
+    };
+    window.addEventListener('popstate', onPop);
+    return () => window.removeEventListener('popstate', onPop);
+  }, [tab, patternId]);
 
   useEffect(() => {
     const savedKit = (localStorage.getItem('bf_kit') as KitId) || '808';

@@ -14,17 +14,24 @@ export type RegionId =
   | 'persia'
   | 'india'
   | 'west-africa'
+  | 'modern-african'             // Afropop / highlife / soukous / makossa / gqom / kwaito
+  | 'north-east-african'         // Gnawa / Ethiopian / Somali / Sufi
   | 'cuba-afrocaribbean'
   | 'brazil'
   | 'andean-south-america'
   | 'caribbean'
   | 'balkans'
   | 'iberia-flamenco'
+  | 'caucasus-mediterranean'     // Georgia / Armenia / Crete / Sicily / Sufi dhikr
   | 'gamelan-southeast-asia'
   | 'east-asia'
+  | 'central-asian-pacific'      // Uzbek / Uyghur / Afghan / Polynesian / Aboriginal
   | 'celtic-europe'
   | 'electronic-western'
-  | 'exercise';   // polyrhythm exercises, not regional
+  | 'global-electronic'          // Funkot / budots / vinahouse / baile-funk / drill
+  | 'underground-electronic'     // Mahraganat / dabke-electronic / guaracha / hardbass
+  | 'internet-born'              // Vaporwave / lo-fi hip-hop / hyperpop / drift-phonk
+  | 'exercise';                  // polyrhythm exercises, not regional
 
 export type Genre =
   | 'folk-dance'

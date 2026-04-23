@@ -20,6 +20,13 @@ import { CELTIC_EUROPE_PATTERNS } from './celtic-europe';
 import { ELECTRONIC_WESTERN_PATTERNS } from './electronic-western';
 import { EXERCISE_PATTERNS } from './exercise';
 import { ANDEAN_SOUTH_AMERICA_PATTERNS } from './andean-south-america';
+import { MODERN_AFRICAN_PATTERNS } from './modern-african';
+import { NORTH_EAST_AFRICAN_PATTERNS } from './north-east-african';
+import { CENTRAL_ASIAN_PACIFIC_PATTERNS } from './central-asian-pacific';
+import { CAUCASUS_MEDITERRANEAN_PATTERNS } from './caucasus-mediterranean';
+import { GLOBAL_ELECTRONIC_PATTERNS } from './global-electronic';
+import { UNDERGROUND_ELECTRONIC_PATTERNS } from './underground-electronic';
+import { INTERNET_BORN_PATTERNS } from './internet-born';
 
 export const PATTERNS: Pattern[] = [
   ...TURKEY_OTTOMAN_PATTERNS,
@@ -38,6 +45,13 @@ export const PATTERNS: Pattern[] = [
   ...ELECTRONIC_WESTERN_PATTERNS,
   ...EXERCISE_PATTERNS,
   ...ANDEAN_SOUTH_AMERICA_PATTERNS,
+  ...MODERN_AFRICAN_PATTERNS,
+  ...NORTH_EAST_AFRICAN_PATTERNS,
+  ...CENTRAL_ASIAN_PACIFIC_PATTERNS,
+  ...CAUCASUS_MEDITERRANEAN_PATTERNS,
+  ...GLOBAL_ELECTRONIC_PATTERNS,
+  ...UNDERGROUND_ELECTRONIC_PATTERNS,
+  ...INTERNET_BORN_PATTERNS,
 ];
 
 // Optional extra-source lookup: Studio/App register user patterns here so
