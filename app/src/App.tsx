@@ -1,12 +1,15 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { AudioEngine } from './audio/engine';
 import { Practice } from './modes/Practice/Practice';
 import { Library } from './modes/Library/Library';
-import type { KitId } from './patterns/types';
+import { Studio } from './modes/Studio/Studio';
+import type { KitId, Pattern } from './patterns/types';
+import { registerPatternSource } from './patterns/seed';
+import { loadAllSafe } from './lib/db';
 import './styles/app.css';
 
 type Theme = 'warm' | 'noir' | 'paper';
-type Tab = 'practice' | 'library';
+type Tab = 'practice' | 'studio' | 'library';
 
 export default function App() {
   const engineRef = useRef<AudioEngine | null>(null);
@@ -19,13 +22,39 @@ export default function App() {
     () => (localStorage.getItem('bf_theme') as Theme) || 'warm',
   );
 
-  const [tab, setTab] = useState<Tab>(
-    () => ((localStorage.getItem('bf_tab') as Tab) === 'library' ? 'library' : 'practice'),
-  );
+  const [tab, setTab] = useState<Tab>(() => {
+    const t = localStorage.getItem('bf_tab');
+    if (t === 'library' || t === 'studio' || t === 'practice') return t;
+    return 'practice';
+  });
 
   const [patternId, setPatternId] = useState<string>(
     () => localStorage.getItem('bf_pattern') || 'karsilama',
   );
+
+  // Library → Studio handoff: a full Pattern object (seed, read-only).
+  const [initialStudioPattern, setInitialStudioPattern] = useState<Pattern | null>(null);
+
+  // User-pattern cache so Practice/Library can resolve them by id.
+  const userCacheRef = useRef<Map<string, Pattern>>(new Map());
+
+  const refreshUserCache = useCallback(async () => {
+    const all = await loadAllSafe();
+    const map = new Map<string, Pattern>();
+    for (const entry of all) {
+      if (entry.pattern) map.set(entry.pattern.id, entry.pattern);
+    }
+    userCacheRef.current = map;
+  }, []);
+
+  // Expose user patterns to seed.patternById.
+  useEffect(() => {
+    const unregister = registerPatternSource(
+      (id) => userCacheRef.current.get(id),
+    );
+    refreshUserCache();
+    return unregister;
+  }, [refreshUserCache]);
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
@@ -50,11 +79,20 @@ export default function App() {
     }
   };
 
-  const loadInPractice = (id: string) => {
+  const loadInPractice = useCallback((id: string) => {
     engine.stop();
-    setPatternId(id);
-    setTab('practice');
-  };
+    // Ensure the cache has this id before Practice reads it (user patterns).
+    refreshUserCache().finally(() => {
+      setPatternId(id);
+      setTab('practice');
+    });
+  }, [engine, refreshUserCache]);
+
+  const openInStudio = useCallback((p: Pattern) => {
+    engine.stop();
+    setInitialStudioPattern(p);
+    setTab('studio');
+  }, [engine]);
 
   return (
     <div className="bf-root" data-theme={theme}>
@@ -72,7 +110,13 @@ export default function App() {
           >
             Practice
           </button>
-          <button className="bf-chip ghost" disabled title="Coming next" type="button">Studio</button>
+          <button
+            className={`bf-chip ${tab === 'studio' ? 'on' : 'ghost'}`}
+            onClick={() => switchTab('studio')}
+            type="button"
+          >
+            Studio
+          </button>
           <button
             className={`bf-chip ${tab === 'library' ? 'on' : 'ghost'}`}
             onClick={() => switchTab('library')}
@@ -103,16 +147,26 @@ export default function App() {
         </div>
       </header>
 
-      {tab === 'practice' ? (
+      {tab === 'practice' && (
         <Practice
           engine={engine}
           patternId={patternId}
           onPatternChange={setPatternId}
         />
-      ) : (
+      )}
+      {tab === 'studio' && (
+        <Studio
+          engine={engine}
+          initialPattern={initialStudioPattern}
+          onConsumedInitial={() => setInitialStudioPattern(null)}
+          onLoadInPractice={(id) => { refreshUserCache(); loadInPractice(id); }}
+        />
+      )}
+      {tab === 'library' && (
         <Library
           engine={engine}
           onLoadInPractice={loadInPractice}
+          onOpenInStudio={openInStudio}
         />
       )}
     </div>

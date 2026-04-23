@@ -13,10 +13,11 @@ interface Props {
   onClose: () => void;
   onOpenPattern: (id: string) => void;
   onLoadInPractice: (id: string) => void;
+  onOpenInStudio?: (pattern: Pattern) => void;
 }
 
 export function PatternDetail({
-  pattern, engine, onClose, onOpenPattern, onLoadInPractice,
+  pattern, engine, onClose, onOpenPattern, onLoadInPractice, onOpenInStudio,
 }: Props) {
   const [starred, setStarred] = useState<boolean>(() => isHighlighted(pattern.id));
   const [previewing, setPreviewing] = useState(false);
@@ -196,8 +197,9 @@ export function PatternDetail({
           </button>
           <button
             className="bf-chip ghost"
-            disabled
-            title="Studio coming soon"
+            onClick={onOpenInStudio ? () => onOpenInStudio(pattern) : undefined}
+            disabled={!onOpenInStudio}
+            title={onOpenInStudio ? 'Open a remix in Studio' : 'Studio unavailable'}
             type="button"
           >
             Open in Studio

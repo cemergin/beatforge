@@ -2002,6 +2002,24 @@ export const PATTERNS: Pattern[] = [
   },
 ];
 
+// Optional extra-source lookup: Studio/App register user patterns here so
+// Practice & Library can resolve them by id without importing Dexie.
+const extraSources: Array<(id: string) => Pattern | undefined> = [];
+
+export function registerPatternSource(src: (id: string) => Pattern | undefined): () => void {
+  extraSources.push(src);
+  return () => {
+    const i = extraSources.indexOf(src);
+    if (i >= 0) extraSources.splice(i, 1);
+  };
+}
+
 export function patternById(id: string): Pattern | undefined {
-  return PATTERNS.find((p) => p.id === id);
+  const hit = PATTERNS.find((p) => p.id === id);
+  if (hit) return hit;
+  for (const src of extraSources) {
+    const p = src(id);
+    if (p) return p;
+  }
+  return undefined;
 }

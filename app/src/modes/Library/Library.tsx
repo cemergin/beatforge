@@ -16,6 +16,7 @@ import type { StarterPath } from './paths';
 interface Props {
   engine: AudioEngine;
   onLoadInPractice: (id: string) => void;
+  onOpenInStudio?: (pattern: Pattern) => void;
 }
 
 const PATH_PROGRESS_KEY = 'bf_path_progress';
@@ -44,7 +45,7 @@ function normalize(s: string): string {
   return s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 }
 
-export function Library({ engine, onLoadInPractice }: Props) {
+export function Library({ engine, onLoadInPractice, onOpenInStudio }: Props) {
   const [query, setQuery] = useState('');
   const [filters, setFilters] = useState<FilterState>(DEFAULT_FILTERS);
   const [groupingSel, setGroupingSel] = useState<string | null>(null);
@@ -352,6 +353,11 @@ export function Library({ engine, onLoadInPractice }: Props) {
           onClose={() => { engine.stop(); setDetailId(null); }}
           onOpenPattern={(id) => { engine.stop(); setDetailId(id); }}
           onLoadInPractice={(id) => { engine.stop(); setDetailId(null); onLoadInPractice(id); }}
+          onOpenInStudio={onOpenInStudio ? (p) => {
+            engine.stop();
+            setDetailId(null);
+            onOpenInStudio(p);
+          } : undefined}
         />
       )}
     </main>
