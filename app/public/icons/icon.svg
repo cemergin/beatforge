@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Warm background to match theme-color -->
+  <rect width="512" height="512" rx="96" fill="#f6f2eb"/>
+  <!-- Conic-style beat groups: 4 dots representing 2+2+2+3 grouping -->
+  <circle cx="256" cy="120" r="48" fill="#e17055"/>
+  <circle cx="376" cy="200" r="48" fill="#f4c542"/>
+  <circle cx="376" cy="320" r="48" fill="#6c5ce7"/>
+  <circle cx="256" cy="400" r="48" fill="#00b894"/>
+  <circle cx="136" cy="320" r="48" fill="#0984e3"/>
+  <circle cx="136" cy="200" r="48" fill="#e84393"/>
+  <!-- Center pulse -->
+  <circle cx="256" cy="256" r="36" fill="#1a1a2e"/>
+</svg>

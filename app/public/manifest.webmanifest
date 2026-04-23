@@ -1,0 +1,20 @@
+{
+  "name": "BeatForge",
+  "short_name": "BeatForge",
+  "description": "Browser-based world-rhythm metronome. 78 rhythms, 7 kits, polyrhythm, offline.",
+  "start_url": "./?source=pwa",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "theme_color": "#e17055",
+  "background_color": "#f6f2eb",
+  "icons": [
+    {
+      "src": "./icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["music", "education", "productivity"]
+}

@@ -1,10 +1,43 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import { VitePWA } from 'vite-plugin-pwa';
 
-// Spec §3.3: deploy to GitHub Pages at /beatforge/.
-// Base is '/' in dev; '/beatforge/' in production.
+// Spec §3.3 — GitHub Pages deploy at /beatforge/; base is '/' in dev.
+// PWA per §8 — precache everything, offline-first.
 export default defineConfig(({ command }) => ({
-  plugins: [react()],
+  plugins: [
+    react(),
+    VitePWA({
+      registerType: 'prompt',
+      // The manifest file already lives in public/; let the plugin inject the
+      // correct <link rel="manifest"> for us at build time.
+      manifest: false,
+      workbox: {
+        // Precache everything the build emits — no runtime fetches in v1.
+        globPatterns: ['**/*.{js,css,html,svg,png,ico,woff2,webmanifest}'],
+        runtimeCaching: [
+          {
+            urlPattern: /^https:\/\/fonts\.googleapis\.com\//,
+            handler: 'StaleWhileRevalidate',
+            options: { cacheName: 'google-fonts-css' },
+          },
+          {
+            urlPattern: /^https:\/\/fonts\.gstatic\.com\//,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'google-fonts-webfonts',
+              expiration: { maxEntries: 20, maxAgeSeconds: 60 * 60 * 24 * 365 },
+            },
+          },
+        ],
+      },
+      includeAssets: ['icons/icon.svg', 'manifest.webmanifest'],
+      devOptions: {
+        // Keep dev frictionless — no SW in dev.
+        enabled: false,
+      },
+    }),
+  ],
   base: command === 'build' ? '/beatforge/' : '/',
   server: { port: 5173 },
 }));
