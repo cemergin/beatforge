@@ -1,0 +1,83 @@
+# INDEX.yaml — src/modes
+# Practice, Studio, Library (and a dev-only _Patterns sandbox).
+
+path: app/src/modes
+purpose: >
+  Three user-facing modes plus a dev-only migration sandbox. All share
+  the single AudioEngine passed in from App.tsx. Switching tabs always
+  calls engine.stop(), so playback never bleeds across modes.
+
+last_indexed: 2026-04-23
+
+contents:
+  - name: Practice
+    kind: folder
+    path: Practice
+    summary: >
+      The daily-use metronome + pattern trainer. Practice.tsx owns the
+      mode layout, BPM / swing / volume / kit / mute controls, and the
+      three visualizations (linear, pill, circular). Trainer.tsx is the
+      speed-trainer widget — repeat-for-N-bars, increase BPM by N.
+    contents:
+      - Practice.tsx
+      - Trainer.tsx
+
+  - name: Studio
+    kind: folder
+    path: Studio
+    summary: >
+      Step-sequencer authoring. StudioGrid.tsx is the edit surface,
+      StudioSidebar.tsx holds pattern meta + tracks, presets.ts ships
+      starter kits, SaveDialog persists to Dexie, ExportImport handles
+      JSON round-trips. Load-in-practice handoff also lives here.
+    contents:
+      - Studio.tsx
+      - StudioGrid.tsx
+      - StudioSidebar.tsx
+      - SaveDialog.tsx
+      - ExportImport.tsx
+      - presets.ts
+
+  - name: Library
+    kind: folder
+    path: Library
+    summary: >
+      Discovery surface for the 294-pattern catalog. Library.tsx is the
+      shell with tabs and preview. PatternCard / PatternDetail render
+      rows + detail pane. Filters.tsx + filterState.ts drive facet
+      filtering; StarterPaths suggests entry points; GroupingBrowser
+      lets users explore by meter/grouping; WorldMap lays regions on a
+      globe; regions.ts + paths.ts + relatedRhythms.ts hold the static
+      metadata that powers all of it.
+    contents:
+      - Library.tsx
+      - PatternCard.tsx
+      - PatternDetail.tsx
+      - Filters.tsx
+      - filterState.ts
+      - StarterPaths.tsx
+      - GroupingBrowser.tsx
+      - WorldMap.tsx
+      - regions.ts
+      - paths.ts
+      - relatedRhythms.ts
+
+  - name: _Patterns
+    kind: folder
+    path: _Patterns
+    summary: >
+      Dev-only sandbox (hidden in production via import.meta.env.DEV).
+      Used during seed migration and schema experiments.
+    stability: experimental
+    contents:
+      - PatternsSandbox.tsx
+
+related_indexes:
+  - path: ../INDEX.yaml
+    why: Parent src layout.
+  - path: ../audio/INDEX.yaml
+    why: The engine these modes drive.
+  - path: ../patterns/INDEX.yaml
+    why: Pattern schema + catalog Library exposes.
+  - path: ../../../docs/INDEX.yaml
+    why: Spec that defines what each mode must do.

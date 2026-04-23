@@ -1,0 +1,94 @@
+# INDEX.yaml — /research
+# Musicology + pattern + technical + design corpus (~78K lines).
+
+path: research
+purpose: >
+  Long-form source material. Four subfolders: musicology/ (cultural
+  histories by region), patterns/ (notated rhythms), technical/
+  (Web Audio / MIDI / PWA / pedagogy references), design/ (UI / visual
+  / sound-design references). INDEX.md and TOPIC-INDEX.md (markdown)
+  remain as narrative entry points; these YAML indexes mirror that map
+  for tool-friendly lookup.
+
+last_indexed: 2026-04-23
+
+corpus_totals:
+  lines: 78084
+  musicology_files: 27
+  pattern_files: 19
+  technical_files: 8
+  design_files: 5
+
+contents:
+  - name: INDEX.md
+    kind: file
+    path: INDEX.md
+    lines: 400
+    summary: >
+      Pre-existing human-readable master index. Covers "how to find
+      what you need", AI agent instructions, per-file summaries with
+      line counts.
+
+  - name: TOPIC-INDEX.md
+    kind: file
+    path: TOPIC-INDEX.md
+    lines: 1000
+    summary: >
+      Concept-to-file cross-reference. If you know the name of a
+      concept ("colotomic", "aksak", "swing", "clave"), start here.
+
+  - name: PATTERN-INDEX.md
+    kind: file
+    path: PATTERN-INDEX.md
+    lines: 600
+    summary: >
+      Catalog of every notated pattern across patterns/ and
+      musicology/. Filterable by region, genre, time signature,
+      difficulty. Used when you know the feel you want, not the file.
+
+  - name: musicology
+    kind: folder
+    path: musicology
+    summary: >
+      27 cultural/historical reports, one per region-cluster, plus a
+      few cross-cutting essays (econopolitics of music, electronic
+      music history). This is where the Library's cultural stories
+      come from.
+    related: [musicology/INDEX.yaml]
+
+  - name: patterns
+    kind: folder
+    path: patterns
+    summary: >
+      19 notated-pattern files — step-sequencer-style grids with
+      cultural notes. These are the transcription source for the
+      294 seed patterns shipped in app/src/patterns/seed/.
+    related: [patterns/INDEX.yaml]
+
+  - name: technical
+    kind: folder
+    path: technical
+    summary: >
+      Web Audio, DSP, MIDI, PWA, keyboard/pad UX, practice
+      methodology, Turkish usul, polyrhythm architecture. Read these
+      when implementing or extending engine / UI infrastructure.
+    related: [technical/INDEX.yaml]
+
+  - name: design
+    kind: folder
+    path: design
+    summary: >
+      Hardware UI idioms, software UI patterns, visual-design systems,
+      world-percussion sound-design targets, plus the original
+      brainstorm notes from the v1 interview.
+    related: [design/INDEX.yaml]
+
+related_indexes:
+  - path: ../INDEX.yaml
+    why: Repo-root context.
+  - path: musicology/INDEX.yaml
+  - path: patterns/INDEX.yaml
+  - path: technical/INDEX.yaml
+  - path: design/INDEX.yaml
+  - path: ../app/src/patterns/seed/INDEX.yaml
+    why: The shipping pattern library this corpus feeds.

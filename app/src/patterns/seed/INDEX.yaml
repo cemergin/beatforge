@@ -1,0 +1,309 @@
+# INDEX.yaml — src/patterns/seed
+# Per-region seed pattern files. 294 patterns total.
+
+path: app/src/patterns/seed
+purpose: >
+  One TypeScript file per RegionId. Each file exports
+  <REGION>_PATTERNS: Pattern[]. The barrel (index.ts) concatenates them
+  in first-seen order. Pattern counts below were taken by counting
+  top-level `id:` fields in each file on 2026-04-23.
+
+last_indexed: 2026-04-23
+
+aggregate:
+  total_patterns: 294
+  per_region:
+    turkey-ottoman: 20
+    balkans: 20
+    cuba-afrocaribbean: 22
+    arabic-swana: 23
+    persia: 13
+    india: 32
+    west-africa: 25
+    brazil: 15
+    caribbean: 12
+    iberia-flamenco: 15
+    gamelan-southeast-asia: 13
+    east-asia: 10
+    celtic-europe: 15
+    electronic-western: 49
+    exercise: 5
+    andean-south-america: 5
+
+contents:
+  - name: turkey-ottoman.ts
+    kind: file
+    path: turkey-ottoman.ts
+    region: turkey-ottoman
+    default_kit: frameDrum
+    patterns: 20
+    summary: >
+      Ottoman usul and Anatolian folk aksak rhythms. Kit is frameDrum.
+    representative:
+      - Karşılama
+      - Horon
+      - Türk Aksağı
+      - Curcuna
+      - Düyek
+
+  - name: balkans.ts
+    kind: file
+    path: balkans.ts
+    region: balkans
+    default_kit: frameDrum
+    patterns: 20
+    summary: >
+      Balkan aksak — Bulgarian, Greek, Macedonian, Romani dance rhythms
+      in 7/8, 9/8, 11/8, etc.
+    representative:
+      - Rŭchenitsa
+      - Kopanitsa
+      - Daichovo
+      - Čoček
+      - Kalamatianós
+
+  - name: cuba-afrocaribbean.ts
+    kind: file
+    path: cuba-afrocaribbean.ts
+    region: cuba-afrocaribbean
+    default_kit: "727"
+    patterns: 22
+    summary: >
+      Cuban claves (son, rumba), bembé, guaguancó, cha-cha, bolero.
+    representative:
+      - Son Clave 3-2
+      - Bembé
+      - Rumba Clave 3-2
+      - Bolero Cubano
+      - Cha-Cha-Chá
+
+  - name: arabic-swana.ts
+    kind: file
+    path: arabic-swana.ts
+    region: arabic-swana
+    default_kit: frameDrum
+    patterns: 23
+    summary: >
+      SWANA (Southwest Asia / North Africa) iqa'at — Egyptian, Levantine,
+      Maghrebi frame-drum rhythms.
+    representative:
+      - Maqsoum
+      - Baladi
+      - Saidi
+      - Masmoudi Kebir
+      - Wahda
+
+  - name: persia.ts
+    kind: file
+    path: persia.ts
+    region: persia
+    default_kit: frameDrum
+    patterns: 13
+    summary: >
+      Persian/Iranian classical and folk rhythms for tombak and daf.
+    representative:
+      - Reng
+      - Tasnif
+      - Chaharmezrab
+      - Kereshmeh
+
+  - name: india.ts
+    kind: file
+    path: india.ts
+    region: india
+    default_kit: tabla
+    patterns: 32
+    summary: >
+      Hindustani and Carnatic talas — Tintal, Dadra, Rupak, Ektal, Jhaptal,
+      and supplementary theka variations for tabla.
+    representative:
+      - Tintal
+      - Dadra
+      - Rupak Tal
+      - Ektal
+      - Jhaptal
+
+  - name: west-africa.ts
+    kind: file
+    path: west-africa.ts
+    region: west-africa
+    default_kit: "727"
+    patterns: 25
+    summary: >
+      Ewe/Ga/Yoruba/Mandé ensemble core parts and bells — Agbekor, Gahu,
+      Kpanlogo, Kuku, Soli.
+    representative:
+      - Agbekor
+      - Gahu
+      - Kpanlogo
+      - Kuku
+      - Soli
+
+  - name: brazil.ts
+    kind: file
+    path: brazil.ts
+    region: brazil
+    default_kit: "727"
+    patterns: 15
+    summary: >
+      Brazilian grooves — Bossa Nova, Samba variants, Samba-Reggae,
+      Baião, Maracatu.
+    representative:
+      - Bossa Nova
+      - Samba Partido Alto
+      - Samba-Reggae
+      - Baião
+      - Maracatu
+
+  - name: caribbean.ts
+    kind: file
+    path: caribbean.ts
+    region: caribbean
+    default_kit: "727"
+    patterns: 12
+    summary: >
+      Non-Cuban Caribbean — Dembow/Reggaeton, Dancehall, Kompa, Soca,
+      Calypso. Some patterns override default_kit to 808.
+    representative:
+      - Reggaeton Dembow
+      - Dancehall
+      - Kompa
+      - Soca
+      - Calypso
+
+  - name: iberia-flamenco.ts
+    kind: file
+    path: iberia-flamenco.ts
+    region: iberia-flamenco
+    default_kit: "727"
+    patterns: 15
+    summary: >
+      Flamenco compases — Bulería, Soleá, Tangos (flamenco), Seguiriya,
+      Alegrías, plus Iberian folk.
+    representative:
+      - Bulería
+      - Soleá
+      - Tangos (Flamenco)
+      - Seguiriya
+      - Alegrías
+
+  - name: gamelan-southeast-asia.ts
+    kind: file
+    path: gamelan-southeast-asia.ts
+    region: gamelan-southeast-asia
+    default_kit: gamelan
+    patterns: 13
+    summary: >
+      Javanese/Balinese gamelan forms — Lancaran, Kotekan, Ketawang,
+      Ladrang — plus broader Southeast-Asian cycles.
+    representative:
+      - Lancaran
+      - Kotekan
+      - Gendhing Sederhana
+      - Ketawang
+      - Ladrang
+
+  - name: east-asia.ts
+    kind: file
+    path: east-asia.ts
+    region: east-asia
+    default_kit: "808"
+    patterns: 10
+    summary: >
+      Japanese and Korean rhythms — Taiko jiuchi/matsuri, Yatai-bayashi,
+      Samulnori jajinmori, Gutgeori changdan. Some patterns use gamelan
+      kit.
+    representative:
+      - Taiko Jiuchi
+      - Samulnori · Jajinmori
+      - Taiko · Matsuri
+      - Yatai-bayashi
+      - Gutgeori Changdan
+
+  - name: celtic-europe.ts
+    kind: file
+    path: celtic-europe.ts
+    region: celtic-europe
+    default_kit: "707"
+    patterns: 15
+    summary: >
+      Irish and Scandinavian dance rhythms — Reel, Jig, Hornpipe, Slip Jig,
+      Polska variants.
+    representative:
+      - Irish Reel
+      - Irish Jig
+      - Scandi Polska
+      - Irish Hornpipe
+      - Slip Jig
+
+  - name: electronic-western.ts
+    kind: file
+    path: electronic-western.ts
+    region: electronic-western
+    default_kit: "909"
+    patterns: 49
+    summary: >
+      Largest seed file — 49 patterns covering rock, pop, hip-hop,
+      house, techno, drum'n'bass, trap, etc. Default kit is 909 but
+      many patterns explicitly use 808 or 707.
+    representative:
+      - Boom Bap
+      - Four on the Floor
+      - Standard Rock Beat
+      - Anthemic Rock
+      - Pop Clap Beat
+
+  - name: exercise.ts
+    kind: file
+    path: exercise.ts
+    region: exercise
+    default_kit: "707"
+    patterns: 5
+    summary: >
+      Polyrhythm training exercises — Hemiola 3:2, 3:4 triplets, 4:3,
+      5:4, 7:4. Uses per-track subdivisions (full Track form). Not
+      regional — the exercise region exists specifically for these.
+    representative:
+      - Hemiola (3:2)
+      - Triplets over Quarters (3:4)
+      - Four over Three (4:3)
+      - Five over Four (5:4)
+      - Seven over Four (7:4)
+
+  - name: andean-south-america.ts
+    kind: file
+    path: andean-south-america.ts
+    region: andean-south-america
+    default_kit: "727"
+    patterns: 5
+    summary: >
+      Andean and Southern Cone folk dances — Huayno, Chacarera, Zamba,
+      Cueca, Carnavalito.
+    representative:
+      - Huayno
+      - Chacarera
+      - Zamba
+      - Cueca
+      - Carnavalito
+
+  - name: index.ts
+    kind: file
+    path: index.ts
+    summary: >
+      Barrel. Imports all sixteen <REGION>_PATTERNS arrays, concatenates
+      into flat PATTERNS, and exposes registerPatternSource /
+      patternById for user patterns from Dexie.
+    exports:
+      - PATTERNS
+      - registerPatternSource
+      - patternById
+
+related_indexes:
+  - path: ../INDEX.yaml
+    why: Pattern schema and type definitions.
+  - path: ../../audio/INDEX.yaml
+    why: The engine that plays these patterns.
+  - path: ../../../../research/patterns/INDEX.yaml
+    why: The raw pattern corpus these seeds were drawn from.
+  - path: ../../../../research/musicology/INDEX.yaml
+    why: Cultural context for the traditions each region covers.

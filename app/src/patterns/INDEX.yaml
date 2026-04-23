@@ -1,0 +1,92 @@
+# INDEX.yaml — src/patterns
+# Pattern schema + seed library entry point.
+
+path: app/src/patterns
+purpose: >
+  Defines the Pattern type (types.ts) and aggregates the per-region seed
+  files into a single PATTERNS array plus a patternById lookup. User
+  patterns from Dexie are layered on top at runtime via
+  registerPatternSource.
+
+last_indexed: 2026-04-23
+
+contents:
+  - name: types.ts
+    kind: file
+    path: types.ts
+    summary: >
+      Pattern schema. Closed voice set (KK/SN/HH/OH/CP), seven KitIds,
+      sixteen RegionIds, Genre + Difficulty unions. Track is either a
+      Velocity[] shorthand (uses pattern.steps as subdivisions) or a
+      full { pattern, subdivisions?, cycle? } object that unlocks
+      per-track polyrhythm. trackMeta() normalizes either form.
+    exports:
+      - VoiceId
+      - Velocity
+      - KitId
+      - RegionId
+      - Genre
+      - Difficulty
+      - Track
+      - Pattern
+      - TrackMeta
+      - trackMeta
+
+  - name: seed
+    kind: folder
+    path: seed
+    summary: >
+      Sixteen per-region TypeScript files, one barrel (index.ts), and
+      the optional runtime extension hook. Seed patterns are tree-shaken
+      and ship inside the JS bundle — no fetch, no JSON.
+    related: [seed/INDEX.yaml]
+
+  - name: seed/index.ts
+    kind: file
+    path: seed/index.ts
+    summary: >
+      Barrel file. Concatenates the sixteen region arrays in first-seen
+      order, exports the flat PATTERNS array, registerPatternSource
+      (for Dexie-backed user patterns), and patternById lookup.
+    exports:
+      - PATTERNS
+      - registerPatternSource
+      - patternById
+
+aggregate:
+  total_patterns: 294
+  regions_covered:
+    - turkey-ottoman
+    - balkans
+    - cuba-afrocaribbean
+    - arabic-swana
+    - persia
+    - india
+    - west-africa
+    - brazil
+    - caribbean
+    - iberia-flamenco
+    - gamelan-southeast-asia
+    - east-asia
+    - celtic-europe
+    - electronic-western
+    - exercise
+    - andean-south-america
+  kits_used:
+    - "808"
+    - "909"
+    - "707"
+    - "727"
+    - frameDrum
+    - tabla
+    - gamelan
+
+related_indexes:
+  - path: ../INDEX.yaml
+    why: Where in the app this folder sits.
+  - path: seed/INDEX.yaml
+    why: Per-region pattern counts, default kits, representative names.
+  - path: ../audio/INDEX.yaml
+    why: The engine that consumes these patterns.
+  - path: ../../../research/patterns/INDEX.yaml
+    why: The markdown corpus these seeds were transcribed from.

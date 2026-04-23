@@ -1,0 +1,144 @@
+# INDEX.yaml — /app (shipping React application)
+# Structure map of the BeatForge v1 codebase.
+
+path: app
+purpose: >
+  The React 19 + Vite 8 + TypeScript app that ships to GitHub Pages. One
+  AudioEngine drives three modes (Practice, Studio, Library) plus a dev-only
+  _Patterns sandbox. Data lives in Dexie/IndexedDB; seed patterns are
+  compiled-in under src/patterns/seed/.
+
+last_indexed: 2026-04-23
+
+tech_stack:
+  runtime: React 19, TypeScript 6 (beta)
+  build: Vite 8, Bun 1.3.x
+  data: Dexie 4 (IndexedDB), Fuse.js 7 (search)
+  pwa: vite-plugin-pwa 1.2, workbox-window 7.4
+  lint: eslint 9 flat config, typescript-eslint 8
+  deploy: GitHub Pages via .github/workflows/deploy.yml
+
+entrypoints:
+  html: index.html
+  js: src/main.tsx
+  root_component: src/App.tsx
+
+contents:
+  - name: src/App.tsx
+    kind: file
+    path: src/App.tsx
+    summary: >
+      Root component. Owns the AudioEngine singleton, tab routing
+      (practice/studio/library/_patterns), theme (warm/noir/paper),
+      persisted patternId, and the user-pattern cache that bridges Dexie
+      back into the seed pattern registry.
+    depends_on:
+      - ./audio/engine
+      - ./modes/Practice/Practice
+      - ./modes/Studio/Studio
+      - ./modes/Library/Library
+      - ./modes/_Patterns/PatternsSandbox
+      - ./patterns/seed
+      - ./lib/db
+      - ./lib/storage
+
+  - name: src/audio
+    kind: folder
+    path: src/audio
+    summary: >
+      Single-file audio engine (engine.ts) — lookahead scheduler,
+      per-track subdivisions for polyrhythm, synthesis recipes for the
+      seven kits, master bus with compressor + convolution reverb.
+    related: [src/audio/INDEX.yaml]
+
+  - name: src/components
+    kind: folder
+    path: src/components
+    summary: >
+      Shared presentational components — BeatDots (group-colored dots),
+      CircularGrid, LinearGrid, PillGrid (three step-sequencer
+      visualizations), plus visual-helpers (color + opacity math).
+
+  - name: src/lib
+    kind: folder
+    path: src/lib
+    summary: >
+      Framework-adjacent utilities — db.ts (Dexie schema + user pattern
+      CRUD + validation), storage.ts (localStorage: highlights, recents,
+      kit overrides, master volume), pwa.tsx (service-worker registration
+      + update UI).
+
+  - name: src/modes
+    kind: folder
+    path: src/modes
+    summary: >
+      One folder per mode. Each consumes the shared AudioEngine and
+      renders a full-page experience.
+    related: [src/modes/INDEX.yaml]
+
+  - name: src/patterns
+    kind: folder
+    path: src/patterns
+    summary: >
+      Pattern schema (types.ts) plus the per-region seed library under
+      seed/. All 294 shipping patterns are imported through
+      seed/index.ts.
+    related: [src/patterns/INDEX.yaml]
+
+  - name: src/styles/app.css
+    kind: file
+    path: src/styles/app.css
+    lines: 1500
+    summary: >
+      Single stylesheet (~54 KB). CSS variables for the three themes,
+      layout, every mode's chrome, and all component styling. No CSS
+      modules, no framework.
+
+  - name: public
+    kind: folder
+    path: public
+    summary: >
+      Static PWA assets — favicon.svg, icons.svg (sprite), icons/
+      (raster), manifest.webmanifest, og-image.svg. Copied verbatim
+      into dist/.
+
+  - name: scripts
+    kind: folder
+    path: scripts
+    summary: >
+      Dev-time utilities run via bunx — extract-patterns.ts (used during
+      the seed migration) and generate-icons.ts. Not part of the build.
+
+  - name: patterns-drafts
+    kind: folder
+    path: patterns-drafts
+    summary: >
+      Staging area for new pattern batches before they are split into
+      seed/ files. Safe to ignore unless authoring new patterns.
+    stability: experimental
+
+  - name: vite.config.ts
+    kind: file
+    path: vite.config.ts
+    summary: >
+      Vite config — React plugin, PWA plugin (workbox generateSW),
+      /beatforge/ base path for GitHub Pages.
+
+  - name: package.json
+    kind: file
+    path: package.json
+    summary: >
+      Scripts: dev, build (tsc -b && vite build), lint, preview.
+      Bun lockfile committed at bun.lock.
+
+related_indexes:
+  - path: ../INDEX.yaml
+    why: Repo-root context.
+  - path: src/patterns/INDEX.yaml
+    why: Pattern schema + full pattern catalog.
+  - path: src/audio/INDEX.yaml
+    why: Engine internals and kit reference.
+  - path: src/modes/INDEX.yaml
+    why: Per-mode breakdown (Practice/Studio/Library).
+  - path: ../design/INDEX.yaml
+    why: Pre-port prototype — compare when behavior seems off.

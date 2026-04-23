@@ -1,0 +1,42 @@
+# INDEX.yaml — src/audio
+# AudioEngine + kit synthesis.
+
+path: app/src/audio
+purpose: >
+  The entire audio stack lives in a single file. engine.ts owns the
+  Web Audio graph, the lookahead scheduler, per-track independent
+  subdivisions for polyrhythm, and synthesis recipes for all seven kits.
+  React code touches an AudioEngine instance held in App.tsx.
+
+last_indexed: 2026-04-23
+
+contents:
+  - name: engine.ts
+    kind: file
+    path: engine.ts
+    lines: 900
+    summary: >
+      AudioEngine class. Lookahead scheduler (25 ms timer, 120 ms
+      scheduleAhead). Per-track nextNoteTimes and nextIdx so each
+      track's subdivisions and cycle advance independently — this is
+      how polyrhythm is realised. Bar duration is pattern.steps ×
+      (60 / BPM); BPM ties to the main division.
+
+      Master bus: master gain → DynamicsCompressor → destination, with
+      a parallel ConvolverNode reverb bus whose send is set per-kit via
+      KIT_REVERB_SEND. Kits (808, 909, 707, 727, frameDrum, tabla,
+      gamelan) all map to the closed voice set KK/SN/HH/OH/CP; each
+      kit provides its own synthesis recipes. Public state (cursors,
+      bar) is read by the UI each animation frame.
+    exports:
+      - AudioEngine
+    depends_on:
+      - ../patterns/types
+
+related_indexes:
+  - path: ../INDEX.yaml
+    why: Parent src structure.
+  - path: ../patterns/INDEX.yaml
+    why: Pattern schema this engine consumes.
+  - path: ../../../research/technical/INDEX.yaml
+    why: Web Audio / DSP / scheduler references behind the design.

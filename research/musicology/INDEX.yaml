@@ -1,0 +1,401 @@
+# INDEX.yaml — research/musicology
+# 27 cultural/historical reports.
+
+path: research/musicology
+purpose: >
+  Long-form musicological reports — one per region-cluster plus a
+  handful of cross-cutting essays. Used when you need cultural
+  context (not notation) for a tradition: instrument histories,
+  dance contexts, colonial/sociopolitical framing, aesthetic concepts.
+
+last_indexed: 2026-04-23
+
+corpus_totals:
+  files: 27
+  lines: 27759
+
+contents:
+  - name: west-african-traditions.md
+    kind: file
+    path: west-african-traditions.md
+    region: west-africa
+    lines: 602
+    key_concepts:
+      - Mandé drumming
+      - Ewe ensemble
+      - djembe lineage
+      - diasporic influence
+    summary: >
+      Foundations of West African rhythm and its global diaspora
+      impact. Ethical notes on appropriation included.
+
+  - name: afro-cuban-caribbean-latin.md
+    kind: file
+    path: afro-cuban-caribbean-latin.md
+    region: cuba-afrocaribbean
+    lines: 692
+    key_concepts:
+      - clave
+      - Orisha religions
+      - Cuba / Puerto Rico / Brazil / Dominican Republic
+      - diaspora retention
+    summary: >
+      Cross-Caribbean report tracking African retention across
+      Hispanic Caribbean, Brazil, and the Dominican Republic.
+
+  - name: brazilian-traditions.md
+    kind: file
+    path: brazilian-traditions.md
+    region: brazil
+    lines: 1993
+    key_concepts:
+      - Candomblé
+      - Umbanda
+      - Capoeira
+      - samba origins
+      - Tia Ciata
+    summary: >
+      Deep dive on Brazilian sacred-to-secular rhythm lineages and
+      the transatlantic roots of samba.
+
+  - name: caribbean-colombia-mexico.md
+    kind: file
+    path: caribbean-colombia-mexico.md
+    region: caribbean
+    lines: 1679
+    key_concepts:
+      - Cabildo system
+      - Santería batá
+      - Abakuá
+      - Palo Congo
+    summary: >
+      Broader Caribbean / Colombian / Mexican rhythmic foundations
+      rooted in African religious practice.
+
+  - name: andean-south-american.md
+    kind: file
+    path: andean-south-american.md
+    region: andean-south-america
+    lines: 2150
+    key_concepts:
+      - Inca music evidence
+      - quipu
+      - tinkuy
+      - Andean cosmovision
+      - agricultural calendar
+    summary: >
+      Pre-Columbian roots plus modern Andean practice — one of the
+      longest files in the corpus.
+
+  - name: balkan-traditions.md
+    kind: file
+    path: balkan-traditions.md
+    region: balkans
+    lines: 1634
+    key_concepts:
+      - aksak
+      - Brailoiu 1951
+      - Bartók fieldwork
+      - Rŭchenitsa
+      - Kopanitsa
+    summary: >
+      Balkan rhythmic crossroads and the scholarship around
+      additive / aksak meters.
+
+  - name: iberian-traditions.md
+    kind: file
+    path: iberian-traditions.md
+    region: iberia-flamenco
+    lines: 746
+    key_concepts:
+      - compás
+      - palos
+      - flamenco multicultural synthesis
+    summary: >
+      Iberian peninsula as a rhythmic crucible — Moorish, Jewish,
+      Romani, Christian strands converging in flamenco.
+
+  - name: celtic-european-traditions.md
+    kind: file
+    path: celtic-european-traditions.md
+    region: celtic-europe
+    lines: 651
+    key_concepts:
+      - bodhrán
+      - Scottish pipe bands
+      - Polska
+      - Springar
+      - Romani across Europe
+    summary: >
+      Ireland, Scotland, Scandinavia, and pan-European Romani
+      traditions.
+
+  - name: turkish-anatolian-swana.md
+    kind: file
+    path: turkish-anatolian-swana.md
+    region: turkey-ottoman
+    lines: 1320
+    key_concepts:
+      - Central Asian Turkic origins
+      - Seljuk mehter
+      - Ottoman usul
+      - Mevlevi
+      - SWANA shared ecosystem
+    summary: >
+      Turkish / Anatolian / SWANA — from shamanic drumming through
+      Ottoman classical into modern Turkey.
+
+  - name: persian-iranian-traditions.md
+    kind: file
+    path: persian-iranian-traditions.md
+    region: persia
+    lines: 1301
+    key_concepts:
+      - Zoroastrian music
+      - Sassanid golden age
+      - Arab conquest
+      - dastgāh system
+    summary: >
+      Persian rhythmic lineage with emphasis on how tradition
+      survived the Arab conquest.
+
+  - name: caucasus-mediterranean-traditions.md
+    kind: file
+    path: caucasus-mediterranean-traditions.md
+    region: caucasus-mediterranean
+    lines: 803
+    key_concepts:
+      - Georgian polyphony
+      - Armenian duduk/dhol
+      - Azeri mugham
+    summary: >
+      Caucasus as collision zone of empires — Georgia, Armenia,
+      Azerbaijan.
+
+  - name: indian-subcontinent.md
+    kind: file
+    path: indian-subcontinent.md
+    region: india
+    lines: 846
+    key_concepts:
+      - Hindustani tala
+      - Carnatic tala
+      - Ancient Vedic roots
+      - folk traditions
+    summary: >
+      North / South Indian classical systems plus folk — primary
+      source for the 32 India seed patterns.
+
+  - name: east-asian-traditions.md
+    kind: file
+    path: east-asian-traditions.md
+    region: east-asia
+    lines: 1135
+    key_concepts:
+      - Korean changdan
+      - Japanese ma
+      - Southeast Asian convergence
+    summary: >
+      Cross-regional East-Asian survey covering Korea, Japan,
+      Southeast Asia, China in one arc.
+
+  - name: japanese-traditions.md
+    kind: file
+    path: japanese-traditions.md
+    region: east-asia
+    lines: 1149
+    key_concepts:
+      - gagaku
+      - Noh
+      - Kabuki
+      - Taiko
+    summary: >
+      Japan-focused deep dive, strong on taiko history.
+
+  - name: chinese-traditions.md
+    kind: file
+    path: chinese-traditions.md
+    region: east-asia
+    lines: 976
+    key_concepts:
+      - ancient foundations
+      - opera percussion
+      - ethnic minorities
+    summary: >
+      Chinese percussion taxonomy and opera-rhythm systems.
+
+  - name: mongolian-traditions.md
+    kind: file
+    path: mongolian-traditions.md
+    region: central-asian-pacific
+    lines: 1550
+    key_concepts:
+      - nomadic aesthetics
+      - Tengrism
+      - five-animals associations
+      - throat singing context
+    summary: >
+      Mongolia and Inner Mongolia — one of the most comprehensive
+      regional reports.
+
+  - name: central-asian-pacific-traditions.md
+    kind: file
+    path: central-asian-pacific-traditions.md
+    region: central-asian-pacific
+    lines: 528
+    key_concepts:
+      - Silk Road
+      - Pacific Oceania
+      - Native American
+      - cross-regional connections
+    summary: >
+      Survey tying Central Asia, Oceania, and Indigenous Americas
+      together with ethical notes.
+
+  - name: gamelan-southeast-asian.md
+    kind: file
+    path: gamelan-southeast-asian.md
+    region: gamelan-southeast-asia
+    lines: 721
+    key_concepts:
+      - Javanese gamelan
+      - Balinese kotekan
+      - Thai traditions
+      - Myanmar hsaing waing
+    summary: >
+      Gamelan deep dive plus adjacent Southeast-Asian ensembles.
+
+  - name: vietnam-cambodia-malaysia.md
+    kind: file
+    path: vietnam-cambodia-malaysia.md
+    region: gamelan-southeast-asia
+    lines: 948
+    key_concepts:
+      - Vietnamese ca trù
+      - Cambodian pinpeat
+      - Malaysian gamelan / silat
+    summary: >
+      Mainland Southeast Asia traditions that are adjacent to the
+      gamelan sphere.
+
+  - name: modern-african-genres.md
+    kind: file
+    path: modern-african-genres.md
+    region: modern-african
+    lines: 617
+    key_concepts:
+      - Congolese soukous
+      - West African modern
+      - Amapiano / SA genres
+      - Lusophone scenes
+    summary: >
+      Modern African popular genres by subregion.
+
+  - name: north-east-african-traditions.md
+    kind: file
+    path: north-east-african-traditions.md
+    region: north-east-african
+    lines: 665
+    key_concepts:
+      - Maghreb
+      - Horn of Africa
+      - Swahili coast
+      - Sudanese traditions
+    summary: >
+      North and East African rhythmic lineages with cross-regional
+      connections.
+
+  - name: electronic-hiphop-funk-reggae.md
+    kind: file
+    path: electronic-hiphop-funk-reggae.md
+    region: electronic-western
+    lines: 900
+    key_concepts:
+      - James Brown "The One"
+      - New Orleans funk
+      - P-Funk Afrofuturism
+      - Sly Stone
+    summary: >
+      Afro-diasporic lineage from funk through hip-hop and reggae —
+      groundwork for the drum machine era.
+
+  - name: electronic-music-history.md
+    kind: file
+    path: electronic-music-history.md
+    region: electronic-western
+    lines: 626
+    key_concepts:
+      - musique concrète
+      - elektronische Musik
+      - Berlin School
+      - synth-pop
+    summary: >
+      From invention of electronic sound through 1980s pop
+      synthesis.
+
+  - name: global-electronic-scenes.md
+    kind: file
+    path: global-electronic-scenes.md
+    region: global-electronic
+    lines: 883
+    key_concepts:
+      - Budots
+      - Funkot
+      - Vinahouse
+      - Manyao
+      - Mor Lam Sing
+    summary: >
+      Electronic scenes beyond the Western canon — Philippines,
+      Indonesia, Vietnam, Malaysia, Thailand.
+
+  - name: underground-electronic-movements.md
+    kind: file
+    path: underground-electronic-movements.md
+    region: global-electronic
+    lines: 1055
+    key_concepts:
+      - MENA underground
+      - South Asia
+      - East/SE Asia
+      - Latin America
+      - Eastern Europe
+    summary: >
+      Deeper underground electronic scenes per region.
+
+  - name: internet-born-genres.md
+    kind: file
+    path: internet-born-genres.md
+    region: internet-born
+    lines: 1164
+    key_concepts:
+      - vaporwave
+      - future funk
+      - mallsoft
+      - signalwave
+      - hardvapor
+    summary: >
+      Genres that could not exist without the internet — surveys
+      microgenres from the 2010s onward.
+
+  - name: econopolitics-of-music.md
+    kind: file
+    path: econopolitics-of-music.md
+    region: cross-cutting
+    lines: 890
+    key_concepts:
+      - phonograph era
+      - 78rpm race records
+      - LP as art
+      - CD era
+      - streaming economics
+    summary: >
+      Why recorded music sounds the way it does — format and
+      business-model history from 1877 to today.
+
+related_indexes:
+  - path: ../INDEX.yaml
+    why: Research corpus root.
+  - path: ../patterns/INDEX.yaml
+    why: Notated patterns paired with these cultural reports.
+  - path: ../../app/src/patterns/seed/INDEX.yaml
+    why: Shipping seed patterns drawn from these regions.
