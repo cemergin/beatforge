@@ -148,6 +148,72 @@ describe('AudioEngine.setMasterVolume()', () => {
   });
 });
 
+describe('AudioEngine.loadPattern() hot swap', () => {
+  it('fresh load (not running) resets nextIdx + cursors per track', () => {
+    const e = new AudioEngine();
+    e.loadPattern(fourFour());
+    const inner = e as unknown as {
+      nextIdx: Record<string, number>;
+      cursors: Record<string, number>;
+    };
+    expect(inner.nextIdx.KK).toBe(0);
+    expect(inner.cursors.KK).toBe(-1);
+  });
+
+  it('hot swap while running preserves scheduler phase for surviving tracks', () => {
+    // Sequencer state doesn't care about real AudioContext — we forge
+    // a "running" engine, advance nextIdx by hand, then hot-swap. The
+    // invariant: nextIdx must NOT snap back to 0, because that would
+    // restart the pattern audibly mid-bar every time a cell is toggled.
+    const e = new AudioEngine();
+    e.loadPattern(fourFour());
+    const inner = e as unknown as {
+      running: boolean;
+      nextIdx: Record<string, number>;
+      cursors: Record<string, number>;
+      nextNoteTimes: Record<string, number>;
+    };
+    inner.running = true;
+    inner.nextIdx.KK = 7;
+    inner.cursors.KK = 7;
+    inner.nextNoteTimes.KK = 4.25;
+
+    // Cell edit: same track shape, different velocities.
+    const edited = fourFour();
+    edited.tracks = { KK: [2, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0] };
+    e.loadPattern(edited);
+
+    expect(inner.nextIdx.KK).toBe(7);          // phase preserved
+    expect(inner.cursors.KK).toBe(7);
+    expect(inner.nextNoteTimes.KK).toBe(4.25); // schedule preserved
+  });
+
+  it('hot swap initialises freshly-added tracks + prunes removed ones', () => {
+    const e = new AudioEngine();
+    e.loadPattern(fourFour());
+    const inner = e as unknown as {
+      running: boolean;
+      nextIdx: Record<string, number>;
+      cursors: Record<string, number>;
+      nextNoteTimes: Record<string, number>;
+      nextBarTime: number;
+    };
+    inner.running = true;
+    inner.nextBarTime = 3.14;
+
+    const withSnare = fourFour();
+    withSnare.tracks = {
+      SD: [0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0],
+    };
+    e.loadPattern(withSnare);
+
+    expect(inner.nextIdx.KK).toBeUndefined();  // pruned
+    expect(inner.nextIdx.SD).toBe(0);           // initialised
+    expect(inner.nextNoteTimes.SD).toBe(3.14);  // at next bar
+    expect(inner.cursors.SD).toBe(-1);
+  });
+});
+
 describe('AudioEngine simple setters', () => {
   it('setKit updates kit id', () => {
     const e = new AudioEngine();

@@ -158,13 +158,39 @@ export class AudioEngine {
   }
 
   loadPattern(p: Pattern): void {
+    const wasRunning = this.running;
     this.pattern = p;
-    this.cursors = {};
-    this.nextIdx = {};
-    Object.keys(p.tracks).forEach((tr) => {
-      this.cursors[tr] = -1;
-      this.nextIdx[tr] = 0;
-    });
+
+    if (!wasRunning) {
+      // Fresh load — start() will seed nextNoteTimes from startTime.
+      this.cursors = {};
+      this.nextIdx = {};
+      Object.keys(p.tracks).forEach((tr) => {
+        this.cursors[tr] = -1;
+        this.nextIdx[tr] = 0;
+      });
+      return;
+    }
+
+    // Hot swap while playing: preserve scheduler phase so cell edits,
+    // grouping picks, and group-accent tweaks don't snap the playhead
+    // back to step 0. Tracks that existed keep their nextIdx/nextNoteTimes;
+    // new tracks enter at the next bar boundary; removed tracks are pruned
+    // so tick() doesn't touch stale entries.
+    for (const tr of Object.keys(p.tracks)) {
+      if (!(tr in this.nextIdx)) {
+        this.nextIdx[tr] = 0;
+        this.cursors[tr] = -1;
+        this.nextNoteTimes[tr] = this.nextBarTime;
+      }
+    }
+    for (const tr of Object.keys(this.nextIdx)) {
+      if (!(tr in p.tracks)) {
+        delete this.nextIdx[tr];
+        delete this.nextNoteTimes[tr];
+        delete this.cursors[tr];
+      }
+    }
   }
 
   start(countInBars = 0): void {
@@ -340,7 +366,10 @@ export class AudioEngine {
           }
         }, delayMs);
       }
-      this.nextBarTime += barSec;
+      // Derive next bar time from startTime + (barIndex+1)*barSec instead
+      // of `+= barSec` so cumulative float-add drift stays bounded across
+      // long sessions / high BPMs.
+      this.nextBarTime = this.startTime + (barIndex + 1) * barSec;
     }
 
     this.timerId = setTimeout(this.tick, this.lookaheadMs);
