@@ -6,8 +6,10 @@ import { Studio } from './modes/Studio/Studio';
 import { PatternsSandbox } from './modes/_Patterns/PatternsSandbox';
 import type { KitId, Pattern } from './patterns/types';
 import { patternById, registerPatternSource } from './patterns/seed';
+import { deserializePattern } from './patterns/serialize';
 import { loadAllSafe } from './lib/db';
 import { getMasterVolume } from './lib/storage';
+import { logError } from './lib/errors';
 import './styles/app.css';
 
 type Theme = 'warm' | 'noir' | 'paper';
@@ -67,6 +69,9 @@ export default function App() {
 
   // User-pattern cache so Practice/Library can resolve them by id.
   const userCacheRef = useRef<Map<string, Pattern>>(new Map());
+  // Transient patterns decoded from ?p= share links. Not persisted to IDB;
+  // live only in-memory for the session. Keyed by a stable share id.
+  const sharedPatternsRef = useRef<Map<string, Pattern>>(new Map());
 
   const refreshUserCache = useCallback(async () => {
     const all = await loadAllSafe();
@@ -77,14 +82,46 @@ export default function App() {
     userCacheRef.current = map;
   }, []);
 
-  // Expose user patterns to seed.patternById.
+  // Expose user patterns + shared patterns to seed.patternById.
   useEffect(() => {
-    const unregister = registerPatternSource(
+    const unregisterUser = registerPatternSource(
       (id) => userCacheRef.current.get(id),
     );
+    const unregisterShared = registerPatternSource(
+      (id) => sharedPatternsRef.current.get(id),
+    );
     refreshUserCache();
-    return unregister;
+    return () => { unregisterUser(); unregisterShared(); };
   }, [refreshUserCache]);
+
+  // One-shot: decode ?p=<hash> on first load. If it decodes + validates,
+  // register as a shared pattern and set as current. Also strip the ?p
+  // from the URL after registering so reloading doesn't re-decode.
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const hash = params.get('p');
+    if (!hash) return;
+
+    let cancelled = false;
+    (async () => {
+      const pattern = await deserializePattern(hash);
+      if (cancelled) return;
+      if (!pattern) {
+        logError('Share link invalid or corrupted', 'could not decode ?p= pattern');
+        return;
+      }
+      const shareId = `shared-${pattern.id}-${Date.now().toString(36)}`;
+      const seeded: Pattern = { ...pattern, id: shareId };
+      sharedPatternsRef.current.set(shareId, seeded);
+      setPatternId(shareId);
+      setTab('practice');
+      // Replace URL: drop ?p=, keep tab+pattern so future reloads point at
+      // the transient id (which will be lost on tab close — acceptable).
+      const next = new URLSearchParams({ tab: 'practice', pattern: shareId });
+      window.history.replaceState(null, '', `${window.location.pathname}?${next.toString()}`);
+    })();
+    return () => { cancelled = true; };
+  }, []);
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;

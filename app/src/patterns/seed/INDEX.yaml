@@ -1,39 +1,84 @@
 # INDEX.yaml — src/patterns/seed
-# Per-region seed pattern files. 294 patterns total.
+# Per-region seed pattern files, shipped as JSON. 526 patterns total.
 
 path: app/src/patterns/seed
 purpose: >
-  One TypeScript file per RegionId. Each file exports
-  <REGION>_PATTERNS: Pattern[]. The barrel (index.ts) concatenates them
-  in first-seen order. Pattern counts below were taken by counting
-  top-level `id:` fields in each file on 2026-04-23.
+  One JSON file per RegionId. The barrel (index.ts) eager-globs every
+  *.json in this directory, runs each entry through the Zod PatternSchema
+  from ../schema.ts, and concatenates the parsed arrays into PATTERNS.
+  A malformed entry throws at module-load with pattern id + field path.
 
-last_indexed: 2026-04-23
+  Community contributors can add a pattern with a single-file PR editing
+  the relevant region's JSON — no TypeScript knowledge required. The
+  schema is the authoritative shape contract.
+
+last_indexed: 2026-04-22
 
 aggregate:
-  total_patterns: 294
+  total_patterns: 526
   per_region:
     turkey-ottoman: 20
-    balkans: 20
-    cuba-afrocaribbean: 22
+    balkans: 32
+    cuba-afrocaribbean: 32
     arabic-swana: 23
     persia: 13
-    india: 32
-    west-africa: 25
-    brazil: 15
-    caribbean: 12
-    iberia-flamenco: 15
+    india: 47
+    west-africa: 40
+    brazil: 27
+    caribbean: 26
+    iberia-flamenco: 25
     gamelan-southeast-asia: 13
     east-asia: 10
-    celtic-europe: 15
+    celtic-europe: 28
     electronic-western: 49
     exercise: 5
     andean-south-america: 5
+    modern-african: 28
+    north-east-african: 21
+    central-asian-pacific: 18
+    caucasus-mediterranean: 15
+    global-electronic: 22
+    underground-electronic: 15
+    internet-born: 12
+
+load_order:
+  # First pass — REGION_ORDER in index.ts (matches legacy concat order).
+  # Any JSON not listed here is appended alphabetically by filename.
+  - turkey-ottoman
+  - balkans
+  - cuba-afrocaribbean
+  - arabic-swana
+  - persia
+  - india
+  - west-africa
+  - brazil
+  - caribbean
+  - iberia-flamenco
+  - gamelan-southeast-asia
+  - east-asia
+  - celtic-europe
+  - electronic-western
+  - exercise
+  - andean-south-america
+  - modern-african
+  - north-east-african
+  - central-asian-pacific
+  - caucasus-mediterranean
+  - global-electronic
+  - underground-electronic
+  - internet-born
+
+schema:
+  file: ../schema.ts
+  purpose: >
+    Zod `PatternSchema`. Enforces enum membership (region/genre/kit/
+    difficulty/stepUnit/voices/velocities), grouping.sum === steps,
+    bpm.default ∈ [min, max], non-empty tracks. Also exports
+    `UserPatternSchema` (Pattern ∩ {user: true, createdAt, updatedAt})
+    reused by lib/db.ts for IDB validation.
 
 contents:
-  - name: turkey-ottoman.ts
-    kind: file
-    path: turkey-ottoman.ts
+  - name: turkey-ottoman.json
     region: turkey-ottoman
     default_kit: frameDrum
     patterns: 20
@@ -46,12 +91,10 @@ contents:
       - Curcuna
       - Düyek
 
-  - name: balkans.ts
-    kind: file
-    path: balkans.ts
+  - name: balkans.json
     region: balkans
     default_kit: frameDrum
-    patterns: 20
+    patterns: 32
     summary: >
       Balkan aksak — Bulgarian, Greek, Macedonian, Romani dance rhythms
       in 7/8, 9/8, 11/8, etc.
@@ -62,12 +105,10 @@ contents:
       - Čoček
       - Kalamatianós
 
-  - name: cuba-afrocaribbean.ts
-    kind: file
-    path: cuba-afrocaribbean.ts
+  - name: cuba-afrocaribbean.json
     region: cuba-afrocaribbean
     default_kit: "727"
-    patterns: 22
+    patterns: 32
     summary: >
       Cuban claves (son, rumba), bembé, guaguancó, cha-cha, bolero.
     representative:
@@ -77,9 +118,7 @@ contents:
       - Bolero Cubano
       - Cha-Cha-Chá
 
-  - name: arabic-swana.ts
-    kind: file
-    path: arabic-swana.ts
+  - name: arabic-swana.json
     region: arabic-swana
     default_kit: frameDrum
     patterns: 23
@@ -93,9 +132,7 @@ contents:
       - Masmoudi Kebir
       - Wahda
 
-  - name: persia.ts
-    kind: file
-    path: persia.ts
+  - name: persia.json
     region: persia
     default_kit: frameDrum
     patterns: 13
@@ -107,12 +144,10 @@ contents:
       - Chaharmezrab
       - Kereshmeh
 
-  - name: india.ts
-    kind: file
-    path: india.ts
+  - name: india.json
     region: india
     default_kit: tabla
-    patterns: 32
+    patterns: 47
     summary: >
       Hindustani and Carnatic talas — Tintal, Dadra, Rupak, Ektal, Jhaptal,
       and supplementary theka variations for tabla.
@@ -123,12 +158,10 @@ contents:
       - Ektal
       - Jhaptal
 
-  - name: west-africa.ts
-    kind: file
-    path: west-africa.ts
+  - name: west-africa.json
     region: west-africa
     default_kit: "727"
-    patterns: 25
+    patterns: 40
     summary: >
       Ewe/Ga/Yoruba/Mandé ensemble core parts and bells — Agbekor, Gahu,
       Kpanlogo, Kuku, Soli.
@@ -139,12 +172,10 @@ contents:
       - Kuku
       - Soli
 
-  - name: brazil.ts
-    kind: file
-    path: brazil.ts
+  - name: brazil.json
     region: brazil
     default_kit: "727"
-    patterns: 15
+    patterns: 27
     summary: >
       Brazilian grooves — Bossa Nova, Samba variants, Samba-Reggae,
       Baião, Maracatu.
@@ -155,12 +186,10 @@ contents:
       - Baião
       - Maracatu
 
-  - name: caribbean.ts
-    kind: file
-    path: caribbean.ts
+  - name: caribbean.json
     region: caribbean
     default_kit: "727"
-    patterns: 12
+    patterns: 26
     summary: >
       Non-Cuban Caribbean — Dembow/Reggaeton, Dancehall, Kompa, Soca,
       Calypso. Some patterns override default_kit to 808.
@@ -171,12 +200,10 @@ contents:
       - Soca
       - Calypso
 
-  - name: iberia-flamenco.ts
-    kind: file
-    path: iberia-flamenco.ts
+  - name: iberia-flamenco.json
     region: iberia-flamenco
     default_kit: "727"
-    patterns: 15
+    patterns: 25
     summary: >
       Flamenco compases — Bulería, Soleá, Tangos (flamenco), Seguiriya,
       Alegrías, plus Iberian folk.
@@ -187,9 +214,7 @@ contents:
       - Seguiriya
       - Alegrías
 
-  - name: gamelan-southeast-asia.ts
-    kind: file
-    path: gamelan-southeast-asia.ts
+  - name: gamelan-southeast-asia.json
     region: gamelan-southeast-asia
     default_kit: gamelan
     patterns: 13
@@ -203,9 +228,7 @@ contents:
       - Ketawang
       - Ladrang
 
-  - name: east-asia.ts
-    kind: file
-    path: east-asia.ts
+  - name: east-asia.json
     region: east-asia
     default_kit: "808"
     patterns: 10
@@ -220,12 +243,10 @@ contents:
       - Yatai-bayashi
       - Gutgeori Changdan
 
-  - name: celtic-europe.ts
-    kind: file
-    path: celtic-europe.ts
+  - name: celtic-europe.json
     region: celtic-europe
     default_kit: "707"
-    patterns: 15
+    patterns: 28
     summary: >
       Irish and Scandinavian dance rhythms — Reel, Jig, Hornpipe, Slip Jig,
       Polska variants.
@@ -236,9 +257,7 @@ contents:
       - Irish Hornpipe
       - Slip Jig
 
-  - name: electronic-western.ts
-    kind: file
-    path: electronic-western.ts
+  - name: electronic-western.json
     region: electronic-western
     default_kit: "909"
     patterns: 49
@@ -253,9 +272,7 @@ contents:
       - Anthemic Rock
       - Pop Clap Beat
 
-  - name: exercise.ts
-    kind: file
-    path: exercise.ts
+  - name: exercise.json
     region: exercise
     default_kit: "707"
     patterns: 5
@@ -270,9 +287,7 @@ contents:
       - Five over Four (5:4)
       - Seven over Four (7:4)
 
-  - name: andean-south-america.ts
-    kind: file
-    path: andean-south-america.ts
+  - name: andean-south-america.json
     region: andean-south-america
     default_kit: "727"
     patterns: 5
@@ -286,17 +301,78 @@ contents:
       - Cueca
       - Carnavalito
 
+  - name: modern-african.json
+    region: modern-african
+    default_kit: "727"
+    patterns: 28
+    summary: >
+      Afropop, highlife, soukous, makossa, gqom, kwaito — contemporary
+      pan-African grooves.
+
+  - name: north-east-african.json
+    region: north-east-african
+    default_kit: frameDrum
+    patterns: 21
+    summary: >
+      Gnawa, Ethiopian, Somali, Sufi — North/East African traditions.
+
+  - name: central-asian-pacific.json
+    region: central-asian-pacific
+    default_kit: frameDrum
+    patterns: 18
+    summary: >
+      Uzbek, Uyghur, Afghan rhythms alongside Polynesian and Aboriginal
+      cycles.
+
+  - name: caucasus-mediterranean.json
+    region: caucasus-mediterranean
+    default_kit: frameDrum
+    patterns: 15
+    summary: >
+      Georgia, Armenia, Crete, Sicily, Sufi dhikr.
+
+  - name: global-electronic.json
+    region: global-electronic
+    default_kit: "909"
+    patterns: 22
+    summary: >
+      Funkot, budots, vinahouse, baile funk, drill — global dance floors.
+
+  - name: underground-electronic.json
+    region: underground-electronic
+    default_kit: "808"
+    patterns: 15
+    summary: >
+      Mahraganat, dabke-electronic, guaracha, hardbass — underground
+      electronic traditions.
+
+  - name: internet-born.json
+    region: internet-born
+    default_kit: "909"
+    patterns: 12
+    summary: >
+      Vaporwave, lo-fi hip-hop, hyperpop, drift-phonk — internet-native
+      microgenres.
+
   - name: index.ts
     kind: file
-    path: index.ts
     summary: >
-      Barrel. Imports all sixteen <REGION>_PATTERNS arrays, concatenates
-      into flat PATTERNS, and exposes registerPatternSource /
-      patternById for user patterns from Dexie.
+      Barrel. Eager-globs all *.json, parses each entry through
+      PatternSchema, exposes PATTERNS + registerPatternSource +
+      patternById (the user-pattern resolution hook).
     exports:
       - PATTERNS
       - registerPatternSource
       - patternById
+
+contributing:
+  how_to_add_a_pattern: >
+    1. Open the relevant `seed/<region>.json` file.
+    2. Add your pattern object at the end of the array, matching the
+       shape of existing entries.
+    3. Run `bun run test` locally — the schema test will reject malformed
+       entries with the exact field path.
+    4. Open a PR. CI runs the build, which re-validates every pattern.
 
 related_indexes:
   - path: ../INDEX.yaml

@@ -37,6 +37,21 @@ export function PatternDetail({
     window.setTimeout(() => setShareToast(null), 1500);
   }, [pattern.id]);
 
+  // Standalone share — encodes the whole pattern into the URL so users
+  // without this library still see it. Bigger URL, no Practice-side
+  // lookup needed.
+  const copyStandaloneLink = useCallback(async () => {
+    try {
+      const { buildShareUrl } = await import('../../patterns/serialize');
+      const url = await buildShareUrl(pattern);
+      await navigator.clipboard.writeText(url);
+      setShareToast('Standalone link copied');
+    } catch {
+      setShareToast('Encode failed');
+    }
+    window.setTimeout(() => setShareToast(null), 1800);
+  }, [pattern]);
+
   const related = useMemo(() => ({
     grouping: sameGrouping(pattern, PATTERNS).slice(0, 6),
     region: sameRegion(pattern, PATTERNS).slice(0, 6),
@@ -214,9 +229,17 @@ export function PatternDetail({
             className="bf-chip ghost"
             onClick={copyShareLink}
             type="button"
-            title="Copy shareable Practice link"
+            title="Copy a short link — recipient must have BeatForge open"
           >
             Share link
+          </button>
+          <button
+            className="bf-chip ghost"
+            onClick={copyStandaloneLink}
+            type="button"
+            title="Copy a standalone link — pattern fully encoded, works anywhere"
+          >
+            Share standalone
           </button>
           <button
             className="bf-chip ghost"

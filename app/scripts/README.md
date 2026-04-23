@@ -2,6 +2,48 @@
 
 This directory hosts dev-time tooling. Nothing here is bundled into the app.
 
+## Contributing a new pattern (no TypeScript needed)
+
+Seed patterns ship as JSON under `app/src/patterns/seed/<region>.json`. To
+add a pattern:
+
+1. Pick the right region file for your rhythm (see
+   `app/src/patterns/seed/INDEX.yaml` for the region catalog).
+2. Open the JSON array and append a new pattern object matching the shape of
+   existing entries. Required fields and enum values are declared in
+   `app/src/patterns/schema.ts` (Zod `PatternSchema`).
+3. Key invariants the schema checks:
+   - `grouping` elements sum exactly to `steps`
+   - `bpm.default` falls in `[bpm.min, bpm.max]`
+   - `tracks` has at least one voice, each track is a non-empty velocity
+     array (0/1/2) or an explicit `{ pattern, subdivisions?, cycle? }` for
+     polyrhythms
+   - `region` / `genre` / `defaultKit` / `difficulty` / `stepUnit` are
+     members of their closed enums
+4. Run `bun run test` — the schema test will reject malformed entries with
+   a pattern-id-qualified field path.
+5. Open a PR. CI runs `bun run build`, which re-validates every pattern
+   at module-load via Zod.
+
+No TypeScript edits are required for a pattern addition. Add fields only
+by first adjusting `schema.ts` + `types.ts`.
+
+## migrate-patterns-to-json.ts — one-shot migration helper
+
+Used once (2026-04-22) to convert the 23 `seed/<region>.ts` exports into
+`seed/<region>.json`. Kept in-tree as a reference; safe to delete once the
+history is in git.
+
+## audit-pattern-schema.ts — batch schema check
+
+Runs `PatternSchema.safeParse` against every entry in every seed JSON
+without aborting on the first failure. Prints a `[region] id — message`
+line for each issue so you can see the full picture.
+
+```bash
+bun run audit-pattern-schema
+```
+
 ## extract-patterns.ts — Markdown → draft JSON
 
 Carves a research Markdown file into per-pattern draft JSONs. Intentionally
