@@ -490,7 +490,8 @@
     "relatedIds": [
       "soca",
       "mento"
-    ]
+    ],
+    "swingDefault": 0.52
   },
   {
     "id": "mento",
@@ -588,7 +589,8 @@
     "relatedIds": [
       "calypso",
       "ska"
-    ]
+    ],
+    "swingDefault": 0.52
   },
   {
     "id": "ska",
@@ -1511,7 +1513,8 @@
     "relatedIds": [
       "bomba-holande",
       "parang"
-    ]
+    ],
+    "swingDefault": 0.52
   },
   {
     "id": "merengue-tipico",
@@ -1612,7 +1615,8 @@
       "merengue",
       "merengue-pambiche",
       "bachata"
-    ]
+    ],
+    "swingDefault": 0.52
   },
   {
     "id": "merengue-pambiche",
@@ -1711,7 +1715,8 @@
     "relatedIds": [
       "merengue",
       "merengue-tipico"
-    ]
+    ],
+    "swingDefault": 0.52
   },
   {
     "id": "rara-haiti",
@@ -2507,7 +2512,8 @@
     "relatedIds": [
       "seis-jibaro",
       "calypso"
-    ]
+    ],
+    "swingDefault": 0.52
   },
   {
     "id": "kadans-lypso",

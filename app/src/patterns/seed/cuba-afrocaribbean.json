@@ -97,7 +97,8 @@
       "funk-second-line",
       "bomba-sica",
       "agbekor"
-    ]
+    ],
+    "swingDefault": 0.52
   },
   {
     "id": "bembe",
@@ -283,7 +284,8 @@
       "son-clave",
       "guaguanco",
       "samba-partido-alto"
-    ]
+    ],
+    "swingDefault": 0.52
   },
   {
     "id": "bolero",
@@ -567,7 +569,8 @@
       "son-clave",
       "soukous",
       "mozambique"
-    ]
+    ],
+    "swingDefault": 0.52
   },
   {
     "id": "guaguanco",
@@ -945,7 +948,8 @@
     "story": "Played on the side of a timbal \u2014 slinky, sideways, reserved for mambo verses before the montuno opens up.",
     "relatedIds": [
       "mambo"
-    ]
+    ],
+    "swingDefault": 0.52
   },
   {
     "id": "son-clave-2-3",
@@ -1042,7 +1046,8 @@
     "story": "Son clave flipped \u2014 two side first, then three. Most Cuban charts start here because the melodic phrasing anticipates the \"3\" resolution.",
     "relatedIds": [
       "son-clave"
-    ]
+    ],
+    "swingDefault": 0.52
   },
   {
     "id": "danzon",
@@ -1239,7 +1244,8 @@
     "relatedIds": [
       "timba",
       "mambo"
-    ]
+    ],
+    "swingDefault": 0.52
   },
   {
     "id": "timba",
@@ -1337,7 +1343,8 @@
     "relatedIds": [
       "songo",
       "mambo"
-    ]
+    ],
+    "swingDefault": 0.52
   },
   {
     "id": "yambu",
@@ -1627,7 +1634,8 @@
     "relatedIds": [
       "son-clave",
       "soukous"
-    ]
+    ],
+    "swingDefault": 0.52
   },
   {
     "id": "mozambique",
@@ -2204,7 +2212,8 @@
     "relatedIds": [
       "cha-cha",
       "danzon"
-    ]
+    ],
+    "swingDefault": 0.52
   },
   {
     "id": "danzon-cha",
@@ -2403,7 +2412,8 @@
       "mambo",
       "guaguanco",
       "rumba-clave-3-2"
-    ]
+    ],
+    "swingDefault": 0.52
   },
   {
     "id": "son-montuno",
@@ -2504,7 +2514,8 @@
       "son-clave-2-3",
       "mambo",
       "changui"
-    ]
+    ],
+    "swingDefault": 0.52
   },
   {
     "id": "afro-68",
@@ -3169,6 +3180,7 @@
     "relatedIds": [
       "cascara",
       "mambo"
-    ]
+    ],
+    "swingDefault": 0.52
   }
 ]

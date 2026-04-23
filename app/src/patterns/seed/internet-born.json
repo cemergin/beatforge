@@ -2,7 +2,7 @@
   {
     "id": "vaporwave",
     "name": "Vaporwave / Mallsoft",
-    "origin": "Internet · Bandcamp / Tumblr",
+    "origin": "Internet \u00b7 Bandcamp / Tumblr",
     "tradition": "Vaporwave",
     "genre": "electronic",
     "timeSig": "4/4",
@@ -95,7 +95,7 @@
   {
     "id": "future-funk",
     "name": "Future Funk",
-    "origin": "Internet · YouTube / Bandcamp",
+    "origin": "Internet \u00b7 YouTube / Bandcamp",
     "tradition": "Future funk",
     "genre": "electronic",
     "timeSig": "4/4",
@@ -201,7 +201,7 @@
       "filter-sweep"
     ],
     "swingable": false,
-    "story": "Vaporwave's dance-floor descendant — 1980s Japanese city pop chopped, pitched up and layered with sidechain-pumped French house drums.",
+    "story": "Vaporwave's dance-floor descendant \u2014 1980s Japanese city pop chopped, pitched up and layered with sidechain-pumped French house drums.",
     "relatedIds": [
       "vaporwave",
       "disco-classic",
@@ -211,7 +211,7 @@
   {
     "id": "lofi-hiphop-standard",
     "name": "Lo-fi Hip-Hop",
-    "origin": "Internet · YouTube (Lofi Girl)",
+    "origin": "Internet \u00b7 YouTube (Lofi Girl)",
     "tradition": "Lo-fi beats",
     "genre": "hip-hop",
     "timeSig": "4/4",
@@ -302,12 +302,13 @@
     "story": "The beat 50,000 concurrent YouTube viewers studied to. J Dilla-descended \"drunken\" timing, warm tape hiss, and a cat-girl studying at her desk forever.",
     "relatedIds": [
       "hiphop-lofi"
-    ]
+    ],
+    "swingDefault": 0.58
   },
   {
     "id": "nightcore",
     "name": "Nightcore",
-    "origin": "Internet · YouTube",
+    "origin": "Internet \u00b7 YouTube",
     "tradition": "Nightcore",
     "genre": "electronic",
     "timeSig": "4/4",
@@ -413,7 +414,7 @@
       "vocal"
     ],
     "swingable": false,
-    "story": "A Norwegian school project turned global YouTube genre — any trance track sped 25% with pitch raised to chipmunk pop, paired with anime thumbnails.",
+    "story": "A Norwegian school project turned global YouTube genre \u2014 any trance track sped 25% with pitch raised to chipmunk pop, paired with anime thumbnails.",
     "relatedIds": [
       "hyperpop",
       "happy-hardcore",
@@ -424,8 +425,8 @@
   {
     "id": "hyperpop",
     "name": "Hyperpop",
-    "origin": "Internet · SoundCloud / Spotify",
-    "tradition": "100 gecs · PC Music",
+    "origin": "Internet \u00b7 SoundCloud / Spotify",
+    "tradition": "100 gecs \u00b7 PC Music",
     "genre": "electronic",
     "timeSig": "4/4",
     "grouping": [
@@ -543,8 +544,8 @@
   {
     "id": "phonk-drift",
     "name": "Drift Phonk",
-    "origin": "Internet · YouTube / TikTok",
-    "tradition": "KORDHELL · drift phonk",
+    "origin": "Internet \u00b7 YouTube / TikTok",
+    "tradition": "KORDHELL \u00b7 drift phonk",
     "genre": "hip-hop",
     "timeSig": "4/4",
     "grouping": [
@@ -649,7 +650,7 @@
       "saturated cowbell"
     ],
     "swingable": false,
-    "story": "KORDHELL's \"Murder In My Mind\" soundtracked a million car-drift videos — relentless 8th-note cowbells distorted until they dominate the entire mix.",
+    "story": "KORDHELL's \"Murder In My Mind\" soundtracked a million car-drift videos \u2014 relentless 8th-note cowbells distorted until they dominate the entire mix.",
     "relatedIds": [
       "hiphop-phonk",
       "phonk-brazilian",
@@ -660,8 +661,8 @@
   {
     "id": "phonk-brazilian",
     "name": "Brazilian Phonk",
-    "origin": "Internet · TikTok / Brazil",
-    "tradition": "Phonk funk · MC GW",
+    "origin": "Internet \u00b7 TikTok / Brazil",
+    "tradition": "Phonk funk \u00b7 MC GW",
     "genre": "hip-hop",
     "timeSig": "4/4",
     "grouping": [
@@ -768,7 +769,7 @@
       "agogo"
     ],
     "swingable": false,
-    "story": "Drift phonk collides with Rio baile funk — tamborzão kick syncopation under distorted 808 cowbells. Gym TikTok's soundtrack of choice.",
+    "story": "Drift phonk collides with Rio baile funk \u2014 tamborz\u00e3o kick syncopation under distorted 808 cowbells. Gym TikTok's soundtrack of choice.",
     "relatedIds": [
       "baile-funk-tamborzao",
       "phonk-drift",
@@ -779,8 +780,8 @@
   {
     "id": "phonk-fish",
     "name": "Fish Phonk",
-    "origin": "Internet · Brazil / TikTok",
-    "tradition": "Fishphonk · hyper-drift",
+    "origin": "Internet \u00b7 Brazil / TikTok",
+    "tradition": "Fishphonk \u00b7 hyper-drift",
     "genre": "hip-hop",
     "timeSig": "4/4",
     "grouping": [
@@ -886,7 +887,7 @@
       "vocal chop"
     ],
     "swingable": false,
-    "story": "The hyper-accelerated Brazilian mutation of drift phonk — every 16th sub-divided, cowbells saturated past clipping, built for TikTok attention spans.",
+    "story": "The hyper-accelerated Brazilian mutation of drift phonk \u2014 every 16th sub-divided, cowbells saturated past clipping, built for TikTok attention spans.",
     "relatedIds": [
       "phonk-drift",
       "phonk-brazilian"
@@ -895,7 +896,7 @@
   {
     "id": "soundcloud-rap",
     "name": "SoundCloud Rap",
-    "origin": "Internet · SoundCloud",
+    "origin": "Internet \u00b7 SoundCloud",
     "tradition": "SoundCloud rap",
     "genre": "hip-hop",
     "timeSig": "4/4",
@@ -1002,12 +1003,12 @@
       "clap"
     ],
     "swingable": false,
-    "story": "Lil Pump, XXXTentacion, Smokepurpp, Lil Peep — teenagers bypassing labels entirely by clipping their 808s into oblivion on SoundCloud."
+    "story": "Lil Pump, XXXTentacion, Smokepurpp, Lil Peep \u2014 teenagers bypassing labels entirely by clipping their 808s into oblivion on SoundCloud."
   },
   {
     "id": "bedroom-pop",
     "name": "Bedroom Pop",
-    "origin": "Internet · YouTube / Spotify",
+    "origin": "Internet \u00b7 YouTube / Spotify",
     "tradition": "Bedroom pop",
     "genre": "popular",
     "timeSig": "4/4",
@@ -1113,12 +1114,12 @@
       "guitar"
     ],
     "swingable": false,
-    "story": "Clairo's \"Pretty Girl\" recorded on a webcam — music made in actual bedrooms on cheap gear. The imperfections are the aesthetic, authenticity over slickness."
+    "story": "Clairo's \"Pretty Girl\" recorded on a webcam \u2014 music made in actual bedrooms on cheap gear. The imperfections are the aesthetic, authenticity over slickness."
   },
   {
     "id": "footwork-internet",
     "name": "Footwork (Internet Variants)",
-    "origin": "Internet · Global diaspora",
+    "origin": "Internet \u00b7 Global diaspora",
     "tradition": "Post-Rashad footwork",
     "genre": "electronic",
     "timeSig": "4/4",
@@ -1224,7 +1225,7 @@
       "vocal chop"
     ],
     "swingable": false,
-    "story": "Teklife's post-Rashad global diaspora — Chicago footwork mutated by Tokyo, Lisbon and London producers on SoundCloud, pushing beat-skipping into new territory.",
+    "story": "Teklife's post-Rashad global diaspora \u2014 Chicago footwork mutated by Tokyo, Lisbon and London producers on SoundCloud, pushing beat-skipping into new territory.",
     "relatedIds": [
       "footwork-juke",
       "footwork"
@@ -1233,8 +1234,8 @@
   {
     "id": "mashcore",
     "name": "Mashcore / Lolicore",
-    "origin": "Internet · Japanese BMS",
-    "tradition": "Mashcore · breakcore",
+    "origin": "Internet \u00b7 Japanese BMS",
+    "tradition": "Mashcore \u00b7 breakcore",
     "genre": "electronic",
     "timeSig": "4/4",
     "grouping": [
@@ -1341,7 +1342,7 @@
       "anime vocal"
     ],
     "swingable": false,
-    "story": "Japanese breakcore fused with anime samples — Goreshit, Sewerslvt, DJ Sharpnel chopping the Amen break past 220 BPM into textural wash.",
+    "story": "Japanese breakcore fused with anime samples \u2014 Goreshit, Sewerslvt, DJ Sharpnel chopping the Amen break past 220 BPM into textural wash.",
     "relatedIds": [
       "dnb-amen-break"
     ]

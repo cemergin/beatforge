@@ -234,7 +234,8 @@
       "fiddle"
     ],
     "swingable": true,
-    "story": "A Swedish couple dance in 3 \u2014 but the beats are unequal. Played on nyckelharpa, the beat-2 delay is an intentional feature tied to the dance, not a mistake."
+    "story": "A Swedish couple dance in 3 \u2014 but the beats are unequal. Played on nyckelharpa, the beat-2 delay is an intentional feature tied to the dance, not a mistake.",
+    "swingDefault": 0.62
   },
   {
     "id": "hornpipe",
@@ -332,7 +333,8 @@
     "story": "A dotted, swaggering 4/4 \u2014 long-short, long-short \u2014 built for the audible clicks of hard-shoe dancing. Apply about 66% swing to hear it breathe.",
     "relatedIds": [
       "irish-reel"
-    ]
+    ],
+    "swingDefault": 0.62
   },
   {
     "id": "slip-jig",
@@ -1027,7 +1029,8 @@
     "relatedIds": [
       "cocek",
       "roman-havasi"
-    ]
+    ],
+    "swingDefault": 0.52
   },
   {
     "id": "bourree",
@@ -1180,7 +1183,8 @@
     "story": "The straighter Swedish cousin of the polska \u2014 still 3/4, still couple-turning, but with more even beats. The bridge between polska asymmetry and plain waltz.",
     "relatedIds": [
       "scandi-polska"
-    ]
+    ],
+    "swingDefault": 0.52
   },
   {
     "id": "halling",
@@ -1347,7 +1351,8 @@
     "relatedIds": [
       "hornpipe",
       "irish-reel"
-    ]
+    ],
+    "swingDefault": 0.55
   },
   {
     "id": "scottish-jig",
@@ -1610,7 +1615,8 @@
     "story": "Slate miners in the Welsh valleys made their boots into instruments \u2014 wooden-soled clog dances tracing rhythmic lines the harp couldn't. The footwork IS the drum.",
     "relatedIds": [
       "hornpipe"
-    ]
+    ],
+    "swingDefault": 0.55
   },
   {
     "id": "breton-gavotte",

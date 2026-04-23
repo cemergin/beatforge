@@ -88,6 +88,10 @@ export interface Pattern {
   tags: string[];
   instruments?: string[];
   swingable: boolean;
+  // Natural swing amount for this rhythm — 0.5 = straight, 0.67 = triplet
+  // shuffle, anywhere in between captures "slightly behind the beat"
+  // feels. Practice Mode hydrates the swing slider from this on load.
+  swingDefault?: number;
   relatedIds?: string[];
 
   // Narrative

@@ -116,7 +116,8 @@
       "mambo",
       "sebene",
       "ndombolo"
-    ]
+    ],
+    "swingDefault": 0.52
   },
   {
     "id": "sebene",
@@ -599,7 +600,8 @@
       "afrobeat",
       "afrobeats-naija",
       "soukous"
-    ]
+    ],
+    "swingDefault": 0.55
   },
   {
     "id": "juju",
@@ -717,7 +719,8 @@
     "relatedIds": [
       "dundun-yoruba",
       "apala"
-    ]
+    ],
+    "swingDefault": 0.52
   },
   {
     "id": "fuji",
@@ -1646,7 +1649,8 @@
       "saxophone"
     ],
     "swingable": true,
-    "story": "Mahlathini's grandfather-voice growl, the Mahotella Queens' tight harmonies, and the Makgona Tsohle Band's shuffling 4/4 underneath. \"Steamed maize bread\" in Zulu \u2014 humble, everyday, nourishing."
+    "story": "Mahlathini's grandfather-voice growl, the Mahotella Queens' tight harmonies, and the Makgona Tsohle Band's shuffling 4/4 underneath. \"Steamed maize bread\" in Zulu \u2014 humble, everyday, nourishing.",
+    "swingDefault": 0.52
   },
   {
     "id": "maskandi",
@@ -2383,7 +2387,8 @@
       "samba-de-roda",
       "samba-partido-alto",
       "kizomba"
-    ]
+    ],
+    "swingDefault": 0.52
   },
   {
     "id": "kizomba",
@@ -2746,7 +2751,8 @@
       "brushes"
     ],
     "swingable": true,
-    "story": "Cape Verde's soul music \u2014 sodade, the ache for a home you may never have seen. Ces\u00e1ria \u00c9vora sang it to the world barefoot. The percussion barely intrudes; the song does the work."
+    "story": "Cape Verde's soul music \u2014 sodade, the ache for a home you may never have seen. Ces\u00e1ria \u00c9vora sang it to the world barefoot. The percussion barely intrudes; the song does the work.",
+    "swingDefault": 0.52
   },
   {
     "id": "singeli",

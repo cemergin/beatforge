@@ -96,7 +96,8 @@
       "samba-partido-alto",
       "jazz-bossa-nova",
       "son-clave"
-    ]
+    ],
+    "swingDefault": 0.52
   },
   {
     "id": "samba-partido-alto",
@@ -170,7 +171,8 @@
       "rumba-clave-3-2",
       "bossa-nova",
       "pagode"
-    ]
+    ],
+    "swingDefault": 0.52
   },
   {
     "id": "samba-reggae",
@@ -513,7 +515,8 @@
     "story": "The theme-song samba written yearly by each escola de samba for the Rio parade. 300+ drummers strong, telling a story the whole school will sing above the bateria.",
     "relatedIds": [
       "samba-partido-alto"
-    ]
+    ],
+    "swingDefault": 0.52
   },
   {
     "id": "pagode",
@@ -584,7 +587,8 @@
     "story": "When the batucada got too big, pagode moved the party back to the backyard. Tant\u00e3 and repique de m\u00e3o (hand-drums) replaced the sticks; intimacy replaced spectacle.",
     "relatedIds": [
       "samba-partido-alto"
-    ]
+    ],
+    "swingDefault": 0.52
   },
   {
     "id": "frevo",
@@ -1160,7 +1164,8 @@
     "relatedIds": [
       "samba-enredo",
       "samba-partido-alto"
-    ]
+    ],
+    "swingDefault": 0.52
   },
   {
     "id": "samba-de-roda",
@@ -1235,7 +1240,8 @@
       "samba-enredo",
       "semba",
       "guaguanco"
-    ]
+    ],
+    "swingDefault": 0.52
   },
   {
     "id": "capoeira-angola",
@@ -1730,7 +1736,8 @@
       "samba-partido-alto",
       "pagode",
       "motown-beat"
-    ]
+    ],
+    "swingDefault": 0.52
   },
   {
     "id": "choro",
@@ -1828,7 +1835,8 @@
     "relatedIds": [
       "samba-partido-alto",
       "pagode"
-    ]
+    ],
+    "swingDefault": 0.52
   },
   {
     "id": "lambada",
@@ -1930,7 +1938,8 @@
       "forro",
       "merengue",
       "zouk-love"
-    ]
+    ],
+    "swingDefault": 0.52
   },
   {
     "id": "carimbo",
@@ -2324,7 +2333,8 @@
       "bossa-nova",
       "samba-rock",
       "samba-partido-alto"
-    ]
+    ],
+    "swingDefault": 0.52
   },
   {
     "id": "sertanejo",

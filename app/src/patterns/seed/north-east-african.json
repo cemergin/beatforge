@@ -620,7 +620,8 @@
     "story": "A grain-pounding mortar strung with a goatskin \u2014 the tende drum, played by women, beats out the gait of a walking camel. Everything else in Tuareg music, electric guitars included, traces back to this step.",
     "relatedIds": [
       "desert-blues"
-    ]
+    ],
+    "swingDefault": 0.55
   },
   {
     "id": "desert-blues",
@@ -894,7 +895,8 @@
     "relatedIds": [
       "eskista",
       "bati"
-    ]
+    ],
+    "swingDefault": 0.55
   },
   {
     "id": "bati",
@@ -1796,7 +1798,8 @@
       "bongo-flava",
       "baladi",
       "chaabi-moroccan"
-    ]
+    ],
+    "swingDefault": 0.55
   },
   {
     "id": "chakacha",

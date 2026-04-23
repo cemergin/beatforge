@@ -148,6 +148,7 @@ export const PatternSchema: z.ZodType<Pattern> = z.object({
   tags: z.array(z.string()),
   instruments: z.array(z.string()).optional(),
   swingable: z.boolean(),
+  swingDefault: z.number().min(0.5).max(1).optional(),
   relatedIds: z.array(z.string()).optional(),
 
   // Narrative

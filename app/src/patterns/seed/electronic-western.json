@@ -97,7 +97,8 @@
       "dnb-amen-break",
       "hiphop-lofi",
       "rnb-neo-soul-dilla"
-    ]
+    ],
+    "swingDefault": 0.58
   },
   {
     "id": "four-on-the-floor",
@@ -1055,7 +1056,8 @@
       "afrobeat",
       "afrobeat-tony-allen",
       "funk-cissy-strut"
-    ]
+    ],
+    "swingDefault": 0.55
   },
   {
     "id": "funk-cissy-strut",
@@ -1147,7 +1149,8 @@
       "drum kit"
     ],
     "swingable": true,
-    "story": "Zigaboo Modeliste with the Meters \u2014 New Orleans funk built out of negative space. Every gap is as composed as every hit."
+    "story": "Zigaboo Modeliste with the Meters \u2014 New Orleans funk built out of negative space. Every gap is as composed as every hit.",
+    "swingDefault": 0.55
   },
   {
     "id": "funk-second-line",
@@ -1247,7 +1250,8 @@
       "bomba-sica",
       "mozambique",
       "funk-cissy-strut"
-    ]
+    ],
+    "swingDefault": 0.55
   },
   {
     "id": "funk-parliament",
@@ -1549,7 +1553,8 @@
       "lofi-hiphop-standard",
       "boom-bap",
       "rnb-neo-soul-ghost"
-    ]
+    ],
+    "swingDefault": 0.58
   },
   {
     "id": "rnb-neo-soul-ghost",
@@ -1641,7 +1646,8 @@
       "Rhodes"
     ],
     "swingable": true,
-    "story": "Ghost notes carpet the space between backbeats \u2014 D'Angelo, Erykah Badu, the Soulquarians crew turning funk into a whispered conversation."
+    "story": "Ghost notes carpet the space between backbeats \u2014 D'Angelo, Erykah Badu, the Soulquarians crew turning funk into a whispered conversation.",
+    "swingDefault": 0.58
   },
   {
     "id": "motown-beat",
@@ -2438,7 +2444,8 @@
       "lofi-hiphop-standard",
       "boom-bap",
       "rnb-neo-soul-dilla"
-    ]
+    ],
+    "swingDefault": 0.58
   },
   {
     "id": "hiphop-uk-drill",
@@ -3466,7 +3473,8 @@
       "sub-bass"
     ],
     "swingable": true,
-    "story": "The 2-step: garage with the kick skipping beat 3, snare still on 2 and 4. Add heavy swing and you've got MJ Cole and Todd Edwards on a UK pirate station."
+    "story": "The 2-step: garage with the kick skipping beat 3, snare still on 2 and 4. Add heavy swing and you've got MJ Cole and Todd Edwards on a UK pirate station.",
+    "swingDefault": 0.55
   },
   {
     "id": "dubstep-classic",
@@ -3873,7 +3881,8 @@
       "jazz-bebop",
       "jazz-waltz",
       "jazz-bossa-nova"
-    ]
+    ],
+    "swingDefault": 0.67
   },
   {
     "id": "jazz-bebop",
@@ -3966,7 +3975,8 @@
       "hi-hat"
     ],
     "swingable": true,
-    "story": "Max Roach, Kenny Clarke \u2014 the bebop reinvention of time. Ride cymbal carries the swing pulse and the bass drum drops bombs."
+    "story": "Max Roach, Kenny Clarke \u2014 the bebop reinvention of time. Ride cymbal carries the swing pulse and the bass drum drops bombs.",
+    "swingDefault": 0.67
   },
   {
     "id": "jazz-waltz",
@@ -4046,7 +4056,8 @@
       "brushes"
     ],
     "swingable": true,
-    "story": "Ride pattern stretched over three beats. \"My Favorite Things,\" \"Bluesette,\" \"Someday My Prince Will Come\" \u2014 the jazz triple meter."
+    "story": "Ride pattern stretched over three beats. \"My Favorite Things,\" \"Bluesette,\" \"Someday My Prince Will Come\" \u2014 the jazz triple meter.",
+    "swingDefault": 0.67
   },
   {
     "id": "jazz-shuffle-purdie",
@@ -4127,7 +4138,8 @@
       "ghost notes"
     ],
     "swingable": true,
-    "story": "Bernard Purdie's half-time triplet shuffle \u2014 \"Babylon Sisters,\" \"Home at Last.\" Ghost-note lace between backbeats, the holy grail of feel."
+    "story": "Bernard Purdie's half-time triplet shuffle \u2014 \"Babylon Sisters,\" \"Home at Last.\" Ghost-note lace between backbeats, the holy grail of feel.",
+    "swingDefault": 0.67
   },
   {
     "id": "jazz-bossa-nova",

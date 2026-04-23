@@ -2,7 +2,7 @@
   {
     "id": "huayno",
     "name": "Huayno",
-    "origin": "Peru · Bolivia · Ecuador · Andean highlands",
+    "origin": "Peru \u00b7 Bolivia \u00b7 Ecuador \u00b7 Andean highlands",
     "tradition": "Pan-Andean couple dance",
     "genre": "folk-dance",
     "timeSig": "2/4",
@@ -66,7 +66,7 @@
       "quena"
     ],
     "swingable": false,
-    "story": "The Andes' most widespread dance — a pre-Hispanic heartbeat that still fills every highland festival from Cuzco to La Paz. The bounce is quarter-eighth-eighth: long-short-short.",
+    "story": "The Andes' most widespread dance \u2014 a pre-Hispanic heartbeat that still fills every highland festival from Cuzco to La Paz. The bounce is quarter-eighth-eighth: long-short-short.",
     "relatedIds": [
       "carnavalito",
       "cueca"
@@ -75,7 +75,7 @@
   {
     "id": "chacarera",
     "name": "Chacarera",
-    "origin": "Argentina · Santiago del Estero",
+    "origin": "Argentina \u00b7 Santiago del Estero",
     "tradition": "Northwestern Argentine folk",
     "genre": "folk-dance",
     "timeSig": "12/8",
@@ -142,17 +142,17 @@
     "region": "andean-south-america",
     "tags": [
       "argentina",
-      "bombo-legüero",
+      "bombo-leg\u00fcero",
       "zapateo",
       "6-8"
     ],
     "instruments": [
-      "bombo legüero",
+      "bombo leg\u00fcero",
       "guitar",
       "violin"
     ],
     "swingable": false,
-    "story": "From the dry province of Santiago del Estero. The bombo legüero — a huge poncho-wrapped bass drum — alternates head and rim to build the chacarera's signature galloping feel.",
+    "story": "From the dry province of Santiago del Estero. The bombo leg\u00fcero \u2014 a huge poncho-wrapped bass drum \u2014 alternates head and rim to build the chacarera's signature galloping feel.",
     "relatedIds": [
       "zamba"
     ]
@@ -160,7 +160,7 @@
   {
     "id": "zamba",
     "name": "Zamba",
-    "origin": "Argentina · Northwest",
+    "origin": "Argentina \u00b7 Northwest",
     "tradition": "Slow romantic folk dance",
     "genre": "folk-dance",
     "timeSig": "12/8",
@@ -227,16 +227,16 @@
     "region": "andean-south-america",
     "tags": [
       "argentina",
-      "bombo-legüero",
-      "pañuelo",
+      "bombo-leg\u00fcero",
+      "pa\u00f1uelo",
       "slow"
     ],
     "instruments": [
-      "bombo legüero",
+      "bombo leg\u00fcero",
       "guitar"
     ],
     "swingable": false,
-    "story": "Not to be confused with Brazilian samba — zamba is a slow, contemplative courtship dance where partners circle each other behind waving handkerchiefs. Atahualpa Yupanqui's heartland.",
+    "story": "Not to be confused with Brazilian samba \u2014 zamba is a slow, contemplative courtship dance where partners circle each other behind waving handkerchiefs. Atahualpa Yupanqui's heartland.",
     "relatedIds": [
       "chacarera",
       "cueca"
@@ -245,7 +245,7 @@
   {
     "id": "cueca",
     "name": "Cueca",
-    "origin": "Chile · Bolivia · Argentina",
+    "origin": "Chile \u00b7 Bolivia \u00b7 Argentina",
     "tradition": "National courtship dance",
     "genre": "folk-dance",
     "timeSig": "12/8",
@@ -314,7 +314,7 @@
       "cueca",
       "sesquialtera",
       "chile",
-      "pañuelo"
+      "pa\u00f1uelo"
     ],
     "instruments": [
       "guitar",
@@ -322,7 +322,7 @@
       "handclaps"
     ],
     "swingable": false,
-    "story": "Chile's national dance (declared 1979). A rooster courts a hen — handkerchiefs wave overhead, feet stamp the sesquiáltera, where 6/8 melody and 3/4 claps occupy the same bar.",
+    "story": "Chile's national dance (declared 1979). A rooster courts a hen \u2014 handkerchiefs wave overhead, feet stamp the sesqui\u00e1ltera, where 6/8 melody and 3/4 claps occupy the same bar.",
     "relatedIds": [
       "zamba",
       "chacarera",
@@ -333,7 +333,7 @@
   {
     "id": "carnavalito",
     "name": "Carnavalito",
-    "origin": "Argentina · Bolivia · Altiplano",
+    "origin": "Argentina \u00b7 Bolivia \u00b7 Altiplano",
     "tradition": "Andean carnival dance",
     "genre": "folk-dance",
     "timeSig": "2/4",
@@ -396,7 +396,7 @@
       "siku"
     ],
     "swingable": false,
-    "story": "The festive cousin of huayno — faster, brighter, the sound of Andean carnival snaking through the Quebrada de Humahuaca behind panpipes and charango.",
+    "story": "The festive cousin of huayno \u2014 faster, brighter, the sound of Andean carnival snaking through the Quebrada de Humahuaca behind panpipes and charango.",
     "relatedIds": [
       "huayno"
     ]

@@ -35,6 +35,13 @@ const GROUP_AMP_MIN = 0.5;
 const GROUP_AMP_MAX = 1.3;
 const GROUP_AMP_DEFAULT = 1.0;
 
+// Convert a pattern's swingDefault (engine units 0.5–0.67) to the Practice
+// slider's 0–100 scale. Inverse of the formula in the setSwing effect.
+function swingDefaultToSlider(s: number | undefined): number {
+  if (s === undefined) return 50;
+  return Math.round(50 + ((s - 0.5) / 0.34) * 100);
+}
+
 // Tap-tempo behavior
 const TAP_WINDOW = 8;      // keep last N taps
 const TAP_MIN_TAPS = 2;     // need at least 2 taps to infer BPM
@@ -77,7 +84,7 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
     () => (localStorage.getItem('bf_view') as View) || 'circular',
   );
   const [grouping, setGrouping] = useState<number[]>(pattern.grouping);
-  const [swing, setSwing] = useState(50);
+  const [swing, setSwing] = useState(() => swingDefaultToSlider(pattern.swingDefault));
   const [strong, setStrong] = useState(100);
   const [weak, setWeak] = useState(55);
 
@@ -153,6 +160,7 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
     setEditedTracks({});   // revert any in-place cell edits — seed is immutable
     engine.loadPattern({ ...pattern, grouping: pattern.grouping });
     setBpm(pattern.bpm.default);
+    setSwing(swingDefaultToSlider(pattern.swingDefault));
     setGrouping(pattern.grouping);
     setKitOverrideState(getKitOverride(pattern.id));
     setGroupAmps(pattern.grouping.map(() => GROUP_AMP_DEFAULT));

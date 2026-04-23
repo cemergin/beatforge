@@ -2,7 +2,7 @@
   {
     "id": "hemiola-3-2",
     "name": "Hemiola (3:2)",
-    "origin": "—",
+    "origin": "\u2014",
     "tradition": "Polyrhythm exercise",
     "genre": "exercise",
     "timeSig": "2/4",
@@ -40,12 +40,12 @@
       "exercise"
     ],
     "swingable": false,
-    "story": "The simplest polyrhythm — three notes in the time of two. The foundation of most polyrhythmic music, from West African bell patterns to jazz."
+    "story": "The simplest polyrhythm \u2014 three notes in the time of two. The foundation of most polyrhythmic music, from West African bell patterns to jazz."
   },
   {
     "id": "triplet-over-quarters",
     "name": "Triplets over Quarters (3:4)",
-    "origin": "—",
+    "origin": "\u2014",
     "tradition": "Polyrhythm exercise",
     "genre": "exercise",
     "timeSig": "4/4",
@@ -86,12 +86,12 @@
       "exercise"
     ],
     "swingable": false,
-    "story": "Three evenly-spaced notes across one bar of four — the classic jazz/funk polyrhythm. Every practicing drummer should internalize this."
+    "story": "Three evenly-spaced notes across one bar of four \u2014 the classic jazz/funk polyrhythm. Every practicing drummer should internalize this."
   },
   {
     "id": "four-over-three",
     "name": "Four over Three (4:3)",
-    "origin": "—",
+    "origin": "\u2014",
     "tradition": "Polyrhythm exercise",
     "genre": "exercise",
     "timeSig": "3/4",
@@ -136,7 +136,7 @@
   {
     "id": "five-over-four",
     "name": "Five over Four (5:4)",
-    "origin": "—",
+    "origin": "\u2014",
     "tradition": "Polyrhythm exercise",
     "genre": "exercise",
     "timeSig": "4/4",
@@ -179,12 +179,12 @@
       "exercise"
     ],
     "swingable": false,
-    "story": "Quintuplets over quarters. Found in Carnatic khanda and contemporary jazz — Vijay Iyer territory."
+    "story": "Quintuplets over quarters. Found in Carnatic khanda and contemporary jazz \u2014 Vijay Iyer territory."
   },
   {
     "id": "seven-over-four",
     "name": "Seven over Four (7:4)",
-    "origin": "—",
+    "origin": "\u2014",
     "tradition": "Polyrhythm exercise",
     "genre": "exercise",
     "timeSig": "4/4",
@@ -229,6 +229,6 @@
       "exercise"
     ],
     "swingable": false,
-    "story": "Septuplets over quarters. Rare in tradition — common in konnakol (Indian rhythmic solfège) exercises."
+    "story": "Septuplets over quarters. Rare in tradition \u2014 common in konnakol (Indian rhythmic solf\u00e8ge) exercises."
   }
 ]
