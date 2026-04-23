@@ -284,10 +284,16 @@ export class AudioEngine {
     }
 
     // Bar boundary — count off full bars (for trainer / stop-after).
+    // Derive each bar's index from elapsed time so multiple bars scheduled
+    // in one tick get unique b values (prev code captured this.bar+1, which
+    // was the same for every bar in the batch because this.bar only
+    // updated inside the async setTimeout — all callbacks fired with the
+    // same index and the speed-trainer stalled at 1).
     while (this.nextBarTime < horizon) {
       const tBar = this.nextBarTime;
-      if (tBar > this.startTime + 0.001) {
-        const b = this.bar + 1;
+      const barIndex = Math.round((tBar - this.startTime) / barSec);
+      if (barIndex > 0) {
+        const b = barIndex;
         const delayMs = Math.max(0, (tBar - this.ctx.currentTime) * 1000);
         setTimeout(() => { this.bar = b; this.onBar?.(b); }, delayMs);
       }
