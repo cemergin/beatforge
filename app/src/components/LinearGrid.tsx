@@ -1,4 +1,4 @@
-import type { Pattern, VoiceId } from '../patterns/types';
+import { trackMeta, type Pattern, type VoiceId } from '../patterns/types';
 import { GROUP_COLORS, groupIndexForStep, isGroupDownbeat } from './visual-helpers';
 
 interface Props {
@@ -9,14 +9,16 @@ interface Props {
 
 export function LinearGrid({ pattern, cursors, onToggle }: Props) {
   const tracks = Object.keys(pattern.tracks) as VoiceId[];
-  const steps = pattern.steps;
-  const styleVar = { '--steps': steps } as React.CSSProperties;
+  const mainSteps = pattern.steps;
 
   return (
-    <div className="bf-linear" style={styleVar}>
-      <div className="bf-linear-head" style={styleVar}>
+    <div className="bf-linear">
+      <div
+        className="bf-linear-head"
+        style={{ '--steps': mainSteps } as React.CSSProperties}
+      >
         <div className="bf-linear-label" />
-        {Array.from({ length: steps }).map((_, s) => {
+        {Array.from({ length: mainSteps }).map((_, s) => {
           const gi = groupIndexForStep(s, pattern.grouping);
           const isDown = isGroupDownbeat(s, pattern.grouping);
           return (
@@ -32,20 +34,30 @@ export function LinearGrid({ pattern, cursors, onToggle }: Props) {
       </div>
       {tracks.map((tr) => {
         const td = pattern.tracks[tr]!;
-        const isPoly = !Array.isArray(td);
-        const cycle = isPoly ? td.cycle : td.length;
-        const data = isPoly ? td.pattern : td;
-        const cursor = cursors[tr] !== undefined ? (cursors[tr] + cycle - 1) % cycle : 0;
+        const meta = trackMeta(td, mainSteps);
+        const isPoly = meta.subdivisions !== mainSteps;
+        const cursor = cursors[tr] ?? -1;
+        const cellCount = meta.subdivisions;
+
         return (
-          <div key={tr} className="bf-linear-row" style={styleVar}>
-            <div className="bf-linear-label">{tr}</div>
-            {Array.from({ length: steps }).map((_, s) => {
-              const localIdx = isPoly ? s % cycle : s;
-              const vel = data[localIdx];
-              const gi = isPoly ? localIdx % GROUP_COLORS.length : groupIndexForStep(s, pattern.grouping);
+          <div
+            key={tr}
+            className={`bf-linear-row ${isPoly ? 'poly' : ''}`}
+            style={{ '--steps': cellCount } as React.CSSProperties}
+          >
+            <div className="bf-linear-label">
+              {tr}
+              {isPoly && <span className="bf-poly-tag">{meta.subdivisions}</span>}
+            </div>
+            {Array.from({ length: cellCount }).map((_, s) => {
+              const localIdx = s % meta.cycle;
+              const vel = meta.pattern[localIdx];
+              const gi = isPoly
+                ? s % GROUP_COLORS.length
+                : groupIndexForStep(s, pattern.grouping);
               const color = GROUP_COLORS[gi % GROUP_COLORS.length];
               const active = vel > 0;
-              const isCur = isPoly ? localIdx === cursor : s === cursor;
+              const isCur = s === cursor;
               return (
                 <div
                   key={s}

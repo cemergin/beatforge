@@ -1,23 +1,114 @@
-// Pattern schema. v1 keeps the 5-voice closed set; new kits arrive incrementally.
+// Pattern schema. v1 keeps the 5-voice closed set.
+// New kits (727/frameDrum/tabla/gamelan) ship as part of batch 1.
 
 export type VoiceId = 'KK' | 'SN' | 'HH' | 'OH' | 'CP';
 export type Velocity = 0 | 1 | 2;   // 0 = off, 1 = ghost, 2 = accent
-export type KitId = '808' | '909' | '707';
 
-export type Track = Velocity[] | { cycle: number; pattern: Velocity[] };
+export type KitId =
+  | '808' | '909' | '707' | '727'
+  | 'frameDrum' | 'tabla' | 'gamelan';
+
+export type RegionId =
+  | 'turkey-ottoman'
+  | 'arabic-swana'
+  | 'persia'
+  | 'india'
+  | 'west-africa'
+  | 'cuba-afrocaribbean'
+  | 'brazil'
+  | 'andean-south-america'
+  | 'caribbean'
+  | 'balkans'
+  | 'iberia-flamenco'
+  | 'gamelan-southeast-asia'
+  | 'east-asia'
+  | 'celtic-europe'
+  | 'electronic-western'
+  | 'exercise';   // polyrhythm exercises, not regional
+
+export type Genre =
+  | 'folk-dance'
+  | 'classical'
+  | 'devotional'
+  | 'popular'
+  | 'electronic'
+  | 'hip-hop'
+  | 'jazz'
+  | 'ceremonial'
+  | 'exercise';
+
+export type Difficulty = 'beginner' | 'intermediate' | 'advanced';
+
+// Track encoding supports per-track subdivisions for polyrhythm (spec §4.5).
+// - Velocity[] shorthand → subdivisions = pattern.steps, cycle = pattern.length
+// - Full form → explicit subdivisions (equal steps per bar), cycle (wrap length)
+export type Track =
+  | Velocity[]
+  | {
+      pattern: Velocity[];
+      subdivisions?: number;
+      cycle?: number;
+    };
 
 export interface Pattern {
+  // Identity
   id: string;
   name: string;
   origin: string;
   tradition: string;
+  genre: Genre;
+
+  // Rhythmic shape
   timeSig: string;
   grouping: number[];
   steps: number;
   stepUnit: 8 | 16 | 4;
-  bpm: { default: number; min: number; max: number };
-  difficulty: 'beginner' | 'intermediate' | 'advanced';
-  tracks: Partial<Record<VoiceId, Track>>;
   poly?: boolean;
+
+  // Tempo
+  bpm: { default: number; min: number; max: number };
+
+  // Content
+  tracks: Partial<Record<VoiceId, Track>>;
+
+  // Kit
+  defaultKit: KitId;
+
+  // Discoverability
+  region: RegionId;
+  country?: string;
+  difficulty: Difficulty;
+  tags: string[];
+  instruments?: string[];
+  swingable: boolean;
+  relatedIds?: string[];
+
+  // Narrative
   story?: string;
+  sources?: string[];
+
+  // Reserved for v2+ (Drum Synth era) — unused in v1
+  customVoices?: Record<string, { synth: string; params: object }>;
+}
+
+// Helper — resolves a Track into its normalized form.
+export interface TrackMeta {
+  subdivisions: number;
+  cycle: number;
+  pattern: Velocity[];
+}
+
+export function trackMeta(track: Track, defaultSubdivisions: number): TrackMeta {
+  if (Array.isArray(track)) {
+    return {
+      subdivisions: defaultSubdivisions,
+      cycle: track.length,
+      pattern: track,
+    };
+  }
+  return {
+    subdivisions: track.subdivisions ?? defaultSubdivisions,
+    cycle: track.cycle ?? track.pattern.length,
+    pattern: track.pattern,
+  };
 }

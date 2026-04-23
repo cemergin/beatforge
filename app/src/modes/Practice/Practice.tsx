@@ -1,6 +1,7 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { AudioEngine, StepSnapshot } from '../../audio/engine';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import type { AudioEngine } from '../../audio/engine';
 import type { KitId, Pattern, VoiceId } from '../../patterns/types';
+import { trackMeta } from '../../patterns/types';
 import { PATTERNS, patternById } from '../../patterns/seed';
 import { BeatDots } from '../../components/BeatDots';
 import { CircularGrid } from '../../components/CircularGrid';
@@ -9,6 +10,8 @@ import { PillGrid } from '../../components/PillGrid';
 import { Trainer, type TrainerCfg } from './Trainer';
 
 type View = 'circular' | 'linear' | 'pill';
+
+const ALL_KITS: KitId[] = ['808', '909', '707', '727', 'frameDrum', 'tabla', 'gamelan'];
 
 interface Props {
   engine: AudioEngine;
@@ -26,9 +29,10 @@ export function Practice({ engine }: Props) {
   const [playing, setPlaying] = useState(false);
   const [bpm, setBpm] = useState(pattern.bpm.default);
   const [cursors, setCursors] = useState<Record<string, number>>({});
-  const [kit, setKit] = useState<KitId>(
-    () => (localStorage.getItem('bf_kit') as KitId) || '808',
-  );
+  // Session kit override; pattern.defaultKit is source of truth until user changes it.
+  const [kitOverride, setKitOverride] = useState<KitId | null>(null);
+  const activeKit: KitId = kitOverride ?? pattern.defaultKit;
+
   const [view, setView] = useState<View>(
     () => (localStorage.getItem('bf_view') as View) || 'circular',
   );
@@ -43,43 +47,45 @@ export function Practice({ engine }: Props) {
   });
   const [trainerBar, setTrainerBar] = useState(0);
 
-  // Keep the latest trainer callback accessible to the engine step callback
-  const trainerRef = useRef({ trainerOn, trainerCfg, playing });
-  useEffect(() => { trainerRef.current = { trainerOn, trainerCfg, playing }; },
-            [trainerOn, trainerCfg, playing]);
-
-  // Engine step callback — updates cursors and counts cycles
+  // rAF cursor polling — smoother than onStep-at-setTimeout
   useEffect(() => {
-    engine.onStep = (snap: StepSnapshot) => {
-      setCursors(snap.cursors);
-      if (snap.absStep > 0 && snap.absStep % pattern.steps === 0) {
-        setTrainerBar((b) => b + 1);
-      }
+    let raf = 0;
+    const loop = () => {
+      // Snapshot cursors only when a frame needs rendering
+      setCursors({ ...engine.cursors });
+      raf = requestAnimationFrame(loop);
     };
-    return () => { engine.onStep = null; };
-  }, [engine, pattern.steps]);
+    raf = requestAnimationFrame(loop);
+    return () => cancelAnimationFrame(raf);
+  }, [engine]);
 
-  // Load pattern into engine when it changes
+  // Bar-boundary callback → trainer bar counter
   useEffect(() => {
-    engine.loadPattern({ ...pattern, grouping });
+    engine.onBar = (bar: number) => setTrainerBar(bar);
+    return () => { engine.onBar = null; };
+  }, [engine]);
+
+  // Pattern change → load into engine + reset trainer + reset kit override
+  useEffect(() => {
+    engine.loadPattern({ ...pattern, grouping: pattern.grouping });
     setBpm(pattern.bpm.default);
     setGrouping(pattern.grouping);
+    setKitOverride(null);   // session override discards on pattern change (spec §5.2)
     localStorage.setItem('bf_pattern', pattern.id);
     setTrainerBar(0);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [patternId]);
 
-  // Re-load pattern when grouping changes (grouping affects display; engine uses step count)
+  // Grouping change → engine re-applies pattern (grouping is display, but safe to re-load)
   useEffect(() => {
     engine.loadPattern({ ...pattern, grouping });
   }, [engine, pattern, grouping]);
 
   useEffect(() => { engine.setBpm(bpm); }, [engine, bpm]);
+  useEffect(() => { engine.setKit(activeKit); }, [engine, activeKit]);
   useEffect(() => {
-    engine.setKit(kit);
-    localStorage.setItem('bf_kit', kit);
-  }, [engine, kit]);
-  useEffect(() => { engine.setSwing(0.5 + ((swing - 50) / 100) * 0.34); }, [engine, swing]);
+    engine.setSwing(pattern.swingable ? 0.5 + ((swing - 50) / 100) * 0.34 : 0.5);
+  }, [engine, swing, pattern.swingable]);
   useEffect(() => { engine.setAccents(strong / 100, weak / 100); }, [engine, strong, weak]);
   useEffect(() => { localStorage.setItem('bf_view', view); }, [view]);
 
@@ -113,13 +119,15 @@ export function Practice({ engine }: Props) {
     }
   }, [engine, playing, bpm, trainerOn, trainerCfg.from]);
 
+  // Beat dots track the KK cursor (or first track's cursor) at main division.
   const curStep = useMemo(() => {
-    const c = cursors.KK;
-    if (c === undefined) return -1;
-    const td = pattern.tracks.KK;
-    if (!td) return -1;
-    const cycle = Array.isArray(td) ? td.length : td.cycle;
-    return (c + cycle - 1) % cycle;
+    const firstTrack = Object.keys(pattern.tracks)[0];
+    if (!firstTrack) return -1;
+    const td = pattern.tracks[firstTrack as VoiceId]!;
+    const meta = trackMeta(td, pattern.steps);
+    // Only meaningful for main-division tracks (polyrhythm tracks have their own cursor rhythm)
+    if (meta.subdivisions !== pattern.steps) return -1;
+    return cursors[firstTrack] ?? -1;
   }, [cursors, pattern]);
 
   const groupingOptions = useMemo(() => {
@@ -162,6 +170,7 @@ export function Practice({ engine }: Props) {
             <span className="bf-meta-badge">{pattern.timeSig}</span>
             <span className="bf-meta-badge alt">{grouping.join('+')}</span>
             <span className="bf-meta-badge alt">{pattern.difficulty}</span>
+            {pattern.poly && <span className="bf-meta-badge alt">poly</span>}
           </div>
         </div>
 
@@ -258,6 +267,7 @@ export function Practice({ engine }: Props) {
         <div className="bf-grid-foot">
           <div className="bf-mini-label">
             {pattern.steps} steps · {pattern.stepUnit === 8 ? 'eighths' : pattern.stepUnit === 16 ? 'sixteenths' : 'quarters'}
+            {pattern.poly && ' · polyrhythm'}
           </div>
         </div>
       </section>
@@ -296,31 +306,44 @@ export function Practice({ engine }: Props) {
             <span className="bf-val">{weak}%</span>
           </div>
         </div>
-        <div className="bf-panel">
-          <div className="bf-panel-head">swing</div>
-          <div className="bf-row">
-            <input
-              type="range"
-              min={50}
-              max={75}
-              value={swing}
-              onChange={(e) => setSwing(Number(e.target.value))}
-            />
-            <span className="bf-val">
-              {swing === 50 ? 'straight' : swing >= 66 ? 'triplet' : `${swing}%`}
-            </span>
+        {pattern.swingable && (
+          <div className="bf-panel">
+            <div className="bf-panel-head">swing</div>
+            <div className="bf-row">
+              <input
+                type="range"
+                min={50}
+                max={75}
+                value={swing}
+                onChange={(e) => setSwing(Number(e.target.value))}
+              />
+              <span className="bf-val">
+                {swing === 50 ? 'straight' : swing >= 66 ? 'triplet' : `${swing}%`}
+              </span>
+            </div>
           </div>
-        </div>
+        )}
         <div className="bf-panel">
-          <div className="bf-panel-head">kit</div>
-          <div className="bf-kit-row">
-            {(['808', '909', '707'] as KitId[]).map((k) => (
+          <div className="bf-panel-head">
+            kit
+            {kitOverride && (
+              <button
+                className="bf-kit-reset"
+                onClick={() => setKitOverride(null)}
+                title={`Reset to pattern default: ${pattern.defaultKit}`}
+              >
+                ⤺ {pattern.defaultKit}
+              </button>
+            )}
+          </div>
+          <div className="bf-kit-grid">
+            {ALL_KITS.map((k) => (
               <button
                 key={k}
-                className={`bf-kit-btn ${kit === k ? 'on' : ''}`}
-                onClick={() => setKit(k)}
+                className={`bf-kit-btn ${activeKit === k ? 'on' : ''}`}
+                onClick={() => setKitOverride(k === pattern.defaultKit ? null : k)}
               >
-                {k}
+                {k === 'frameDrum' ? 'frame' : k}
               </button>
             ))}
           </div>

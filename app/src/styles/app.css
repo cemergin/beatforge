@@ -537,6 +537,62 @@ input[type="number"] { font: inherit; color: inherit; }
   .bf-theme-btn { padding: 4px; }
 }
 
+/* ── Kit grid (7 kits, 2-column layout) ── */
+.bf-kit-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 4px;
+  margin-top: 8px;
+}
+.bf-kit-grid .bf-kit-btn {
+  padding: 8px 4px;
+  border-radius: 8px;
+  background: var(--bg-sunk);
+  color: var(--fg);
+  font-size: 11px;
+  font-family: var(--mono);
+  letter-spacing: 0.02em;
+  transition: all 0.12s;
+}
+.bf-kit-grid .bf-kit-btn:hover { background: var(--line); }
+.bf-kit-grid .bf-kit-btn.on {
+  background: var(--accent);
+  color: #fff;
+}
+.bf-kit-reset {
+  float: right;
+  font-size: 10px;
+  font-family: var(--mono);
+  color: var(--muted);
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: var(--bg-sunk);
+}
+.bf-kit-reset:hover { color: var(--fg); }
+
+/* ── Polyrhythm track visual hints ── */
+.bf-poly-tag {
+  display: inline-block;
+  margin-left: 4px;
+  padding: 1px 5px;
+  background: var(--grp-3);
+  color: #fff;
+  font-size: 9px;
+  font-family: var(--mono);
+  border-radius: 3px;
+  font-weight: 700;
+}
+.bf-linear-row.poly {
+  border-top: 1px dashed var(--line);
+  padding-top: 4px;
+  margin-top: 2px;
+}
+.bf-pill-row.poly {
+  border-top: 1px dashed var(--line);
+  padding-top: 4px;
+  margin-top: 2px;
+}
+
 /* ── Inline pattern list (Practice left column) ── */
 .bf-pattern-list {
   display: flex; flex-direction: column; gap: 2px;

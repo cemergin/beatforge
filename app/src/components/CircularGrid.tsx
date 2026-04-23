@@ -1,4 +1,4 @@
-import type { Pattern, VoiceId } from '../patterns/types';
+import { trackMeta, type Pattern, type VoiceId } from '../patterns/types';
 import { GROUP_COLORS, groupIndexForStep, isGroupDownbeat } from './visual-helpers';
 
 interface Props {
@@ -67,18 +67,21 @@ export function CircularGrid({ pattern, cursors, size = 380, onToggle }: Props) 
     const rMid = outer - ringGap - (ti + 1) * ringWidth;
     const rad = Math.max(8, ringWidth * 0.42);
     const trackData = pattern.tracks[tr]!;
-    const isPoly = !Array.isArray(trackData);
-    const cycle = isPoly ? trackData.cycle : trackData.length;
-    const data = isPoly ? trackData.pattern : trackData;
-    const cursor = cursors[tr] !== undefined ? (cursors[tr] + cycle - 1) % cycle : 0;
+    const meta = trackMeta(trackData, steps);
+    const isPoly = meta.subdivisions !== steps;
+    const ringSteps = meta.subdivisions;  // circular ring has `subdivisions` notches
+    const cursor = cursors[tr] ?? -1;
 
     const nodes: React.ReactNode[] = [];
-    for (let s = 0; s < cycle; s++) {
-      const ang = (s / cycle) * Math.PI * 2 - Math.PI / 2;
+    for (let s = 0; s < ringSteps; s++) {
+      const ang = (s / ringSteps) * Math.PI * 2 - Math.PI / 2;
       const x = cx + Math.cos(ang) * rMid;
       const y = cy + Math.sin(ang) * rMid;
-      const vel = data[s];
-      const gi = isPoly ? s % GROUP_COLORS.length : groupIndexForStep(s, pattern.grouping);
+      const localIdx = s % meta.cycle;
+      const vel = meta.pattern[localIdx];
+      const gi = isPoly
+        ? s % GROUP_COLORS.length
+        : groupIndexForStep(s, pattern.grouping);
       const color = GROUP_COLORS[gi % GROUP_COLORS.length];
       const active = vel > 0;
       const fill = active ? color : 'transparent';
@@ -87,7 +90,7 @@ export function CircularGrid({ pattern, cursors, size = 380, onToggle }: Props) 
       nodes.push(
         <g
           key={`${tr}${s}`}
-          onClick={() => onToggle?.(tr, s)}
+          onClick={() => onToggle?.(tr, localIdx)}
           style={{ cursor: onToggle ? 'pointer' : 'default' }}
         >
           <circle
@@ -132,6 +135,7 @@ export function CircularGrid({ pattern, cursors, size = 380, onToggle }: Props) 
           }}
         >
           {tr}
+          {isPoly && ` ·${meta.subdivisions}`}
         </text>
       </g>
     );
