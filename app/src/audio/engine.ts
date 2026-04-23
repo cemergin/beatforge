@@ -55,8 +55,13 @@ export class AudioEngine {
     if (fn) this.barListeners.add(fn);
   }
 
-  private readonly lookaheadMs = 25;
-  private readonly scheduleAheadS = 0.12;
+  // Scheduler timing. lookaheadMs is how often tick() fires; scheduleAheadS
+  // is how far into Web Audio's future we queue notes. Must be sized so
+  // (scheduleAhead >> lookahead) and so that a worst-case main-thread stall
+  // still leaves a margin — React renders and devtools panels can freeze
+  // the event loop for 100+ms on a slow device. 300ms horizon survives that.
+  private readonly lookaheadMs = 15;
+  private readonly scheduleAheadS = 0.30;
   private timerId: ReturnType<typeof setTimeout> | null = null;
   private nextNoteTimes: Record<string, number> = {};
   private nextIdx: Record<string, number> = {};
@@ -308,6 +313,16 @@ export class AudioEngine {
       if (!meta.pattern || meta.pattern.length === 0) continue;
       const stepSec = barSec / meta.subdivisions;
       const isMainDivision = meta.subdivisions === p.steps;
+
+      // Catch-up: if a main-thread stall pushed us past nextNoteTimes
+       // (tick fired late), snap the next note up to the audio clock so
+       // Web Audio doesn't silently drop notes scheduled in the past.
+       // This trades phase for continuity — audible glitch once, better
+       // than a sustained dropout across the rest of the bar.
+       const nowCatchUp = this.ctx.currentTime;
+       if (this.nextNoteTimes[tr] < nowCatchUp) {
+         this.nextNoteTimes[tr] = nowCatchUp + 0.005;
+       }
 
       while (this.nextNoteTimes[tr] < horizon) {
         let tPlay = this.nextNoteTimes[tr];
