@@ -452,6 +452,86 @@ input[type="number"] { font: inherit; color: inherit; }
   .bf-studio-main .bf-right { overflow: visible; }
 }
 
+/* ── Mobile / narrow-screen shrink-to-fit ─────────────────────────
+   Locked to viewport width, shrink large fixed-size elements so
+   nothing forces horizontal scroll on phones. */
+@media (max-width: 600px) {
+  html, body { overflow-x: hidden; }
+  .bf-root, .bf-main { max-width: 100vw; }
+
+  /* Top bar becomes two rows on very small screens. */
+  .bf-top {
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto;
+    gap: 8px; padding: 12px 14px;
+  }
+  .bf-brand { grid-column: 1; grid-row: 1; }
+  .bf-topright { grid-column: 2; grid-row: 1; }
+  .bf-topnav {
+    grid-column: 1 / -1; grid-row: 2;
+    justify-content: flex-start; gap: 4px;
+  }
+  .bf-theme-btn { padding: 4px; }
+  .bf-theme-name { display: none; }
+
+  /* Big numbers clamp for small screens */
+  .bf-bpm-num { font-size: clamp(48px, 12vw, 62px); }
+  .bf-lib-title { font-size: clamp(28px, 7vw, 44px); }
+  .bf-lib-page { padding: 16px; }
+  .bf-lib-hero { gap: 12px; margin-bottom: 12px; padding-bottom: 12px; }
+
+  /* Grid wrapper: tighter padding so interior fits viewport */
+  .bf-grid-wrap { padding: 12px 12px 16px; border-radius: 14px; }
+  .bf-grid-head { gap: 8px; }
+
+  /* Circular: let the SVG shrink to the viewport */
+  .bf-circ { width: 100%; height: auto; max-width: 100%; }
+
+  /* Linear: narrower label column so more room for cells */
+  .bf-linear-head, .bf-linear-row { gap: 4px; }
+  .bf-linear-label { font-size: 9px; padding-right: 2px; }
+
+  /* Pill: much smaller cells + tighter gaps */
+  .bf-pill { gap: 8px; }
+  .bf-pill-row { grid-template-columns: 36px 1fr; gap: 6px; }
+  .bf-pill-label { font-size: 10px; padding-right: 2px; }
+  .bf-pill-groups { gap: 6px; }
+  .bf-pill-group { gap: 3px; padding: 4px 5px; border-radius: 8px; }
+  .bf-pill-group .bf-cell { width: 18px; height: 18px; border-radius: 4px; }
+
+  /* Studio grid rows: shrink label + cells */
+  .bf-studio-row { gap: 4px; }
+  .bf-studio-rowlabel,
+  .bf-studio-rowlabel-wrap { font-size: 10px; }
+  .bf-studio-rowlabel-full { display: none; }
+
+  /* Make panels hug the viewport */
+  .bf-panel { padding: 10px 12px; }
+
+  /* BPM hero tightens */
+  .bf-bpm-hero { padding: 14px 12px 10px; }
+  .bf-bpm-controls { gap: 4px; }
+  .bf-bpm-controls button { width: 24px; height: 24px; font-size: 14px; }
+
+  /* Play + volume shrink a touch */
+  .bf-play { padding: 14px; font-size: 14px; }
+  .bf-play.on { padding: 12px; }
+
+  /* Library zones: tighter padding, single-column worldmap */
+  .bf-lib-zone { padding: 14px; }
+  .bf-worldmap-grid { grid-template-columns: repeat(2, 1fr); }
+
+  /* PWA install toast → full width at bottom */
+  .bf-pwa-toast { left: 12px; right: 12px; }
+}
+
+/* Tiny phones */
+@media (max-width: 380px) {
+  .bf-pill-group .bf-cell { width: 14px; height: 14px; }
+  .bf-linear-label { font-size: 8px; }
+  .bf-worldmap-grid { grid-template-columns: 1fr; }
+}
+
 /* ── Starter-path active view ── */
 .bf-path-view {
   background: var(--bg-2);
