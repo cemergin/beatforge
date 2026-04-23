@@ -1,10 +1,47 @@
-# Audio Engine (`src/audio/engine.ts`)
+# Audio Engine (`src/audio/engine.ts` + `src/audio/kits/`)
 
-The audio engine is a single TypeScript class (`AudioEngine`) with direct Web Audio access. No Tone.js, no worklets. ~780 LOC. Everything scheduling- and synthesis-related lives in this one file.
+The audio engine is a single TypeScript class (`AudioEngine`) with direct Web Audio access. No Tone.js, no worklets. ~360 LOC. Scheduling, master bus, reverb routing, and kit dispatch live in `engine.ts`; per-kit synthesis recipes live under `src/audio/kits/` — one file per kit family.
 
 If you only read one source file in this codebase, read `engine.ts`. It is intensively commented and authoritative for timing behavior.
 
 See also: [overview.md](./overview.md), [sequencer-and-patterns.md](./sequencer-and-patterns.md), [react-app.md](./react-app.md).
+
+## `kits/` layout
+
+Synthesis was extracted out of `engine.ts` so the Drum Synth (v2) can reuse the recipes cleanly. The engine never imports Web Audio node constructors directly for voice synthesis; it dispatches into the registry.
+
+```
+src/audio/kits/
+├── types.ts          # KitRecipe / VoiceRenderer / VoiceCtx + connectVoice()
+├── _util.ts          # createOsc/createGain/createBiquad/createNoise — each takes an AudioContext
+├── index.ts          # kitRecipes: Record<KitId, KitRecipe> + buildVoiceCtx()
+├── drum-machine.ts   # 808 / 909 / 707 — shared branching recipe, per-kit param tables
+├── tr-727.ts         # 727 — Latin remap (conga/cowbell/agogo/claves), structurally distinct
+├── frame-drum.ts     # doum / tek / finger-snap / zils / slap
+├── tabla.ts          # ge / na / tin / tun / dha (composite)
+└── gamelan.ts        # inharmonic modal resonators (one tone generator, five parameterisations)
+```
+
+Each `KitRecipe` is:
+
+```ts
+export interface KitRecipe {
+  id: KitId;
+  name: string;
+  reverbSend: number;       // per-kit reverb send level
+  voices: Record<VoiceId, VoiceRenderer>;
+}
+
+export type VoiceRenderer = (vc: VoiceCtx, when: number, amp: number) => void;
+
+export interface VoiceCtx {
+  ctx: AudioContext;
+  destination: AudioNode;       // master bus input
+  reverbSend: GainNode | null;  // null pre-ensureCtx()
+}
+```
+
+`engine.trigger()` resolves `kitRecipes[this.kit].voices[voice](vc, when, amp)`. `setKit()` also rewrites `this.reverbSend.gain.value` from `kitRecipes[k].reverbSend`. There is no backref from kits into the engine.
 
 ---
 
@@ -81,21 +118,19 @@ Built once inside `ensureCtx()` (`engine.ts:52-77`):
 
 The impulse response is synthesized once on context creation — `makeImpulse(1.8, 2.2)` at `engine.ts:79-91` fills a stereo buffer with exponentially-decaying white noise. No IR file download.
 
-**Reverb send is global**, but the send gain is set per kit (`engine.ts:341-349`):
+**Reverb send is global**, but the send gain is set per kit. Each `KitRecipe` exports its own `reverbSend` value; `setKit()` rewrites the send gain to `kitRecipes[k].reverbSend`:
 
-```ts
-const KIT_REVERB_SEND: Record<KitId, number> = {
-  '808': 0.05,
-  '909': 0.05,
-  '707': 0.10,
-  '727': 0.12,
-  frameDrum: 0.08,
-  tabla: 0.15,
-  gamelan: 0.35,   // pavilion ambience is part of gamelan's sound
-};
-```
+| Kit | reverbSend |
+|---|---|
+| 808 | 0.05 |
+| 909 | 0.05 |
+| 707 | 0.10 |
+| 727 | 0.12 |
+| frameDrum | 0.08 |
+| tabla | 0.15 |
+| gamelan | 0.35 (pavilion ambience is part of gamelan's sound) |
 
-Individual voices can multiply the send level with a `wetAmount` arg to `_connect(node, wetAmount)` — e.g. the frame drum's zils use `e._connect(g, 1.5)` to get 50% more reverb for a shimmery decay.
+Individual voices can multiply the send level with a `wetAmount` arg to `connectVoice(vc, node, wetAmount)` — e.g. the frame drum's zils use `connectVoice(vc, g, 1.5)` to get 50% more reverb for a shimmery decay.
 
 ## The scheduler
 
@@ -281,35 +316,42 @@ if (this.overlay) {
 
 ## The 7 kits
 
-Kits are implemented as functions, not classes. Voice dispatch (`engine.ts:353-364`):
+Kits are `KitRecipe` objects stored in `kitRecipes: Record<KitId, KitRecipe>` (`src/audio/kits/index.ts`). Voice dispatch (`engine.ts`, in `trigger()`):
 
 ```ts
-function kitVoice(e: AudioEngine, voice: VoiceId, when: number, amp: number): void {
-  const { kit } = e;
-  if (kit === 'frameDrum')    frameDrumVoice(e, voice, when, amp);
-  else if (kit === 'tabla')   tablaVoice(e, voice, when, amp);
-  else if (kit === 'gamelan') gamelanVoice(e, voice, when, amp);
-  else                         drumMachineVoice(e, voice, when, amp);
-}
+const vc = buildVoiceCtx(this.ctx, this.master, this.reverbSend);
+kitRecipes[this.kit].voices[voice](vc, when, base * groupMul);
 ```
 
-Each voice function constructs a disposable graph of Web Audio nodes, wires them to `master` (and optionally to the reverb send tap), and calls `.start(when)` / `.stop(when + dur)`. After stop, the browser garbage-collects the nodes.
+Each `VoiceRenderer` constructs a disposable graph of Web Audio nodes, wires them to `vc.destination` (master bus) and optionally to `vc.reverbSend` via `connectVoice(vc, node, wetAmount)`, and calls `.start(when)` / `.stop(when + dur)`. After stop, the browser garbage-collects the nodes.
 
-### `drumMachineVoice` — 808/909/707/727 (`engine.ts:368-534`)
+### `drum-machine.ts` — 808 / 909 / 707
 
-One function, four sub-variants branched via `kit === '727'` checks and parameter tables. The Latin 727 remaps voices entirely:
+Three kits with shared voice shape — one file, parameter tables select kick/snare/hat/clap variant per kit.
 
-| Voice | 808/909/707 | 727 |
-|---|---|---|
-| KK | Kick (sine sweep 150→40Hz-ish) | Low conga (180→130Hz) |
-| SN | Snare (two-osc body + filtered noise) | High conga (300→220Hz) |
-| HH | Hi-hat (HP+BP filtered noise) | Cowbell (two squares + BP) |
-| OH | Open hat (same chain, longer decay) | Agogo (same synth, lower pitches) |
-| CP | Clap (3× stacked noise bursts) | Claves (short 2500Hz click) |
+| Voice | 808 / 909 / 707 |
+|---|---|
+| KK | Kick (sine sweep with optional 2400Hz click transient) |
+| SN | Snare (two-osc body + filtered noise) |
+| HH | Hi-hat (HP+BP filtered noise) |
+| OH | Open hat (same chain, longer decay) |
+| CP | Clap (3× stacked noise bursts) |
 
-808 vs 909 differ by kick frequencies (180→42 vs 150→40) and decay (0.35s vs 0.6s); 909's kick includes a 2400Hz square "click" transient (`engine.ts:401-410`). 707 is shorter and more percussive (dec=0.28) with the same transient.
+808 vs 909 differ by kick frequencies (150→40 vs 180→42) and decay (0.6s vs 0.35s); 909's kick includes a 2400Hz square "click" transient. 707 is shorter and more percussive (dec=0.28) with the same transient.
 
-### `frameDrumVoice` — Turkish/Arabic/Persian/Balkan (`engine.ts:538-645`)
+### `tr-727.ts` — Roland 727 (Latin percussion)
+
+Different enough from 808/909/707 to live in its own file — same `VoiceId` surface (KK/SN/HH/OH/CP), different instruments.
+
+| Voice | 727 |
+|---|---|
+| KK | Low conga (180→130Hz) |
+| SN | High conga (300→220Hz) |
+| HH | Cowbell (two squares + BP) |
+| OH | Agogo (same synth, lower pitches) |
+| CP | Claves (short 2500Hz click) |
+
+### `frame-drum.ts` — Turkish / Arabic / Persian / Balkan
 
 Voice mapping:
 
@@ -321,7 +363,7 @@ Voice mapping:
 | OH | Zils (jingles) | Three detuned sines (3.1/5.2/7.3kHz) + HP noise tail |
 | CP | Slap | 700Hz BP noise |
 
-### `tablaVoice` — Indian Hindustani (`engine.ts:649-731`)
+### `tabla.ts` — Indian Hindustani
 
 | Voice | Bol | Synthesis |
 |---|---|---|
@@ -329,18 +371,18 @@ Voice mapping:
 | SN | Na/ta (dayan rim) | Modal resonator at 600/1020Hz + HP noise attack |
 | HH | Tin (closed bell) | 900Hz sine, 40ms |
 | OH | Tun (open resonant) | 500/980Hz sines, 500ms decay |
-| CP | Dha | Composite — calls `tablaVoice(KK) + tablaVoice(SN)` simultaneously |
+| CP | Dha | Composite — calls `ge + na` simultaneously |
 
 The bayan's upward bend is the signature "wump" — a lexical cue your ear will pick up even at low volumes.
 
-### `gamelanVoice` — Indonesian metal percussion (`engine.ts:736-779`)
+### `gamelan.ts` — Indonesian metal percussion
 
 All voices share the same recipe via `gamelanTone()`: inharmonic modal resonators (sine partials at non-integer ratios) with higher partials decaying faster. Each voice has different `fundamental`, `partials[]`, and `decay`:
 
 ```ts
-function gamelanTone(e, when, amp, fundamental, partials, decay) {
+function gamelanTone(vc, when, amp, fundamental, partials, decay) {
   partials.forEach((ratio, i) => {
-    const osc = e._createOsc();
+    const osc = createOsc(vc.ctx);
     osc.frequency.value = fundamental * ratio;
     // Higher partials decay faster (classic inharmonic metal shape)
     const partialDecay = decay * (1 / (1 + i * 0.4));
@@ -359,7 +401,7 @@ function gamelanTone(e, when, amp, fundamental, partials, decay) {
 | OH | Kempul (hanging gong) | 140Hz | 1, 1.84, 2.9, 4.2 | 1.2s |
 | CP | Kempyang (high bell) | 1180Hz | 1, 2.1 | 0.3s |
 
-Gamelan kit pairs with `KIT_REVERB_SEND = 0.35` — the highest of any kit — because pavilion ambience is inseparable from the sound.
+Gamelan kit pairs with `reverbSend = 0.35` — the highest of any kit — because pavilion ambience is inseparable from the sound.
 
 ## Velocity → amplitude
 
