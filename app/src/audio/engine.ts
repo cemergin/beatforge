@@ -41,6 +41,11 @@ export class AudioEngine {
   private nextBarTime = 0;
   private startTime = 0;
 
+  // Polyrhythm overlay — ephemeral click track at chosen subdivisions.
+  overlay: { subdivisions: number } | null = null;
+  private overlayNextTime = 0;
+  private overlayNextIdx = 0;
+
   async ensureCtx(): Promise<void> {
     if (!this.ctx) {
       const Ctor = window.AudioContext
@@ -103,20 +108,79 @@ export class AudioEngine {
     });
   }
 
-  start(): void {
+  start(countInBars = 0): void {
     if (!this.pattern || !this.ctx || this.running) return;
     this.running = true;
     const now = this.ctx.currentTime + 0.06;
-    this.startTime = now;
-    this.nextBarTime = now;
+    const barSec = this.pattern.steps * (60 / this.bpm);
+
+    // Count-in: schedule clicks for N bars, then start pattern after delay.
+    // Count-in clicks fire at `pattern.grouping.length` per bar (pulse level).
+    if (countInBars > 0) {
+      const pulsesPerBar = Math.max(1, this.pattern.grouping.length);
+      const pulseSec = barSec / pulsesPerBar;
+      const totalPulses = countInBars * pulsesPerBar;
+      for (let i = 0; i < totalPulses; i++) {
+        const t = now + i * pulseSec;
+        // Beat-one accent on the first pulse of each count-in bar
+        const isBeatOne = i % pulsesPerBar === 0;
+        this.countInClick(t, isBeatOne ? 1.0 : 0.5);
+      }
+    }
+
+    this.startTime = now + countInBars * barSec;
+    this.nextBarTime = this.startTime;
     this.bar = 0;
 
     Object.keys(this.pattern.tracks).forEach((tr) => {
-      this.nextNoteTimes[tr] = now;
+      this.nextNoteTimes[tr] = this.startTime;
       this.nextIdx[tr] = 0;
       this.cursors[tr] = -1;
     });
+
+    if (this.overlay) {
+      this.overlayNextTime = this.startTime;
+      this.overlayNextIdx = 0;
+    }
+
     this.tick();
+  }
+
+  // Neutral count-in click — kit-independent (always a wood-like tick).
+  private countInClick(when: number, amp: number): void {
+    const ctx = this.ctx!;
+    const osc = ctx.createOscillator();
+    const g = ctx.createGain();
+    osc.frequency.value = amp > 0.8 ? 2200 : 1400;
+    g.gain.setValueAtTime(amp * 0.5, when);
+    g.gain.exponentialRampToValueAtTime(0.0001, when + 0.03);
+    osc.connect(g);
+    g.connect(this.master!);
+    osc.start(when);
+    osc.stop(when + 0.05);
+  }
+
+  // Polyrhythm overlay click — used for the ephemeral practice overlay.
+  private overlayClick(when: number): void {
+    const ctx = this.ctx!;
+    const osc = ctx.createOscillator();
+    const g = ctx.createGain();
+    osc.frequency.value = 1800;
+    g.gain.setValueAtTime(0.6, when);
+    g.gain.exponentialRampToValueAtTime(0.0001, when + 0.04);
+    osc.connect(g);
+    g.connect(this.master!);
+    osc.start(when);
+    osc.stop(when + 0.05);
+  }
+
+  setOverlay(cfg: { subdivisions: number } | null): void {
+    this.overlay = cfg;
+    if (this.running && this.ctx && cfg) {
+      // Re-sync overlay to the nearest upcoming bar boundary
+      this.overlayNextTime = Math.max(this.ctx.currentTime, this.nextBarTime - this.barSeconds());
+      this.overlayNextIdx = 0;
+    }
   }
 
   stop(): void {
@@ -163,6 +227,18 @@ export class AudioEngine {
 
         this.nextNoteTimes[tr] += stepSec;
         this.nextIdx[tr] += 1;
+      }
+    }
+
+    // Polyrhythm overlay scheduling (separate from pattern tracks)
+    if (this.overlay) {
+      const overlayStepSec = barSec / this.overlay.subdivisions;
+      while (this.overlayNextTime < horizon) {
+        if (this.overlayNextTime >= this.startTime) {
+          this.overlayClick(this.overlayNextTime);
+        }
+        this.overlayNextTime += overlayStepSec;
+        this.overlayNextIdx += 1;
       }
     }
 

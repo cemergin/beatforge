@@ -593,6 +593,75 @@ input[type="number"] { font: inherit; color: inherit; }
   margin-top: 2px;
 }
 
+/* ── Highlights / Recent strips ── */
+.bf-strip {
+  display: flex; flex-direction: column; gap: 4px;
+  padding: 8px 10px;
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+}
+.bf-strip-label {
+  font-family: var(--mono); font-size: 10px;
+  color: var(--muted); letter-spacing: 0.12em;
+  text-transform: uppercase; font-weight: 600;
+}
+.bf-strip-chips {
+  display: flex; gap: 4px; flex-wrap: wrap;
+}
+.bf-strip-chip {
+  padding: 4px 9px;
+  border-radius: 999px;
+  background: var(--bg-sunk);
+  color: var(--fg);
+  font-size: 11px; font-weight: 500;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  transition: all 0.1s;
+}
+.bf-strip-chip:hover { border-color: var(--accent); }
+.bf-strip-chip.on {
+  background: var(--accent); color: #fff;
+}
+.bf-strip-chip.muted { opacity: 0.75; font-size: 10px; }
+
+/* ── Star button on pattern card ── */
+.bf-pattern-head {
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 8px;
+}
+.bf-star {
+  font-size: 20px; line-height: 1; padding: 0;
+  color: var(--muted);
+  transition: color 0.15s, transform 0.1s;
+}
+.bf-star:hover { color: var(--accent); transform: scale(1.1); }
+.bf-star.on { color: var(--grp-2); }
+
+/* ── Count-in / stop-after / overlay visual state ── */
+.bf-counting-in-badge {
+  position: absolute; top: 8px; right: 12px;
+  font-family: var(--mono); font-size: 10px;
+  color: var(--accent); letter-spacing: 0.1em;
+  text-transform: uppercase; font-weight: 700;
+  animation: bf-pulse 0.8s ease-in-out infinite;
+}
+@keyframes bf-pulse {
+  0%, 100% { opacity: 0.5; }
+  50%      { opacity: 1; }
+}
+.bf-bpm-hero.counting-in { border-color: var(--accent); }
+.bf-grid-wrap.counting-in .bf-grid-stage {
+  opacity: 0.35;
+  transition: opacity 0.2s;
+}
+
+.bf-exp {
+  font-family: var(--mono); font-size: 7px;
+  color: var(--grp-2); margin-left: 2px;
+  vertical-align: super;
+}
+
 /* ── Inline pattern list (Practice left column) ── */
 .bf-pattern-list {
   display: flex; flex-direction: column; gap: 2px;

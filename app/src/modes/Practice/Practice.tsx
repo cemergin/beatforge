@@ -3,6 +3,7 @@ import type { AudioEngine } from '../../audio/engine';
 import type { KitId, Pattern, VoiceId } from '../../patterns/types';
 import { trackMeta } from '../../patterns/types';
 import { PATTERNS, patternById } from '../../patterns/seed';
+import { getHighlights, getRecent, isHighlighted, pushRecent, toggleHighlight } from '../../lib/storage';
 import { BeatDots } from '../../components/BeatDots';
 import { CircularGrid } from '../../components/CircularGrid';
 import { LinearGrid } from '../../components/LinearGrid';
@@ -12,6 +13,10 @@ import { Trainer, type TrainerCfg } from './Trainer';
 type View = 'circular' | 'linear' | 'pill';
 
 const ALL_KITS: KitId[] = ['808', '909', '707', '727', 'frameDrum', 'tabla', 'gamelan'];
+const OVERLAY_OPTIONS = [0, 3, 4, 5, 7];
+
+type StopAfterMode = 'off' | 'cycles' | 'time';
+interface StopAfter { mode: StopAfterMode; value: number }
 
 interface Props {
   engine: AudioEngine;
@@ -29,7 +34,6 @@ export function Practice({ engine }: Props) {
   const [playing, setPlaying] = useState(false);
   const [bpm, setBpm] = useState(pattern.bpm.default);
   const [cursors, setCursors] = useState<Record<string, number>>({});
-  // Session kit override; pattern.defaultKit is source of truth until user changes it.
   const [kitOverride, setKitOverride] = useState<KitId | null>(null);
   const activeKit: KitId = kitOverride ?? pattern.defaultKit;
 
@@ -47,11 +51,18 @@ export function Practice({ engine }: Props) {
   });
   const [trainerBar, setTrainerBar] = useState(0);
 
-  // rAF cursor polling — smoother than onStep-at-setTimeout
+  const [countInBars, setCountInBars] = useState(1);
+  const [stopAfter, setStopAfter] = useState<StopAfter>({ mode: 'off', value: 0 });
+  const [overlaySubdivisions, setOverlaySubdivisions] = useState(0);
+  const [countingIn, setCountingIn] = useState(false);
+
+  const [highlights, setHighlights] = useState<string[]>(() => getHighlights());
+  const [recent, setRecent] = useState<string[]>(() => getRecent());
+
+  // rAF cursor polling
   useEffect(() => {
     let raf = 0;
     const loop = () => {
-      // Snapshot cursors only when a frame needs rendering
       setCursors({ ...engine.cursors });
       raf = requestAnimationFrame(loop);
     };
@@ -59,24 +70,40 @@ export function Practice({ engine }: Props) {
     return () => cancelAnimationFrame(raf);
   }, [engine]);
 
-  // Bar-boundary callback → trainer bar counter
+  // Bar-boundary callback → trainer bar counter + stop-after check
   useEffect(() => {
-    engine.onBar = (bar: number) => setTrainerBar(bar);
+    engine.onBar = (bar: number) => {
+      setTrainerBar(bar);
+      if (stopAfter.mode === 'cycles' && bar >= stopAfter.value) {
+        engine.stop();
+        setPlaying(false);
+      }
+    };
     return () => { engine.onBar = null; };
-  }, [engine]);
+  }, [engine, stopAfter]);
 
-  // Pattern change → load into engine + reset trainer + reset kit override
+  // Stop-after time mode (pure wall-clock, tracked while playing)
+  useEffect(() => {
+    if (!playing || stopAfter.mode !== 'time') return;
+    const id = setTimeout(() => {
+      engine.stop();
+      setPlaying(false);
+    }, stopAfter.value * 60_000);
+    return () => clearTimeout(id);
+  }, [playing, engine, stopAfter]);
+
+  // Pattern change → load + reset trainer + kit override + push recent
   useEffect(() => {
     engine.loadPattern({ ...pattern, grouping: pattern.grouping });
     setBpm(pattern.bpm.default);
     setGrouping(pattern.grouping);
-    setKitOverride(null);   // session override discards on pattern change (spec §5.2)
+    setKitOverride(null);
     localStorage.setItem('bf_pattern', pattern.id);
     setTrainerBar(0);
+    setRecent(pushRecent(pattern.id));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [patternId]);
 
-  // Grouping change → engine re-applies pattern (grouping is display, but safe to re-load)
   useEffect(() => {
     engine.loadPattern({ ...pattern, grouping });
   }, [engine, pattern, grouping]);
@@ -88,6 +115,15 @@ export function Practice({ engine }: Props) {
   }, [engine, swing, pattern.swingable]);
   useEffect(() => { engine.setAccents(strong / 100, weak / 100); }, [engine, strong, weak]);
   useEffect(() => { localStorage.setItem('bf_view', view); }, [view]);
+
+  // Polyrhythm overlay — sync engine when changed
+  useEffect(() => {
+    if (overlaySubdivisions > 0) {
+      engine.setOverlay({ subdivisions: overlaySubdivisions });
+    } else {
+      engine.setOverlay(null);
+    }
+  }, [engine, overlaySubdivisions]);
 
   // Speed trainer — cycles mode
   useEffect(() => {
@@ -111,21 +147,48 @@ export function Practice({ engine }: Props) {
     if (playing) {
       engine.stop();
       setPlaying(false);
+      setCountingIn(false);
     } else {
       if (bpm < trainerCfg.from && trainerOn) setBpm(trainerCfg.from);
       engine.setBpm(bpm);
-      engine.start();
+      engine.start(countInBars);
       setPlaying(true);
+      if (countInBars > 0) {
+        setCountingIn(true);
+        const barSec = pattern.steps * (60 / bpm);
+        setTimeout(() => setCountingIn(false), countInBars * barSec * 1000);
+      }
     }
-  }, [engine, playing, bpm, trainerOn, trainerCfg.from]);
+  }, [engine, playing, bpm, trainerOn, trainerCfg.from, countInBars, pattern.steps]);
 
-  // Beat dots track the KK cursor (or first track's cursor) at main division.
+  // Keyboard shortcuts — Space for play/stop, 1-9 for highlights
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const t = e.target as HTMLElement;
+      if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+      if (e.code === 'Space') {
+        e.preventDefault();
+        toggle();
+        return;
+      }
+      if (e.key >= '1' && e.key <= '9') {
+        const idx = Number(e.key) - 1;
+        const hl = getHighlights();
+        if (hl[idx]) { setPatternId(hl[idx]); }
+      }
+      if (e.key.toLowerCase() === 's' && !e.metaKey && !e.ctrlKey) {
+        setHighlights(toggleHighlight(patternId));
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [toggle, patternId]);
+
   const curStep = useMemo(() => {
     const firstTrack = Object.keys(pattern.tracks)[0];
     if (!firstTrack) return -1;
     const td = pattern.tracks[firstTrack as VoiceId]!;
     const meta = trackMeta(td, pattern.steps);
-    // Only meaningful for main-division tracks (polyrhythm tracks have their own cursor rhythm)
     if (meta.subdivisions !== pattern.steps) return -1;
     return cursors[firstTrack] ?? -1;
   }, [cursors, pattern]);
@@ -160,11 +223,68 @@ export function Practice({ engine }: Props) {
     pill: <PillGrid pattern={{ ...pattern, grouping }} cursors={cursors} onToggle={toggleStep} />,
   }[view];
 
+  const starred = isHighlighted(patternId);
+  const starToggle = () => setHighlights(toggleHighlight(patternId));
+
   return (
     <main className="bf-main">
       <aside className="bf-left">
+        {/* Highlights strip */}
+        {highlights.length > 0 && (
+          <div className="bf-strip">
+            <div className="bf-strip-label">⭐ highlights</div>
+            <div className="bf-strip-chips">
+              {highlights.map((id) => {
+                const p = patternById(id);
+                if (!p) return null;
+                return (
+                  <button
+                    key={id}
+                    className={`bf-strip-chip ${id === patternId ? 'on' : ''}`}
+                    onClick={() => setPatternId(id)}
+                    title={p.name}
+                  >
+                    {p.name}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
+        {recent.length > 1 && (
+          <div className="bf-strip">
+            <div className="bf-strip-label">recent</div>
+            <div className="bf-strip-chips">
+              {recent.slice(0, 8).map((id) => {
+                const p = patternById(id);
+                if (!p) return null;
+                return (
+                  <button
+                    key={id}
+                    className={`bf-strip-chip muted ${id === patternId ? 'on' : ''}`}
+                    onClick={() => setPatternId(id)}
+                    title={p.name}
+                  >
+                    {p.name}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
         <div className="bf-pattern-card">
-          <div className="bf-pattern-name">{pattern.name}</div>
+          <div className="bf-pattern-head">
+            <div className="bf-pattern-name">{pattern.name}</div>
+            <button
+              className={`bf-star ${starred ? 'on' : ''}`}
+              onClick={starToggle}
+              title={starred ? 'Unstar' : 'Star'}
+              aria-label={starred ? 'Unstar pattern' : 'Star pattern'}
+            >
+              {starred ? '★' : '☆'}
+            </button>
+          </div>
           <div className="bf-pattern-origin">{pattern.origin}</div>
           <div className="bf-pattern-meta">
             <span className="bf-meta-badge">{pattern.timeSig}</span>
@@ -174,7 +294,7 @@ export function Practice({ engine }: Props) {
           </div>
         </div>
 
-        <div className="bf-bpm-hero">
+        <div className={`bf-bpm-hero ${countingIn ? 'counting-in' : ''}`}>
           <div className="bf-bpm-num">{bpm}</div>
           <div className="bf-bpm-unit" title="Beats per minute — where one beat is one grid step">
             BPM <span style={{ opacity: 0.45, fontSize: '0.7em' }}>· step/min</span>
@@ -191,6 +311,7 @@ export function Practice({ engine }: Props) {
             <button onClick={() => setBpm((b) => Math.min(800, b + 1))}>+</button>
           </div>
           <BeatDots grouping={grouping} currentStep={curStep} size={12} />
+          {countingIn && <div className="bf-counting-in-badge">counting in…</div>}
         </div>
 
         <button className={`bf-play ${playing ? 'on' : ''}`} onClick={toggle}>
@@ -237,7 +358,7 @@ export function Practice({ engine }: Props) {
         )}
       </aside>
 
-      <section className="bf-grid-wrap">
+      <section className={`bf-grid-wrap ${countingIn ? 'counting-in' : ''}`}>
         <div className="bf-grid-head">
           <div className="bf-view-switch">
             {(['circular', 'linear', 'pill'] as View[]).map((v) => (
@@ -281,6 +402,88 @@ export function Practice({ engine }: Props) {
           bar={trainerBar}
           bpm={bpm}
         />
+
+        <div className="bf-panel">
+          <div className="bf-panel-head">count-in</div>
+          <div className="bf-seg">
+            {[0, 1, 2, 4].map((n) => (
+              <button
+                key={n}
+                className={countInBars === n ? 'on' : ''}
+                onClick={() => setCountInBars(n)}
+              >
+                {n === 0 ? 'off' : `${n} bar${n > 1 ? 's' : ''}`}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="bf-panel">
+          <div className="bf-panel-head">stop after</div>
+          <div className="bf-row">
+            <label>cycles</label>
+            <div className="bf-seg">
+              {[0, 4, 8, 16, 32].map((n) => (
+                <button
+                  key={n}
+                  className={stopAfter.mode === 'cycles' && stopAfter.value === n
+                    ? 'on' : (n === 0 && stopAfter.mode === 'off' ? 'on' : '')}
+                  onClick={() => setStopAfter(n === 0
+                    ? { mode: 'off', value: 0 }
+                    : { mode: 'cycles', value: n })}
+                >
+                  {n === 0 ? '∞' : n}
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className="bf-row">
+            <label>min</label>
+            <div className="bf-seg">
+              {[1, 5, 10, 15, 30].map((n) => (
+                <button
+                  key={n}
+                  className={stopAfter.mode === 'time' && stopAfter.value === n ? 'on' : ''}
+                  onClick={() => setStopAfter({ mode: 'time', value: n })}
+                >
+                  {n}
+                </button>
+              ))}
+            </div>
+          </div>
+          {stopAfter.mode !== 'off' && playing && (
+            <div className="bf-mini-label">
+              {stopAfter.mode === 'cycles'
+                ? `${Math.max(0, stopAfter.value - trainerBar)} cycles remaining`
+                : `stops after ${stopAfter.value} min`}
+            </div>
+          )}
+        </div>
+
+        <div className="bf-panel">
+          <div className="bf-panel-head">polyrhythm overlay</div>
+          <div className="bf-seg">
+            {OVERLAY_OPTIONS.map((n) => (
+              <button
+                key={n}
+                className={overlaySubdivisions === n ? 'on' : ''}
+                onClick={() => setOverlaySubdivisions(n)}
+                title={n === 0 ? 'Off'
+                  : n === 5 || n === 7 ? `${n} over main (experimental)`
+                  : `${n} over main`}
+              >
+                {n === 0 ? 'off' : `${n}`}
+                {(n === 5 || n === 7) && <sup className="bf-exp">exp</sup>}
+              </button>
+            ))}
+          </div>
+          {overlaySubdivisions > 0 && (
+            <div className="bf-mini-label">
+              {overlaySubdivisions} clicks over {pattern.steps} main steps
+            </div>
+          )}
+        </div>
+
         <div className="bf-panel">
           <div className="bf-panel-head">accents</div>
           <div className="bf-row">
