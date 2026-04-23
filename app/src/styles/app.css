@@ -195,7 +195,7 @@ input[type="number"] { font: inherit; color: inherit; }
   content: "▸";
   display: inline-block;
   margin-right: 10px;
-  font-size: 11px;
+  font-size: 15px;
   color: var(--muted);
   transition: transform 0.15s;
   vertical-align: middle;
@@ -1282,7 +1282,7 @@ input[type="number"] { font: inherit; color: inherit; }
   content: "▸";
   display: inline-block;
   margin-right: 10px;
-  font-size: 11px;
+  font-size: 15px;
   color: var(--muted);
   transition: transform 0.15s;
   vertical-align: middle;
@@ -1308,7 +1308,7 @@ input[type="number"] { font: inherit; color: inherit; }
   content: "▸";
   display: inline-block;
   margin-right: 10px;
-  font-size: 11px;
+  font-size: 15px;
   color: var(--muted);
   transition: transform 0.15s;
   vertical-align: middle;
