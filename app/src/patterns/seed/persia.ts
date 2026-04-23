@@ -36,7 +36,7 @@ export const PERSIA_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 90, min: 70, max: 120 },
+    bpm: { default: 360, min: 280, max: 480 },
     difficulty: 'intermediate',
     tracks: {
       KK: [2, 0, 0, 0, 0, 0, 2, 0, 2, 0, 0, 0, 0, 0, 2, 0],
@@ -61,7 +61,7 @@ export const PERSIA_PATTERNS: Pattern[] = [
     grouping: [3, 3],
     stepUnit: 16,
     steps: 6,
-    bpm: { default: 180, min: 140, max: 240 },
+    bpm: { default: 720, min: 560, max: 960 },
     difficulty: 'advanced',
     tracks: {
       KK: [2, 0, 0, 2, 0, 0],
@@ -264,7 +264,7 @@ export const PERSIA_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 100, min: 60, max: 160 },
+    bpm: { default: 400, min: 240, max: 640 },
     difficulty: 'intermediate',
     tracks: {
       KK: [2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0],
@@ -314,7 +314,7 @@ export const PERSIA_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 70, min: 55, max: 90 },
+    bpm: { default: 280, min: 220, max: 360 },
     difficulty: 'intermediate',
     tracks: {
       KK: [2, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0],

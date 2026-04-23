@@ -11,7 +11,7 @@ export const CARIBBEAN_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 95, min: 85, max: 105 },
+    bpm: { default: 380, min: 340, max: 420 },
     difficulty: 'beginner',
     tracks: {
       KK: [2, 0, 0, 0, 0, 2, 0, 0, 2, 0, 0, 0, 0, 2, 0, 0],
@@ -37,7 +37,7 @@ export const CARIBBEAN_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 100, min: 80, max: 120 },
+    bpm: { default: 400, min: 320, max: 480 },
     difficulty: 'beginner',
     tracks: {
       KK: [2, 0, 0, 0, 0, 2, 0, 0, 2, 0, 0, 0, 0, 2, 0, 0],
@@ -62,7 +62,7 @@ export const CARIBBEAN_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 115, min: 100, max: 130 },
+    bpm: { default: 460, min: 400, max: 520 },
     difficulty: 'beginner',
     tracks: {
       KK: [2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0],
@@ -87,7 +87,7 @@ export const CARIBBEAN_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 142, min: 130, max: 160 },
+    bpm: { default: 568, min: 520, max: 640 },
     difficulty: 'beginner',
     tracks: {
       KK: [2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0],
@@ -112,7 +112,7 @@ export const CARIBBEAN_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 115, min: 100, max: 130 },
+    bpm: { default: 460, min: 400, max: 520 },
     difficulty: 'beginner',
     tracks: {
       KK: [2, 0, 0, 0, 0, 0, 2, 0, 2, 0, 0, 0, 0, 0, 1, 0],
@@ -138,7 +138,7 @@ export const CARIBBEAN_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 105, min: 90, max: 120 },
+    bpm: { default: 420, min: 360, max: 480 },
     difficulty: 'beginner',
     tracks: {
       KK: [2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0],
@@ -163,7 +163,7 @@ export const CARIBBEAN_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 145, min: 120, max: 180 },
+    bpm: { default: 580, min: 480, max: 720 },
     difficulty: 'beginner',
     tracks: {
       KK: [2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0],
@@ -190,7 +190,7 @@ export const CARIBBEAN_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 80, min: 70, max: 90 },
+    bpm: { default: 320, min: 280, max: 360 },
     difficulty: 'beginner',
     tracks: {
       KK: [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0],
@@ -217,7 +217,7 @@ export const CARIBBEAN_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 75, min: 65, max: 90 },
+    bpm: { default: 300, min: 260, max: 360 },
     difficulty: 'beginner',
     tracks: {
       KK: [0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0],
@@ -244,7 +244,7 @@ export const CARIBBEAN_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 80, min: 70, max: 95 },
+    bpm: { default: 320, min: 280, max: 380 },
     difficulty: 'beginner',
     tracks: {
       KK: [2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0],
@@ -271,7 +271,7 @@ export const CARIBBEAN_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 85, min: 75, max: 100 },
+    bpm: { default: 340, min: 300, max: 400 },
     difficulty: 'intermediate',
     tracks: {
       KK: [2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0],
@@ -298,7 +298,7 @@ export const CARIBBEAN_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 130, min: 120, max: 145 },
+    bpm: { default: 520, min: 480, max: 580 },
     difficulty: 'beginner',
     tracks: {
       KK: [2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 2, 0, 0, 0, 2, 0],

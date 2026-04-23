@@ -11,7 +11,7 @@ export const CELTIC_EUROPE_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 115, min: 100, max: 130 },
+    bpm: { default: 460, min: 400, max: 520 },
     difficulty: 'beginner',
     tracks: {
       KK: [2, 0, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0, 1, 0, 0, 0],
@@ -61,7 +61,7 @@ export const CELTIC_EUROPE_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4],
     stepUnit: 16,
     steps: 12,
-    bpm: { default: 120, min: 100, max: 140 },
+    bpm: { default: 480, min: 400, max: 560 },
     difficulty: 'advanced',
     tracks: {
       KK: [2, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
@@ -86,7 +86,7 @@ export const CELTIC_EUROPE_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 85, min: 70, max: 100 },
+    bpm: { default: 340, min: 280, max: 400 },
     difficulty: 'intermediate',
     tracks: {
       KK: [2, 0, 1, 0, 0, 0, 0, 0, 2, 0, 1, 0, 0, 0, 0, 0],
@@ -164,7 +164,7 @@ export const CELTIC_EUROPE_PATTERNS: Pattern[] = [
     grouping: [4, 4],
     stepUnit: 16,
     steps: 8,
-    bpm: { default: 130, min: 120, max: 140 },
+    bpm: { default: 520, min: 480, max: 560 },
     difficulty: 'beginner',
     tracks: {
       KK: [2, 0, 0, 0, 1, 0, 0, 0],
@@ -190,7 +190,7 @@ export const CELTIC_EUROPE_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 140, min: 130, max: 152 },
+    bpm: { default: 560, min: 520, max: 608 },
     difficulty: 'advanced',
     tracks: {
       KK: [2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0],
@@ -215,7 +215,7 @@ export const CELTIC_EUROPE_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4],
     stepUnit: 16,
     steps: 12,
-    bpm: { default: 150, min: 120, max: 180 },
+    bpm: { default: 600, min: 480, max: 720 },
     difficulty: 'beginner',
     tracks: {
       KK: [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -240,7 +240,7 @@ export const CELTIC_EUROPE_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4],
     stepUnit: 16,
     steps: 12,
-    bpm: { default: 160, min: 130, max: 190 },
+    bpm: { default: 640, min: 520, max: 760 },
     difficulty: 'intermediate',
     tracks: {
       KK: [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -266,7 +266,7 @@ export const CELTIC_EUROPE_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 110, min: 90, max: 130 },
+    bpm: { default: 440, min: 360, max: 520 },
     difficulty: 'beginner',
     tracks: {
       KK: [2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0],
@@ -291,7 +291,7 @@ export const CELTIC_EUROPE_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 140, min: 100, max: 200 },
+    bpm: { default: 560, min: 400, max: 800 },
     difficulty: 'intermediate',
     tracks: {
       KK: [2, 0, 1, 0, 0, 0, 0, 0, 2, 0, 1, 0, 0, 0, 0, 0],
@@ -316,7 +316,7 @@ export const CELTIC_EUROPE_PATTERNS: Pattern[] = [
     grouping: [4, 4],
     stepUnit: 16,
     steps: 8,
-    bpm: { default: 120, min: 100, max: 140 },
+    bpm: { default: 480, min: 400, max: 560 },
     difficulty: 'beginner',
     tracks: {
       KK: [2, 0, 0, 0, 1, 0, 0, 0],
@@ -341,7 +341,7 @@ export const CELTIC_EUROPE_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4],
     stepUnit: 16,
     steps: 12,
-    bpm: { default: 130, min: 110, max: 150 },
+    bpm: { default: 520, min: 440, max: 600 },
     difficulty: 'intermediate',
     tracks: {
       KK: [2, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
@@ -367,7 +367,7 @@ export const CELTIC_EUROPE_PATTERNS: Pattern[] = [
     grouping: [4, 4],
     stepUnit: 16,
     steps: 8,
-    bpm: { default: 130, min: 110, max: 150 },
+    bpm: { default: 520, min: 440, max: 600 },
     difficulty: 'intermediate',
     tracks: {
       KK: [2, 0, 0, 0, 0, 0, 1, 0],

@@ -215,7 +215,7 @@ export const BALKANS_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 130, min: 110, max: 160 },
+    bpm: { default: 520, min: 440, max: 640 },
     difficulty: 'beginner',
     tracks: {
       KK: [2, 0, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0, 1, 0, 0, 0],
@@ -240,7 +240,7 @@ export const BALKANS_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4],
     stepUnit: 16,
     steps: 12,
-    bpm: { default: 100, min: 80, max: 130 },
+    bpm: { default: 400, min: 320, max: 520 },
     difficulty: 'intermediate',
     tracks: {
       KK: [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -265,7 +265,7 @@ export const BALKANS_PATTERNS: Pattern[] = [
     grouping: [4, 4],
     stepUnit: 16,
     steps: 8,
-    bpm: { default: 140, min: 100, max: 200 },
+    bpm: { default: 560, min: 400, max: 800 },
     difficulty: 'intermediate',
     tracks: {
       KK: [2, 0, 0, 0, 2, 0, 0, 0],

@@ -11,7 +11,7 @@ export const BRAZIL_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 128, min: 70, max: 160 },
+    bpm: { default: 512, min: 280, max: 640 },
     difficulty: 'intermediate',
     tracks: {
       KK: [2, 0, 0, 0, 0, 0, 2, 0, 0, 2, 0, 0, 0, 0, 2, 0],
@@ -37,7 +37,7 @@ export const BRAZIL_PATTERNS: Pattern[] = [
     grouping: [4, 4],
     stepUnit: 16,
     steps: 8,
-    bpm: { default: 110, min: 90, max: 130 },
+    bpm: { default: 440, min: 360, max: 520 },
     difficulty: 'intermediate',
     tracks: {
       KK: [2, 0, 0, 0, 0, 0, 2, 0],
@@ -62,7 +62,7 @@ export const BRAZIL_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 105, min: 90, max: 120 },
+    bpm: { default: 420, min: 360, max: 480 },
     difficulty: 'intermediate',
     tracks: {
       KK: [2, 0, 0, 0, 0, 0, 2, 0, 2, 0, 0, 0, 0, 0, 2, 0],
@@ -87,7 +87,7 @@ export const BRAZIL_PATTERNS: Pattern[] = [
     grouping: [4, 4],
     stepUnit: 16,
     steps: 8,
-    bpm: { default: 120, min: 100, max: 140 },
+    bpm: { default: 480, min: 400, max: 560 },
     difficulty: 'beginner',
     tracks: {
       KK: [2, 0, 0, 0, 0, 0, 2, 0],
@@ -112,7 +112,7 @@ export const BRAZIL_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 95, min: 80, max: 110 },
+    bpm: { default: 380, min: 320, max: 440 },
     difficulty: 'intermediate',
     tracks: {
       KK: [2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0],
@@ -137,7 +137,7 @@ export const BRAZIL_PATTERNS: Pattern[] = [
     grouping: [4, 4],
     stepUnit: 16,
     steps: 8,
-    bpm: { default: 135, min: 125, max: 145 },
+    bpm: { default: 540, min: 500, max: 580 },
     difficulty: 'intermediate',
     tracks: {
       KK: [2, 0, 0, 0, 2, 0, 0, 0],
@@ -163,7 +163,7 @@ export const BRAZIL_PATTERNS: Pattern[] = [
     grouping: [4, 4],
     stepUnit: 16,
     steps: 8,
-    bpm: { default: 95, min: 80, max: 110 },
+    bpm: { default: 380, min: 320, max: 440 },
     difficulty: 'intermediate',
     tracks: {
       KK: [2, 0, 0, 0, 0, 1, 2, 0],
@@ -189,7 +189,7 @@ export const BRAZIL_PATTERNS: Pattern[] = [
     grouping: [4, 4],
     stepUnit: 16,
     steps: 8,
-    bpm: { default: 175, min: 150, max: 200 },
+    bpm: { default: 700, min: 600, max: 800 },
     difficulty: 'advanced',
     tracks: {
       KK: [2, 0, 0, 0, 2, 0, 0, 0],
@@ -214,7 +214,7 @@ export const BRAZIL_PATTERNS: Pattern[] = [
     grouping: [4, 4],
     stepUnit: 16,
     steps: 8,
-    bpm: { default: 120, min: 100, max: 140 },
+    bpm: { default: 480, min: 400, max: 560 },
     difficulty: 'beginner',
     tracks: {
       KK: [2, 0, 0, 0, 2, 0, 0, 0],
@@ -240,7 +240,7 @@ export const BRAZIL_PATTERNS: Pattern[] = [
     grouping: [4, 4],
     stepUnit: 16,
     steps: 8,
-    bpm: { default: 95, min: 80, max: 115 },
+    bpm: { default: 380, min: 320, max: 460 },
     difficulty: 'beginner',
     tracks: {
       KK: [2, 0, 0, 0, 0, 0, 2, 0],
@@ -266,7 +266,7 @@ export const BRAZIL_PATTERNS: Pattern[] = [
     grouping: [4, 4],
     stepUnit: 16,
     steps: 8,
-    bpm: { default: 115, min: 100, max: 130 },
+    bpm: { default: 460, min: 400, max: 520 },
     difficulty: 'beginner',
     tracks: {
       KK: [2, 0, 0, 2, 0, 0, 2, 0],
@@ -291,7 +291,7 @@ export const BRAZIL_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 95, min: 80, max: 110 },
+    bpm: { default: 380, min: 320, max: 440 },
     difficulty: 'intermediate',
     tracks: {
       KK: [2, 0, 0, 2, 0, 0, 0, 0, 2, 0, 0, 2, 0, 0, 0, 0],
@@ -317,7 +317,7 @@ export const BRAZIL_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 125, min: 110, max: 140 },
+    bpm: { default: 500, min: 440, max: 560 },
     difficulty: 'intermediate',
     tracks: {
       KK: [2, 0, 0, 0, 0, 0, 1, 0, 2, 0, 0, 0, 0, 0, 1, 0],
@@ -343,7 +343,7 @@ export const BRAZIL_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 100, min: 85, max: 120 },
+    bpm: { default: 400, min: 340, max: 480 },
     difficulty: 'intermediate',
     tracks: {
       KK: [2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0],
@@ -369,7 +369,7 @@ export const BRAZIL_PATTERNS: Pattern[] = [
     grouping: [4, 4],
     stepUnit: 16,
     steps: 8,
-    bpm: { default: 110, min: 95, max: 125 },
+    bpm: { default: 440, min: 380, max: 500 },
     difficulty: 'beginner',
     tracks: {
       KK: [2, 0, 0, 0, 2, 0, 0, 0],

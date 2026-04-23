@@ -522,7 +522,7 @@ export const INDIA_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 110, min: 60, max: 160 },
+    bpm: { default: 440, min: 240, max: 640 },
     difficulty: 'beginner',
     tracks: {
       KK: [2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0],
@@ -548,7 +548,7 @@ export const INDIA_PATTERNS: Pattern[] = [
     grouping: [3, 3, 3, 3],
     stepUnit: 16,
     steps: 12,
-    bpm: { default: 110, min: 60, max: 180 },
+    bpm: { default: 440, min: 240, max: 720 },
     difficulty: 'beginner',
     tracks: {
       KK: [2, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0],
@@ -574,7 +574,7 @@ export const INDIA_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 95, min: 80, max: 110 },
+    bpm: { default: 380, min: 320, max: 440 },
     difficulty: 'intermediate',
     tracks: {
       KK: [2, 0, 0, 2, 0, 0, 0, 0, 2, 0, 0, 2, 0, 0, 0, 0],
@@ -600,7 +600,7 @@ export const INDIA_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 150, min: 120, max: 200 },
+    bpm: { default: 600, min: 480, max: 800 },
     difficulty: 'intermediate',
     tracks: {
       KK: [2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0],
@@ -627,7 +627,7 @@ export const INDIA_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 180, min: 150, max: 220 },
+    bpm: { default: 720, min: 600, max: 880 },
     difficulty: 'intermediate',
     tracks: {
       KK: [2, 2, 0, 0, 2, 2, 0, 0, 2, 2, 0, 0, 2, 2, 0, 0],
@@ -653,7 +653,7 @@ export const INDIA_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 140, min: 120, max: 170 },
+    bpm: { default: 560, min: 480, max: 680 },
     difficulty: 'intermediate',
     tracks: {
       KK: [2, 0, 0, 0, 0, 0, 2, 0, 2, 0, 0, 0, 0, 0, 0, 0],
@@ -678,7 +678,7 @@ export const INDIA_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 145, min: 130, max: 170 },
+    bpm: { default: 580, min: 520, max: 680 },
     difficulty: 'intermediate',
     tracks: {
       KK: [2, 0, 0, 2, 0, 0, 2, 0, 2, 0, 0, 2, 0, 0, 0, 2],
@@ -704,7 +704,7 @@ export const INDIA_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 100, min: 80, max: 140 },
+    bpm: { default: 400, min: 320, max: 560 },
     difficulty: 'intermediate',
     tracks: {
       KK: [2, 0, 0, 0, 2, 0, 2, 0, 2, 0, 0, 0, 0, 0, 0, 0],
@@ -731,7 +731,7 @@ export const INDIA_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 115, min: 90, max: 140 },
+    bpm: { default: 460, min: 360, max: 560 },
     difficulty: 'beginner',
     tracks: {
       KK: [2, 0, 0, 0, 0, 0, 2, 0, 2, 0, 0, 0, 0, 0, 0, 0],
@@ -757,7 +757,7 @@ export const INDIA_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 120, min: 100, max: 150 },
+    bpm: { default: 480, min: 400, max: 600 },
     difficulty: 'beginner',
     tracks: {
       KK: [2, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 2, 0, 0, 0],
@@ -783,7 +783,7 @@ export const INDIA_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 115, min: 100, max: 130 },
+    bpm: { default: 460, min: 400, max: 520 },
     difficulty: 'intermediate',
     tracks: {
       KK: [2, 0, 2, 0, 0, 0, 2, 0, 2, 0, 2, 0, 0, 0, 2, 0],
@@ -809,7 +809,7 @@ export const INDIA_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 125, min: 110, max: 140 },
+    bpm: { default: 500, min: 440, max: 560 },
     difficulty: 'beginner',
     tracks: {
       KK: [2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0],

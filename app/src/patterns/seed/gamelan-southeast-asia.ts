@@ -38,7 +38,7 @@ export const GAMELAN_SOUTHEAST_ASIA_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 160, min: 140, max: 200 },
+    bpm: { default: 640, min: 560, max: 800 },
     difficulty: 'advanced',
     tracks: {
       KK: [2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0],
@@ -64,7 +64,7 @@ export const GAMELAN_SOUTHEAST_ASIA_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 8,
     steps: 16,
-    bpm: { default: 75, min: 50, max: 100 },
+    bpm: { default: 150, min: 100, max: 200 },
     difficulty: 'intermediate',
     tracks: {
       KK: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2],
@@ -90,7 +90,7 @@ export const GAMELAN_SOUTHEAST_ASIA_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 8,
     steps: 16,
-    bpm: { default: 70, min: 50, max: 90 },
+    bpm: { default: 140, min: 100, max: 180 },
     difficulty: 'intermediate',
     tracks: {
       KK: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2],
@@ -193,7 +193,7 @@ export const GAMELAN_SOUTHEAST_ASIA_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 170, min: 140, max: 200 },
+    bpm: { default: 680, min: 560, max: 800 },
     difficulty: 'advanced',
     tracks: {
       KK: [2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0],
@@ -221,7 +221,7 @@ export const GAMELAN_SOUTHEAST_ASIA_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 140, min: 120, max: 170 },
+    bpm: { default: 560, min: 480, max: 680 },
     difficulty: 'advanced',
     tracks: {
       KK: [2, 0, 0, 0, 2, 0, 0, 0, 0, 0, 2, 0, 0, 0, 1, 0],
@@ -249,7 +249,7 @@ export const GAMELAN_SOUTHEAST_ASIA_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 100, min: 80, max: 130 },
+    bpm: { default: 400, min: 320, max: 520 },
     difficulty: 'intermediate',
     tracks: {
       KK: [2, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 0, 0, 0],
@@ -277,7 +277,7 @@ export const GAMELAN_SOUTHEAST_ASIA_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 110, min: 90, max: 140 },
+    bpm: { default: 440, min: 360, max: 560 },
     difficulty: 'intermediate',
     tracks: {
       KK: [2, 0, 0, 1, 0, 0, 2, 0, 0, 0, 0, 1, 2, 0, 0, 0],
@@ -361,7 +361,7 @@ export const GAMELAN_SOUTHEAST_ASIA_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 100, min: 80, max: 120 },
+    bpm: { default: 400, min: 320, max: 480 },
     difficulty: 'intermediate',
     tracks: {
       KK: [2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0],

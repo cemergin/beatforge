@@ -11,7 +11,7 @@ export const ANDEAN_SOUTH_AMERICA_PATTERNS: Pattern[] = [
     grouping: [4, 4],
     stepUnit: 16,
     steps: 8,
-    bpm: { default: 110, min: 95, max: 130 },
+    bpm: { default: 440, min: 380, max: 520 },
     difficulty: 'beginner',
     tracks: {
       KK: [2, 0, 0, 0, 2, 0, 0, 0],
@@ -114,7 +114,7 @@ export const ANDEAN_SOUTH_AMERICA_PATTERNS: Pattern[] = [
     grouping: [4, 4],
     stepUnit: 16,
     steps: 8,
-    bpm: { default: 130, min: 115, max: 150 },
+    bpm: { default: 520, min: 460, max: 600 },
     difficulty: 'beginner',
     tracks: {
       KK: [2, 0, 0, 0, 2, 0, 0, 0],

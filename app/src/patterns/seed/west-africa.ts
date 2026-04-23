@@ -36,7 +36,7 @@ export const WEST_AFRICA_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 120, min: 110, max: 135 },
+    bpm: { default: 480, min: 440, max: 540 },
     difficulty: 'intermediate',
     tracks: {
       KK: [2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0],
@@ -62,7 +62,7 @@ export const WEST_AFRICA_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 115, min: 105, max: 125 },
+    bpm: { default: 460, min: 420, max: 500 },
     difficulty: 'intermediate',
     tracks: {
       KK: [2, 0, 0, 2, 0, 0, 0, 0, 2, 0, 0, 2, 0, 0, 0, 0],
@@ -137,7 +137,7 @@ export const WEST_AFRICA_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 130, min: 110, max: 145 },
+    bpm: { default: 520, min: 440, max: 580 },
     difficulty: 'advanced',
     tracks: {
       KK: [2, 0, 2, 0, 0, 0, 2, 0, 2, 0, 2, 0, 0, 0, 2, 0],
@@ -162,7 +162,7 @@ export const WEST_AFRICA_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 115, min: 100, max: 130 },
+    bpm: { default: 460, min: 400, max: 520 },
     difficulty: 'beginner',
     tracks: {
       KK: [2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0],
@@ -340,7 +340,7 @@ export const WEST_AFRICA_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 130, min: 120, max: 145 },
+    bpm: { default: 520, min: 480, max: 580 },
     difficulty: 'intermediate',
     tracks: {
       KK: [2, 0, 0, 0, 2, 0, 2, 0, 2, 0, 0, 0, 2, 0, 2, 0],
@@ -390,7 +390,7 @@ export const WEST_AFRICA_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 105, min: 90, max: 115 },
+    bpm: { default: 420, min: 360, max: 460 },
     difficulty: 'beginner',
     tracks: {
       KK: [2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 2, 0, 0, 0, 0, 0],
@@ -519,7 +519,7 @@ export const WEST_AFRICA_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 115, min: 95, max: 130 },
+    bpm: { default: 460, min: 380, max: 520 },
     difficulty: 'intermediate',
     tracks: {
       KK: [2, 0, 0, 0, 2, 0, 2, 0, 2, 0, 0, 0, 2, 0, 2, 0],
@@ -544,7 +544,7 @@ export const WEST_AFRICA_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 110, min: 100, max: 120 },
+    bpm: { default: 440, min: 400, max: 480 },
     difficulty: 'intermediate',
     tracks: {
       KK: [2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0],
@@ -594,7 +594,7 @@ export const WEST_AFRICA_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 110, min: 100, max: 120 },
+    bpm: { default: 440, min: 400, max: 480 },
     difficulty: 'advanced',
     tracks: {
       KK: [2, 0, 0, 2, 0, 0, 2, 0, 0, 0, 2, 0, 0, 2, 0, 0],
@@ -619,7 +619,7 @@ export const WEST_AFRICA_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 130, min: 110, max: 160 },
+    bpm: { default: 520, min: 440, max: 640 },
     difficulty: 'advanced',
     tracks: {
       KK: [2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0],

@@ -139,7 +139,7 @@ export const TURKEY_OTTOMAN_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 90, min: 60, max: 120 },
+    bpm: { default: 360, min: 240, max: 480 },
     difficulty: 'beginner',
     tracks: {
       KK: [2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0],
@@ -164,7 +164,7 @@ export const TURKEY_OTTOMAN_PATTERNS: Pattern[] = [
     grouping: [4, 4],
     stepUnit: 16,
     steps: 8,
-    bpm: { default: 110, min: 80, max: 140 },
+    bpm: { default: 440, min: 320, max: 560 },
     difficulty: 'beginner',
     tracks: {
       KK: [2, 0, 0, 0, 0, 0, 0, 0],
@@ -266,7 +266,7 @@ export const TURKEY_OTTOMAN_PATTERNS: Pattern[] = [
     grouping: [2, 2, 2, 3],
     stepUnit: 8,
     steps: 9,
-    bpm: { default: 65, min: 50, max: 80 },
+    bpm: { default: 130, min: 100, max: 160 },
     difficulty: 'advanced',
     tracks: {
       KK: [2, 0, 0, 0, 2, 0, 0, 0, 0],
@@ -292,7 +292,7 @@ export const TURKEY_OTTOMAN_PATTERNS: Pattern[] = [
     grouping: [4, 4],
     stepUnit: 16,
     steps: 8,
-    bpm: { default: 170, min: 140, max: 220 },
+    bpm: { default: 680, min: 560, max: 880 },
     difficulty: 'intermediate',
     tracks: {
       KK: [2, 0, 0, 2, 0, 0, 0, 0],
@@ -317,7 +317,7 @@ export const TURKEY_OTTOMAN_PATTERNS: Pattern[] = [
     grouping: [2, 2, 2, 3],
     stepUnit: 8,
     steps: 9,
-    bpm: { default: 55, min: 40, max: 80 },
+    bpm: { default: 110, min: 80, max: 160 },
     difficulty: 'advanced',
     tracks: {
       KK: [2, 0, 0, 0, 2, 0, 0, 0, 0],
@@ -343,7 +343,7 @@ export const TURKEY_OTTOMAN_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 120, min: 100, max: 160 },
+    bpm: { default: 480, min: 400, max: 640 },
     difficulty: 'beginner',
     tracks: {
       KK: [2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 2, 0, 0, 0, 0, 0],
@@ -446,7 +446,7 @@ export const TURKEY_OTTOMAN_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 75, min: 60, max: 90 },
+    bpm: { default: 300, min: 240, max: 360 },
     difficulty: 'intermediate',
     tracks: {
       KK: [2, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0],
@@ -471,7 +471,7 @@ export const TURKEY_OTTOMAN_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 125, min: 110, max: 140 },
+    bpm: { default: 500, min: 440, max: 560 },
     difficulty: 'intermediate',
     tracks: {
       KK: [2, 0, 0, 2, 0, 0, 0, 0, 2, 0, 2, 0, 0, 0, 0, 0],
@@ -496,7 +496,7 @@ export const TURKEY_OTTOMAN_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 130, min: 100, max: 160 },
+    bpm: { default: 520, min: 400, max: 640 },
     difficulty: 'intermediate',
     tracks: {
       KK: [2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 2, 0, 2, 0, 0, 0],

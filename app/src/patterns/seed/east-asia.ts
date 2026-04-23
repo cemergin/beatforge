@@ -11,7 +11,7 @@ export const EAST_ASIA_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 130, min: 80, max: 180 },
+    bpm: { default: 520, min: 320, max: 720 },
     difficulty: 'beginner',
     tracks: {
       KK: [2, 0, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 0],
@@ -62,7 +62,7 @@ export const EAST_ASIA_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 140, min: 100, max: 180 },
+    bpm: { default: 560, min: 400, max: 720 },
     difficulty: 'intermediate',
     tracks: {
       KK: [2, 0, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 0],
@@ -88,7 +88,7 @@ export const EAST_ASIA_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 120, min: 90, max: 160 },
+    bpm: { default: 480, min: 360, max: 640 },
     difficulty: 'advanced',
     tracks: {
       KK: [2, 0, 1, 2, 0, 1, 2, 0, 1, 2, 0, 1, 2, 0, 1, 2],
@@ -194,7 +194,7 @@ export const EAST_ASIA_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 130, min: 100, max: 170 },
+    bpm: { default: 520, min: 400, max: 680 },
     difficulty: 'intermediate',
     tracks: {
       KK: [2, 0, 1, 0, 2, 0, 1, 0, 2, 0, 1, 0, 2, 0, 1, 0],
@@ -219,7 +219,7 @@ export const EAST_ASIA_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 110, min: 90, max: 140 },
+    bpm: { default: 440, min: 360, max: 560 },
     difficulty: 'beginner',
     tracks: {
       KK: [2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0],
@@ -245,7 +245,7 @@ export const EAST_ASIA_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 100, min: 70, max: 140 },
+    bpm: { default: 400, min: 280, max: 560 },
     difficulty: 'advanced',
     tracks: {
       KK: [2, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 2, 0, 0, 0],

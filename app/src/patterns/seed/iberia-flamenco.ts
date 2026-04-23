@@ -63,7 +63,7 @@ export const IBERIA_FLAMENCO_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 130, min: 120, max: 160 },
+    bpm: { default: 520, min: 480, max: 640 },
     difficulty: 'beginner',
     tracks: {
       KK: [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0],
@@ -140,7 +140,7 @@ export const IBERIA_FLAMENCO_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 120, min: 100, max: 140 },
+    bpm: { default: 480, min: 400, max: 560 },
     difficulty: 'beginner',
     tracks: {
       KK: [2, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 2, 0, 0, 0],
@@ -191,7 +191,7 @@ export const IBERIA_FLAMENCO_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 90, min: 70, max: 110 },
+    bpm: { default: 360, min: 280, max: 440 },
     difficulty: 'intermediate',
     tracks: {
       KK: [2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0],
@@ -216,7 +216,7 @@ export const IBERIA_FLAMENCO_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 80, min: 60, max: 100 },
+    bpm: { default: 320, min: 240, max: 400 },
     difficulty: 'intermediate',
     tracks: {
       KK: [2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0],
@@ -241,7 +241,7 @@ export const IBERIA_FLAMENCO_PATTERNS: Pattern[] = [
     grouping: [4, 4],
     stepUnit: 16,
     steps: 8,
-    bpm: { default: 180, min: 140, max: 220 },
+    bpm: { default: 720, min: 560, max: 880 },
     difficulty: 'intermediate',
     tracks: {
       KK: [2, 0, 0, 0, 2, 0, 0, 1],
@@ -267,7 +267,7 @@ export const IBERIA_FLAMENCO_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 110, min: 90, max: 130 },
+    bpm: { default: 440, min: 360, max: 520 },
     difficulty: 'intermediate',
     tracks: {
       KK: [2, 0, 0, 1, 0, 0, 0, 0, 2, 0, 0, 1, 0, 0, 0, 0],
@@ -345,7 +345,7 @@ export const IBERIA_FLAMENCO_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 140, min: 110, max: 170 },
+    bpm: { default: 560, min: 440, max: 680 },
     difficulty: 'intermediate',
     tracks: {
       KK: [2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0],
@@ -371,7 +371,7 @@ export const IBERIA_FLAMENCO_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 120, min: 100, max: 140 },
+    bpm: { default: 480, min: 400, max: 560 },
     difficulty: 'intermediate',
     tracks: {
       KK: [2, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 2, 0, 0, 0],

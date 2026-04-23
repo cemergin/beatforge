@@ -11,7 +11,7 @@ export const ARABIC_SWANA_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 120, min: 100, max: 140 },
+    bpm: { default: 480, min: 400, max: 560 },
     difficulty: 'beginner',
     tracks: {
       KK: [2, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -36,7 +36,7 @@ export const ARABIC_SWANA_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 100, min: 80, max: 120 },
+    bpm: { default: 400, min: 320, max: 480 },
     difficulty: 'beginner',
     tracks: {
       KK: [2, 0, 2, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0],
@@ -62,7 +62,7 @@ export const ARABIC_SWANA_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 115, min: 100, max: 140 },
+    bpm: { default: 460, min: 400, max: 560 },
     difficulty: 'beginner',
     tracks: {
       KK: [2, 0, 0, 0, 2, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -87,7 +87,7 @@ export const ARABIC_SWANA_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4, 4, 4, 4, 4],
     stepUnit: 16,
     steps: 32,
-    bpm: { default: 80, min: 60, max: 100 },
+    bpm: { default: 320, min: 240, max: 400 },
     difficulty: 'intermediate',
     tracks: {
       KK: [
@@ -120,7 +120,7 @@ export const ARABIC_SWANA_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 65, min: 40, max: 90 },
+    bpm: { default: 260, min: 160, max: 360 },
     difficulty: 'beginner',
     tracks: {
       KK: [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -144,7 +144,7 @@ export const ARABIC_SWANA_PATTERNS: Pattern[] = [
     grouping: [4, 4],
     stepUnit: 16,
     steps: 8,
-    bpm: { default: 120, min: 80, max: 160 },
+    bpm: { default: 480, min: 320, max: 640 },
     difficulty: 'beginner',
     tracks: {
       KK: [2, 0, 0, 2, 0, 0, 0, 0],
@@ -168,7 +168,7 @@ export const ARABIC_SWANA_PATTERNS: Pattern[] = [
     grouping: [3, 2, 2, 3],
     stepUnit: 8,
     steps: 10,
-    bpm: { default: 75, min: 60, max: 100 },
+    bpm: { default: 150, min: 120, max: 200 },
     difficulty: 'advanced',
     tracks: {
       KK: [2, 0, 0, 0, 0, 2, 0, 2, 0, 0],
@@ -192,7 +192,7 @@ export const ARABIC_SWANA_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 100, min: 80, max: 120 },
+    bpm: { default: 400, min: 320, max: 480 },
     difficulty: 'beginner',
     tracks: {
       KK: [2, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -217,7 +217,7 @@ export const ARABIC_SWANA_PATTERNS: Pattern[] = [
     grouping: [4, 4],
     stepUnit: 16,
     steps: 8,
-    bpm: { default: 150, min: 120, max: 180 },
+    bpm: { default: 600, min: 480, max: 720 },
     difficulty: 'beginner',
     tracks: {
       KK: [2, 0, 0, 0, 0, 0, 0, 0],
@@ -242,7 +242,7 @@ export const ARABIC_SWANA_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 120, min: 100, max: 140 },
+    bpm: { default: 480, min: 400, max: 560 },
     difficulty: 'beginner',
     tracks: {
       KK: [2, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -267,7 +267,7 @@ export const ARABIC_SWANA_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 115, min: 100, max: 130 },
+    bpm: { default: 460, min: 400, max: 520 },
     difficulty: 'intermediate',
     tracks: {
       KK: [2, 0, 2, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -292,7 +292,7 @@ export const ARABIC_SWANA_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 125, min: 110, max: 140 },
+    bpm: { default: 500, min: 440, max: 560 },
     difficulty: 'intermediate',
     tracks: {
       KK: [2, 0, 0, 0, 0, 0, 2, 0, 2, 0, 0, 0, 0, 0, 0, 0],
@@ -318,7 +318,7 @@ export const ARABIC_SWANA_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 135, min: 120, max: 160 },
+    bpm: { default: 540, min: 480, max: 640 },
     difficulty: 'intermediate',
     tracks: {
       KK: [2, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -342,7 +342,7 @@ export const ARABIC_SWANA_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 150, min: 130, max: 170 },
+    bpm: { default: 600, min: 520, max: 680 },
     difficulty: 'intermediate',
     tracks: {
       KK: [2, 0, 2, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0],
@@ -367,7 +367,7 @@ export const ARABIC_SWANA_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 105, min: 90, max: 130 },
+    bpm: { default: 420, min: 360, max: 520 },
     difficulty: 'beginner',
     tracks: {
       KK: [2, 0, 2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0],
@@ -392,7 +392,7 @@ export const ARABIC_SWANA_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 80, min: 60, max: 100 },
+    bpm: { default: 320, min: 240, max: 400 },
     difficulty: 'intermediate',
     tracks: {
       KK: [2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0],
@@ -442,7 +442,7 @@ export const ARABIC_SWANA_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 95, min: 80, max: 110 },
+    bpm: { default: 380, min: 320, max: 440 },
     difficulty: 'intermediate',
     tracks: {
       KK: [2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0],
@@ -467,7 +467,7 @@ export const ARABIC_SWANA_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 125, min: 110, max: 140 },
+    bpm: { default: 500, min: 440, max: 560 },
     difficulty: 'intermediate',
     tracks: {
       KK: [2, 0, 0, 0, 2, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -492,7 +492,7 @@ export const ARABIC_SWANA_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 110, min: 80, max: 140 },
+    bpm: { default: 440, min: 320, max: 560 },
     difficulty: 'intermediate',
     tracks: {
       KK: [2, 0, 0, 2, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -517,7 +517,7 @@ export const ARABIC_SWANA_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 115, min: 100, max: 130 },
+    bpm: { default: 460, min: 400, max: 520 },
     difficulty: 'beginner',
     tracks: {
       KK: [2, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -542,7 +542,7 @@ export const ARABIC_SWANA_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 125, min: 110, max: 140 },
+    bpm: { default: 500, min: 440, max: 560 },
     difficulty: 'intermediate',
     tracks: {
       KK: [2, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],

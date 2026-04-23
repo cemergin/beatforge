@@ -87,7 +87,7 @@ export const CUBA_AFROCARIBBEAN_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 160, min: 100, max: 220 },
+    bpm: { default: 640, min: 400, max: 880 },
     difficulty: 'beginner',
     tracks: {
       KK: [2, 0, 0, 0, 0, 0, 2, 0, 2, 0, 0, 0, 0, 0, 2, 0],
@@ -112,7 +112,7 @@ export const CUBA_AFROCARIBBEAN_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 128, min: 100, max: 160 },
+    bpm: { default: 512, min: 400, max: 640 },
     difficulty: 'beginner',
     tracks: {
       KK: [2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 2],
@@ -137,7 +137,7 @@ export const CUBA_AFROCARIBBEAN_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 190, min: 160, max: 230 },
+    bpm: { default: 760, min: 640, max: 920 },
     difficulty: 'intermediate',
     tracks: {
       KK: [2, 0, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 0],
@@ -163,7 +163,7 @@ export const CUBA_AFROCARIBBEAN_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 108, min: 90, max: 130 },
+    bpm: { default: 432, min: 360, max: 520 },
     difficulty: 'advanced',
     tracks: {
       KK: [2, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0],
@@ -215,7 +215,7 @@ export const CUBA_AFROCARIBBEAN_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 125, min: 110, max: 140 },
+    bpm: { default: 500, min: 440, max: 560 },
     difficulty: 'intermediate',
     tracks: {
       KK: [2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 2, 0],
@@ -266,7 +266,7 @@ export const CUBA_AFROCARIBBEAN_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 180, min: 120, max: 240 },
+    bpm: { default: 720, min: 480, max: 960 },
     difficulty: 'beginner',
     tracks: {
       KK: [2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0],
@@ -292,7 +292,7 @@ export const CUBA_AFROCARIBBEAN_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 110, min: 90, max: 130 },
+    bpm: { default: 440, min: 360, max: 520 },
     difficulty: 'intermediate',
     tracks: {
       KK: [2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0],
@@ -317,7 +317,7 @@ export const CUBA_AFROCARIBBEAN_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 112, min: 90, max: 130 },
+    bpm: { default: 448, min: 360, max: 520 },
     difficulty: 'advanced',
     tracks: {
       KK: [2, 0, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 2, 0],
@@ -343,7 +343,7 @@ export const CUBA_AFROCARIBBEAN_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 160, min: 140, max: 190 },
+    bpm: { default: 640, min: 560, max: 760 },
     difficulty: 'advanced',
     tracks: {
       KK: [2, 0, 0, 0, 0, 2, 0, 0, 2, 0, 0, 0, 0, 2, 0, 0],
@@ -369,7 +369,7 @@ export const CUBA_AFROCARIBBEAN_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 75, min: 60, max: 85 },
+    bpm: { default: 300, min: 240, max: 340 },
     difficulty: 'intermediate',
     tracks: {
       KK: [2, 0, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 0],
@@ -395,7 +395,7 @@ export const CUBA_AFROCARIBBEAN_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 130, min: 120, max: 145 },
+    bpm: { default: 520, min: 480, max: 580 },
     difficulty: 'intermediate',
     tracks: {
       KK: [2, 0, 0, 0, 0, 0, 2, 0, 0, 2, 0, 0, 0, 0, 2, 0],
@@ -420,7 +420,7 @@ export const CUBA_AFROCARIBBEAN_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 115, min: 90, max: 130 },
+    bpm: { default: 460, min: 360, max: 520 },
     difficulty: 'intermediate',
     tracks: {
       KK: [2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0],
@@ -446,7 +446,7 @@ export const CUBA_AFROCARIBBEAN_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 115, min: 100, max: 130 },
+    bpm: { default: 460, min: 400, max: 520 },
     difficulty: 'advanced',
     tracks: {
       KK: [2, 0, 0, 0, 0, 0, 2, 0, 2, 0, 0, 0, 0, 0, 2, 0],
@@ -472,7 +472,7 @@ export const CUBA_AFROCARIBBEAN_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 120, min: 100, max: 140 },
+    bpm: { default: 480, min: 400, max: 560 },
     difficulty: 'intermediate',
     tracks: {
       KK: [2, 0, 0, 2, 0, 0, 2, 0, 2, 0, 0, 2, 0, 0, 2, 0],
@@ -523,7 +523,7 @@ export const CUBA_AFROCARIBBEAN_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 125, min: 110, max: 140 },
+    bpm: { default: 500, min: 440, max: 560 },
     difficulty: 'beginner',
     tracks: {
       KK: [2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0],
@@ -548,7 +548,7 @@ export const CUBA_AFROCARIBBEAN_PATTERNS: Pattern[] = [
     grouping: [4, 4, 4, 4],
     stepUnit: 16,
     steps: 16,
-    bpm: { default: 150, min: 130, max: 170 },
+    bpm: { default: 600, min: 520, max: 680 },
     difficulty: 'beginner',
     tracks: {
       KK: [2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0],
