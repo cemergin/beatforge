@@ -50,6 +50,7 @@ export function Library({ engine, onLoadInPractice, onOpenInStudio }: Props) {
   const [filters, setFilters] = useState<FilterState>(DEFAULT_FILTERS);
   const [groupingSel, setGroupingSel] = useState<string | null>(null);
   const [detailId, setDetailId] = useState<string | null>(null);
+  const [activePath, setActivePath] = useState<StarterPath | null>(null);
 
   const [highlights, setHighlights] = useState<string[]>(() => getHighlights());
   const recent = useMemo<string[]>(() => getRecent(), []);
@@ -119,6 +120,15 @@ export function Library({ engine, onLoadInPractice, onOpenInStudio }: Props) {
   }, [query, fuse]);
 
   const filtered = useMemo<Pattern[]>(() => {
+    // When a starter path is active, it's the dominant filter — everything
+    // else (search/region/meter/...) is ignored so the path's sequence is
+    // visible in its intended order.
+    if (activePath) {
+      const known = new Map(PATTERNS.map((p) => [p.id, p] as const));
+      return activePath.patternIds
+        .map((id) => known.get(id))
+        .filter((p): p is Pattern => !!p);
+    }
     return searched.filter((p) => {
       if (filters.meters.length && !filters.meters.includes(p.timeSig)) return false;
       if (filters.regions.length && !filters.regions.includes(p.region)) return false;
@@ -129,7 +139,7 @@ export function Library({ engine, onLoadInPractice, onOpenInStudio }: Props) {
       if (groupingSel && p.grouping.join('+') !== groupingSel) return false;
       return true;
     });
-  }, [searched, filters, groupingSel]);
+  }, [searched, filters, groupingSel, activePath]);
 
   const scrollToResults = useCallback(() => {
     requestAnimationFrame(() => {
@@ -149,12 +159,28 @@ export function Library({ engine, onLoadInPractice, onOpenInStudio }: Props) {
     const known = new Set(PATTERNS.map((p) => p.id));
     const valid = path.patternIds.filter((id) => known.has(id));
     if (valid.length === 0) return;
-    const first = valid[0];
-    const next = { ...pathProgress, [path.id]: 0 };
+    // Open the path's filtered view INSIDE the Library, don't jump to Practice.
+    // User reads the context, then clicks a specific pattern card (or the
+    // "Start from first" action) when ready to play.
+    setActivePath(path);
+    setQuery('');
+    setFilters(DEFAULT_FILTERS);
+    setGroupingSel(null);
+    scrollToResults();
+  }, [scrollToResults]);
+
+  const clearActivePath = useCallback(() => setActivePath(null), []);
+
+  const startPathFromFirst = useCallback(() => {
+    if (!activePath) return;
+    const known = new Set(PATTERNS.map((p) => p.id));
+    const valid = activePath.patternIds.filter((id) => known.has(id));
+    if (valid.length === 0) return;
+    const next = { ...pathProgress, [activePath.id]: 0 };
     setPathProgress(next);
     writePathProgress(next);
-    onLoadInPractice(first);
-  }, [pathProgress, onLoadInPractice]);
+    onLoadInPractice(valid[0]);
+  }, [activePath, pathProgress, onLoadInPractice]);
 
   const surprise = useCallback(() => {
     const pool = filtered.length > 0 ? filtered : PATTERNS;
@@ -320,28 +346,84 @@ export function Library({ engine, onLoadInPractice, onOpenInStudio }: Props) {
         </span>
       </section>
 
-      {/* Zone 9 — Results grid */}
+      {/* Zone 9 — Results grid (or Active Path view) */}
       <section className="bf-lib-zone" ref={resultsRef}>
-        <div className="bf-zone-head">
-          <h2 className="bf-zone-title">Results</h2>
-          <span className="bf-zone-sub">{filtered.length} of {PATTERNS.length}</span>
-        </div>
-        {filtered.length === 0 ? (
-          <div className="bf-lib-empty">
-            Nothing matches these filters. <button className="bf-linkbtn" onClick={() => { setFilters(DEFAULT_FILTERS); setQuery(''); setGroupingSel(null); }} type="button">reset</button>
+        {activePath ? (
+          <div className="bf-path-view">
+            <div className="bf-path-head">
+              <div>
+                <div className="bf-path-kicker">
+                  <span className="bf-mini-label">Starter path</span>
+                  <button
+                    className="bf-linkbtn"
+                    onClick={clearActivePath}
+                    type="button"
+                  >
+                    × close path
+                  </button>
+                </div>
+                <h2 className="bf-path-title">{activePath.title}</h2>
+                <p className="bf-path-subtitle">{activePath.subtitle}</p>
+              </div>
+              <button
+                className="bf-chip on"
+                onClick={startPathFromFirst}
+                type="button"
+                disabled={filtered.length === 0}
+              >
+                ▶ start from first
+              </button>
+            </div>
+            <p className="bf-path-context">{activePath.context}</p>
+            <div className="bf-zone-head">
+              <h3 className="bf-zone-subtitle">
+                {filtered.length} pattern{filtered.length === 1 ? '' : 's'} in this path
+              </h3>
+            </div>
+            {filtered.length === 0 ? (
+              <div className="bf-lib-empty">
+                None of this path's patterns are in the library yet.
+              </div>
+            ) : (
+              <div className="bf-lib-full-grid">
+                {filtered.map((p, i) => (
+                  <div key={p.id} className="bf-path-card-wrap">
+                    <span className="bf-path-step">{i + 1}</span>
+                    <PatternCard
+                      pattern={p}
+                      starred={highlights.includes(p.id)}
+                      onClick={(id) => setDetailId(id)}
+                      onToggleStar={onToggleStar}
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         ) : (
-          <div className="bf-lib-full-grid">
-            {filtered.map((p) => (
-              <PatternCard
-                key={p.id}
-                pattern={p}
-                starred={highlights.includes(p.id)}
-                onClick={(id) => setDetailId(id)}
-                onToggleStar={onToggleStar}
-              />
-            ))}
-          </div>
+          <>
+            <div className="bf-zone-head">
+              <h2 className="bf-zone-title">Results</h2>
+              <span className="bf-zone-sub">{filtered.length} of {PATTERNS.length}</span>
+            </div>
+            {filtered.length === 0 ? (
+              <div className="bf-lib-empty">
+                Nothing matches these filters. <button className="bf-linkbtn" onClick={() => { setFilters(DEFAULT_FILTERS); setQuery(''); setGroupingSel(null); }} type="button">reset</button>
+              </div>
+            ) : (
+              <div className="bf-lib-full-grid">
+                {filtered.map((p) => (
+                  <PatternCard
+                    key={p.id}
+                    pattern={p}
+                    starred={highlights.includes(p.id)}
+                    onClick={(id) => setDetailId(id)}
+                    onToggleStar={onToggleStar}
+                  />
+                ))}
+              </div>
+            )}
+          </>
         )}
       </section>
 
