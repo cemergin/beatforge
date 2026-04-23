@@ -92,3 +92,22 @@ export function clearKitOverride(id: string): void {
     writeKitOverrides(map);
   }
 }
+
+// ── Master volume ────────────────────────────────────────────────────
+const MASTER_VOLUME_KEY = 'bf_master_volume';
+const DEFAULT_MASTER_VOLUME = 0.85;
+
+export function getMasterVolume(): number {
+  try {
+    const raw = localStorage.getItem(MASTER_VOLUME_KEY);
+    if (raw === null) return DEFAULT_MASTER_VOLUME;
+    const n = Number(raw);
+    return Number.isFinite(n) ? Math.max(0, Math.min(1, n)) : DEFAULT_MASTER_VOLUME;
+  } catch {
+    return DEFAULT_MASTER_VOLUME;
+  }
+}
+
+export function setMasterVolume(v: number): void {
+  try { localStorage.setItem(MASTER_VOLUME_KEY, String(Math.max(0, Math.min(1, v)))); } catch {}
+}

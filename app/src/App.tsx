@@ -7,6 +7,7 @@ import { PatternsSandbox } from './modes/_Patterns/PatternsSandbox';
 import type { KitId, Pattern } from './patterns/types';
 import { registerPatternSource } from './patterns/seed';
 import { loadAllSafe } from './lib/db';
+import { getMasterVolume } from './lib/storage';
 import './styles/app.css';
 
 type Theme = 'warm' | 'noir' | 'paper';
@@ -73,6 +74,7 @@ export default function App() {
   useEffect(() => {
     const savedKit = (localStorage.getItem('bf_kit') as KitId) || '808';
     engine.setKit(savedKit);
+    engine.setMasterVolume(getMasterVolume());
     return () => { engine.stop(); };
   }, [engine]);
 
@@ -141,9 +143,6 @@ export default function App() {
           )}
         </nav>
         <div className="bf-topright">
-          {tab === 'practice' && (
-            <span className="bf-edit-hint">tap cells to edit</span>
-          )}
           <div className="bf-theme-seg" role="group" aria-label="theme">
             {(['warm', 'noir', 'paper'] as Theme[]).map((t) => (
               <button

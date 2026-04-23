@@ -7,10 +7,12 @@ import {
   clearKitOverride,
   getHighlights,
   getKitOverride,
+  getMasterVolume,
   getRecent,
   isHighlighted,
   pushRecent,
   setKitOverride,
+  setMasterVolume as storeMasterVolume,
   toggleHighlight,
 } from '../../lib/storage';
 import { BeatDots } from '../../components/BeatDots';
@@ -84,6 +86,7 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
 
   const [highlights, setHighlights] = useState<string[]>(() => getHighlights());
   const [recent, setRecent] = useState<string[]>(() => getRecent());
+  const [masterVolume, setMasterVolumeState] = useState(() => getMasterVolume());
 
   // Per-group accent multipliers — one per grouping position, resets
   // when the pattern's grouping changes.
@@ -129,9 +132,13 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
     return () => clearTimeout(id);
   }, [playing, engine, stopAfter]);
 
-  // Pattern change → load + reset trainer + hydrate kit override +
-  // reset per-group accents + push recent.
+  // Pattern change → stop playback (user hits play again when ready) +
+  // load + reset trainer + hydrate kit override + reset per-group
+  // accents + push recent.
   useEffect(() => {
+    engine.stop();
+    setPlaying(false);
+    setCountingIn(false);
     engine.loadPattern({ ...pattern, grouping: pattern.grouping });
     setBpm(pattern.bpm.default);
     setGrouping(pattern.grouping);
@@ -418,13 +425,33 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
           {countingIn && <div className="bf-counting-in-badge">counting in…</div>}
         </div>
 
-        <button className={`bf-play ${playing ? 'on' : ''}`} onClick={toggle}>
-          {playing ? (
-            <span><span className="bf-stop-ico" /> stop</span>
-          ) : (
-            <span><span className="bf-play-ico" /> play</span>
-          )}
-        </button>
+        <div className="bf-play-volume">
+          <button className={`bf-play ${playing ? 'on' : ''}`} onClick={toggle}>
+            {playing ? (
+              <span><span className="bf-stop-ico" /> stop</span>
+            ) : (
+              <span><span className="bf-play-ico" /> play</span>
+            )}
+          </button>
+          <div className="bf-volume" title="Master volume">
+            <span className="bf-volume-ico" aria-hidden="true">
+              {masterVolume === 0 ? '🔇' : masterVolume < 0.35 ? '🔈' : masterVolume < 0.7 ? '🔉' : '🔊'}
+            </span>
+            <input
+              type="range"
+              min={0}
+              max={100}
+              value={Math.round(masterVolume * 100)}
+              onChange={(e) => {
+                const v = Number(e.target.value) / 100;
+                setMasterVolumeState(v);
+                engine.setMasterVolume(v);
+                storeMasterVolume(v);
+              }}
+              aria-label="Master volume"
+            />
+          </div>
+        </div>
 
         <div className="bf-quick">
           <button

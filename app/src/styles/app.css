@@ -109,7 +109,15 @@ input[type="number"] { font: inherit; color: inherit; }
   background: var(--bg-2); border: 1px solid var(--line);
   border-radius: 14px; padding: 14px 16px; box-shadow: var(--shadow);
 }
-.bf-pattern-name { font-size: 24px; font-weight: 700; letter-spacing: -0.01em; line-height: 1.1; }
+.bf-pattern-name {
+  font-size: clamp(16px, 3.2vw, 24px);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
 .bf-pattern-origin { font-size: 12px; color: var(--muted); margin-top: 2px; font-family: var(--mono); }
 .bf-pattern-meta { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
 
@@ -923,7 +931,10 @@ input[type="number"] { font: inherit; color: inherit; }
 /* ── Star button on pattern card ── */
 .bf-pattern-head {
   display: flex; align-items: flex-start; justify-content: space-between; gap: 8px;
+  min-width: 0;
 }
+.bf-pattern-head > div:first-child,
+.bf-pattern-head > .bf-pattern-name { min-width: 0; flex: 1; }
 .bf-star {
   font-size: 20px; line-height: 1; padding: 0;
   color: var(--muted);
@@ -931,6 +942,64 @@ input[type="number"] { font: inherit; color: inherit; }
 }
 .bf-star:hover { color: var(--accent); transform: scale(1.1); }
 .bf-star.on { color: var(--grp-2); }
+
+/* ── Play + master volume row ── */
+.bf-play-volume { display: flex; flex-direction: column; gap: 8px; }
+.bf-volume {
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 10px;
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+.bf-volume-ico {
+  font-size: 14px; line-height: 1; flex-shrink: 0; width: 18px; text-align: center;
+}
+.bf-volume input[type="range"] { flex: 1; accent-color: var(--accent); }
+
+/* ── Studio per-track subdivisions badge + menu ── */
+.bf-studio-rowlabel-wrap {
+  position: relative;
+  display: flex; flex-direction: column; gap: 4px;
+  grid-column: 1;
+}
+.bf-studio-sub-badge {
+  padding: 3px 7px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  font-family: var(--mono); font-size: 10px; font-weight: 600;
+  color: var(--muted);
+  background: var(--bg-sunk);
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+  transition: all 0.1s;
+}
+.bf-studio-sub-badge:hover { color: var(--fg); border-color: var(--fg); }
+.bf-studio-sub-badge.poly {
+  background: var(--grp-3);
+  color: #fff;
+  border-color: var(--grp-3);
+}
+.bf-studio-sub-menu {
+  position: absolute; top: calc(100% + 4px); left: 0; z-index: 20;
+  display: flex; flex-direction: column; gap: 2px;
+  padding: 6px;
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+  min-width: 120px;
+}
+.bf-studio-sub-menu button {
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-family: var(--mono); font-size: 11px;
+  text-align: left;
+  color: var(--fg);
+  background: transparent;
+}
+.bf-studio-sub-menu button:hover { background: var(--bg-sunk); }
+.bf-studio-sub-menu button.on { background: var(--accent); color: #fff; }
 
 /* ── Count-in / stop-after / overlay visual state ── */
 .bf-counting-in-badge {

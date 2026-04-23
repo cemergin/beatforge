@@ -55,7 +55,7 @@ export class AudioEngine {
         || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
       this.ctx = new Ctor();
       this.master = this.ctx.createGain();
-      this.master.gain.value = 0.85;
+      this.master.gain.value = this.masterVolume;
 
       const comp = this.ctx.createDynamicsCompressor();
       comp.threshold.value = -14;
@@ -95,6 +95,14 @@ export class AudioEngine {
     if (this.reverbSend) this.reverbSend.gain.value = KIT_REVERB_SEND[k];
   }
   setBpm(b: number): void { this.bpm = b; }
+
+  // Master volume 0..1; persists via the master gain node.
+  private masterVolume = 0.85;
+  setMasterVolume(v: number): void {
+    this.masterVolume = Math.max(0, Math.min(1, v));
+    if (this.master) this.master.gain.value = this.masterVolume;
+  }
+  getMasterVolume(): number { return this.masterVolume; }
   setSwing(s: number): void { this.swing = s; }
   setAccents(strong: number, weak: number): void {
     this.strongAmp = strong;

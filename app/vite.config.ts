@@ -8,7 +8,10 @@ export default defineConfig(({ command }) => ({
   plugins: [
     react(),
     VitePWA({
-      registerType: 'prompt',
+      // autoUpdate — skipWaiting + clientsClaim so new SWs take over on
+      // next visit. Earlier 'prompt' meant users had to see + click a
+      // toast; too easy for a stale SW to hold on silently.
+      registerType: 'autoUpdate',
       // The manifest file already lives in public/; let the plugin inject the
       // correct <link rel="manifest"> for us at build time.
       manifest: false,

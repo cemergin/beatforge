@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <!-- Warm background -->
+  <rect width="1200" height="630" fill="#f6f2eb"/>
+
+  <!-- Beat-group ring centered left -->
+  <g transform="translate(300 315)">
+    <!-- 9/8 as 2+2+2+3 accent arcs -->
+    <circle cx="0" cy="-160" r="54" fill="#e17055"/>
+    <circle cx="153" cy="-45" r="54" fill="#f4c542"/>
+    <circle cx="95" cy="130" r="54" fill="#6c5ce7"/>
+    <circle cx="-95" cy="130" r="54" fill="#00b894"/>
+    <circle cx="-153" cy="-45" r="54" fill="#0984e3"/>
+    <!-- Inner pulse -->
+    <circle cx="0" cy="0" r="42" fill="#1a1a2e"/>
+  </g>
+
+  <!-- Wordmark + tagline right side -->
+  <g font-family="IBM Plex Sans, -apple-system, system-ui, sans-serif" fill="#1a1a2e">
+    <text x="560" y="220" font-size="108" font-weight="700" letter-spacing="-3">BeatForge</text>
+    <text x="562" y="288" font-size="36" font-weight="500" fill="#6b665d">
+      World-rhythm metronome
+    </text>
+    <text x="562" y="340" font-size="24" font-weight="400" fill="#6b665d" font-family="JetBrains Mono, ui-monospace, monospace">
+      294 rhythms · 7 kits · polyrhythm · offline
+    </text>
+
+    <!-- Feature chips -->
+    <g font-family="JetBrains Mono, ui-monospace, monospace" font-size="20" font-weight="600">
+      <g transform="translate(562 400)">
+        <rect x="0" y="0" width="96" height="36" rx="18" fill="#e17055"/>
+        <text x="48" y="24" text-anchor="middle" fill="#ffffff">9/8</text>
+      </g>
+      <g transform="translate(670 400)">
+        <rect x="0" y="0" width="118" height="36" rx="18" fill="#f4c542"/>
+        <text x="59" y="24" text-anchor="middle" fill="#1a1a2e">2+2+2+3</text>
+      </g>
+      <g transform="translate(800 400)">
+        <rect x="0" y="0" width="96" height="36" rx="18" fill="#6c5ce7"/>
+        <text x="48" y="24" text-anchor="middle" fill="#ffffff">3:4 poly</text>
+      </g>
+      <g transform="translate(908 400)">
+        <rect x="0" y="0" width="96" height="36" rx="18" fill="#00b894"/>
+        <text x="48" y="24" text-anchor="middle" fill="#ffffff">tabla</text>
+      </g>
+    </g>
+  </g>
+</svg>
