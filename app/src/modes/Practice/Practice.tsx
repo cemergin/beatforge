@@ -95,6 +95,7 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
   const [highlights, setHighlights] = useState<string[]>(() => getHighlights());
   const [recent, setRecent] = useState<string[]>(() => getRecent());
   const [masterVolume, setMasterVolumeState] = useState(() => getMasterVolume());
+  const [shareToast, setShareToast] = useState<string | null>(null);
 
   // Per-group accent multipliers — one per grouping position, resets
   // when the pattern's grouping changes.
@@ -381,6 +382,21 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
   const starred = isHighlighted(patternId);
   const starToggle = () => setHighlights(toggleHighlight(patternId));
 
+  // Copy a standalone share URL that encodes the CURRENT pattern (with
+  // live edits baked in). Dynamic import keeps the compressor out of
+  // the critical path for users who never share.
+  const shareCurrent = useCallback(async () => {
+    try {
+      const { buildShareUrl } = await import('../../patterns/serialize');
+      const url = await buildShareUrl({ ...pattern, grouping });
+      await navigator.clipboard.writeText(url);
+      setShareToast('Share link copied');
+    } catch {
+      setShareToast('Copy failed');
+    }
+    window.setTimeout(() => setShareToast(null), 1800);
+  }, [pattern, grouping]);
+
   return (
     <main className="bf-main">
       <aside className="bf-left">
@@ -431,14 +447,25 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
         <div className="bf-pattern-card">
           <div className="bf-pattern-head">
             <div className="bf-pattern-name">{pattern.name}</div>
-            <button
-              className={`bf-star ${starred ? 'on' : ''}`}
-              onClick={starToggle}
-              title={starred ? 'Unstar' : 'Star'}
-              aria-label={starred ? 'Unstar pattern' : 'Star pattern'}
-            >
-              {starred ? '★' : '☆'}
-            </button>
+            <div className="bf-pattern-head-actions">
+              <button
+                className="bf-share-btn"
+                onClick={shareCurrent}
+                title="Copy a share link for this exact pattern (including your edits)"
+                aria-label="Share pattern"
+                type="button"
+              >
+                ↗
+              </button>
+              <button
+                className={`bf-star ${starred ? 'on' : ''}`}
+                onClick={starToggle}
+                title={starred ? 'Unstar' : 'Star'}
+                aria-label={starred ? 'Unstar pattern' : 'Star pattern'}
+              >
+                {starred ? '★' : '☆'}
+              </button>
+            </div>
           </div>
           <div className="bf-pattern-origin">{pattern.origin}</div>
           <div className="bf-pattern-meta">
@@ -447,6 +474,7 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
             <span className="bf-meta-badge alt">{pattern.difficulty}</span>
             {pattern.poly && <span className="bf-meta-badge alt">poly</span>}
           </div>
+          {shareToast && <div className="bf-share-toast">{shareToast}</div>}
         </div>
 
         <div className={`bf-bpm-hero ${countingIn ? 'counting-in' : ''}`}>

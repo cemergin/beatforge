@@ -487,6 +487,20 @@ export function Studio({
     setSavedId(null);
   }, [engine]);
 
+  // Share the current draft. Works on unsaved drafts too — the pattern
+  // is encoded into the URL directly.
+  const shareDraft = useCallback(async () => {
+    try {
+      const { buildShareUrl } = await import('../../patterns/serialize');
+      const url = await buildShareUrl(draft);
+      await navigator.clipboard.writeText(url);
+      setToast('Share link copied');
+    } catch {
+      setToast('Copy failed');
+    }
+    window.setTimeout(() => setToast(null), 1800);
+  }, [draft]);
+
   const clearHits = useCallback(() => {
     setDraft((d) => {
       const cleared: Partial<Record<VoiceId, Track>> = {};
@@ -547,6 +561,9 @@ export function Studio({
           <div className="bf-studio-actions">
             <button className="bf-chip ghost" onClick={newBlank} type="button">new</button>
             <button className="bf-chip ghost" onClick={clearHits} type="button">clear hits</button>
+            <button className="bf-chip ghost" onClick={shareDraft} type="button" title="Copy a standalone share link — recipient doesn't need the seed library">
+              share ↗
+            </button>
             <button className="bf-chip on" onClick={openSave} type="button">save as…</button>
             <button className="bf-chip ghost" onClick={loadInPractice} type="button">
               → practice
