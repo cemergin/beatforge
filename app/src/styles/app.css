@@ -1250,6 +1250,30 @@ input[type="number"] { font: inherit; color: inherit; }
   flex-shrink: 0;
 }
 
+/* Collapsible Library zone (Browse by Grouping) */
+.bf-lib-zone-collapsible { padding: 0; overflow: hidden; }
+.bf-lib-zone-collapsible > summary {
+  cursor: pointer;
+  list-style: none;
+  padding: 14px 18px;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+.bf-lib-zone-collapsible > summary::-webkit-details-marker { display: none; }
+.bf-lib-zone-collapsible > summary::before {
+  content: "▸";
+  display: inline-block;
+  margin-right: 10px;
+  font-size: 11px;
+  color: var(--muted);
+  transition: transform 0.15s;
+  vertical-align: middle;
+}
+.bf-lib-zone-collapsible[open] > summary::before {
+  transform: rotate(90deg);
+}
+.bf-lib-zone-collapsible > .bf-grouping-browser { padding: 0 18px 18px; }
+
 /* Collapsible pattern list — saves space on long sidebars */
 .bf-pattern-list-panel { padding: 0; overflow: hidden; }
 .bf-pattern-list-summary {

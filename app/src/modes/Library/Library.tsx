@@ -306,9 +306,9 @@ export function Library({ engine, onLoadInPractice, onOpenInStudio }: Props) {
         />
       </section>
 
-      {/* Zone 7 — Grouping Browser */}
-      <section className="bf-lib-zone">
-        <div className="bf-zone-head">
+      {/* Zone 7 — Grouping Browser (collapsible) */}
+      <details className="bf-lib-zone bf-lib-zone-collapsible" open={!!groupingSel}>
+        <summary className="bf-zone-head bf-zone-head-summary">
           <h2 className="bf-zone-title">Browse by Grouping</h2>
           <span className="bf-zone-sub">
             Cross-cultural: same pulse, different traditions.
@@ -317,7 +317,7 @@ export function Library({ engine, onLoadInPractice, onOpenInStudio }: Props) {
                 {' '}
                 <button
                   className="bf-linkbtn"
-                  onClick={() => setGroupingSel(null)}
+                  onClick={(e) => { e.preventDefault(); setGroupingSel(null); }}
                   type="button"
                 >
                   clear ({groupingSel})
@@ -325,7 +325,7 @@ export function Library({ engine, onLoadInPractice, onOpenInStudio }: Props) {
               </>
             )}
           </span>
-        </div>
+        </summary>
         <GroupingBrowser
           patterns={PATTERNS}
           selected={groupingSel}
@@ -334,7 +334,7 @@ export function Library({ engine, onLoadInPractice, onOpenInStudio }: Props) {
             if (key) scrollToResults();
           }}
         />
-      </section>
+      </details>
 
       {/* Zone 8 — Surprise me */}
       <section className="bf-lib-zone bf-lib-surprise-zone">
