@@ -18,9 +18,10 @@
   --bg-2: #ffffff;
   --bg-sunk: #ede7dc;
   --fg: #1a1a2e;
-  --muted: #6b665d;
+  --muted: #5a5349;       /* was #6b665d — bumped for WCAG AA on warm bg */
   --line: #e1d9cb;
   --accent: #e17055;
+  --accent-strong: #b84d31;  /* darker accent for small text on light bg */
   --play: #e17055;
   --shadow: 0 1px 0 rgba(0,0,0,0.04), 0 4px 18px -10px rgba(60,40,20,0.25);
 }
@@ -122,9 +123,9 @@ input[type="number"] { font: inherit; color: inherit; }
 .bf-pattern-meta { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
 
 .bf-meta-badge {
-  background: var(--accent); color: var(--bg-2);
+  background: var(--accent-strong, var(--accent)); color: #fff;
   padding: 3px 8px; border-radius: 4px;
-  font-family: var(--mono); font-size: 11px; font-weight: 600; letter-spacing: 0.02em;
+  font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: 0.02em;
 }
 .bf-meta-badge.alt { background: transparent; border: 1px solid var(--line); color: var(--muted); }
 .bf-meta-badge.small { font-size: 9px; padding: 2px 5px; }
@@ -1187,9 +1188,9 @@ input[type="number"] { font: inherit; color: inherit; }
 }
 
 .bf-exp {
-  font-family: var(--mono); font-size: 7px;
-  color: var(--grp-2); margin-left: 2px;
-  vertical-align: super;
+  font-family: var(--mono); font-size: 8px; font-weight: 700;
+  color: var(--accent-strong, var(--accent));
+  margin-left: 2px; vertical-align: super;
 }
 
 /* ── Inline pattern list (Practice left column) ── */
@@ -1221,6 +1222,39 @@ input[type="number"] { font: inherit; color: inherit; }
   font-family: var(--mono); font-size: 10px;
   color: var(--muted); letter-spacing: 0.04em;
   flex-shrink: 0;
+}
+
+/* Collapsible pattern list — saves space on long sidebars */
+.bf-pattern-list-panel { padding: 0; overflow: hidden; }
+.bf-pattern-list-summary {
+  display: flex; align-items: center; justify-content: space-between;
+  cursor: pointer;
+  list-style: none;
+  padding: 12px 14px;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+.bf-pattern-list-summary::-webkit-details-marker { display: none; }
+.bf-pattern-list-summary::before {
+  content: "▸";
+  display: inline-block;
+  margin-right: 8px;
+  font-size: 9px;
+  color: var(--muted);
+  transition: transform 0.15s;
+}
+.bf-pattern-list-panel[open] .bf-pattern-list-summary::before {
+  transform: rotate(90deg);
+}
+.bf-pattern-list-panel .bf-pattern-list {
+  padding: 0 8px 10px; margin-top: 0;
+}
+.bf-pattern-list-count {
+  font-family: var(--mono); font-size: 10px;
+  color: var(--muted); letter-spacing: 0.04em;
+  padding: 2px 8px; border-radius: 999px;
+  background: var(--bg-sunk);
+  margin-left: auto;
 }
 
 

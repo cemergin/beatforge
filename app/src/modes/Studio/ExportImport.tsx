@@ -3,6 +3,7 @@
 import { useRef, useState } from 'react';
 import type { UserPattern } from '../../lib/db';
 import { bulkImport, isValidUserPattern, isValidPattern } from '../../lib/db';
+import { logError } from '../../lib/errors';
 
 interface Props {
   userPatterns: UserPattern[];
@@ -43,36 +44,51 @@ export function ExportImport({ userPatterns, onImported }: Props) {
   };
 
   const importFile = async (file: File) => {
+    // Split the error surface so parse/read errors don't look like
+    // database errors — previously a single catch swallowed everything.
+    let parsed: unknown;
     try {
       const text = await file.text();
-      const parsed: unknown = JSON.parse(text);
-      if (!Array.isArray(parsed)) throw new Error('File must contain a JSON array of patterns.');
-      const now = Date.now();
-      const valid: UserPattern[] = [];
-      let skipped = 0;
-      for (const raw of parsed) {
-        if (isValidUserPattern(raw)) {
-          valid.push(raw);
-        } else if (isValidPattern(raw)) {
-          // Upgrade a plain Pattern export into a UserPattern envelope.
-          valid.push({ ...raw, user: true, createdAt: now, updatedAt: now });
-        } else {
-          skipped += 1;
-        }
-      }
-      if (valid.length === 0) {
-        setMsg(`Import failed — no valid patterns in file (${skipped} skipped).`);
-        setTimeout(() => setMsg(null), 3000);
-        return;
-      }
-      await bulkImport(valid);
-      onImported();
-      setMsg(`Imported ${valid.length}${skipped ? ` · skipped ${skipped} invalid` : ''}.`);
-      setTimeout(() => setMsg(null), 2800);
+      parsed = JSON.parse(text);
     } catch (err) {
-      setMsg(`Import failed: ${(err as Error).message}`);
+      logError('Import: failed to read/parse JSON file', err);
+      setMsg(`Import failed — file isn't valid JSON.`);
       setTimeout(() => setMsg(null), 3000);
+      return;
     }
+    if (!Array.isArray(parsed)) {
+      setMsg('Import failed — file must contain a JSON array.');
+      setTimeout(() => setMsg(null), 3000);
+      return;
+    }
+    const now = Date.now();
+    const valid: UserPattern[] = [];
+    let skipped = 0;
+    for (const raw of parsed) {
+      if (isValidUserPattern(raw)) {
+        valid.push(raw);
+      } else if (isValidPattern(raw)) {
+        valid.push({ ...raw, user: true, createdAt: now, updatedAt: now });
+      } else {
+        skipped += 1;
+      }
+    }
+    if (valid.length === 0) {
+      setMsg(`Import: no valid patterns (${skipped} skipped).`);
+      setTimeout(() => setMsg(null), 3000);
+      return;
+    }
+    try {
+      await bulkImport(valid);
+    } catch (err) {
+      logError('Import: database write failed', err);
+      setMsg('Import failed — couldn\'t write to local storage.');
+      setTimeout(() => setMsg(null), 3000);
+      return;
+    }
+    onImported();
+    setMsg(`Imported ${valid.length}${skipped ? ` · skipped ${skipped} invalid` : ''}.`);
+    setTimeout(() => setMsg(null), 2800);
   };
 
   return (

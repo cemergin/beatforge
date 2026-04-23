@@ -446,18 +446,19 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
         <div className={`bf-bpm-hero ${countingIn ? 'counting-in' : ''}`}>
           <div className="bf-bpm-num">{bpm}</div>
           <div className="bf-bpm-unit" title="Beats per minute — where one beat is one grid step">
-            BPM <span style={{ opacity: 0.45, fontSize: '0.7em' }}>· step/min</span>
+            BPM <span style={{ opacity: 0.7, fontSize: '0.7em' }}>· step/min</span>
           </div>
           <div className="bf-bpm-controls">
-            <button onClick={() => setBpm((b) => Math.max(30, b - 1))}>−</button>
+            <button onClick={() => setBpm((b) => Math.max(30, b - 1))} aria-label="Decrease BPM">−</button>
             <input
               type="range"
               min={30}
               max={800}
               value={bpm}
+              aria-label="BPM (steps per minute)"
               onChange={(e) => setBpm(Number(e.target.value))}
             />
-            <button onClick={() => setBpm((b) => Math.min(800, b + 1))}>+</button>
+            <button onClick={() => setBpm((b) => Math.min(800, b + 1))} aria-label="Increase BPM">+</button>
           </div>
           <BeatDots grouping={grouping} currentStep={curStep} size={12} />
           {countingIn && <div className="bf-counting-in-badge">counting in…</div>}
@@ -503,8 +504,11 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
           </button>
         </div>
 
-        <div className="bf-panel">
-          <div className="bf-panel-head">patterns</div>
+        <details className="bf-panel bf-pattern-list-panel">
+          <summary className="bf-panel-head bf-pattern-list-summary">
+            <span>patterns</span>
+            <span className="bf-pattern-list-count">{PATTERNS.length}</span>
+          </summary>
           <div className="bf-pattern-list">
             {PATTERNS.map((p) => (
               <button
@@ -517,7 +521,7 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
               </button>
             ))}
           </div>
-        </div>
+        </details>
 
         {pattern.story && (
           <details className="bf-story">

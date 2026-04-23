@@ -1,11 +1,22 @@
 // Client-side persistence for quick-access state. No backend, per spec.
 
 import type { KitId } from '../patterns/types';
+import { logWarn } from './errors';
 
 const HIGHLIGHTS_KEY = 'bf_highlights';
 const RECENT_KEY = 'bf_recent';
 const KIT_OVERRIDES_KEY = 'bf_kit_overrides';
 const RECENT_MAX = 20;
+
+// Warn once per session if storage is unreachable (Safari private mode,
+// quota exhausted, etc.) — was silently no-op'ing user actions.
+let storageWarned = false;
+function warnStorage(op: string, err: unknown): void {
+  if (storageWarned) return;
+  storageWarned = true;
+  const reason = err instanceof Error ? err.message : String(err);
+  logWarn(`Browser storage unavailable (${op}): ${reason}. Highlights + preferences won't persist this session.`);
+}
 
 function read(key: string): string[] {
   try {
@@ -13,13 +24,15 @@ function read(key: string): string[] {
     if (!raw) return [];
     const parsed = JSON.parse(raw);
     return Array.isArray(parsed) ? parsed.filter((x) => typeof x === 'string') : [];
-  } catch {
+  } catch (err) {
+    warnStorage(`read ${key}`, err);
     return [];
   }
 }
 
 function write(key: string, ids: string[]): void {
-  try { localStorage.setItem(key, JSON.stringify(ids)); } catch {}
+  try { localStorage.setItem(key, JSON.stringify(ids)); }
+  catch (err) { warnStorage(`write ${key}`, err); }
 }
 
 export function getHighlights(): string[] { return read(HIGHLIGHTS_KEY); }
@@ -66,13 +79,15 @@ function readKitOverrides(): Record<string, KitId> {
       }
     }
     return out;
-  } catch {
+  } catch (err) {
+    warnStorage(`read ${KIT_OVERRIDES_KEY}`, err);
     return {};
   }
 }
 
 function writeKitOverrides(map: Record<string, KitId>): void {
-  try { localStorage.setItem(KIT_OVERRIDES_KEY, JSON.stringify(map)); } catch {}
+  try { localStorage.setItem(KIT_OVERRIDES_KEY, JSON.stringify(map)); }
+  catch (err) { warnStorage(`write ${KIT_OVERRIDES_KEY}`, err); }
 }
 
 export function getKitOverride(id: string): KitId | null {

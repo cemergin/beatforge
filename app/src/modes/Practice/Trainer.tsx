@@ -39,18 +39,22 @@ export function Trainer({ cfg, setCfg, on, setOn, bar, bpm }: Props) {
       <div className="bf-row">
         <label>from</label>
         <input type="number" min={30} max={800} value={cfg.from}
-               onChange={(e) => setCfg({ ...cfg, from: Number(e.target.value) })} />
+               onChange={(e) => setCfg({ ...cfg, from: Number(e.target.value) })}
+               aria-label="Trainer starting BPM" />
         <label>→ to</label>
         <input type="number" min={30} max={800} value={cfg.to}
-               onChange={(e) => setCfg({ ...cfg, to: Number(e.target.value) })} />
+               onChange={(e) => setCfg({ ...cfg, to: Number(e.target.value) })}
+               aria-label="Trainer target BPM" />
       </div>
       <div className="bf-row">
         <label>+</label>
         <input type="number" min={1} max={20} value={cfg.step}
-               onChange={(e) => setCfg({ ...cfg, step: Number(e.target.value) })} />
+               onChange={(e) => setCfg({ ...cfg, step: Number(e.target.value) })}
+               aria-label="Trainer BPM increment per cycle" />
         <label>every</label>
         <input type="number" min={1} max={32} value={cfg.bars}
-               onChange={(e) => setCfg({ ...cfg, bars: Number(e.target.value) })} />
+               onChange={(e) => setCfg({ ...cfg, bars: Number(e.target.value) })}
+               aria-label="Trainer cycles between BPM bumps" />
         <div className="bf-mode-seg">
           <button className={cfg.mode === 'cycles' ? 'on' : ''} onClick={() => setCfg({ ...cfg, mode: 'cycles' })}>bars</button>
           <button className={cfg.mode === 'time' ? 'on' : ''} onClick={() => setCfg({ ...cfg, mode: 'time' })}>sec</button>

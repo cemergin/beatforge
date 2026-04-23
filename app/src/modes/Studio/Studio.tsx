@@ -664,7 +664,7 @@ export function Studio({
         <div className={`bf-bpm-hero ${countingIn ? 'counting-in' : ''}`}>
           <div className="bf-bpm-num">{bpm}</div>
           <div className="bf-bpm-unit">
-            BPM <span style={{ opacity: 0.45, fontSize: '0.7em' }}>· step/min</span>
+            BPM <span style={{ opacity: 0.7, fontSize: '0.7em' }}>· step/min</span>
           </div>
           <div className="bf-bpm-controls">
             <button onClick={() => setBpm((b) => Math.max(30, b - 1))} type="button">−</button>

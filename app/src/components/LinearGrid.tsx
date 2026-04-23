@@ -59,8 +59,9 @@ export function LinearGrid({ pattern, cursors, onToggle }: Props) {
               const active = vel > 0;
               const isCur = s === cursor;
               return (
-                <div
+                <button
                   key={s}
+                  type="button"
                   className={`bf-cell ${active ? 'on' : ''} ${isCur ? 'cur' : ''}`}
                   style={{
                     background: active ? color : 'transparent',
@@ -68,6 +69,8 @@ export function LinearGrid({ pattern, cursors, onToggle }: Props) {
                     opacity: active ? (vel === 2 ? 1 : 0.5) : 0.9,
                   }}
                   onClick={() => onToggle?.(tr, localIdx)}
+                  aria-label={`${tr} step ${s + 1} velocity ${vel}`}
+                  aria-pressed={active}
                 />
               );
             })}
