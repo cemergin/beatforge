@@ -9,6 +9,7 @@ import { DEFAULT_FILTERS, type FilterState } from './filterState';
 import { WorldMap } from './WorldMap';
 import { StarterPaths } from './StarterPaths';
 import { GroupingBrowser } from './GroupingBrowser';
+import { Disclosure } from '../../components/Disclosure';
 import { PatternCard } from './PatternCard';
 import { PatternDetail } from './PatternDetail';
 import type { StarterPath } from './paths';
@@ -314,25 +315,31 @@ export function Library({ engine, onLoadInPractice, onOpenInStudio }: Props) {
       </section>
 
       {/* Zone 7 — Grouping Browser (collapsible) */}
-      <details className="bf-lib-zone bf-lib-zone-collapsible" open={!!groupingSel}>
-        <summary className="bf-zone-head bf-zone-head-summary">
-          <h2 className="bf-zone-title">Browse by Grouping</h2>
-          <span className="bf-zone-sub">
-            Cross-cultural: same pulse, different traditions.
-            {groupingSel && (
-              <>
-                {' '}
-                <button
-                  className="bf-linkbtn"
-                  onClick={(e) => { e.preventDefault(); setGroupingSel(null); }}
-                  type="button"
-                >
-                  clear ({groupingSel})
-                </button>
-              </>
-            )}
-          </span>
-        </summary>
+      <Disclosure
+        className="bf-lib-zone bf-lib-zone-collapsible"
+        open={!!groupingSel}
+        summaryClassName="bf-zone-head"
+        summary={
+          <div>
+            <h2 className="bf-zone-title">Browse by Grouping</h2>
+            <span className="bf-zone-sub">
+              Cross-cultural: same pulse, different traditions.
+              {groupingSel && (
+                <>
+                  {' '}
+                  <button
+                    className="bf-linkbtn"
+                    onClick={(e) => { e.preventDefault(); setGroupingSel(null); }}
+                    type="button"
+                  >
+                    clear ({groupingSel})
+                  </button>
+                </>
+              )}
+            </span>
+          </div>
+        }
+      >
         <GroupingBrowser
           patterns={PATTERNS}
           selected={groupingSel}
@@ -341,7 +348,7 @@ export function Library({ engine, onLoadInPractice, onOpenInStudio }: Props) {
             if (key) scrollToResults();
           }}
         />
-      </details>
+      </Disclosure>
 
       {/* Zone 8 — Surprise me */}
       <section className="bf-lib-zone bf-lib-surprise-zone">

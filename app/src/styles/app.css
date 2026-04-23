@@ -182,27 +182,9 @@ input[type="number"] { font: inherit; color: inherit; }
   background: var(--bg-2); border: 1px solid var(--line);
   border-radius: 14px; padding: 12px 16px;
 }
-.bf-story summary {
-  cursor: pointer; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted);
+.bf-story .bf-disclosure-summary {
+  font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted);
   outline: none; font-weight: 600;
-  display: flex; align-items: center;
-  list-style: none;
-  -webkit-tap-highlight-color: transparent;
-  user-select: none;
-}
-.bf-story summary::-webkit-details-marker { display: none; }
-.bf-story summary::before {
-  content: "▸";
-  display: inline-block;
-  margin-right: 10px;
-  font-size: 15px;
-  color: var(--muted);
-  transition: transform 0.15s;
-  vertical-align: middle;
-  line-height: 1;
-}
-.bf-story[open] summary::before {
-  transform: rotate(90deg);
 }
 .bf-story p { margin: 10px 0 4px; font-size: 13px; line-height: 1.55; color: var(--fg); text-wrap: pretty; }
 
@@ -1268,17 +1250,18 @@ input[type="number"] { font: inherit; color: inherit; }
   flex-shrink: 0;
 }
 
-/* Collapsible Library zone (Browse by Grouping) */
-.bf-lib-zone-collapsible { padding: 0; overflow: hidden; }
-.bf-lib-zone-collapsible > summary {
+/* ── Shared Disclosure widget (see src/components/Disclosure.tsx) ──
+   Single source of truth for the collapsible section caret. All
+   <details>-based sections in the app go through <Disclosure/>.   */
+.bf-disclosure-summary {
   cursor: pointer;
   list-style: none;
-  padding: 14px 18px;
+  display: flex; align-items: center;
   -webkit-tap-highlight-color: transparent;
   user-select: none;
 }
-.bf-lib-zone-collapsible > summary::-webkit-details-marker { display: none; }
-.bf-lib-zone-collapsible > summary::before {
+.bf-disclosure-summary::-webkit-details-marker { display: none; }
+.bf-disclosure-summary::before {
   content: "▸";
   display: inline-block;
   margin-right: 10px;
@@ -1287,35 +1270,20 @@ input[type="number"] { font: inherit; color: inherit; }
   transition: transform 0.15s;
   vertical-align: middle;
   line-height: 1;
+  flex-shrink: 0;
 }
-.bf-lib-zone-collapsible[open] > summary::before {
+.bf-disclosure[open] > .bf-disclosure-summary::before {
   transform: rotate(90deg);
 }
+
+/* Site-specific padding / layout (caret itself is shared above) */
+.bf-lib-zone-collapsible { padding: 0; overflow: hidden; }
+.bf-lib-zone-collapsible > .bf-disclosure-summary { padding: 14px 18px; }
 .bf-lib-zone-collapsible > .bf-grouping-browser { padding: 0 18px 18px; }
 
-/* Collapsible pattern list — saves space on long sidebars */
 .bf-pattern-list-panel { padding: 0; overflow: hidden; }
-.bf-pattern-list-summary {
-  display: flex; align-items: center; justify-content: space-between;
-  cursor: pointer;
-  list-style: none;
-  padding: 12px 14px;
-  -webkit-tap-highlight-color: transparent;
-  user-select: none;
-}
-.bf-pattern-list-summary::-webkit-details-marker { display: none; }
-.bf-pattern-list-summary::before {
-  content: "▸";
-  display: inline-block;
-  margin-right: 10px;
-  font-size: 15px;
-  color: var(--muted);
-  transition: transform 0.15s;
-  vertical-align: middle;
-  line-height: 1;
-}
-.bf-pattern-list-panel[open] .bf-pattern-list-summary::before {
-  transform: rotate(90deg);
+.bf-pattern-list-panel > .bf-disclosure-summary {
+  padding: 12px 14px; justify-content: space-between;
 }
 .bf-pattern-list-panel .bf-pattern-list {
   padding: 0 8px 10px; margin-top: 0;

@@ -16,6 +16,7 @@ import {
   toggleHighlight,
 } from '../../lib/storage';
 import { BeatDots } from '../../components/BeatDots';
+import { Disclosure } from '../../components/Disclosure';
 import { CircularGrid } from '../../components/CircularGrid';
 import { LinearGrid } from '../../components/LinearGrid';
 import { PillGrid } from '../../components/PillGrid';
@@ -554,11 +555,16 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
           </button>
         </div>
 
-        <details className="bf-panel bf-pattern-list-panel">
-          <summary className="bf-panel-head bf-pattern-list-summary">
-            <span>patterns</span>
-            <span className="bf-pattern-list-count">{PATTERNS.length}</span>
-          </summary>
+        <Disclosure
+          className="bf-panel bf-pattern-list-panel"
+          summaryClassName="bf-panel-head"
+          summary={
+            <>
+              <span>patterns</span>
+              <span className="bf-pattern-list-count">{PATTERNS.length}</span>
+            </>
+          }
+        >
           <div className="bf-pattern-list">
             {PATTERNS.map((p) => (
               <button
@@ -571,13 +577,12 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
               </button>
             ))}
           </div>
-        </details>
+        </Disclosure>
 
         {pattern.story && (
-          <details className="bf-story">
-            <summary>about this rhythm</summary>
+          <Disclosure className="bf-story" summary="about this rhythm">
             <p>{pattern.story}</p>
-          </details>
+          </Disclosure>
         )}
       </aside>
 
