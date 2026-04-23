@@ -337,9 +337,20 @@ input[type="number"] { font: inherit; color: inherit; }
 .bf-mode-seg button { padding: 3px 8px; border-radius: 4px; font-size: 10px; color: var(--muted); }
 .bf-mode-seg button.on { background: var(--bg-2); color: var(--fg); }
 
-.bf-trainer-barcount { display: flex; align-items: center; gap: 10px; }
-.bf-barpips { display: flex; gap: 4px; }
-.bf-pip { width: 8px; height: 8px; border-radius: 50%; background: var(--bg-sunk); border: 1px solid var(--line); }
+.bf-trainer-barcount {
+  display: flex; align-items: flex-start; gap: 10px;
+  min-width: 0;
+}
+.bf-trainer-barcount .bf-mini-label { flex-shrink: 0; padding-top: 2px; }
+.bf-barpips {
+  display: flex; flex-wrap: wrap; gap: 4px;
+  min-width: 0; flex: 1;
+}
+.bf-pip {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--bg-sunk); border: 1px solid var(--line);
+  flex-shrink: 0;
+}
 .bf-pip.on { background: var(--accent); border-color: var(--accent); }
 
 .bf-kit-row { display: flex; gap: 4px; }
