@@ -2,7 +2,7 @@
   {
     "id": "georgian-khorumi",
     "name": "Georgian Khorumi",
-    "origin": "Georgia · Adjara",
+    "origin": "Georgia \u00b7 Adjara",
     "tradition": "Georgian war dance",
     "genre": "folk-dance",
     "timeSig": "5/8",
@@ -56,12 +56,12 @@
       "chiboni"
     ],
     "swingable": false,
-    "story": "The only Georgian dance in 5/4 and one of the rarest 5-beat folk meters on earth. A 3+2 martial limp — warriors scouting, advancing, engaging, winning."
+    "story": "The only Georgian dance in 5/4 and one of the rarest 5-beat folk meters on earth. A 3+2 martial limp \u2014 warriors scouting, advancing, engaging, winning."
   },
   {
     "id": "georgian-acharuli",
     "name": "Georgian Acharuli",
-    "origin": "Georgia · Adjara",
+    "origin": "Georgia \u00b7 Adjara",
     "tradition": "Georgian couple dance",
     "genre": "folk-dance",
     "timeSig": "2/4",
@@ -124,7 +124,7 @@
       "garmoni"
     ],
     "swingable": false,
-    "story": "A joyful flirtatious 2/4 couple dance from Georgia's Black Sea coast — doli lilts under panduri strumming while the dancers tease and advance."
+    "story": "A joyful flirtatious 2/4 couple dance from Georgia's Black Sea coast \u2014 doli lilts under panduri strumming while the dancers tease and advance."
   },
   {
     "id": "armenian-kochari",
@@ -191,7 +191,7 @@
       "zurna"
     ],
     "swingable": false,
-    "story": "Armenia's national line dance — shoulders locked, high jumps and vigorous footwork while dhol and screaming zurna drive a relentless 2/4 (UNESCO 2017)."
+    "story": "Armenia's national line dance \u2014 shoulders locked, high jumps and vigorous footwork while dhol and screaming zurna drive a relentless 2/4 (UNESCO 2017)."
   },
   {
     "id": "armenian-yarkhushta",
@@ -258,7 +258,7 @@
   {
     "id": "lezginka",
     "name": "Lezginka",
-    "origin": "Caucasus · Dagestan",
+    "origin": "Caucasus \u00b7 Dagestan",
     "tradition": "Pan-Caucasian fast dance",
     "genre": "folk-dance",
     "timeSig": "6/8",
@@ -315,7 +315,7 @@
       "doli"
     ],
     "swingable": false,
-    "story": "The dance of the Caucasus — a man on his toes like an eagle, a woman gliding like a swan. Every Caucasian people claims their own variant.",
+    "story": "The dance of the Caucasus \u2014 a man on his toes like an eagle, a woman gliding like a swan. Every Caucasian people claims their own variant.",
     "relatedIds": [
       "armenian-yarkhushta"
     ]
@@ -323,7 +323,7 @@
   {
     "id": "azerbaijani-yalli",
     "name": "Azerbaijani Yalli",
-    "origin": "Azerbaijan · Nakhchivan",
+    "origin": "Azerbaijan \u00b7 Nakhchivan",
     "tradition": "Circle/chain dance",
     "genre": "folk-dance",
     "timeSig": "6/8",
@@ -379,12 +379,12 @@
       "zurna"
     ],
     "swingable": false,
-    "story": "A three-stage circle dance (andante → moderato → allegro) with bird and animal pantomime inside the ring. UNESCO 2018."
+    "story": "A three-stage circle dance (andante \u2192 moderato \u2192 allegro) with bird and animal pantomime inside the ring. UNESCO 2018."
   },
   {
     "id": "cretan-syrtos",
     "name": "Cretan Syrtos",
-    "origin": "Crete · Greece",
+    "origin": "Crete \u00b7 Greece",
     "tradition": "Cretan chain dance",
     "genre": "folk-dance",
     "timeSig": "2/4",
@@ -417,7 +417,7 @@
         2,
         0,
         0,
-        2,
+        0,
         2,
         0
       ],
@@ -447,12 +447,12 @@
       "daouli"
     ],
     "swingable": false,
-    "story": "Cretan syrtos is 2/4 (not the mainland 7/8) — dancers chain hands while a leader breaks out to improvise. The laouto strum is the rhythmic backbone."
+    "story": "Cretan syrtos is 2/4 (not the mainland 7/8) \u2014 dancers chain hands while a leader breaks out to improvise. The laouto strum is the rhythmic backbone."
   },
   {
     "id": "cretan-pentozali",
     "name": "Cretan Pentozali",
-    "origin": "Crete · Greece",
+    "origin": "Crete \u00b7 Greece",
     "tradition": "Fast warrior dance",
     "genre": "folk-dance",
     "timeSig": "8/8",
@@ -516,7 +516,7 @@
       "daouli"
     ],
     "swingable": false,
-    "story": "\"Five steps\" — a fast 3+2+3 showcase for male athletic ability with jumps, spins and aerial feats. Ottoman aksak DNA filtered through Cretan mountains.",
+    "story": "\"Five steps\" \u2014 a fast 3+2+3 showcase for male athletic ability with jumps, spins and aerial feats. Ottoman aksak DNA filtered through Cretan mountains.",
     "relatedIds": [
       "karsilama",
       "aksak",
@@ -526,7 +526,7 @@
   {
     "id": "sicilian-tamburello",
     "name": "Sicilian Tamburello",
-    "origin": "Sicily · Southern Italy",
+    "origin": "Sicily \u00b7 Southern Italy",
     "tradition": "Tarantella family",
     "genre": "folk-dance",
     "timeSig": "6/8",
@@ -583,12 +583,12 @@
       "marranzano"
     ],
     "swingable": false,
-    "story": "The heartbeat of Southern Italian folk — continuous wrist motion activates jingles between thumb slaps on centre. Tarantism healing rhythm at frame-drum velocity."
+    "story": "The heartbeat of Southern Italian folk \u2014 continuous wrist motion activates jingles between thumb slaps on centre. Tarantism healing rhythm at frame-drum velocity."
   },
   {
     "id": "tarantella-pizzica",
     "name": "Pizzica Tarantella",
-    "origin": "Italy · Puglia · Salento",
+    "origin": "Italy \u00b7 Puglia \u00b7 Salento",
     "tradition": "Pizzica / tarantism",
     "genre": "folk-dance",
     "timeSig": "6/8",
@@ -646,7 +646,7 @@
       "chitarra battente"
     ],
     "swingable": false,
-    "story": "The trance rhythm of the tarantate — women bitten by imaginary spiders, danced for days until cured. The pizzica's relentless heartbeat built for exorcism.",
+    "story": "The trance rhythm of the tarantate \u2014 women bitten by imaginary spiders, danced for days until cured. The pizzica's relentless heartbeat built for exorcism.",
     "relatedIds": [
       "sicilian-tamburello",
       "taranta",
@@ -658,7 +658,7 @@
   {
     "id": "calabrian-tarantella",
     "name": "Calabrian Tarantella",
-    "origin": "Italy · Calabria",
+    "origin": "Italy \u00b7 Calabria",
     "tradition": "Tarantella calabrese",
     "genre": "folk-dance",
     "timeSig": "6/8",
@@ -715,12 +715,12 @@
       "organetto"
     ],
     "swingable": false,
-    "story": "Southern tarantella with a heavier, earthier 6/8 — zampogna bagpipe drone, organetto accordion and the village piazza turning under dancing feet."
+    "story": "Southern tarantella with a heavier, earthier 6/8 \u2014 zampogna bagpipe drone, organetto accordion and the village piazza turning under dancing feet."
   },
   {
     "id": "zeibekiko",
     "name": "Zeibekiko",
-    "origin": "Greece · Aegean",
+    "origin": "Greece \u00b7 Aegean",
     "tradition": "Rebetiko solo dance",
     "genre": "folk-dance",
     "timeSig": "9/4",
@@ -815,7 +815,7 @@
       "voice"
     ],
     "swingable": false,
-    "story": "A masculine solo dance in 9/4 — eyes lowered, arms outstretched, improvising private sorrow over a rebetiko bouzouki. Nobody else steps into the ring.",
+    "story": "A masculine solo dance in 9/4 \u2014 eyes lowered, arms outstretched, improvising private sorrow over a rebetiko bouzouki. Nobody else steps into the ring.",
     "relatedIds": [
       "karsilama",
       "aksak",
@@ -826,7 +826,7 @@
   {
     "id": "tsifteteli",
     "name": "Greek Tsifteteli",
-    "origin": "Greece · Asia Minor",
+    "origin": "Greece \u00b7 Asia Minor",
     "tradition": "Rebetiko belly dance",
     "genre": "folk-dance",
     "timeSig": "4/4",
@@ -874,7 +874,7 @@
         0,
         0,
         0,
-        2,
+        0,
         0,
         2,
         0,
@@ -915,7 +915,7 @@
       "ud"
     ],
     "swingable": false,
-    "story": "The Greek cousin of çiftetelli — Ottoman belly-dance rhythm carried across the Aegean with the refugees of 1923, Americanised through rebetiko cafes.",
+    "story": "The Greek cousin of \u00e7iftetelli \u2014 Ottoman belly-dance rhythm carried across the Aegean with the refugees of 1923, Americanised through rebetiko cafes.",
     "relatedIds": [
       "chiftetelli",
       "cocek",
@@ -925,7 +925,7 @@
   {
     "id": "sardinian-ballu-tundu",
     "name": "Sardinian Ballu Tundu",
-    "origin": "Italy · Sardinia",
+    "origin": "Italy \u00b7 Sardinia",
     "tradition": "Sardinian round dance",
     "genre": "folk-dance",
     "timeSig": "4/4",
@@ -1014,12 +1014,12 @@
       "voice"
     ],
     "swingable": false,
-    "story": "Sardinia's ancient round dance — launeddas triple-reed pipes circle-breathe an endless drone while villagers turn the piazza into a single grounded wheel."
+    "story": "Sardinia's ancient round dance \u2014 launeddas triple-reed pipes circle-breathe an endless drone while villagers turn the piazza into a single grounded wheel."
   },
   {
     "id": "sufi-dhikr-circular",
     "name": "Sufi Dhikr (Circular)",
-    "origin": "Pan-Islamic · Turkey / Levant / Central Asia",
+    "origin": "Pan-Islamic \u00b7 Turkey / Levant / Central Asia",
     "tradition": "Sufi devotional",
     "genre": "devotional",
     "timeSig": "4/4",
@@ -1108,7 +1108,7 @@
       "voice"
     ],
     "swingable": false,
-    "story": "The dhikr arc — slow meditation accelerating to ecstatic whirling. Daf metal rings shimmer from silence to a continuous wash as brainwaves entrain to the frame drum.",
+    "story": "The dhikr arc \u2014 slow meditation accelerating to ecstatic whirling. Daf metal rings shimmer from silence to a continuous wash as brainwaves entrain to the frame drum.",
     "relatedIds": [
       "daf-zikr",
       "sufi-dhikr-sudan",

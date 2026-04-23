@@ -2,7 +2,7 @@
   {
     "id": "agbekor",
     "name": "Agbekor",
-    "origin": "Ghana · Ewe",
+    "origin": "Ghana \u00b7 Ewe",
     "tradition": "Anlo Ewe war dance",
     "genre": "ceremonial",
     "timeSig": "12/8",
@@ -91,7 +91,7 @@
   {
     "id": "gahu",
     "name": "Gahu",
-    "origin": "Ghana · Ewe",
+    "origin": "Ghana \u00b7 Ewe",
     "tradition": "Social dance",
     "genre": "folk-dance",
     "timeSig": "4/4",
@@ -188,7 +188,7 @@
   {
     "id": "kpanlogo",
     "name": "Kpanlogo",
-    "origin": "Ghana · Ga",
+    "origin": "Ghana \u00b7 Ga",
     "tradition": "Social dance",
     "genre": "folk-dance",
     "timeSig": "4/4",
@@ -277,7 +277,7 @@
       "afiri"
     ],
     "swingable": false,
-    "story": "Invented in 1960s Accra by Ga youth — a conga-based social dance that fused traditional Ga drumming with highlife and rock, now Ghana's de facto national rhythm.",
+    "story": "Invented in 1960s Accra by Ga youth \u2014 a conga-based social dance that fused traditional Ga drumming with highlife and rock, now Ghana's de facto national rhythm.",
     "relatedIds": [
       "highlife-ghana",
       "azonto"
@@ -286,7 +286,7 @@
   {
     "id": "kuku",
     "name": "Kuku",
-    "origin": "Guinea · Malinke",
+    "origin": "Guinea \u00b7 Malinke",
     "tradition": "Fishermen's celebration",
     "genre": "folk-dance",
     "timeSig": "12/8",
@@ -320,15 +320,15 @@
         0
       ],
       "SN": [
+        2,
         0,
         0,
         2,
         0,
         0,
-        1,
         2,
         0,
-        1,
+        2,
         0,
         2,
         0
@@ -363,12 +363,12 @@
       "kenkeni"
     ],
     "swingable": false,
-    "story": "Originally played for women returning from fishing trips. Now the first djembe ensemble rhythm taught worldwide — driving, joyful, endlessly danceable."
+    "story": "Originally played for women returning from fishing trips. Now the first djembe ensemble rhythm taught worldwide \u2014 driving, joyful, endlessly danceable."
   },
   {
     "id": "soli",
     "name": "Soli",
-    "origin": "Guinea · Malinke",
+    "origin": "Guinea \u00b7 Malinke",
     "tradition": "Initiation ceremony",
     "genre": "ceremonial",
     "timeSig": "12/8",
@@ -445,12 +445,12 @@
       "sangban"
     ],
     "swingable": false,
-    "story": "The initiation rhythm of Malinke Guinea — it accompanies the dance-stories of young people crossing from childhood to adulthood. Sacred in its traditional context."
+    "story": "The initiation rhythm of Malinke Guinea \u2014 it accompanies the dance-stories of young people crossing from childhood to adulthood. Sacred in its traditional context."
   },
   {
     "id": "dununba",
     "name": "Dununba",
-    "origin": "Guinea · Malinke",
+    "origin": "Guinea \u00b7 Malinke",
     "tradition": "Strong men's dance",
     "genre": "ceremonial",
     "timeSig": "4/4",
@@ -491,18 +491,18 @@
         0,
         0,
         2,
-        1,
-        2,
-        1,
-        0,
-        0,
         0,
         2,
-        1,
+        0,
         2,
-        1,
         0,
         0,
+        0,
+        2,
+        0,
+        2,
+        0,
+        2,
         0
       ],
       "HH": [
@@ -539,12 +539,12 @@
       "kenkeni"
     ],
     "swingable": false,
-    "story": "The dance of the strong men — acrobatic, muscular, led by the booming dundunba drum the rhythm is named after."
+    "story": "The dance of the strong men \u2014 acrobatic, muscular, led by the booming dundunba drum the rhythm is named after."
   },
   {
     "id": "fanga",
     "name": "Fanga",
-    "origin": "Liberia · Pan-West-African",
+    "origin": "Liberia \u00b7 Pan-West-African",
     "tradition": "Welcome dance",
     "genre": "ceremonial",
     "timeSig": "4/4",
@@ -637,7 +637,7 @@
   {
     "id": "adowa",
     "name": "Adowa",
-    "origin": "Ghana · Ashanti",
+    "origin": "Ghana \u00b7 Ashanti",
     "tradition": "Funeral / royal dance",
     "genre": "ceremonial",
     "timeSig": "12/8",
@@ -714,12 +714,12 @@
       "dawuro"
     ],
     "swingable": false,
-    "story": "The most widespread Akan dance — performed at funerals, royal gatherings, and festivals. Graceful hand-and-foot gestures tell proverbs through movement."
+    "story": "The most widespread Akan dance \u2014 performed at funerals, royal gatherings, and festivals. Graceful hand-and-foot gestures tell proverbs through movement."
   },
   {
     "id": "bembe-68",
-    "name": "Bembé 6/8",
-    "origin": "West Africa · Yoruba",
+    "name": "Bemb\u00e9 6/8",
+    "origin": "West Africa \u00b7 Yoruba",
     "tradition": "Sacred bell timeline",
     "genre": "devotional",
     "timeSig": "12/8",
@@ -770,15 +770,15 @@
         2,
         0,
         2,
-        2,
-        0,
-        2,
         0,
         2,
         2,
         0,
         2,
-        2
+        0,
+        2,
+        2,
+        0
       ]
     },
     "defaultKit": "727",
@@ -790,12 +790,12 @@
       "standard-pattern"
     ],
     "instruments": [
-      "agogô",
+      "agog\u00f4",
       "bata",
       "shekere"
     ],
     "swingable": false,
-    "story": "The \"standard pattern\" — the 12/8 bell timeline that traveled from Yorubaland to Havana to Salvador and anchors half the African diaspora's music.",
+    "story": "The \"standard pattern\" \u2014 the 12/8 bell timeline that traveled from Yorubaland to Havana to Salvador and anchors half the African diaspora's music.",
     "relatedIds": [
       "bembe",
       "agbekor",
@@ -809,7 +809,7 @@
   {
     "id": "djembe-standard",
     "name": "Djembe Standard",
-    "origin": "Mali · Mande",
+    "origin": "Mali \u00b7 Mande",
     "tradition": "Djembe ensemble",
     "genre": "folk-dance",
     "timeSig": "12/8",
@@ -886,12 +886,12 @@
       "kenkeni"
     ],
     "swingable": false,
-    "story": "The archetypal djembe accompaniment — tones and slaps interlocking over the kenkeni pulse. Mande culture's most traveled rhythmic export."
+    "story": "The archetypal djembe accompaniment \u2014 tones and slaps interlocking over the kenkeni pulse. Mande culture's most traveled rhythmic export."
   },
   {
     "id": "tiriba",
     "name": "Tiriba",
-    "origin": "Guinea · Malinke",
+    "origin": "Guinea \u00b7 Malinke",
     "tradition": "Women's celebration / harvest",
     "genre": "folk-dance",
     "timeSig": "12/8",
@@ -916,11 +916,11 @@
         0,
         0,
         0,
-        2,
+        0,
+        0,
         0,
         0,
         2,
-        0,
         0,
         0
       ],
@@ -968,7 +968,7 @@
       "dundunba"
     ],
     "swingable": false,
-    "story": "A joyful rhythm traditionally played for women's celebrations — harvest, fertility, coming-of-age. The sangban's bell pattern is what you'll hear first and remember longest.",
+    "story": "A joyful rhythm traditionally played for women's celebrations \u2014 harvest, fertility, coming-of-age. The sangban's bell pattern is what you'll hear first and remember longest.",
     "relatedIds": [
       "kuku",
       "yankadi"
@@ -977,7 +977,7 @@
   {
     "id": "yankadi",
     "name": "Yankadi",
-    "origin": "Guinea · Malinke / Susu",
+    "origin": "Guinea \u00b7 Malinke / Susu",
     "tradition": "Slow courtship dance",
     "genre": "folk-dance",
     "timeSig": "12/8",
@@ -1062,7 +1062,7 @@
   {
     "id": "makru",
     "name": "Makru",
-    "origin": "Guinea · Malinke / Susu",
+    "origin": "Guinea \u00b7 Malinke / Susu",
     "tradition": "Fast courtship dance",
     "genre": "folk-dance",
     "timeSig": "12/8",
@@ -1139,7 +1139,7 @@
       "sangban"
     ],
     "swingable": false,
-    "story": "Yankadi's fast partner. The lead drummer signals the transition and the whole dance explodes — one of West African music's most thrilling gear-changes.",
+    "story": "Yankadi's fast partner. The lead drummer signals the transition and the whole dance explodes \u2014 one of West African music's most thrilling gear-changes.",
     "relatedIds": [
       "yankadi"
     ]
@@ -1147,7 +1147,7 @@
   {
     "id": "djansa",
     "name": "Djansa",
-    "origin": "Guinea · Malinke",
+    "origin": "Guinea \u00b7 Malinke",
     "tradition": "Celebration / wedding",
     "genre": "folk-dance",
     "timeSig": "4/4",
@@ -1241,7 +1241,7 @@
   {
     "id": "sunu",
     "name": "Sunu",
-    "origin": "Guinea · Malinke",
+    "origin": "Guinea \u00b7 Malinke",
     "tradition": "Community gathering",
     "genre": "folk-dance",
     "timeSig": "12/8",
@@ -1323,7 +1323,7 @@
   {
     "id": "bobobo",
     "name": "Bobobo",
-    "origin": "Ghana · Northern Ewe",
+    "origin": "Ghana \u00b7 Northern Ewe",
     "tradition": "Social / recreational dance",
     "genre": "folk-dance",
     "timeSig": "4/4",
@@ -1412,7 +1412,7 @@
       "kagan"
     ],
     "swingable": false,
-    "story": "The northern Ewe's most accessible recreational dance — simpler than Agbekor or Gahu, and usually the first rhythm drum-class newcomers learn.",
+    "story": "The northern Ewe's most accessible recreational dance \u2014 simpler than Agbekor or Gahu, and usually the first rhythm drum-class newcomers learn.",
     "relatedIds": [
       "gahu",
       "agbekor"
@@ -1421,7 +1421,7 @@
   {
     "id": "atsiagbekor",
     "name": "Atsiagbekor",
-    "origin": "Ghana · Anlo Ewe",
+    "origin": "Ghana \u00b7 Anlo Ewe",
     "tradition": "War dance (full ritual form)",
     "genre": "ceremonial",
     "timeSig": "12/8",
@@ -1498,7 +1498,7 @@
       "sogo"
     ],
     "swingable": false,
-    "story": "The complete ritual form of the Ewe war dance — slow processional before a fast dance of combat. Some scholars treat Agbekor and Atsiagbekor as the same tradition seen from two angles.",
+    "story": "The complete ritual form of the Ewe war dance \u2014 slow processional before a fast dance of combat. Some scholars treat Agbekor and Atsiagbekor as the same tradition seen from two angles.",
     "relatedIds": [
       "agbekor"
     ]
@@ -1506,7 +1506,7 @@
   {
     "id": "gadzo",
     "name": "Gadzo",
-    "origin": "Ghana · Ewe",
+    "origin": "Ghana \u00b7 Ewe",
     "tradition": "Social / work song",
     "genre": "folk-dance",
     "timeSig": "12/8",
@@ -1592,7 +1592,7 @@
   {
     "id": "tokoe",
     "name": "Tokoe",
-    "origin": "Ghana · Ewe",
+    "origin": "Ghana \u00b7 Ewe",
     "tradition": "Social dance",
     "genre": "folk-dance",
     "timeSig": "12/8",
@@ -1673,8 +1673,8 @@
   },
   {
     "id": "bata-shango",
-    "name": "Bata — Shango",
-    "origin": "Nigeria · Yoruba",
+    "name": "Bata \u2014 Shango",
+    "origin": "Nigeria \u00b7 Yoruba",
     "tradition": "Orisha worship (orisha of thunder)",
     "genre": "devotional",
     "timeSig": "12/8",
@@ -1751,7 +1751,7 @@
       "okonkolo"
     ],
     "swingable": false,
-    "story": "The fire-and-thunder rhythm for Shango, orisha of lightning. The three-drum Bata trio speaks Yoruba — here we collapse it: okonkolo timeline on HH, iya lead on KK, itotele response on SN.",
+    "story": "The fire-and-thunder rhythm for Shango, orisha of lightning. The three-drum Bata trio speaks Yoruba \u2014 here we collapse it: okonkolo timeline on HH, iya lead on KK, itotele response on SN.",
     "relatedIds": [
       "bembe-68",
       "bembe",
@@ -1762,7 +1762,7 @@
   {
     "id": "dundun-yoruba",
     "name": "Dundun / Talking Drum",
-    "origin": "Nigeria · Yoruba",
+    "origin": "Nigeria \u00b7 Yoruba",
     "tradition": "Praise and proverb",
     "genre": "ceremonial",
     "timeSig": "4/4",
@@ -1851,12 +1851,12 @@
       "gudugudu"
     ],
     "swingable": false,
-    "story": "The hourglass tension drum squeezed under the armpit bends pitch to mimic Yoruba tonal speech — here a framework groove for the iya dundun to \"speak\" over."
+    "story": "The hourglass tension drum squeezed under the armpit bends pitch to mimic Yoruba tonal speech \u2014 here a framework groove for the iya dundun to \"speak\" over."
   },
   {
     "id": "apala",
     "name": "Apala",
-    "origin": "Nigeria · Yoruba",
+    "origin": "Nigeria \u00b7 Yoruba",
     "tradition": "Social / Islamic-influenced",
     "genre": "folk-dance",
     "timeSig": "4/4",
@@ -1945,12 +1945,12 @@
       "sekere"
     ],
     "swingable": false,
-    "story": "Yoruba Muslim social music, popularised by Haruna Ishola in the 1940s–60s. No melodic instruments — only drums, thumb-piano, and voice."
+    "story": "Yoruba Muslim social music, popularised by Haruna Ishola in the 1940s\u201360s. No melodic instruments \u2014 only drums, thumb-piano, and voice."
   },
   {
     "id": "highlife-ghana",
     "name": "Highlife (Ghana)",
-    "origin": "Ghana · Accra / Kumasi",
+    "origin": "Ghana \u00b7 Accra / Kumasi",
     "tradition": "Guitar-band highlife",
     "genre": "popular",
     "timeSig": "12/8",
@@ -2027,7 +2027,7 @@
       "sikyi bell"
     ],
     "swingable": true,
-    "story": "The sikyi bell timeline runs the whole of Ghanaian highlife — the cosmopolitan, horn-driven sound of E.T. Mensah and the guitar-band era.",
+    "story": "The sikyi bell timeline runs the whole of Ghanaian highlife \u2014 the cosmopolitan, horn-driven sound of E.T. Mensah and the guitar-band era.",
     "relatedIds": [
       "highlife-nigeria",
       "soukous",
@@ -2038,7 +2038,7 @@
   {
     "id": "afrobeat",
     "name": "Afrobeat (Tony Allen)",
-    "origin": "Nigeria · Lagos",
+    "origin": "Nigeria \u00b7 Lagos",
     "tradition": "Fela Kuti / Tony Allen",
     "genre": "popular",
     "timeSig": "4/4",
@@ -2139,7 +2139,7 @@
   {
     "id": "sabar",
     "name": "Sabar",
-    "origin": "Senegal · Wolof",
+    "origin": "Senegal \u00b7 Wolof",
     "tradition": "Wolof griot drumming",
     "genre": "ceremonial",
     "timeSig": "4/4",
@@ -2228,7 +2228,7 @@
       "tungune"
     ],
     "swingable": false,
-    "story": "The Wolof griot's drum family. The lead nder shouts rhythmic \"bakks\" — spoken-sentence phrases — that the dancers must answer with specific steps.",
+    "story": "The Wolof griot's drum family. The lead nder shouts rhythmic \"bakks\" \u2014 spoken-sentence phrases \u2014 that the dancers must answer with specific steps.",
     "relatedIds": [
       "mbalax",
       "dundun-yoruba"
@@ -2237,7 +2237,7 @@
   {
     "id": "mendiani",
     "name": "Mendiani",
-    "origin": "Guinea · Malinke",
+    "origin": "Guinea \u00b7 Malinke",
     "tradition": "Young women's ceremonial dance",
     "genre": "ceremonial",
     "timeSig": "12/8",
@@ -2315,7 +2315,7 @@
       "kenkeni"
     ],
     "swingable": false,
-    "story": "The virtuoso female solo dance of the Malinke — a young girl chosen as \"mendiani\" performs athletic, elegant variations on the lead drummer's calls. Danced only by pre-pubescent girls; retired once they come of age.",
+    "story": "The virtuoso female solo dance of the Malinke \u2014 a young girl chosen as \"mendiani\" performs athletic, elegant variations on the lead drummer's calls. Danced only by pre-pubescent girls; retired once they come of age.",
     "relatedIds": [
       "soli",
       "kuku",
@@ -2325,7 +2325,7 @@
   {
     "id": "bolon-guinea",
     "name": "Bolon",
-    "origin": "Guinea · Mande",
+    "origin": "Guinea \u00b7 Mande",
     "tradition": "Hunter's harp repertoire",
     "genre": "ceremonial",
     "timeSig": "12/8",
@@ -2403,7 +2403,7 @@
       "dundun"
     ],
     "swingable": false,
-    "story": "Bolon is both the instrument — a three-string bass harp once carried by Mande warriors to war — and the slow, stately drum cycle that accompanies its songs of heroism.",
+    "story": "Bolon is both the instrument \u2014 a three-string bass harp once carried by Mande warriors to war \u2014 and the slow, stately drum cycle that accompanies its songs of heroism.",
     "relatedIds": [
       "djembe-standard",
       "lamba"
@@ -2412,7 +2412,7 @@
   {
     "id": "wassoulou",
     "name": "Wassoulou",
-    "origin": "Mali · Southern Mali · Wassoulou",
+    "origin": "Mali \u00b7 Southern Mali \u00b7 Wassoulou",
     "tradition": "Hunter-tradition pop / women's voice",
     "genre": "popular",
     "timeSig": "12/8",
@@ -2479,7 +2479,7 @@
     "region": "west-africa",
     "tags": [
       "wassoulou",
-      "oumou-sangaré",
+      "oumou-sangar\u00e9",
       "women",
       "kamale-ngoni",
       "hunter"
@@ -2490,7 +2490,7 @@
       "calabash"
     ],
     "swingable": false,
-    "story": "Southern Mali's hunter-harp tradition, reinvented by women — Oumou Sangaré and peers built a global pop style on the kamale ngoni. Earthy, cyclical, deeply feminist.",
+    "story": "Southern Mali's hunter-harp tradition, reinvented by women \u2014 Oumou Sangar\u00e9 and peers built a global pop style on the kamale ngoni. Earthy, cyclical, deeply feminist.",
     "relatedIds": [
       "bolon-guinea",
       "djembe-standard"
@@ -2499,7 +2499,7 @@
   {
     "id": "lamba",
     "name": "Lamba",
-    "origin": "West Africa · Mandinka",
+    "origin": "West Africa \u00b7 Mandinka",
     "tradition": "Griot praise rhythm",
     "genre": "ceremonial",
     "timeSig": "12/8",
@@ -2577,7 +2577,7 @@
       "sangban"
     ],
     "swingable": false,
-    "story": "The foundational griot rhythm — the cycle under which Mandinka jalis praise kings and ancestors on the kora. Every jali learns lamba before any other piece.",
+    "story": "The foundational griot rhythm \u2014 the cycle under which Mandinka jalis praise kings and ancestors on the kora. Every jali learns lamba before any other piece.",
     "relatedIds": [
       "djembe-standard",
       "bolon-guinea",
@@ -2587,7 +2587,7 @@
   {
     "id": "kiti-dende",
     "name": "Kiti Dende",
-    "origin": "Guinea · Malinke",
+    "origin": "Guinea \u00b7 Malinke",
     "tradition": "Pre-ceremony call rhythm",
     "genre": "ceremonial",
     "timeSig": "4/4",
@@ -2676,12 +2676,12 @@
       "kenkeni"
     ],
     "swingable": false,
-    "story": "A gathering rhythm — played to call the village before a ceremony begins. The dundunba stomps the forward figure; the djembes fill the spaces with rolls."
+    "story": "A gathering rhythm \u2014 played to call the village before a ceremony begins. The dundunba stomps the forward figure; the djembes fill the spaces with rolls."
   },
   {
     "id": "yoruba-ogun",
     "name": "Ogun (Yoruba)",
-    "origin": "Nigeria · Yoruba",
+    "origin": "Nigeria \u00b7 Yoruba",
     "tradition": "Orisha worship (warrior / iron deity)",
     "genre": "devotional",
     "timeSig": "12/8",
@@ -2759,7 +2759,7 @@
       "okonkolo"
     ],
     "swingable": false,
-    "story": "The rhythm for Ogun — orisha of iron, warriors, and the clearing of paths. The bell strikes like hammer on anvil; the iya leads attack calls.",
+    "story": "The rhythm for Ogun \u2014 orisha of iron, warriors, and the clearing of paths. The bell strikes like hammer on anvil; the iya leads attack calls.",
     "relatedIds": [
       "bata-shango",
       "yoruba-oya",
@@ -2770,7 +2770,7 @@
   {
     "id": "yoruba-oya",
     "name": "Oya (Yoruba)",
-    "origin": "Nigeria · Yoruba",
+    "origin": "Nigeria \u00b7 Yoruba",
     "tradition": "Orisha worship (storm / wind)",
     "genre": "devotional",
     "timeSig": "12/8",
@@ -2848,7 +2848,7 @@
       "okonkolo"
     ],
     "swingable": false,
-    "story": "Oya rules the wind, storm, and the gates between worlds. Her rhythm is restless, whirling — every beat seems to twist away before it lands.",
+    "story": "Oya rules the wind, storm, and the gates between worlds. Her rhythm is restless, whirling \u2014 every beat seems to twist away before it lands.",
     "relatedIds": [
       "bata-shango",
       "yoruba-ogun",
@@ -2859,7 +2859,7 @@
   {
     "id": "yoruba-oshun",
     "name": "Oshun (Yoruba)",
-    "origin": "Nigeria · Yoruba",
+    "origin": "Nigeria \u00b7 Yoruba",
     "tradition": "Orisha worship (river / love)",
     "genre": "devotional",
     "timeSig": "12/8",
@@ -2937,7 +2937,7 @@
       "okonkolo"
     ],
     "swingable": false,
-    "story": "Oshun is the river, beauty, fresh water, love. Her rhythm flows — a sweet, sensual bata pattern that ripples rather than strikes. The slowest and most seductive orisha rhythm.",
+    "story": "Oshun is the river, beauty, fresh water, love. Her rhythm flows \u2014 a sweet, sensual bata pattern that ripples rather than strikes. The slowest and most seductive orisha rhythm.",
     "relatedIds": [
       "bata-shango",
       "yoruba-ogun",
@@ -2948,7 +2948,7 @@
   {
     "id": "gadzo-slow",
     "name": "Gadzo (Slow)",
-    "origin": "Ghana · Ewe",
+    "origin": "Ghana \u00b7 Ewe",
     "tradition": "Processional war-dance opening",
     "genre": "ceremonial",
     "timeSig": "12/8",
@@ -3026,7 +3026,7 @@
       "sogo"
     ],
     "swingable": false,
-    "story": "The slow processional half of the Ewe Gadzo tradition — drawn-out bell hits, the war-dance held in meditative suspension before the acceleration begins.",
+    "story": "The slow processional half of the Ewe Gadzo tradition \u2014 drawn-out bell hits, the war-dance held in meditative suspension before the acceleration begins.",
     "relatedIds": [
       "gadzo",
       "agbekor",
@@ -3036,7 +3036,7 @@
   {
     "id": "fang-akom",
     "name": "Akom (Fang)",
-    "origin": "Gabon · Fang",
+    "origin": "Gabon \u00b7 Fang",
     "tradition": "Bwiti ceremony / ancestral trance",
     "genre": "ceremonial",
     "timeSig": "6/8",
@@ -3094,12 +3094,12 @@
       "seed rattle"
     ],
     "swingable": false,
-    "story": "From Gabon's Fang Bwiti initiates — a cyclical 6/8 accompanying night-long ancestral contact rites. The mongongo mouth-bow carries the melody; drums and rattles drive the trance."
+    "story": "From Gabon's Fang Bwiti initiates \u2014 a cyclical 6/8 accompanying night-long ancestral contact rites. The mongongo mouth-bow carries the melody; drums and rattles drive the trance."
   },
   {
     "id": "kpelle-pepper",
     "name": "Kpelle Pepper Dance",
-    "origin": "Liberia · Kpelle",
+    "origin": "Liberia \u00b7 Kpelle",
     "tradition": "Social dance",
     "genre": "folk-dance",
     "timeSig": "4/4",
@@ -3188,7 +3188,7 @@
       "rattle"
     ],
     "swingable": false,
-    "story": "Hot-footed — the Kpelle name it for pepper because dancers mime stepping on hot coals. A tight, interlocking groove documented by Ruth Stone in 1970s Liberia.",
+    "story": "Hot-footed \u2014 the Kpelle name it for pepper because dancers mime stepping on hot coals. A tight, interlocking groove documented by Ruth Stone in 1970s Liberia.",
     "relatedIds": [
       "fanga",
       "kpanlogo"
@@ -3197,7 +3197,7 @@
   {
     "id": "wolof-lamb",
     "name": "Lamb (Senegalese Wrestling)",
-    "origin": "Senegal · Wolof",
+    "origin": "Senegal \u00b7 Wolof",
     "tradition": "Wrestling ceremony rhythm",
     "genre": "ceremonial",
     "timeSig": "4/4",
@@ -3287,7 +3287,7 @@
       "tama"
     ],
     "swingable": false,
-    "story": "Laamb is Senegalese wrestling — a national sport of stadium-sized crowds and mystical preparation. The sabar ensemble hammers out attack calls as wrestlers dance into the ring.",
+    "story": "Laamb is Senegalese wrestling \u2014 a national sport of stadium-sized crowds and mystical preparation. The sabar ensemble hammers out attack calls as wrestlers dance into the ring.",
     "relatedIds": [
       "sabar",
       "mbalax"
@@ -3395,7 +3395,7 @@
   {
     "id": "tabanka",
     "name": "Tabanka",
-    "origin": "Guinea-Bissau · Papel / Mancanha",
+    "origin": "Guinea-Bissau \u00b7 Papel / Mancanha",
     "tradition": "Carnival procession",
     "genre": "folk-dance",
     "timeSig": "2/4",
@@ -3458,7 +3458,7 @@
       "whistle"
     ],
     "swingable": false,
-    "story": "A Guinea-Bissau carnival rhythm — satirical processions where neighborhoods compete with costumed critiques of the year's politics. Stomping 2/4 over conch-shell calls.",
+    "story": "A Guinea-Bissau carnival rhythm \u2014 satirical processions where neighborhoods compete with costumed critiques of the year's politics. Stomping 2/4 over conch-shell calls.",
     "relatedIds": [
       "hausa-gumbe"
     ]
@@ -3466,7 +3466,7 @@
   {
     "id": "fulani-halam",
     "name": "Halam (Fulani / Wolof)",
-    "origin": "Senegal · Fulani / Wolof",
+    "origin": "Senegal \u00b7 Fulani / Wolof",
     "tradition": "Xalam lute griot tradition",
     "genre": "ceremonial",
     "timeSig": "6/8",
@@ -3524,7 +3524,7 @@
       "calabash"
     ],
     "swingable": false,
-    "story": "The Halam / xalam — a four- or five-string skin-bodied lute carried by Fulbe and Wolof griots across the Sahel. Blues scholars trace the American banjo back to this instrument's 6/8 praise cycles.",
+    "story": "The Halam / xalam \u2014 a four- or five-string skin-bodied lute carried by Fulbe and Wolof griots across the Sahel. Blues scholars trace the American banjo back to this instrument's 6/8 praise cycles.",
     "relatedIds": [
       "lamba",
       "sabar"

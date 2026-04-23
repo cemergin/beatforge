@@ -58,7 +58,7 @@
       "dutar"
     ],
     "swingable": false,
-    "story": "The foundational \"Bum–Bak\" alternation every doira student learns. Metal rings shimmer on every edge stroke underneath Uzbek folk song and Shashmaqom.",
+    "story": "The foundational \"Bum\u2013Bak\" alternation every doira student learns. Metal rings shimmer on every edge stroke underneath Uzbek folk song and Shashmaqom.",
     "relatedIds": [
       "reng",
       "khaliji-saudi",
@@ -68,7 +68,7 @@
   {
     "id": "uzbek-lapar",
     "name": "Lapar / Yalla",
-    "origin": "Uzbekistan · Ferghana",
+    "origin": "Uzbekistan \u00b7 Ferghana",
     "tradition": "Uzbek folk song-dance",
     "genre": "folk-dance",
     "timeSig": "4/4",
@@ -157,7 +157,7 @@
       "voice"
     ],
     "swingable": false,
-    "story": "Lapar and yalla are antiphonal song-dances from the Ferghana valley — women and men trading verses while the doira drives the celebration."
+    "story": "Lapar and yalla are antiphonal song-dances from the Ferghana valley \u2014 women and men trading verses while the doira drives the celebration."
   },
   {
     "id": "tajik-dumbak",
@@ -251,7 +251,7 @@
       "gijak"
     ],
     "swingable": false,
-    "story": "Tajik dumbak (tablak) patterns bridge Persian zarb technique and Central Asian doira language — doum on centre, tek on the edge, ghost notes threading between.",
+    "story": "Tajik dumbak (tablak) patterns bridge Persian zarb technique and Central Asian doira language \u2014 doum on centre, tek on the edge, ghost notes threading between.",
     "relatedIds": [
       "tasnif-4-4",
       "uzbek-doira-basic",
@@ -261,8 +261,8 @@
   {
     "id": "uyghur-muqam-78",
     "name": "Uyghur Muqam (7/8)",
-    "origin": "Xinjiang · Uyghur",
-    "tradition": "Twelve Muqam · Mashrap",
+    "origin": "Xinjiang \u00b7 Uyghur",
+    "tradition": "Twelve Muqam \u00b7 Mashrap",
     "genre": "classical",
     "timeSig": "7/8",
     "grouping": [
@@ -389,12 +389,12 @@
       "gidjak"
     ],
     "swingable": false,
-    "story": "Suzme (\"the strained one\") is the signature rolling 6/8 of Turkmen bagshy bards — rhythm of nomadic horsemen set into song."
+    "story": "Suzme (\"the strained one\") is the signature rolling 6/8 of Turkmen bagshy bards \u2014 rhythm of nomadic horsemen set into song."
   },
   {
     "id": "afghan-attan",
     "name": "Afghan Attan",
-    "origin": "Afghanistan · Pashtun",
+    "origin": "Afghanistan \u00b7 Pashtun",
     "tradition": "National circle dance",
     "genre": "folk-dance",
     "timeSig": "7/8",
@@ -454,7 +454,7 @@
       "sorna"
     ],
     "swingable": false,
-    "story": "Afghanistan's national dance — a 3+2+2 circle that starts dignified and accelerates for hours. The dhol drives the spiral, hundreds of feet answering.",
+    "story": "Afghanistan's national dance \u2014 a 3+2+2 circle that starts dignified and accelerates for hours. The dhol drives the spiral, hundreds of feet answering.",
     "relatedIds": [
       "kalamatianos",
       "lesnoto",
@@ -465,7 +465,7 @@
   {
     "id": "afghan-tabla-dhol",
     "name": "Afghan Tabla + Dhol",
-    "origin": "Afghanistan · Kabul / Herat",
+    "origin": "Afghanistan \u00b7 Kabul / Herat",
     "tradition": "Afghan classical / film song",
     "genre": "popular",
     "timeSig": "4/4",
@@ -555,7 +555,7 @@
       "harmonium"
     ],
     "swingable": false,
-    "story": "Kabul radio orchestras stacked Indian tabla under Pashtun dhol — Ahmad Zahir, Ustad Sarahang and the soft-power soundtrack of 1970s Afghanistan.",
+    "story": "Kabul radio orchestras stacked Indian tabla under Pashtun dhol \u2014 Ahmad Zahir, Ustad Sarahang and the soft-power soundtrack of 1970s Afghanistan.",
     "relatedIds": [
       "keherwa",
       "tintal",
@@ -722,12 +722,12 @@
       "voice"
     ],
     "swingable": false,
-    "story": "The sasa is a seated group dance where dozens of bodies slap legs, chests and pate slit-drums in perfect unison — rhythm as collective architecture."
+    "story": "The sasa is a seated group dance where dozens of bodies slap legs, chests and pate slit-drums in perfect unison \u2014 rhythm as collective architecture."
   },
   {
     "id": "tahitian-toere",
     "name": "Tahitian Toere",
-    "origin": "Tahiti · French Polynesia",
+    "origin": "Tahiti \u00b7 French Polynesia",
     "tradition": "Ote'a dance",
     "genre": "folk-dance",
     "timeSig": "4/4",
@@ -816,7 +816,7 @@
       "tariparau"
     ],
     "swingable": false,
-    "story": "The to'ere slit-drum hits with cone-shaped sticks at speeds closer to Morse code than music — interlocking cells that drive the ote'a dance."
+    "story": "The to'ere slit-drum hits with cone-shaped sticks at speeds closer to Morse code than music \u2014 interlocking cells that drive the ote'a dance."
   },
   {
     "id": "hawaiian-pahu",
@@ -910,13 +910,13 @@
       "voice"
     ],
     "swingable": false,
-    "story": "The sharkskin-headed pahu is the most sacred drum in Hawaiian culture — reserved for temple hula, synchronised precisely with the chanter's breath."
+    "story": "The sharkskin-headed pahu is the most sacred drum in Hawaiian culture \u2014 reserved for temple hula, synchronised precisely with the chanter's breath."
   },
   {
     "id": "hawaiian-ipu-heke",
     "name": "Ipu Heke",
     "origin": "Hawai'i",
-    "tradition": "Hula · ho'opa'a",
+    "tradition": "Hula \u00b7 ho'opa'a",
     "genre": "ceremonial",
     "timeSig": "4/4",
     "grouping": [
@@ -1003,12 +1003,12 @@
       "voice"
     ],
     "swingable": false,
-    "story": "Two calabashes joined in a figure-eight — ground-strike bass and finger-tap treble, earth and air, the Hawaiian cosmology of duality."
+    "story": "Two calabashes joined in a figure-eight \u2014 ground-strike bass and finger-tap treble, earth and air, the Hawaiian cosmology of duality."
   },
   {
     "id": "maori-haka",
     "name": "Maori Haka",
-    "origin": "Aotearoa · New Zealand",
+    "origin": "Aotearoa \u00b7 New Zealand",
     "tradition": "Kapa haka",
     "genre": "ceremonial",
     "timeSig": "3/4",
@@ -1085,7 +1085,7 @@
       "voice"
     ],
     "swingable": false,
-    "story": "The haka has no instruments — the body IS the drum. Stomping feet, thigh slaps and chest strikes in triple meter, amplified by dozens of voices in unison."
+    "story": "The haka has no instruments \u2014 the body IS the drum. Stomping feet, thigh slaps and chest strikes in triple meter, amplified by dozens of voices in unison."
   },
   {
     "id": "fijian-meke",
@@ -1179,13 +1179,13 @@
       "voice"
     ],
     "swingable": false,
-    "story": "Fijian meke is sung poetry with choreographed movement — the lali log drum and derua bamboo stamping tubes keep the villagers moving as one body."
+    "story": "Fijian meke is sung poetry with choreographed movement \u2014 the lali log drum and derua bamboo stamping tubes keep the villagers moving as one body."
   },
   {
     "id": "aboriginal-clapsticks",
     "name": "Aboriginal Clapsticks",
     "origin": "Australia",
-    "tradition": "Songline · ceremonial",
+    "tradition": "Songline \u00b7 ceremonial",
     "genre": "ceremonial",
     "timeSig": "4/4",
     "grouping": [
@@ -1273,13 +1273,13 @@
       "voice"
     ],
     "swingable": false,
-    "story": "Bilma eucalyptus clapsticks hold the structural timeline for Aboriginal song. A generalised public-domain pulse — ceremonial songline rhythms remain culturally restricted."
+    "story": "Bilma eucalyptus clapsticks hold the structural timeline for Aboriginal song. A generalised public-domain pulse \u2014 ceremonial songline rhythms remain culturally restricted."
   },
   {
     "id": "aboriginal-yidaki",
     "name": "Yidaki Drone + Clapsticks",
-    "origin": "Australia · Arnhem Land",
-    "tradition": "Yolngu yidaki · Songline",
+    "origin": "Australia \u00b7 Arnhem Land",
+    "tradition": "Yolngu yidaki \u00b7 Songline",
     "genre": "ceremonial",
     "timeSig": "4/4",
     "grouping": [
@@ -1367,7 +1367,7 @@
       "voice"
     ],
     "swingable": false,
-    "story": "The yidaki never stops — circular breathing turns a drone into rhythm through tongue pops, vocal harmonics and the whispered pulse of breath transitions.",
+    "story": "The yidaki never stops \u2014 circular breathing turns a drone into rhythm through tongue pops, vocal harmonics and the whispered pulse of breath transitions.",
     "relatedIds": [
       "aboriginal-clapsticks"
     ]
@@ -1375,7 +1375,7 @@
   {
     "id": "filipino-kulintang",
     "name": "Filipino Kulintang",
-    "origin": "Philippines · Mindanao",
+    "origin": "Philippines \u00b7 Mindanao",
     "tradition": "Maguindanaon kulintang",
     "genre": "classical",
     "timeSig": "4/4",
@@ -1469,8 +1469,8 @@
   {
     "id": "powwow-round-dance",
     "name": "Powwow Round Dance",
-    "origin": "North America · Intertribal",
-    "tradition": "Round dance · social",
+    "origin": "North America \u00b7 Intertribal",
+    "tradition": "Round dance \u00b7 social",
     "genre": "ceremonial",
     "timeSig": "4/4",
     "grouping": [
@@ -1491,37 +1491,37 @@
       "KK": [
         2,
         0,
-        0,
-        0,
-        2,
-        0,
-        0,
+        1,
         0,
         2,
         0,
-        0,
+        1,
         0,
         2,
         0,
+        1,
         0,
+        2,
+        0,
+        1,
         0
       ],
       "SN": [
         0,
         0,
-        2,
         0,
         0,
         0,
-        2,
         0,
         0,
         0,
-        2,
         0,
         0,
         0,
-        2,
+        0,
+        0,
+        0,
+        0,
         0
       ],
       "HH": [
@@ -1557,6 +1557,6 @@
       "rattle"
     ],
     "swingable": false,
-    "story": "An intertribal social dance — a circle of linked hands moves sideways to a steady heartbeat hand-drum. All are welcome to join."
+    "story": "An intertribal social dance \u2014 a circle of linked hands moves sideways to a steady heartbeat hand-drum. All are welcome to join."
   }
 ]

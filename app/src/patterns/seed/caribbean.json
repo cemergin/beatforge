@@ -2,7 +2,7 @@
   {
     "id": "reggaeton-dembow",
     "name": "Reggaeton Dembow",
-    "origin": "Puerto Rico · Dominican Republic",
+    "origin": "Puerto Rico \u00b7 Dominican Republic",
     "tradition": "Urbano",
     "genre": "popular",
     "timeSig": "4/4",
@@ -91,7 +91,7 @@
       "timbale"
     ],
     "swingable": false,
-    "story": "The dembow riddim that conquered the world — Jamaican dancehall mutated through Panama, Puerto Rico and the DR into the global sound of reggaeton.",
+    "story": "The dembow riddim that conquered the world \u2014 Jamaican dancehall mutated through Panama, Puerto Rico and the DR into the global sound of reggaeton.",
     "relatedIds": [
       "dancehall",
       "moombahton",
@@ -289,7 +289,7 @@
       "bass"
     ],
     "swingable": false,
-    "story": "Nemours Jean-Baptiste's 1955 invention — a slow, sensual grind built on cowbell, tanbou, and bass. Haiti's national sound, and UNESCO heritage since 2025.",
+    "story": "Nemours Jean-Baptiste's 1955 invention \u2014 a slow, sensual grind built on cowbell, tanbou, and bass. Haiti's national sound, and UNESCO heritage since 2025.",
     "relatedIds": [
       "zouk-bass",
       "kizomba",
@@ -340,19 +340,19 @@
         0,
         0,
         0,
-        0,
         2,
-        0,
-        0,
-        1,
-        0,
-        0,
         0,
         0,
         2,
         0,
         0,
-        1
+        0,
+        0,
+        2,
+        0,
+        0,
+        2,
+        0
       ],
       "HH": [
         2,
@@ -388,7 +388,7 @@
       "tassa"
     ],
     "swingable": false,
-    "story": "Lord Shorty's 1970s fusion of calypso with East Indian rhythms — the \"soul of calypso.\" The signature hi-hat opens on the last sixteenth of every beat.",
+    "story": "Lord Shorty's 1970s fusion of calypso with East Indian rhythms \u2014 the \"soul of calypso.\" The signature hi-hat opens on the last sixteenth of every beat.",
     "relatedIds": [
       "calypso",
       "bhangra"
@@ -486,7 +486,7 @@
       "steel pan"
     ],
     "swingable": true,
-    "story": "Trinidad's newspaper of the people — Lord Kitchener and Mighty Sparrow used the form to praise, satirise, and scandalise. The lilt swings around the offbeats.",
+    "story": "Trinidad's newspaper of the people \u2014 Lord Kitchener and Mighty Sparrow used the form to praise, satirise, and scandalise. The lilt swings around the offbeats.",
     "relatedIds": [
       "soca",
       "mento"
@@ -584,7 +584,7 @@
       "hand drum"
     ],
     "swingable": true,
-    "story": "Before ska, before reggae — mento was Jamaica's own folk music. Banjo, rumba box, and bawdy social commentary. The Jolly Boys from Port Antonio carried it into the 21st century.",
+    "story": "Before ska, before reggae \u2014 mento was Jamaica's own folk music. Banjo, rumba box, and bawdy social commentary. The Jolly Boys from Port Antonio carried it into the 21st century.",
     "relatedIds": [
       "calypso",
       "ska"
@@ -593,7 +593,7 @@
   {
     "id": "ska",
     "name": "Ska",
-    "origin": "Jamaica · Kingston",
+    "origin": "Jamaica \u00b7 Kingston",
     "tradition": "Skatalites / Studio One",
     "genre": "popular",
     "timeSig": "4/4",
@@ -700,7 +700,7 @@
       "piano"
     ],
     "swingable": false,
-    "story": "Jamaica 1962 — the year of independence and the year the offbeat became a national identity. Lloyd Knibb's drums turned American R&B inside out.",
+    "story": "Jamaica 1962 \u2014 the year of independence and the year the offbeat became a national identity. Lloyd Knibb's drums turned American R&B inside out.",
     "relatedIds": [
       "rocksteady",
       "jamaica-one-drop",
@@ -711,7 +711,7 @@
   {
     "id": "rocksteady",
     "name": "Rocksteady",
-    "origin": "Jamaica · Kingston",
+    "origin": "Jamaica \u00b7 Kingston",
     "tradition": "Alton Ellis / Studio One",
     "genre": "popular",
     "timeSig": "4/4",
@@ -739,11 +739,11 @@
         0,
         0,
         0,
-        0,
-        0,
-        0,
-        0,
         2,
+        0,
+        0,
+        0,
+        0,
         0,
         0,
         0
@@ -818,7 +818,7 @@
       "bubble organ"
     ],
     "swingable": false,
-    "story": "Summer 1966 — the music slowed down. Nobody is sure why, but when it did, space opened up for the bass to step forward and become the lead instrument.",
+    "story": "Summer 1966 \u2014 the music slowed down. Nobody is sure why, but when it did, space opened up for the bass to step forward and become the lead instrument.",
     "relatedIds": [
       "ska",
       "jamaica-one-drop"
@@ -934,7 +934,7 @@
       "skank guitar"
     ],
     "swingable": false,
-    "story": "Beat 1 is empty — dropped. Carlton Barrett turned the downbeat's absence into gravity itself. Everything leans toward the snare-kick unison on beat 3.",
+    "story": "Beat 1 is empty \u2014 dropped. Carlton Barrett turned the downbeat's absence into gravity itself. Everything leans toward the snare-kick unison on beat 3.",
     "relatedIds": [
       "rocksteady",
       "jamaica-rockers",
@@ -1053,7 +1053,7 @@
       "skank guitar"
     ],
     "swingable": false,
-    "story": "Sly Dunbar's answer to the one-drop — put the kick back on beat 1 AND beat 3. Harder, more driving, built for dub plates at the dance.",
+    "story": "Sly Dunbar's answer to the one-drop \u2014 put the kick back on beat 1 AND beat 3. Harder, more driving, built for dub plates at the dance.",
     "relatedIds": [
       "jamaica-one-drop",
       "jamaica-steppers"
@@ -1169,7 +1169,7 @@
       "skank guitar"
     ],
     "swingable": false,
-    "story": "Four on the floor, reggae style. \"Exodus,\" \"Marcus Garvey\" — the ancestor of the whole electronic dance family.",
+    "story": "Four on the floor, reggae style. \"Exodus,\" \"Marcus Garvey\" \u2014 the ancestor of the whole electronic dance family.",
     "relatedIds": [
       "jamaica-one-drop",
       "jamaica-rockers"
@@ -1262,12 +1262,12 @@
       "derecho"
     ],
     "instruments": [
-      "bongó",
-      "güira",
+      "bong\u00f3",
+      "g\u00fcira",
       "guitar"
     ],
     "swingable": false,
-    "story": "José Manuel Calderón cut the first bachata in 1962. For decades the Dominican elite dismissed it as cabaret music — until Juan Luis Guerra took it to the world.",
+    "story": "Jos\u00e9 Manuel Calder\u00f3n cut the first bachata in 1962. For decades the Dominican elite dismissed it as cabaret music \u2014 until Juan Luis Guerra took it to the world.",
     "relatedIds": [
       "bolero",
       "merengue"
@@ -1275,8 +1275,8 @@
   },
   {
     "id": "bomba-yuba",
-    "name": "Bomba Yubá",
-    "origin": "Puerto Rico · Loíza",
+    "name": "Bomba Yub\u00e1",
+    "origin": "Puerto Rico \u00b7 Lo\u00edza",
     "tradition": "Fast Afro-Puerto Rican bomba",
     "genre": "folk-dance",
     "timeSig": "2/4",
@@ -1329,18 +1329,18 @@
     "region": "caribbean",
     "tags": [
       "bomba",
-      "yubá",
-      "loíza",
+      "yub\u00e1",
+      "lo\u00edza",
       "fast",
       "athletic"
     ],
     "instruments": [
       "buleador",
       "subidor",
-      "cuá"
+      "cu\u00e1"
     ],
     "swingable": false,
-    "story": "The fastest and most athletic of the bomba seises — the primo must match the dancer's sharp feints in real time. Physically demanding, virtuosic, the apex of the dancer-drummer dialogue.",
+    "story": "The fastest and most athletic of the bomba seises \u2014 the primo must match the dancer's sharp feints in real time. Physically demanding, virtuosic, the apex of the dancer-drummer dialogue.",
     "relatedIds": [
       "bomba-sica",
       "bomba-holande",
@@ -1349,7 +1349,7 @@
   },
   {
     "id": "bomba-cuembe",
-    "name": "Bomba Cuembé",
+    "name": "Bomba Cuemb\u00e9",
     "origin": "Puerto Rico",
     "tradition": "Slow bomba",
     "genre": "folk-dance",
@@ -1429,17 +1429,17 @@
     "region": "caribbean",
     "tags": [
       "bomba",
-      "cuembé",
+      "cuemb\u00e9",
       "slow",
       "stately"
     ],
     "instruments": [
       "buleador",
       "subidor",
-      "cuá"
+      "cu\u00e1"
     ],
     "swingable": false,
-    "story": "The slowest and most spacious of the common bomba styles — elegant, controlled, stately. The buleador breathes; the primo has time to listen. A beginner's way into the dancer-drummer conversation.",
+    "story": "The slowest and most spacious of the common bomba styles \u2014 elegant, controlled, stately. The buleador breathes; the primo has time to listen. A beginner's way into the dancer-drummer conversation.",
     "relatedIds": [
       "bomba-sica",
       "bomba-holande",
@@ -1448,8 +1448,8 @@
   },
   {
     "id": "seis-jibaro",
-    "name": "Seis Jíbaro",
-    "origin": "Puerto Rico · interior",
+    "name": "Seis J\u00edbaro",
+    "origin": "Puerto Rico \u00b7 interior",
     "tradition": "Rural Puerto Rican folk",
     "genre": "folk-dance",
     "timeSig": "6/8",
@@ -1496,18 +1496,18 @@
     "region": "caribbean",
     "tags": [
       "seis",
-      "jíbaro",
+      "j\u00edbaro",
       "cuatro",
       "mountain",
       "trulla"
     ],
     "instruments": [
       "cuatro",
-      "güiro",
-      "bongó"
+      "g\u00fciro",
+      "bong\u00f3"
     ],
     "swingable": true,
-    "story": "The music of the jíbaros — mountain peasant farmers of Puerto Rico's interior. Cuatro, güiro, bongó; a décima sung in 10-line verses. The aguinaldo Christmas carols and Trulla processions ride this 6/8 sway.",
+    "story": "The music of the j\u00edbaros \u2014 mountain peasant farmers of Puerto Rico's interior. Cuatro, g\u00fciro, bong\u00f3; a d\u00e9cima sung in 10-line verses. The aguinaldo Christmas carols and Trulla processions ride this 6/8 sway.",
     "relatedIds": [
       "bomba-holande",
       "parang"
@@ -1515,8 +1515,8 @@
   },
   {
     "id": "merengue-tipico",
-    "name": "Merengue Típico",
-    "origin": "Dominican Republic · Cibao",
+    "name": "Merengue T\u00edpico",
+    "origin": "Dominican Republic \u00b7 Cibao",
     "tradition": "Perico Ripiao accordion merengue",
     "genre": "folk-dance",
     "timeSig": "4/4",
@@ -1595,19 +1595,19 @@
     "region": "caribbean",
     "tags": [
       "merengue",
-      "típico",
+      "t\u00edpico",
       "perico-ripiao",
       "cibao",
       "accordion"
     ],
     "instruments": [
       "tambora",
-      "güira",
+      "g\u00fcira",
       "button accordion",
       "marimba"
     ],
     "swingable": true,
-    "story": "The original rural merengue of the Cibao — button accordion leading, the tambora player improvising freely, the swing harder than orchestra merengue. \"Perico ripiao\" — the ripped parrot.",
+    "story": "The original rural merengue of the Cibao \u2014 button accordion leading, the tambora player improvising freely, the swing harder than orchestra merengue. \"Perico ripiao\" \u2014 the ripped parrot.",
     "relatedIds": [
       "merengue",
       "merengue-pambiche",
@@ -1617,7 +1617,7 @@
   {
     "id": "merengue-pambiche",
     "name": "Merengue Pambiche",
-    "origin": "Dominican Republic · Cibao",
+    "origin": "Dominican Republic \u00b7 Cibao",
     "tradition": "Slow merengue derana",
     "genre": "folk-dance",
     "timeSig": "4/4",
@@ -1699,15 +1699,15 @@
       "pambiche",
       "slow",
       "cibao",
-      "ocupación"
+      "ocupaci\u00f3n"
     ],
     "instruments": [
       "tambora",
-      "güira",
+      "g\u00fcira",
       "accordion"
     ],
     "swingable": true,
-    "story": "Pambiche, a.k.a. merengue apambichao — slower than the típico. The name jokes at U.S. Marines during the 1916-24 occupation who could not keep up with fast merengue, so the Dominicans slowed it down for them.",
+    "story": "Pambiche, a.k.a. merengue apambichao \u2014 slower than the t\u00edpico. The name jokes at U.S. Marines during the 1916-24 occupation who could not keep up with fast merengue, so the Dominicans slowed it down for them.",
     "relatedIds": [
       "merengue",
       "merengue-tipico"
@@ -1803,11 +1803,11 @@
     "instruments": [
       "vaksin",
       "kata",
-      "kès",
+      "k\u00e8s",
       "graj"
     ],
     "swingable": false,
-    "story": "Haitian Lenten street music — bamboo vaksin trumpets each blow one note in hocket while a kata iron keeps the 3-3-2 tresillo. Hundreds march all night behind one band. Vodou societies run most ranks.",
+    "story": "Haitian Lenten street music \u2014 bamboo vaksin trumpets each blow one note in hocket while a kata iron keeps the 3-3-2 tresillo. Hundreds march all night behind one band. Vodou societies run most ranks.",
     "relatedIds": [
       "bomba-sica",
       "kompa",
@@ -1816,7 +1816,7 @@
   },
   {
     "id": "vodou-yanvalou",
-    "name": "Vodou Rada · Yanvalou",
+    "name": "Vodou Rada \u00b7 Yanvalou",
     "origin": "Haiti",
     "tradition": "Fon/Dahomey ceremonial",
     "genre": "ceremonial",
@@ -1896,7 +1896,7 @@
       "ogan"
     ],
     "swingable": false,
-    "story": "The foundational Rada rhythm — serpentine, undulating, called to invoke Danbala the serpent lwa. Dancers bend and wave through the floor in unison. Fon-derived, dignified, the coolest of the hot Vodou rites.",
+    "story": "The foundational Rada rhythm \u2014 serpentine, undulating, called to invoke Danbala the serpent lwa. Dancers bend and wave through the floor in unison. Fon-derived, dignified, the coolest of the hot Vodou rites.",
     "relatedIds": [
       "bembe",
       "bembe-68",
@@ -1998,7 +1998,7 @@
       "ogan"
     ],
     "swingable": false,
-    "story": "The hot Vodou rites — fierce, fast, linked to the Creole spirits born in the New World and the revolutionary fury that freed Haiti in 1804. The kata's 3-3-2 drives the drums hand-and-stick.",
+    "story": "The hot Vodou rites \u2014 fierce, fast, linked to the Creole spirits born in the New World and the revolutionary fury that freed Haiti in 1804. The kata's 3-3-2 drives the drums hand-and-stick.",
     "relatedIds": [
       "rara-haiti",
       "vodou-yanvalou",
@@ -2099,7 +2099,7 @@
       "bass"
     ],
     "swingable": false,
-    "story": "Mizik rasin — \"roots music.\" Boukman Eksperyans and RAM fused Vodou drumming with rock and funk in the 1980s. Under the Duvaliers and the Aristide coup, the music became a banner of resistance.",
+    "story": "Mizik rasin \u2014 \"roots music.\" Boukman Eksperyans and RAM fused Vodou drumming with rock and funk in the 1980s. Under the Duvaliers and the Aristide coup, the music became a banner of resistance.",
     "relatedIds": [
       "vodou-petwo",
       "vodou-yanvalou",
@@ -2109,7 +2109,7 @@
   {
     "id": "zouk-love",
     "name": "Zouk Love",
-    "origin": "French Antilles · Guadeloupe",
+    "origin": "French Antilles \u00b7 Guadeloupe",
     "tradition": "Antillean popular",
     "genre": "popular",
     "timeSig": "4/4",
@@ -2199,7 +2199,7 @@
       "synth bass"
     ],
     "swingable": false,
-    "story": "The slow romantic half of zouk — Kassav's 1980s Guadeloupean invention stripped down to the grinding, sensual dance. The blueprint for kizomba across Lusophone Africa and back into the Caribbean.",
+    "story": "The slow romantic half of zouk \u2014 Kassav's 1980s Guadeloupean invention stripped down to the grinding, sensual dance. The blueprint for kizomba across Lusophone Africa and back into the Caribbean.",
     "relatedIds": [
       "kompa",
       "zouk-bass",
@@ -2210,7 +2210,7 @@
   {
     "id": "punta-rock",
     "name": "Punta Rock",
-    "origin": "Belize · Honduras · Garifuna",
+    "origin": "Belize \u00b7 Honduras \u00b7 Garifuna",
     "tradition": "Garifuna popular electric",
     "genre": "popular",
     "timeSig": "4/4",
@@ -2301,7 +2301,7 @@
       "electric guitar"
     ],
     "swingable": false,
-    "story": "Andy Palacio and Pen Cayetano electrified the Garifuna punta drum in 1970s Dangriga, Belize. Turtle-shell percussion, interlocking hand drums, and rock guitar over an ancient St. Vincent rhythm — UNESCO-listed Garifuna heritage.",
+    "story": "Andy Palacio and Pen Cayetano electrified the Garifuna punta drum in 1970s Dangriga, Belize. Turtle-shell percussion, interlocking hand drums, and rock guitar over an ancient St. Vincent rhythm \u2014 UNESCO-listed Garifuna heritage.",
     "relatedIds": [
       "calypso",
       "soca",
@@ -2311,7 +2311,7 @@
   {
     "id": "chutney-soca",
     "name": "Chutney Soca",
-    "origin": "Trinidad and Tobago · Indo-Caribbean",
+    "origin": "Trinidad and Tobago \u00b7 Indo-Caribbean",
     "tradition": "Indo-Trini dance fusion",
     "genre": "popular",
     "timeSig": "4/4",
@@ -2402,7 +2402,7 @@
       "iron"
     ],
     "swingable": false,
-    "story": "The Indo-Trinidadian fusion — soca's four-on-the-floor married to dholak hand-drum and dhantal iron rod. Sundar Popo and Drupatee Ramgoonai forged it in the 1990s from bhajan roots and carnival dancehall.",
+    "story": "The Indo-Trinidadian fusion \u2014 soca's four-on-the-floor married to dholak hand-drum and dhantal iron rod. Sundar Popo and Drupatee Ramgoonai forged it in the 1990s from bhajan roots and carnival dancehall.",
     "relatedIds": [
       "soca",
       "bhangra",
@@ -2412,7 +2412,7 @@
   {
     "id": "parang",
     "name": "Parang",
-    "origin": "Trinidad · Venezuelan heritage",
+    "origin": "Trinidad \u00b7 Venezuelan heritage",
     "tradition": "Christmas serenading",
     "genre": "folk-dance",
     "timeSig": "4/4",
@@ -2503,7 +2503,7 @@
       "box bass"
     ],
     "swingable": true,
-    "story": "Trinidad's Venezuelan-heritage Christmas music — house-to-house serenading by paranderos singing aguinaldos in Spanish. The cuatro strums, the maracas rattle, and the rum flows until dawn.",
+    "story": "Trinidad's Venezuelan-heritage Christmas music \u2014 house-to-house serenading by paranderos singing aguinaldos in Spanish. The cuatro strums, the maracas rattle, and the rum flows until dawn.",
     "relatedIds": [
       "seis-jibaro",
       "calypso"
@@ -2512,7 +2512,7 @@
   {
     "id": "kadans-lypso",
     "name": "Cadence-Lypso",
-    "origin": "Dominica · French Antilles",
+    "origin": "Dominica \u00b7 French Antilles",
     "tradition": "Afro-Caribbean fusion",
     "genre": "popular",
     "timeSig": "4/4",
@@ -2601,7 +2601,7 @@
       "guitar"
     ],
     "swingable": false,
-    "story": "Dominica's 1970s fusion of Haitian kadans and Trinidadian calypso — Exile One and Gordon Henderson invented the template that Kassav's zouk would perfect a decade later.",
+    "story": "Dominica's 1970s fusion of Haitian kadans and Trinidadian calypso \u2014 Exile One and Gordon Henderson invented the template that Kassav's zouk would perfect a decade later.",
     "relatedIds": [
       "kompa",
       "zouk-love",
