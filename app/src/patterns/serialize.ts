@@ -68,6 +68,32 @@ export async function buildShareUrl(pattern: Pattern): Promise<string> {
   return `${base}?${params.toString()}`;
 }
 
+/**
+ * Build the right share URL automatically:
+ *   - Seed pattern (exists in PATTERNS by id) → short ?pattern=<id>
+ *     (recipient resolves via their built-in library, ~60 chars)
+ *   - Anything else (user pattern, shared, edited) → ?p=<hash>
+ *     (recipient doesn't need a matching library, ~300-800 chars)
+ *
+ * The caller passes an `isSeed` predicate so this module stays free of
+ * the seed import cycle. Practice/Studio can always pass () => false
+ * (their patterns can carry edits and shouldn't be short-linked).
+ */
+export async function buildSmartShareUrl(
+  pattern: Pattern,
+  isSeed: (id: string) => boolean,
+): Promise<string> {
+  if (isSeed(pattern.id)) {
+    const base = window.location.origin + window.location.pathname;
+    const params = new URLSearchParams({
+      tab: 'practice',
+      pattern: pattern.id,
+    });
+    return `${base}?${params.toString()}`;
+  }
+  return buildShareUrl(pattern);
+}
+
 // ── base64url codec ─────────────────────────────────────────────────
 // Standard base64 with `+` → `-`, `/` → `_`, `=` padding stripped.
 // Safe to carry in URL query strings without percent-encoding.

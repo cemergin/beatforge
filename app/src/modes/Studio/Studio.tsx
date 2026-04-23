@@ -487,12 +487,13 @@ export function Studio({
     setSavedId(null);
   }, [engine]);
 
-  // Share the current draft. Works on unsaved drafts too — the pattern
-  // is encoded into the URL directly.
+  // Share the current draft. Always hash-encodes — Studio drafts have
+  // arbitrary edits vs seed patterns, so the recipient can't resolve
+  // them by id.
   const shareDraft = useCallback(async () => {
     try {
-      const { buildShareUrl } = await import('../../patterns/serialize');
-      const url = await buildShareUrl(draft);
+      const { buildSmartShareUrl } = await import('../../patterns/serialize');
+      const url = await buildSmartShareUrl(draft, () => false);
       await navigator.clipboard.writeText(url);
       setToast('Share link copied');
     } catch {

@@ -382,20 +382,28 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
   const starred = isHighlighted(patternId);
   const starToggle = () => setHighlights(toggleHighlight(patternId));
 
-  // Copy a standalone share URL that encodes the CURRENT pattern (with
-  // live edits baked in). Dynamic import keeps the compressor out of
-  // the critical path for users who never share.
+  // Smart share: short ?pattern=<id> for an unedited seed pattern
+  // (compact, stable). Hash URL the moment the user's touched anything
+  // (grouping permutation, cell toggle, or a non-seed pattern).
   const shareCurrent = useCallback(async () => {
     try {
-      const { buildShareUrl } = await import('../../patterns/serialize');
-      const url = await buildShareUrl({ ...pattern, grouping });
+      const { buildSmartShareUrl } = await import('../../patterns/serialize');
+      const effective = { ...pattern, grouping };
+      const seedMatch = PATTERNS.find((p) => p.id === effective.id);
+      const untouched = !!seedMatch
+        && effective.grouping.join('+') === seedMatch.grouping.join('+')
+        && Object.keys(editedTracks).length === 0;
+      const url = await buildSmartShareUrl(
+        effective,
+        (id) => untouched && id === seedMatch!.id,
+      );
       await navigator.clipboard.writeText(url);
       setShareToast('Share link copied');
     } catch {
       setShareToast('Copy failed');
     }
     window.setTimeout(() => setShareToast(null), 1800);
-  }, [pattern, grouping]);
+  }, [pattern, grouping, editedTracks]);
 
   return (
     <main className="bf-main">
