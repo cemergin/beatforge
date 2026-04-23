@@ -1,58 +1,127 @@
-// Seed pattern library — split per region.
-// Each region file exports `<REGION>_PATTERNS: Pattern[]`.
-// This barrel concatenates them in first-seen order from the original seed.ts.
+// Seed pattern library — one JSON file per region, loaded eagerly at
+// module init via Vite's import.meta.glob. Each array is parsed through
+// PatternSchema; a malformed entry throws at build time with a useful path.
+//
+// Public API unchanged: PATTERNS, patternById, registerPatternSource.
+// To add a pattern: edit seed/<region>.json. No TypeScript required.
 
 import type { Pattern } from '../types';
+import { PatternSchema } from '../schema';
 
-import { TURKEY_OTTOMAN_PATTERNS } from './turkey-ottoman';
-import { BALKANS_PATTERNS } from './balkans';
-import { CUBA_AFROCARIBBEAN_PATTERNS } from './cuba-afrocaribbean';
-import { ARABIC_SWANA_PATTERNS } from './arabic-swana';
-import { PERSIA_PATTERNS } from './persia';
-import { INDIA_PATTERNS } from './india';
-import { WEST_AFRICA_PATTERNS } from './west-africa';
-import { BRAZIL_PATTERNS } from './brazil';
-import { CARIBBEAN_PATTERNS } from './caribbean';
-import { IBERIA_FLAMENCO_PATTERNS } from './iberia-flamenco';
-import { GAMELAN_SOUTHEAST_ASIA_PATTERNS } from './gamelan-southeast-asia';
-import { EAST_ASIA_PATTERNS } from './east-asia';
-import { CELTIC_EUROPE_PATTERNS } from './celtic-europe';
-import { ELECTRONIC_WESTERN_PATTERNS } from './electronic-western';
-import { EXERCISE_PATTERNS } from './exercise';
-import { ANDEAN_SOUTH_AMERICA_PATTERNS } from './andean-south-america';
-import { MODERN_AFRICAN_PATTERNS } from './modern-african';
-import { NORTH_EAST_AFRICAN_PATTERNS } from './north-east-african';
-import { CENTRAL_ASIAN_PACIFIC_PATTERNS } from './central-asian-pacific';
-import { CAUCASUS_MEDITERRANEAN_PATTERNS } from './caucasus-mediterranean';
-import { GLOBAL_ELECTRONIC_PATTERNS } from './global-electronic';
-import { UNDERGROUND_ELECTRONIC_PATTERNS } from './underground-electronic';
-import { INTERNET_BORN_PATTERNS } from './internet-born';
-
-export const PATTERNS: Pattern[] = [
-  ...TURKEY_OTTOMAN_PATTERNS,
-  ...BALKANS_PATTERNS,
-  ...CUBA_AFROCARIBBEAN_PATTERNS,
-  ...ARABIC_SWANA_PATTERNS,
-  ...PERSIA_PATTERNS,
-  ...INDIA_PATTERNS,
-  ...WEST_AFRICA_PATTERNS,
-  ...BRAZIL_PATTERNS,
-  ...CARIBBEAN_PATTERNS,
-  ...IBERIA_FLAMENCO_PATTERNS,
-  ...GAMELAN_SOUTHEAST_ASIA_PATTERNS,
-  ...EAST_ASIA_PATTERNS,
-  ...CELTIC_EUROPE_PATTERNS,
-  ...ELECTRONIC_WESTERN_PATTERNS,
-  ...EXERCISE_PATTERNS,
-  ...ANDEAN_SOUTH_AMERICA_PATTERNS,
-  ...MODERN_AFRICAN_PATTERNS,
-  ...NORTH_EAST_AFRICAN_PATTERNS,
-  ...CENTRAL_ASIAN_PACIFIC_PATTERNS,
-  ...CAUCASUS_MEDITERRANEAN_PATTERNS,
-  ...GLOBAL_ELECTRONIC_PATTERNS,
-  ...UNDERGROUND_ELECTRONIC_PATTERNS,
-  ...INTERNET_BORN_PATTERNS,
+// Ordered region slugs — this is the concat order of the old TS barrel.
+// Any new region JSON dropped into this directory will fall through to the
+// trailing alphabetical pass so it can't be silently ignored; add it here
+// if you care about a specific ordering.
+const REGION_ORDER: string[] = [
+  'turkey-ottoman',
+  'balkans',
+  'cuba-afrocaribbean',
+  'arabic-swana',
+  'persia',
+  'india',
+  'west-africa',
+  'brazil',
+  'caribbean',
+  'iberia-flamenco',
+  'gamelan-southeast-asia',
+  'east-asia',
+  'celtic-europe',
+  'electronic-western',
+  'exercise',
+  'andean-south-america',
+  'modern-african',
+  'north-east-african',
+  'central-asian-pacific',
+  'caucasus-mediterranean',
+  'global-electronic',
+  'underground-electronic',
+  'internet-born',
 ];
+
+// Vite transforms this into a static object of { path: json } at build time.
+// `eager: true` inlines the JSON so there's no async boundary on first load.
+const modules = import.meta.glob<unknown[]>('./*.json', {
+  eager: true,
+  import: 'default',
+});
+
+function regionOf(path: string): string {
+  // './turkey-ottoman.json' → 'turkey-ottoman'
+  return path.replace(/^\.\//, '').replace(/\.json$/, '');
+}
+
+function loadRegion(slug: string, raw: unknown): Pattern[] {
+  if (!Array.isArray(raw)) {
+    throw new Error(`[seed/${slug}] expected a JSON array, got ${typeof raw}`);
+  }
+  const out: Pattern[] = [];
+  for (let i = 0; i < raw.length; i++) {
+    const entry = raw[i];
+    const result = PatternSchema.safeParse(entry);
+    if (result.success) {
+      out.push(result.data);
+      continue;
+    }
+
+    const id = (entry && typeof entry === 'object' && 'id' in (entry as object))
+      ? String((entry as { id: unknown }).id)
+      : `index ${i}`;
+    const issues = result.error.issues;
+
+    // Known pre-existing data bug: a handful of seed patterns have
+    // grouping that doesn't sum to steps (e.g. Adi Tala [4,2,2] with
+    // steps 16 — the grouping is beat-level but steps is subdivision-
+    // level). Runtime tolerates this today because seed patterns are
+    // never run through isValidPattern. We warn loudly but keep loading
+    // so this migration preserves shipped behavior byte-for-byte.
+    // TODO(data): fix these 11 patterns and remove this allowlist.
+    const onlyGroupingError =
+      issues.length === 1 &&
+      issues[0].path.join('.') === 'grouping' &&
+      issues[0].message.startsWith('grouping must sum to steps');
+
+    if (onlyGroupingError) {
+      console.warn(`[seed/${slug}] pattern "${id}": grouping does not sum to steps — kept (pre-existing data bug)`);
+      out.push(entry as Pattern);
+      continue;
+    }
+
+    const msg = issues
+      .map((iss) => `${iss.path.join('.') || '<root>'}: ${iss.message}`)
+      .join('; ');
+    throw new Error(`[seed/${slug}] invalid pattern "${id}": ${msg}`);
+  }
+  return out;
+}
+
+// Resolve known regions first (in REGION_ORDER), then any stragglers in
+// alphabetical order — keeps PATTERNS deterministic across machines.
+const pathBySlug = new Map<string, string>();
+for (const path of Object.keys(modules)) {
+  pathBySlug.set(regionOf(path), path);
+}
+
+const parsed: Pattern[] = [];
+const seen = new Set<string>();
+
+for (const slug of REGION_ORDER) {
+  const path = pathBySlug.get(slug);
+  if (!path) continue; // region not yet migrated — tolerate, don't crash
+  parsed.push(...loadRegion(slug, modules[path]));
+  seen.add(slug);
+}
+
+const strays = [...pathBySlug.keys()]
+  .filter((s) => !seen.has(s))
+  .sort();
+for (const slug of strays) {
+  const path = pathBySlug.get(slug)!;
+  parsed.push(...loadRegion(slug, modules[path]));
+}
+
+export const PATTERNS: Pattern[] = parsed;
+
+// ── Extensibility hook: user patterns from Dexie ─────────────────────
 
 // Optional extra-source lookup: Studio/App register user patterns here so
 // Practice & Library can resolve them by id without importing Dexie.

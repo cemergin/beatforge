@@ -10,13 +10,16 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "migrate-patterns": "bun scripts/migrate-patterns-to-json.ts",
+    "audit-pattern-schema": "bun scripts/audit-pattern-schema.ts"
   },
   "dependencies": {
     "dexie": "^4.4.2",
     "fuse.js": "^7.3.0",
     "react": "^19.2.5",
-    "react-dom": "^19.2.5"
+    "react-dom": "^19.2.5",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.4",

@@ -1,0 +1,1120 @@
+[
+  {
+    "id": "georgian-khorumi",
+    "name": "Georgian Khorumi",
+    "origin": "Georgia · Adjara",
+    "tradition": "Georgian war dance",
+    "genre": "folk-dance",
+    "timeSig": "5/8",
+    "grouping": [
+      3,
+      2
+    ],
+    "stepUnit": 8,
+    "steps": 5,
+    "bpm": {
+      "default": 220,
+      "min": 160,
+      "max": 280
+    },
+    "difficulty": "advanced",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        2,
+        0
+      ],
+      "SN": [
+        0,
+        0,
+        2,
+        0,
+        2
+      ],
+      "HH": [
+        2,
+        1,
+        2,
+        2,
+        1
+      ]
+    },
+    "defaultKit": "frameDrum",
+    "country": "GE",
+    "region": "caucasus-mediterranean",
+    "tags": [
+      "khorumi",
+      "georgia",
+      "adjara",
+      "war-dance",
+      "5-beat"
+    ],
+    "instruments": [
+      "doli",
+      "chiboni"
+    ],
+    "swingable": false,
+    "story": "The only Georgian dance in 5/4 and one of the rarest 5-beat folk meters on earth. A 3+2 martial limp — warriors scouting, advancing, engaging, winning."
+  },
+  {
+    "id": "georgian-acharuli",
+    "name": "Georgian Acharuli",
+    "origin": "Georgia · Adjara",
+    "tradition": "Georgian couple dance",
+    "genre": "folk-dance",
+    "timeSig": "2/4",
+    "grouping": [
+      4,
+      4
+    ],
+    "stepUnit": 16,
+    "steps": 8,
+    "bpm": {
+      "default": 540,
+      "min": 480,
+      "max": 600
+    },
+    "difficulty": "beginner",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0
+      ],
+      "SN": [
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        2,
+        0
+      ],
+      "HH": [
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1
+      ]
+    },
+    "defaultKit": "frameDrum",
+    "country": "GE",
+    "region": "caucasus-mediterranean",
+    "tags": [
+      "acharuli",
+      "georgia",
+      "couple-dance",
+      "black-sea"
+    ],
+    "instruments": [
+      "doli",
+      "panduri",
+      "garmoni"
+    ],
+    "swingable": false,
+    "story": "A joyful flirtatious 2/4 couple dance from Georgia's Black Sea coast — doli lilts under panduri strumming while the dancers tease and advance."
+  },
+  {
+    "id": "armenian-kochari",
+    "name": "Armenian Kochari",
+    "origin": "Armenian Highlands",
+    "tradition": "National line dance",
+    "genre": "folk-dance",
+    "timeSig": "2/4",
+    "grouping": [
+      4,
+      4
+    ],
+    "stepUnit": 16,
+    "steps": 8,
+    "bpm": {
+      "default": 560,
+      "min": 480,
+      "max": 640
+    },
+    "difficulty": "intermediate",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0
+      ],
+      "SN": [
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        2,
+        0
+      ],
+      "HH": [
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1
+      ]
+    },
+    "defaultKit": "frameDrum",
+    "country": "AM",
+    "region": "caucasus-mediterranean",
+    "tags": [
+      "kochari",
+      "armenia",
+      "line-dance",
+      "unesco"
+    ],
+    "instruments": [
+      "dhol",
+      "zurna"
+    ],
+    "swingable": false,
+    "story": "Armenia's national line dance — shoulders locked, high jumps and vigorous footwork while dhol and screaming zurna drive a relentless 2/4 (UNESCO 2017)."
+  },
+  {
+    "id": "armenian-yarkhushta",
+    "name": "Armenian Yarkhushta",
+    "origin": "Armenian Highlands",
+    "tradition": "Male warrior dance",
+    "genre": "folk-dance",
+    "timeSig": "6/8",
+    "grouping": [
+      3,
+      3
+    ],
+    "stepUnit": 8,
+    "steps": 6,
+    "bpm": {
+      "default": 300,
+      "min": 260,
+      "max": 360
+    },
+    "difficulty": "advanced",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        2,
+        0,
+        0
+      ],
+      "SN": [
+        0,
+        2,
+        0,
+        0,
+        2,
+        0
+      ],
+      "HH": [
+        2,
+        1,
+        2,
+        2,
+        1,
+        2
+      ]
+    },
+    "defaultKit": "frameDrum",
+    "country": "AM",
+    "region": "caucasus-mediterranean",
+    "tags": [
+      "yarkhushta",
+      "armenia",
+      "war-dance",
+      "clap"
+    ],
+    "instruments": [
+      "dhol",
+      "zurna",
+      "clap"
+    ],
+    "swingable": false,
+    "story": "A pre-Christian warrior dance defined by thunderous unison hand-claps between facing lines of men. The dhol is apricot-wood and four times oversized."
+  },
+  {
+    "id": "lezginka",
+    "name": "Lezginka",
+    "origin": "Caucasus · Dagestan",
+    "tradition": "Pan-Caucasian fast dance",
+    "genre": "folk-dance",
+    "timeSig": "6/8",
+    "grouping": [
+      3,
+      3
+    ],
+    "stepUnit": 8,
+    "steps": 6,
+    "bpm": {
+      "default": 320,
+      "min": 280,
+      "max": 400
+    },
+    "difficulty": "advanced",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        2,
+        0,
+        0
+      ],
+      "SN": [
+        0,
+        0,
+        2,
+        0,
+        0,
+        2
+      ],
+      "HH": [
+        2,
+        2,
+        1,
+        2,
+        2,
+        1
+      ]
+    },
+    "defaultKit": "frameDrum",
+    "country": "RU",
+    "region": "caucasus-mediterranean",
+    "tags": [
+      "lezginka",
+      "dagestan",
+      "caucasus",
+      "fast"
+    ],
+    "instruments": [
+      "naghara",
+      "accordion",
+      "doli"
+    ],
+    "swingable": false,
+    "story": "The dance of the Caucasus — a man on his toes like an eagle, a woman gliding like a swan. Every Caucasian people claims their own variant.",
+    "relatedIds": [
+      "armenian-yarkhushta"
+    ]
+  },
+  {
+    "id": "azerbaijani-yalli",
+    "name": "Azerbaijani Yalli",
+    "origin": "Azerbaijan · Nakhchivan",
+    "tradition": "Circle/chain dance",
+    "genre": "folk-dance",
+    "timeSig": "6/8",
+    "grouping": [
+      3,
+      3
+    ],
+    "stepUnit": 8,
+    "steps": 6,
+    "bpm": {
+      "default": 240,
+      "min": 180,
+      "max": 320
+    },
+    "difficulty": "intermediate",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        2,
+        0,
+        0
+      ],
+      "SN": [
+        0,
+        0,
+        2,
+        0,
+        0,
+        2
+      ],
+      "HH": [
+        2,
+        1,
+        2,
+        2,
+        1,
+        2
+      ]
+    },
+    "defaultKit": "frameDrum",
+    "country": "AZ",
+    "region": "caucasus-mediterranean",
+    "tags": [
+      "yalli",
+      "azerbaijan",
+      "circle-dance",
+      "unesco"
+    ],
+    "instruments": [
+      "naghara",
+      "zurna"
+    ],
+    "swingable": false,
+    "story": "A three-stage circle dance (andante → moderato → allegro) with bird and animal pantomime inside the ring. UNESCO 2018."
+  },
+  {
+    "id": "cretan-syrtos",
+    "name": "Cretan Syrtos",
+    "origin": "Crete · Greece",
+    "tradition": "Cretan chain dance",
+    "genre": "folk-dance",
+    "timeSig": "2/4",
+    "grouping": [
+      4,
+      4
+    ],
+    "stepUnit": 16,
+    "steps": 8,
+    "bpm": {
+      "default": 460,
+      "min": 400,
+      "max": 520
+    },
+    "difficulty": "beginner",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0
+      ],
+      "SN": [
+        0,
+        0,
+        2,
+        0,
+        0,
+        2,
+        2,
+        0
+      ],
+      "HH": [
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1
+      ]
+    },
+    "defaultKit": "727",
+    "country": "GR",
+    "region": "caucasus-mediterranean",
+    "tags": [
+      "syrtos",
+      "crete",
+      "chain-dance",
+      "lyra"
+    ],
+    "instruments": [
+      "lyra",
+      "laouto",
+      "daouli"
+    ],
+    "swingable": false,
+    "story": "Cretan syrtos is 2/4 (not the mainland 7/8) — dancers chain hands while a leader breaks out to improvise. The laouto strum is the rhythmic backbone."
+  },
+  {
+    "id": "cretan-pentozali",
+    "name": "Cretan Pentozali",
+    "origin": "Crete · Greece",
+    "tradition": "Fast warrior dance",
+    "genre": "folk-dance",
+    "timeSig": "8/8",
+    "grouping": [
+      3,
+      2,
+      3
+    ],
+    "stepUnit": 8,
+    "steps": 8,
+    "bpm": {
+      "default": 320,
+      "min": 280,
+      "max": 400
+    },
+    "difficulty": "advanced",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        2,
+        0,
+        2,
+        0,
+        0
+      ],
+      "SN": [
+        0,
+        0,
+        2,
+        0,
+        2,
+        0,
+        0,
+        2
+      ],
+      "HH": [
+        2,
+        1,
+        2,
+        2,
+        1,
+        2,
+        1,
+        2
+      ]
+    },
+    "defaultKit": "727",
+    "country": "GR",
+    "region": "caucasus-mediterranean",
+    "tags": [
+      "pentozali",
+      "crete",
+      "warrior-dance",
+      "asymmetric"
+    ],
+    "instruments": [
+      "lyra",
+      "laouto",
+      "daouli"
+    ],
+    "swingable": false,
+    "story": "\"Five steps\" — a fast 3+2+3 showcase for male athletic ability with jumps, spins and aerial feats. Ottoman aksak DNA filtered through Cretan mountains.",
+    "relatedIds": [
+      "karsilama",
+      "aksak",
+      "zeybek"
+    ]
+  },
+  {
+    "id": "sicilian-tamburello",
+    "name": "Sicilian Tamburello",
+    "origin": "Sicily · Southern Italy",
+    "tradition": "Tarantella family",
+    "genre": "folk-dance",
+    "timeSig": "6/8",
+    "grouping": [
+      3,
+      3
+    ],
+    "stepUnit": 8,
+    "steps": 6,
+    "bpm": {
+      "default": 320,
+      "min": 280,
+      "max": 360
+    },
+    "difficulty": "advanced",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        2,
+        0,
+        0
+      ],
+      "SN": [
+        0,
+        2,
+        2,
+        0,
+        2,
+        2
+      ],
+      "HH": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ]
+    },
+    "defaultKit": "727",
+    "country": "IT",
+    "region": "caucasus-mediterranean",
+    "tags": [
+      "tamburello",
+      "sicily",
+      "tarantella",
+      "frame-drum"
+    ],
+    "instruments": [
+      "tamburello",
+      "fisarmonica",
+      "marranzano"
+    ],
+    "swingable": false,
+    "story": "The heartbeat of Southern Italian folk — continuous wrist motion activates jingles between thumb slaps on centre. Tarantism healing rhythm at frame-drum velocity."
+  },
+  {
+    "id": "tarantella-pizzica",
+    "name": "Pizzica Tarantella",
+    "origin": "Italy · Puglia · Salento",
+    "tradition": "Pizzica / tarantism",
+    "genre": "folk-dance",
+    "timeSig": "6/8",
+    "grouping": [
+      3,
+      3
+    ],
+    "stepUnit": 8,
+    "steps": 6,
+    "bpm": {
+      "default": 300,
+      "min": 260,
+      "max": 360
+    },
+    "difficulty": "intermediate",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        2,
+        0,
+        0
+      ],
+      "SN": [
+        0,
+        2,
+        2,
+        0,
+        2,
+        2
+      ],
+      "HH": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ]
+    },
+    "defaultKit": "727",
+    "country": "IT",
+    "region": "caucasus-mediterranean",
+    "tags": [
+      "pizzica",
+      "tarantella",
+      "puglia",
+      "salento",
+      "trance"
+    ],
+    "instruments": [
+      "tamburello",
+      "violino",
+      "chitarra battente"
+    ],
+    "swingable": false,
+    "story": "The trance rhythm of the tarantate — women bitten by imaginary spiders, danced for days until cured. The pizzica's relentless heartbeat built for exorcism.",
+    "relatedIds": [
+      "sicilian-tamburello",
+      "taranta",
+      "calabrian-tarantella",
+      "gnawa-lila",
+      "sufi-dhikr-circular"
+    ]
+  },
+  {
+    "id": "calabrian-tarantella",
+    "name": "Calabrian Tarantella",
+    "origin": "Italy · Calabria",
+    "tradition": "Tarantella calabrese",
+    "genre": "folk-dance",
+    "timeSig": "6/8",
+    "grouping": [
+      3,
+      3
+    ],
+    "stepUnit": 8,
+    "steps": 6,
+    "bpm": {
+      "default": 280,
+      "min": 240,
+      "max": 340
+    },
+    "difficulty": "intermediate",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        2,
+        0,
+        0
+      ],
+      "SN": [
+        0,
+        0,
+        2,
+        0,
+        2,
+        2
+      ],
+      "HH": [
+        2,
+        1,
+        2,
+        2,
+        1,
+        2
+      ]
+    },
+    "defaultKit": "727",
+    "country": "IT",
+    "region": "caucasus-mediterranean",
+    "tags": [
+      "tarantella",
+      "calabria",
+      "folk-dance",
+      "zampogna"
+    ],
+    "instruments": [
+      "tamburello",
+      "zampogna",
+      "organetto"
+    ],
+    "swingable": false,
+    "story": "Southern tarantella with a heavier, earthier 6/8 — zampogna bagpipe drone, organetto accordion and the village piazza turning under dancing feet."
+  },
+  {
+    "id": "zeibekiko",
+    "name": "Zeibekiko",
+    "origin": "Greece · Aegean",
+    "tradition": "Rebetiko solo dance",
+    "genre": "folk-dance",
+    "timeSig": "9/4",
+    "grouping": [
+      2,
+      2,
+      2,
+      3
+    ],
+    "stepUnit": 8,
+    "steps": 18,
+    "bpm": {
+      "default": 240,
+      "min": 200,
+      "max": 300
+    },
+    "difficulty": "advanced",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "SN": [
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        2,
+        0,
+        2,
+        0
+      ],
+      "HH": [
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1
+      ]
+    },
+    "defaultKit": "727",
+    "country": "GR",
+    "region": "caucasus-mediterranean",
+    "tags": [
+      "zeibekiko",
+      "rebetiko",
+      "greece",
+      "solo-dance"
+    ],
+    "instruments": [
+      "bouzouki",
+      "baglama",
+      "voice"
+    ],
+    "swingable": false,
+    "story": "A masculine solo dance in 9/4 — eyes lowered, arms outstretched, improvising private sorrow over a rebetiko bouzouki. Nobody else steps into the ring.",
+    "relatedIds": [
+      "karsilama",
+      "aksak",
+      "zeybek",
+      "hasapiko"
+    ]
+  },
+  {
+    "id": "tsifteteli",
+    "name": "Greek Tsifteteli",
+    "origin": "Greece · Asia Minor",
+    "tradition": "Rebetiko belly dance",
+    "genre": "folk-dance",
+    "timeSig": "4/4",
+    "grouping": [
+      4,
+      4,
+      4,
+      4
+    ],
+    "stepUnit": 16,
+    "steps": 16,
+    "bpm": {
+      "default": 384,
+      "min": 320,
+      "max": 440
+    },
+    "difficulty": "intermediate",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "SN": [
+        0,
+        0,
+        2,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        2,
+        0,
+        0,
+        2
+      ],
+      "HH": [
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1
+      ]
+    },
+    "defaultKit": "frameDrum",
+    "country": "GR",
+    "region": "caucasus-mediterranean",
+    "tags": [
+      "tsifteteli",
+      "rebetiko",
+      "belly-dance",
+      "asia-minor"
+    ],
+    "instruments": [
+      "bouzouki",
+      "darbuka",
+      "ud"
+    ],
+    "swingable": false,
+    "story": "The Greek cousin of çiftetelli — Ottoman belly-dance rhythm carried across the Aegean with the refugees of 1923, Americanised through rebetiko cafes.",
+    "relatedIds": [
+      "chiftetelli",
+      "cocek",
+      "baladi"
+    ]
+  },
+  {
+    "id": "sardinian-ballu-tundu",
+    "name": "Sardinian Ballu Tundu",
+    "origin": "Italy · Sardinia",
+    "tradition": "Sardinian round dance",
+    "genre": "folk-dance",
+    "timeSig": "4/4",
+    "grouping": [
+      4,
+      4,
+      4,
+      4
+    ],
+    "stepUnit": 16,
+    "steps": 16,
+    "bpm": {
+      "default": 440,
+      "min": 400,
+      "max": 520
+    },
+    "difficulty": "beginner",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0
+      ],
+      "SN": [
+        0,
+        0,
+        2,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        2,
+        0,
+        0
+      ],
+      "HH": [
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1
+      ]
+    },
+    "defaultKit": "727",
+    "country": "IT",
+    "region": "caucasus-mediterranean",
+    "tags": [
+      "ballu-tundu",
+      "sardinia",
+      "round-dance",
+      "launeddas"
+    ],
+    "instruments": [
+      "launeddas",
+      "organetto",
+      "voice"
+    ],
+    "swingable": false,
+    "story": "Sardinia's ancient round dance — launeddas triple-reed pipes circle-breathe an endless drone while villagers turn the piazza into a single grounded wheel."
+  },
+  {
+    "id": "sufi-dhikr-circular",
+    "name": "Sufi Dhikr (Circular)",
+    "origin": "Pan-Islamic · Turkey / Levant / Central Asia",
+    "tradition": "Sufi devotional",
+    "genre": "devotional",
+    "timeSig": "4/4",
+    "grouping": [
+      4,
+      4,
+      4,
+      4
+    ],
+    "stepUnit": 16,
+    "steps": 16,
+    "bpm": {
+      "default": 320,
+      "min": 200,
+      "max": 560
+    },
+    "difficulty": "intermediate",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0
+      ],
+      "SN": [
+        0,
+        0,
+        2,
+        0,
+        2,
+        0,
+        0,
+        2,
+        0,
+        0,
+        2,
+        0,
+        2,
+        0,
+        0,
+        2
+      ],
+      "HH": [
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1
+      ]
+    },
+    "defaultKit": "frameDrum",
+    "region": "caucasus-mediterranean",
+    "tags": [
+      "dhikr",
+      "sufi",
+      "devotional",
+      "daf",
+      "accelerando"
+    ],
+    "instruments": [
+      "daf",
+      "bendir",
+      "voice"
+    ],
+    "swingable": false,
+    "story": "The dhikr arc — slow meditation accelerating to ecstatic whirling. Daf metal rings shimmer from silence to a continuous wash as brainwaves entrain to the frame drum.",
+    "relatedIds": [
+      "daf-zikr",
+      "sufi-dhikr-sudan",
+      "ayoub",
+      "dhamaal-sufi",
+      "qawwali"
+    ]
+  }
+]

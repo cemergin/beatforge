@@ -1,0 +1,2429 @@
+[
+  {
+    "id": "bossa-nova",
+    "name": "Bossa Nova",
+    "origin": "Brazil · Rio de Janeiro",
+    "tradition": "Cool jazz / samba",
+    "genre": "jazz",
+    "timeSig": "4/4",
+    "grouping": [
+      4,
+      4,
+      4,
+      4
+    ],
+    "stepUnit": 16,
+    "steps": 16,
+    "bpm": {
+      "default": 512,
+      "min": 280,
+      "max": 640
+    },
+    "difficulty": "intermediate",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0
+      ],
+      "SN": [
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        2,
+        0
+      ],
+      "HH": [
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1
+      ]
+    },
+    "defaultKit": "727",
+    "country": "BR",
+    "region": "brazil",
+    "tags": [
+      "jazz",
+      "cool",
+      "partido-alto",
+      "ipanema"
+    ],
+    "instruments": [
+      "nylon guitar",
+      "brushes",
+      "surdo"
+    ],
+    "swingable": true,
+    "story": "Jobim and João Gilberto slowed samba down, stripped it bare, and dressed it in cool-jazz harmony. The cross-stick traces the partido-alto skeleton.",
+    "relatedIds": [
+      "samba-partido-alto",
+      "jazz-bossa-nova",
+      "son-clave"
+    ]
+  },
+  {
+    "id": "samba-partido-alto",
+    "name": "Samba Partido Alto",
+    "origin": "Brazil · Rio de Janeiro",
+    "tradition": "Samba subgenre",
+    "genre": "folk-dance",
+    "timeSig": "2/4",
+    "grouping": [
+      4,
+      4
+    ],
+    "stepUnit": 16,
+    "steps": 8,
+    "bpm": {
+      "default": 440,
+      "min": 360,
+      "max": 520
+    },
+    "difficulty": "intermediate",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0
+      ],
+      "SN": [
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        2,
+        0
+      ],
+      "HH": [
+        2,
+        0,
+        1,
+        0,
+        2,
+        0,
+        1,
+        0
+      ]
+    },
+    "defaultKit": "727",
+    "country": "BR",
+    "region": "brazil",
+    "tags": [
+      "samba",
+      "partido-alto",
+      "pagode",
+      "pandeiro"
+    ],
+    "instruments": [
+      "pandeiro",
+      "tantã",
+      "cavaquinho"
+    ],
+    "swingable": true,
+    "story": "Older, rootsier samba — circled around improvised verses and hand percussion. The partido-alto pattern became the \"Brazilian clave\" that crossed into bossa and jazz.",
+    "relatedIds": [
+      "son-clave",
+      "rumba-clave-3-2",
+      "bossa-nova",
+      "pagode"
+    ]
+  },
+  {
+    "id": "samba-reggae",
+    "name": "Samba-Reggae",
+    "origin": "Brazil · Salvador, Bahia",
+    "tradition": "Olodum / bloco afro",
+    "genre": "folk-dance",
+    "timeSig": "4/4",
+    "grouping": [
+      4,
+      4,
+      4,
+      4
+    ],
+    "stepUnit": 16,
+    "steps": 16,
+    "bpm": {
+      "default": 420,
+      "min": 360,
+      "max": 480
+    },
+    "difficulty": "intermediate",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0
+      ],
+      "SN": [
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        1
+      ],
+      "HH": [
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1
+      ]
+    },
+    "defaultKit": "727",
+    "country": "BR",
+    "region": "brazil",
+    "tags": [
+      "bahia",
+      "olodum",
+      "bloco-afro",
+      "interlocking-surdos"
+    ],
+    "instruments": [
+      "surdo",
+      "repique",
+      "caixa"
+    ],
+    "swingable": false,
+    "story": "Created in 1986 by Neguinho do Samba for Olodum — samba's surdo foundation married to reggae's tempo, three drums interlocking into a wall of bass through the streets of Salvador.",
+    "relatedIds": [
+      "jamaica-one-drop",
+      "reggae-one-drop",
+      "ijexa",
+      "axe"
+    ]
+  },
+  {
+    "id": "baiao",
+    "name": "Baião",
+    "origin": "Brazil · Northeast",
+    "tradition": "Forró",
+    "genre": "folk-dance",
+    "timeSig": "2/4",
+    "grouping": [
+      4,
+      4
+    ],
+    "stepUnit": 16,
+    "steps": 8,
+    "bpm": {
+      "default": 480,
+      "min": 400,
+      "max": 560
+    },
+    "difficulty": "beginner",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0
+      ],
+      "SN": [
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "HH": [
+        2,
+        0,
+        2,
+        2,
+        2,
+        0,
+        2,
+        2
+      ]
+    },
+    "defaultKit": "727",
+    "country": "BR",
+    "region": "brazil",
+    "tags": [
+      "forró",
+      "zabumba",
+      "accordion",
+      "sertão"
+    ],
+    "instruments": [
+      "zabumba",
+      "triangle",
+      "sanfona"
+    ],
+    "swingable": false,
+    "story": "The foundational rhythm of forró, from the arid sertão of Pernambuco — zabumba bass-and-slap, triangle, accordion. Luiz Gonzaga brought it to the whole country.",
+    "relatedIds": [
+      "forro",
+      "xote",
+      "merengue"
+    ]
+  },
+  {
+    "id": "maracatu",
+    "name": "Maracatu",
+    "origin": "Brazil · Pernambuco",
+    "tradition": "Afro-Brazilian procession",
+    "genre": "ceremonial",
+    "timeSig": "4/4",
+    "grouping": [
+      4,
+      4,
+      4,
+      4
+    ],
+    "stepUnit": 16,
+    "steps": 16,
+    "bpm": {
+      "default": 380,
+      "min": 320,
+      "max": 440
+    },
+    "difficulty": "intermediate",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "SN": [
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        1,
+        0,
+        2,
+        0,
+        0,
+        0
+      ],
+      "HH": [
+        2,
+        0,
+        2,
+        0,
+        2,
+        0,
+        2,
+        0,
+        2,
+        0,
+        2,
+        0,
+        2,
+        0,
+        2,
+        0
+      ]
+    },
+    "defaultKit": "727",
+    "country": "BR",
+    "region": "brazil",
+    "tags": [
+      "afro-brazilian",
+      "procession",
+      "alfaia",
+      "candomble"
+    ],
+    "instruments": [
+      "alfaia",
+      "gongue",
+      "caixa"
+    ],
+    "swingable": false,
+    "story": "One of Brazil's oldest Afro-descended traditions — born from the coronation processions of enslaved African \"kings and queens\" in colonial Pernambuco.",
+    "relatedIds": [
+      "ijexa",
+      "samba-reggae",
+      "agbekor"
+    ]
+  },
+  {
+    "id": "samba-enredo",
+    "name": "Samba-Enredo",
+    "origin": "Brazil · Rio de Janeiro",
+    "tradition": "Escola de samba carnival parade",
+    "genre": "folk-dance",
+    "timeSig": "2/4",
+    "grouping": [
+      4,
+      4
+    ],
+    "stepUnit": 16,
+    "steps": 8,
+    "bpm": {
+      "default": 540,
+      "min": 500,
+      "max": 580
+    },
+    "difficulty": "intermediate",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0
+      ],
+      "SN": [
+        0,
+        0,
+        2,
+        1,
+        0,
+        0,
+        2,
+        1
+      ],
+      "HH": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ]
+    },
+    "defaultKit": "727",
+    "country": "BR",
+    "region": "brazil",
+    "tags": [
+      "samba",
+      "bateria",
+      "sambadrome",
+      "carnival"
+    ],
+    "instruments": [
+      "surdo",
+      "caixa",
+      "tamborim"
+    ],
+    "swingable": true,
+    "story": "The theme-song samba written yearly by each escola de samba for the Rio parade. 300+ drummers strong, telling a story the whole school will sing above the bateria.",
+    "relatedIds": [
+      "samba-partido-alto"
+    ]
+  },
+  {
+    "id": "pagode",
+    "name": "Pagode",
+    "origin": "Brazil · Rio de Janeiro",
+    "tradition": "Backyard hand-percussion samba",
+    "genre": "popular",
+    "timeSig": "2/4",
+    "grouping": [
+      4,
+      4
+    ],
+    "stepUnit": 16,
+    "steps": 8,
+    "bpm": {
+      "default": 380,
+      "min": 320,
+      "max": 440
+    },
+    "difficulty": "intermediate",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        0,
+        0,
+        1,
+        2,
+        0
+      ],
+      "SN": [
+        0,
+        0,
+        2,
+        0,
+        0,
+        2,
+        0,
+        2
+      ],
+      "HH": [
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1
+      ]
+    },
+    "defaultKit": "727",
+    "country": "BR",
+    "region": "brazil",
+    "tags": [
+      "pagode",
+      "tantã",
+      "cavaquinho",
+      "fundo-de-quintal"
+    ],
+    "instruments": [
+      "tantã",
+      "repique de mão",
+      "pandeiro"
+    ],
+    "swingable": true,
+    "story": "When the batucada got too big, pagode moved the party back to the backyard. Tantã and repique de mão (hand-drums) replaced the sticks; intimacy replaced spectacle.",
+    "relatedIds": [
+      "samba-partido-alto"
+    ]
+  },
+  {
+    "id": "frevo",
+    "name": "Frevo",
+    "origin": "Brazil · Recife, Pernambuco",
+    "tradition": "Carnival brass-band dance",
+    "genre": "folk-dance",
+    "timeSig": "2/4",
+    "grouping": [
+      4,
+      4
+    ],
+    "stepUnit": 16,
+    "steps": 8,
+    "bpm": {
+      "default": 700,
+      "min": 600,
+      "max": 800
+    },
+    "difficulty": "advanced",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0
+      ],
+      "SN": [
+        2,
+        2,
+        2,
+        0,
+        2,
+        2,
+        2,
+        2
+      ],
+      "HH": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ]
+    },
+    "defaultKit": "727",
+    "country": "BR",
+    "region": "brazil",
+    "tags": [
+      "frevo",
+      "recife",
+      "carnival",
+      "capoeira",
+      "unesco"
+    ],
+    "instruments": [
+      "caixa",
+      "surdo",
+      "trumpets"
+    ],
+    "swingable": false,
+    "story": "Recife's \"ferver\" — to boil. Brass bands blow at 180 BPM while dancers kick and jump with a tiny umbrella, the descendants of capoeira fighters who cleared the street."
+  },
+  {
+    "id": "forro",
+    "name": "Forró",
+    "origin": "Brazil · Northeast",
+    "tradition": "Pé-de-serra trio (accordion + zabumba + triangle)",
+    "genre": "folk-dance",
+    "timeSig": "2/4",
+    "grouping": [
+      4,
+      4
+    ],
+    "stepUnit": 16,
+    "steps": 8,
+    "bpm": {
+      "default": 480,
+      "min": 400,
+      "max": 560
+    },
+    "difficulty": "beginner",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0
+      ],
+      "SN": [
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      "HH": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ]
+    },
+    "defaultKit": "727",
+    "country": "BR",
+    "region": "brazil",
+    "tags": [
+      "forró",
+      "pé-de-serra",
+      "luiz-gonzaga",
+      "accordion"
+    ],
+    "instruments": [
+      "zabumba",
+      "triangle",
+      "sanfona"
+    ],
+    "swingable": false,
+    "story": "The generic, foundational forró — the zabumba's mallet-and-stick conversation under an accordion. Luiz Gonzaga called himself the King of Baião and made the whole Northeast sing.",
+    "relatedIds": [
+      "baiao"
+    ]
+  },
+  {
+    "id": "xote",
+    "name": "Xote",
+    "origin": "Brazil · Northeast",
+    "tradition": "Slow forró cousin (from Schottische)",
+    "genre": "folk-dance",
+    "timeSig": "2/4",
+    "grouping": [
+      4,
+      4
+    ],
+    "stepUnit": 16,
+    "steps": 8,
+    "bpm": {
+      "default": 380,
+      "min": 320,
+      "max": 460
+    },
+    "difficulty": "beginner",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0
+      ],
+      "SN": [
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "HH": [
+        2,
+        0,
+        2,
+        0,
+        2,
+        0,
+        2,
+        0
+      ]
+    },
+    "defaultKit": "727",
+    "country": "BR",
+    "region": "brazil",
+    "tags": [
+      "xote",
+      "forró",
+      "schottische",
+      "romantic"
+    ],
+    "instruments": [
+      "zabumba",
+      "triangle",
+      "sanfona"
+    ],
+    "swingable": false,
+    "story": "The slower, romantic sibling of baião. The name is Brazilian-Portuguese for \"Schottische\" — a European dance that arrived in the 1800s and settled in the sertão.",
+    "relatedIds": [
+      "forro",
+      "baiao"
+    ]
+  },
+  {
+    "id": "coco",
+    "name": "Coco",
+    "origin": "Brazil · Northeast",
+    "tradition": "Afro-Brazilian foot-stomping circle",
+    "genre": "folk-dance",
+    "timeSig": "2/4",
+    "grouping": [
+      4,
+      4
+    ],
+    "stepUnit": 16,
+    "steps": 8,
+    "bpm": {
+      "default": 460,
+      "min": 400,
+      "max": 520
+    },
+    "difficulty": "beginner",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        2,
+        0,
+        0,
+        2,
+        0
+      ],
+      "SN": [
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        2,
+        0
+      ],
+      "HH": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ]
+    },
+    "defaultKit": "727",
+    "country": "BR",
+    "region": "brazil",
+    "tags": [
+      "coco",
+      "afro-brazilian",
+      "stomping",
+      "jackson-do-pandeiro"
+    ],
+    "instruments": [
+      "surdo",
+      "pandeiro",
+      "ganzá"
+    ],
+    "swingable": false,
+    "story": "A circle dance from Alagoas and Pernambuco, stamped out in wooden clogs on hard ground. Indigenous and African ancestry meet in the stomp-clap-chant."
+  },
+  {
+    "id": "ijexa",
+    "name": "Ijexá",
+    "origin": "Brazil · Salvador, Bahia",
+    "tradition": "Afoxé / Candomblé rhythm for Oxum",
+    "genre": "devotional",
+    "timeSig": "4/4",
+    "grouping": [
+      4,
+      4,
+      4,
+      4
+    ],
+    "stepUnit": 16,
+    "steps": 16,
+    "bpm": {
+      "default": 380,
+      "min": 320,
+      "max": 440
+    },
+    "difficulty": "intermediate",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0
+      ],
+      "SN": [
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        2,
+        0
+      ],
+      "HH": [
+        2,
+        0,
+        0,
+        2,
+        0,
+        2,
+        2,
+        0,
+        0,
+        2,
+        0,
+        2,
+        2,
+        0,
+        0,
+        2
+      ]
+    },
+    "defaultKit": "727",
+    "country": "BR",
+    "region": "brazil",
+    "tags": [
+      "candomblé",
+      "oxum",
+      "afoxé",
+      "filhos-de-gandhy"
+    ],
+    "instruments": [
+      "agogô",
+      "atabaque",
+      "xequerê"
+    ],
+    "swingable": false,
+    "story": "The rhythm of the orixá Oxum — goddess of rivers, love, gold. When 10,000 Filhos de Gandhy process through Salvador's carnival playing ijexá, the city becomes a trance.",
+    "relatedIds": [
+      "samba-reggae",
+      "bata-shango",
+      "bembe-68",
+      "bembe"
+    ]
+  },
+  {
+    "id": "axe",
+    "name": "Axé",
+    "origin": "Brazil · Salvador, Bahia",
+    "tradition": "Bahian carnival pop",
+    "genre": "popular",
+    "timeSig": "4/4",
+    "grouping": [
+      4,
+      4,
+      4,
+      4
+    ],
+    "stepUnit": 16,
+    "steps": 16,
+    "bpm": {
+      "default": 500,
+      "min": 440,
+      "max": 560
+    },
+    "difficulty": "intermediate",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      "SN": [
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        1
+      ],
+      "HH": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ]
+    },
+    "defaultKit": "727",
+    "country": "BR",
+    "region": "brazil",
+    "tags": [
+      "axé",
+      "trio-elétrico",
+      "daniela-mercury",
+      "bahia"
+    ],
+    "instruments": [
+      "timbau",
+      "caixa",
+      "surdo"
+    ],
+    "swingable": false,
+    "story": "The pop-carnival sound of Salvador's trios elétricos. \"Axé\" is Yoruba for life-force; the music fuses samba-reggae, ijexá, frevo, merengue into a stadium-sized groove.",
+    "relatedIds": [
+      "samba-reggae",
+      "ijexa"
+    ]
+  },
+  {
+    "id": "samba-batucada",
+    "name": "Samba Batucada",
+    "origin": "Brazil · Rio de Janeiro",
+    "tradition": "Escola de samba surdo battery",
+    "genre": "folk-dance",
+    "timeSig": "4/4",
+    "grouping": [
+      4,
+      4,
+      4,
+      4
+    ],
+    "stepUnit": 16,
+    "steps": 16,
+    "bpm": {
+      "default": 400,
+      "min": 340,
+      "max": 480
+    },
+    "difficulty": "intermediate",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0
+      ],
+      "SN": [
+        0,
+        0,
+        2,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        2,
+        0,
+        0,
+        2
+      ],
+      "HH": [
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1
+      ]
+    },
+    "defaultKit": "727",
+    "country": "BR",
+    "region": "brazil",
+    "tags": [
+      "samba",
+      "batucada",
+      "surdo",
+      "street-samba"
+    ],
+    "instruments": [
+      "surdo",
+      "tamborim",
+      "agogô"
+    ],
+    "swingable": true,
+    "story": "The street-samba battery pared down to its core: three interlocking surdos, a tamborim syncopating above, and agogô shimmer on top. The sound of Rio's neighborhood rehearsal halls.",
+    "relatedIds": [
+      "samba-enredo",
+      "samba-partido-alto"
+    ]
+  },
+  {
+    "id": "samba-de-roda",
+    "name": "Samba de Roda",
+    "origin": "Brazil · Recôncavo Baiano",
+    "tradition": "Circle samba (UNESCO heritage)",
+    "genre": "folk-dance",
+    "timeSig": "2/4",
+    "grouping": [
+      4,
+      4
+    ],
+    "stepUnit": 16,
+    "steps": 8,
+    "bpm": {
+      "default": 440,
+      "min": 380,
+      "max": 500
+    },
+    "difficulty": "beginner",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0
+      ],
+      "SN": [
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        2,
+        0
+      ],
+      "HH": [
+        2,
+        0,
+        2,
+        1,
+        2,
+        0,
+        2,
+        1
+      ]
+    },
+    "defaultKit": "727",
+    "country": "BR",
+    "region": "brazil",
+    "tags": [
+      "samba-de-roda",
+      "bahia",
+      "recôncavo",
+      "unesco",
+      "root"
+    ],
+    "instruments": [
+      "atabaque",
+      "pandeiro",
+      "palmas"
+    ],
+    "swingable": true,
+    "story": "The root of all samba. In the Recôncavo villages around the Bay of All Saints, dancers step into a circle one at a time, invited by an umbigada — a belly-bump — to the next. UNESCO Intangible Heritage, 2005.",
+    "relatedIds": [
+      "samba-partido-alto",
+      "samba-enredo",
+      "semba",
+      "guaguanco"
+    ]
+  },
+  {
+    "id": "capoeira-angola",
+    "name": "Capoeira Angola",
+    "origin": "Brazil · Bahia",
+    "tradition": "Mestre Pastinha capoeira",
+    "genre": "ceremonial",
+    "timeSig": "2/4",
+    "grouping": [
+      4,
+      4
+    ],
+    "stepUnit": 16,
+    "steps": 16,
+    "bpm": {
+      "default": 240,
+      "min": 180,
+      "max": 320
+    },
+    "difficulty": "intermediate",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0
+      ],
+      "SN": [
+        0,
+        2,
+        0,
+        0,
+        2,
+        0,
+        2,
+        0,
+        0,
+        2,
+        0,
+        0,
+        2,
+        0,
+        0,
+        2
+      ],
+      "HH": [
+        2,
+        0,
+        1,
+        2,
+        0,
+        1,
+        2,
+        0,
+        1,
+        2,
+        0,
+        1,
+        2,
+        0,
+        1,
+        2
+      ]
+    },
+    "defaultKit": "727",
+    "country": "BR",
+    "region": "brazil",
+    "tags": [
+      "capoeira",
+      "angola",
+      "berimbau",
+      "pastinha",
+      "martial"
+    ],
+    "instruments": [
+      "berimbau",
+      "atabaque",
+      "pandeiro",
+      "agogô"
+    ],
+    "swingable": false,
+    "story": "Mestre Pastinha's lineage of capoeira — slow, philosophical, played close to the ground with malícia (cunning). The berimbau gunga leads; the roda is the game's operating system. São Bento Grande de Angola is the signature toque.",
+    "relatedIds": [
+      "capoeira-regional",
+      "samba-de-roda",
+      "semba"
+    ]
+  },
+  {
+    "id": "capoeira-regional",
+    "name": "Capoeira Regional",
+    "origin": "Brazil · Bahia",
+    "tradition": "Mestre Bimba capoeira",
+    "genre": "ceremonial",
+    "timeSig": "2/4",
+    "grouping": [
+      4,
+      4
+    ],
+    "stepUnit": 16,
+    "steps": 16,
+    "bpm": {
+      "default": 480,
+      "min": 400,
+      "max": 620
+    },
+    "difficulty": "advanced",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        2,
+        0,
+        0,
+        2,
+        0,
+        2,
+        0,
+        0,
+        2,
+        0,
+        0,
+        2,
+        0
+      ],
+      "SN": [
+        0,
+        2,
+        2,
+        0,
+        2,
+        2,
+        0,
+        2,
+        0,
+        2,
+        2,
+        0,
+        2,
+        2,
+        0,
+        2
+      ],
+      "HH": [
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1
+      ]
+    },
+    "defaultKit": "727",
+    "country": "BR",
+    "region": "brazil",
+    "tags": [
+      "capoeira",
+      "regional",
+      "bimba",
+      "acrobatic",
+      "martial"
+    ],
+    "instruments": [
+      "berimbau",
+      "atabaque",
+      "pandeiro"
+    ],
+    "swingable": false,
+    "story": "Mestre Bimba legalized capoeira by codifying Regional in 1937 — fast, acrobatic, played standing with high kicks and flying spins. The berimbau pushes tempo; the game becomes athletic spectacle.",
+    "relatedIds": [
+      "capoeira-angola",
+      "frevo"
+    ]
+  },
+  {
+    "id": "olodum-samba-reggae",
+    "name": "Olodum",
+    "origin": "Brazil · Pelourinho, Salvador",
+    "tradition": "Bloco Afro surdo ensemble",
+    "genre": "folk-dance",
+    "timeSig": "4/4",
+    "grouping": [
+      4,
+      4,
+      4,
+      4
+    ],
+    "stepUnit": 16,
+    "steps": 16,
+    "bpm": {
+      "default": 400,
+      "min": 340,
+      "max": 460
+    },
+    "difficulty": "intermediate",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "SN": [
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        2,
+        2,
+        0,
+        2,
+        0,
+        0,
+        2,
+        0,
+        0,
+        2
+      ],
+      "HH": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ]
+    },
+    "defaultKit": "727",
+    "country": "BR",
+    "region": "brazil",
+    "tags": [
+      "olodum",
+      "bloco-afro",
+      "pelourinho",
+      "neguinho-do-samba",
+      "paul-simon"
+    ],
+    "instruments": [
+      "surdo",
+      "repinique",
+      "caixa",
+      "timbau"
+    ],
+    "swingable": false,
+    "story": "Neguinho do Samba's 1986 Olodum pattern — three surdos interlock in a wall of polyrhythmic bass that Paul Simon and Michael Jackson brought to the world. The music of Black Bahian liberation.",
+    "relatedIds": [
+      "samba-reggae",
+      "ijexa",
+      "axe"
+    ]
+  },
+  {
+    "id": "timbalada-timbal",
+    "name": "Timbalada",
+    "origin": "Brazil · Candeal, Salvador",
+    "tradition": "Carlinhos Brown timbal ensemble",
+    "genre": "folk-dance",
+    "timeSig": "4/4",
+    "grouping": [
+      4,
+      4,
+      4,
+      4
+    ],
+    "stepUnit": 16,
+    "steps": 16,
+    "bpm": {
+      "default": 440,
+      "min": 380,
+      "max": 520
+    },
+    "difficulty": "intermediate",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0
+      ],
+      "SN": [
+        2,
+        0,
+        2,
+        2,
+        0,
+        2,
+        2,
+        0,
+        2,
+        0,
+        2,
+        2,
+        0,
+        2,
+        2,
+        0
+      ],
+      "HH": [
+        0,
+        2,
+        2,
+        0,
+        0,
+        2,
+        2,
+        0,
+        0,
+        2,
+        2,
+        0,
+        0,
+        2,
+        2,
+        0
+      ]
+    },
+    "defaultKit": "727",
+    "country": "BR",
+    "region": "brazil",
+    "tags": [
+      "timbal",
+      "carlinhos-brown",
+      "candeal",
+      "community-percussion"
+    ],
+    "instruments": [
+      "timbal",
+      "surdo",
+      "repinique"
+    ],
+    "swingable": false,
+    "story": "Carlinhos Brown's 1991 Timbalada — a community percussion school in Candeal, Salvador. The nylon-headed timbal became an accessible lead drum, bright enough to project under the Bahian sun.",
+    "relatedIds": [
+      "samba-reggae",
+      "olodum-samba-reggae",
+      "axe"
+    ]
+  },
+  {
+    "id": "samba-rock",
+    "name": "Samba-Rock",
+    "origin": "Brazil · São Paulo",
+    "tradition": "São Paulo dance hall fusion",
+    "genre": "popular",
+    "timeSig": "4/4",
+    "grouping": [
+      4,
+      4,
+      4,
+      4
+    ],
+    "stepUnit": 16,
+    "steps": 16,
+    "bpm": {
+      "default": 440,
+      "min": 380,
+      "max": 500
+    },
+    "difficulty": "intermediate",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        2,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        2,
+        0,
+        0
+      ],
+      "SN": [
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        2
+      ],
+      "HH": [
+        2,
+        0,
+        2,
+        0,
+        2,
+        0,
+        2,
+        0,
+        2,
+        0,
+        2,
+        0,
+        2,
+        0,
+        2,
+        0
+      ]
+    },
+    "defaultKit": "727",
+    "country": "BR",
+    "region": "brazil",
+    "tags": [
+      "samba-rock",
+      "jorge-ben",
+      "partner-dance",
+      "baile-black"
+    ],
+    "instruments": [
+      "drum kit",
+      "cavaquinho",
+      "electric guitar"
+    ],
+    "swingable": true,
+    "story": "Born in 1960s São Paulo Black dance halls when DJs mixed samba with soul, funk, rock. Jorge Ben's \"Mas Que Nada\" is the anthem. A partner dance with intricate footwork — Brazil's answer to swing.",
+    "relatedIds": [
+      "samba-partido-alto",
+      "pagode",
+      "motown-beat"
+    ]
+  },
+  {
+    "id": "choro",
+    "name": "Choro",
+    "origin": "Brazil · Rio de Janeiro",
+    "tradition": "Urban instrumental virtuoso music",
+    "genre": "classical",
+    "timeSig": "2/4",
+    "grouping": [
+      4,
+      4
+    ],
+    "stepUnit": 16,
+    "steps": 16,
+    "bpm": {
+      "default": 480,
+      "min": 400,
+      "max": 560
+    },
+    "difficulty": "advanced",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0
+      ],
+      "SN": [
+        0,
+        0,
+        2,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        2,
+        0,
+        0,
+        0
+      ],
+      "HH": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ]
+    },
+    "defaultKit": "727",
+    "country": "BR",
+    "region": "brazil",
+    "tags": [
+      "choro",
+      "pixinguinha",
+      "cavaquinho",
+      "pandeiro",
+      "urban"
+    ],
+    "instruments": [
+      "pandeiro",
+      "cavaquinho",
+      "7-string guitar",
+      "flute"
+    ],
+    "swingable": true,
+    "story": "Born in late-1800s Rio from European salon dances (polka, schottische) cross-pollinated with African syncopation. Pixinguinha is its Bach. Pandeiro, cavaquinho, and violão fly through virtuoso counter-melodies at a sprint.",
+    "relatedIds": [
+      "samba-partido-alto",
+      "pagode"
+    ]
+  },
+  {
+    "id": "lambada",
+    "name": "Lambada",
+    "origin": "Brazil · Pará",
+    "tradition": "Amazonian dance craze",
+    "genre": "popular",
+    "timeSig": "4/4",
+    "grouping": [
+      4,
+      4,
+      4,
+      4
+    ],
+    "stepUnit": 16,
+    "steps": 16,
+    "bpm": {
+      "default": 460,
+      "min": 400,
+      "max": 540
+    },
+    "difficulty": "intermediate",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0
+      ],
+      "SN": [
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        1
+      ],
+      "HH": [
+        2,
+        0,
+        2,
+        1,
+        2,
+        0,
+        2,
+        1,
+        2,
+        0,
+        2,
+        1,
+        2,
+        0,
+        2,
+        1
+      ]
+    },
+    "defaultKit": "727",
+    "country": "BR",
+    "region": "brazil",
+    "tags": [
+      "lambada",
+      "carimbó",
+      "pará",
+      "kaoma",
+      "80s-dance-craze"
+    ],
+    "instruments": [
+      "drums",
+      "accordion",
+      "berimbau",
+      "maracas"
+    ],
+    "swingable": true,
+    "story": "Born in 1980s Pará from carimbó, merengue, zouk and forró — the whole world learned the hip-grinding Lambada choreography from Kaoma's \"Chorando Se Foi\" in 1989.",
+    "relatedIds": [
+      "carimbo",
+      "forro",
+      "merengue",
+      "zouk-love"
+    ]
+  },
+  {
+    "id": "carimbo",
+    "name": "Carimbó",
+    "origin": "Brazil · Pará · Amazon",
+    "tradition": "Afro-Amazonian circle dance",
+    "genre": "folk-dance",
+    "timeSig": "2/4",
+    "grouping": [
+      4,
+      4
+    ],
+    "stepUnit": 16,
+    "steps": 8,
+    "bpm": {
+      "default": 420,
+      "min": 360,
+      "max": 480
+    },
+    "difficulty": "beginner",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        2,
+        0,
+        2,
+        0,
+        2
+      ],
+      "SN": [
+        0,
+        0,
+        2,
+        0,
+        2,
+        0,
+        2,
+        0
+      ],
+      "HH": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ]
+    },
+    "defaultKit": "727",
+    "country": "BR",
+    "region": "brazil",
+    "tags": [
+      "carimbó",
+      "pará",
+      "amazon",
+      "afro-brazilian",
+      "curimbó"
+    ],
+    "instruments": [
+      "curimbó",
+      "maracas",
+      "banjo",
+      "flute"
+    ],
+    "swingable": false,
+    "story": "Pará's Afro-Amazonian circle dance, named for the curimbó log drum. The root of tecnobrega and a cousin of Caribbean lundu — danced in a roda as the drummer sits astride the log and plays the head with bare hands.",
+    "relatedIds": [
+      "samba-de-roda",
+      "tecnobrega",
+      "lambada"
+    ]
+  },
+  {
+    "id": "tecnobrega",
+    "name": "Tecnobrega",
+    "origin": "Brazil · Belém",
+    "tradition": "Amazonian electronic brega",
+    "genre": "electronic",
+    "timeSig": "4/4",
+    "grouping": [
+      4,
+      4,
+      4,
+      4
+    ],
+    "stepUnit": 16,
+    "steps": 16,
+    "bpm": {
+      "default": 540,
+      "min": 480,
+      "max": 600
+    },
+    "difficulty": "beginner",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0
+      ],
+      "SN": [
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0
+      ],
+      "HH": [
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1
+      ],
+      "CP": [
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0
+      ]
+    },
+    "defaultKit": "808",
+    "country": "BR",
+    "region": "brazil",
+    "tags": [
+      "tecnobrega",
+      "belém",
+      "aparelhagem",
+      "amazonian",
+      "diy"
+    ],
+    "instruments": [
+      "drum machine",
+      "synth",
+      "brega keyboard"
+    ],
+    "swingable": false,
+    "story": "Early 2000s Belém invented tecnobrega on carimbó roots — cheesy, sentimental, built for the aparelhagem sound systems that roam the Amazon periphery. A music economy that bypassed the industry and became a global DIY model.",
+    "relatedIds": [
+      "carimbo",
+      "baile-funk-tamborzao",
+      "funkot"
+    ]
+  },
+  {
+    "id": "arrocha",
+    "name": "Arrocha",
+    "origin": "Brazil · Bahia",
+    "tradition": "Northeastern romantic slow-dance",
+    "genre": "popular",
+    "timeSig": "4/4",
+    "grouping": [
+      4,
+      4,
+      4,
+      4
+    ],
+    "stepUnit": 16,
+    "steps": 16,
+    "bpm": {
+      "default": 300,
+      "min": 260,
+      "max": 340
+    },
+    "difficulty": "beginner",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "SN": [
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0
+      ],
+      "HH": [
+        2,
+        0,
+        2,
+        0,
+        2,
+        0,
+        2,
+        0,
+        2,
+        0,
+        2,
+        0,
+        2,
+        0,
+        2,
+        0
+      ]
+    },
+    "defaultKit": "727",
+    "country": "BR",
+    "region": "brazil",
+    "tags": [
+      "arrocha",
+      "pagode-baiano",
+      "romantic",
+      "slow-drag"
+    ],
+    "instruments": [
+      "drum machine",
+      "keyboard",
+      "bass"
+    ],
+    "swingable": false,
+    "story": "\"Arrocha\" means \"squeeze\" — Bahia's romantic slow dance in which couples press chest-to-chest and shuffle in place. Emerged from pagode baiano in the 2000s with Pablo do Arrocha as its flagbearer.",
+    "relatedIds": [
+      "bachata",
+      "zouk-love",
+      "bolero"
+    ]
+  },
+  {
+    "id": "mpb-tropicalia",
+    "name": "MPB · Tropicália",
+    "origin": "Brazil · Bahia / Rio",
+    "tradition": "Tropicalist pop",
+    "genre": "popular",
+    "timeSig": "4/4",
+    "grouping": [
+      4,
+      4,
+      4,
+      4
+    ],
+    "stepUnit": 16,
+    "steps": 16,
+    "bpm": {
+      "default": 400,
+      "min": 340,
+      "max": 480
+    },
+    "difficulty": "intermediate",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0
+      ],
+      "SN": [
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        2,
+        0
+      ],
+      "HH": [
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1
+      ]
+    },
+    "defaultKit": "727",
+    "country": "BR",
+    "region": "brazil",
+    "tags": [
+      "mpb",
+      "tropicalia",
+      "caetano",
+      "gil",
+      "os-mutantes",
+      "anthropophagy"
+    ],
+    "instruments": [
+      "drum kit",
+      "electric guitar",
+      "cavaquinho",
+      "strings"
+    ],
+    "swingable": true,
+    "story": "The Tropicalist principle: Brazil devours every influence and spits out something new. Caetano, Gil, Os Mutantes fused samba, psychedelia, and bossa into the sound that scandalized 1968 and outlived the dictatorship that exiled them.",
+    "relatedIds": [
+      "bossa-nova",
+      "samba-rock",
+      "samba-partido-alto"
+    ]
+  },
+  {
+    "id": "sertanejo",
+    "name": "Sertanejo Universitário",
+    "origin": "Brazil · Minas / São Paulo interior",
+    "tradition": "Brazilian country pop",
+    "genre": "popular",
+    "timeSig": "4/4",
+    "grouping": [
+      4,
+      4,
+      4,
+      4
+    ],
+    "stepUnit": 16,
+    "steps": 16,
+    "bpm": {
+      "default": 360,
+      "min": 320,
+      "max": 420
+    },
+    "difficulty": "beginner",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "SN": [
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0
+      ],
+      "HH": [
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1
+      ]
+    },
+    "defaultKit": "727",
+    "country": "BR",
+    "region": "brazil",
+    "tags": [
+      "sertanejo",
+      "country",
+      "viola-caipira",
+      "interior",
+      "popular"
+    ],
+    "instruments": [
+      "drum kit",
+      "viola caipira",
+      "accordion"
+    ],
+    "swingable": false,
+    "story": "Brazil's best-selling genre — country music of the interior. The duplas (duos) of Jorge & Mateus, Henrique & Juliano, Marília Mendonça built the sertanejo universitário subgenre into the 2010s' dominant pop sound.",
+    "relatedIds": [
+      "xote",
+      "forro",
+      "country-two-step"
+    ]
+  }
+]

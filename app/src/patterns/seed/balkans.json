@@ -1,0 +1,2557 @@
+[
+  {
+    "id": "ruchenitsa",
+    "name": "Rŭchenitsa",
+    "origin": "Bulgaria",
+    "tradition": "Folk dance",
+    "genre": "folk-dance",
+    "timeSig": "7/8",
+    "grouping": [
+      2,
+      2,
+      3
+    ],
+    "stepUnit": 8,
+    "steps": 7,
+    "bpm": {
+      "default": 320,
+      "min": 240,
+      "max": 420
+    },
+    "difficulty": "intermediate",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        2,
+        0,
+        2,
+        0,
+        0
+      ],
+      "SN": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1
+      ],
+      "HH": [
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        1
+      ]
+    },
+    "defaultKit": "frameDrum",
+    "region": "balkans",
+    "country": "BG",
+    "tags": [
+      "dance",
+      "line-dance",
+      "bulgarian"
+    ],
+    "instruments": [
+      "gaida",
+      "kaval",
+      "tapan"
+    ],
+    "swingable": false,
+    "story": "Bulgaria's most danced rhythm — \"quick-quick-sloooow\" is how kids learn it.",
+    "relatedIds": [
+      "horon",
+      "eleno-mome",
+      "trite-puti"
+    ]
+  },
+  {
+    "id": "kopanitsa",
+    "name": "Kopanitsa",
+    "origin": "Bulgaria · Shope",
+    "tradition": "Folk dance",
+    "genre": "folk-dance",
+    "timeSig": "11/8",
+    "grouping": [
+      2,
+      2,
+      3,
+      2,
+      2
+    ],
+    "stepUnit": 8,
+    "steps": 11,
+    "bpm": {
+      "default": 400,
+      "min": 320,
+      "max": 520
+    },
+    "difficulty": "advanced",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        2,
+        0,
+        2,
+        0,
+        0,
+        2,
+        0,
+        2,
+        0
+      ],
+      "SN": [
+        0,
+        1,
+        0,
+        1,
+        0,
+        1,
+        1,
+        0,
+        1,
+        0,
+        1
+      ],
+      "HH": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ]
+    },
+    "defaultKit": "frameDrum",
+    "region": "balkans",
+    "country": "BG",
+    "tags": [
+      "dance",
+      "advanced",
+      "shope"
+    ],
+    "instruments": [
+      "gaida",
+      "kaval",
+      "tapan"
+    ],
+    "swingable": false,
+    "story": "11/8 stomping through a tavern. The long beat is in the middle here."
+  },
+  {
+    "id": "daichovo",
+    "name": "Daichovo",
+    "origin": "Bulgaria",
+    "tradition": "Folk dance",
+    "genre": "folk-dance",
+    "timeSig": "9/8",
+    "grouping": [
+      2,
+      2,
+      2,
+      3
+    ],
+    "stepUnit": 8,
+    "steps": 9,
+    "bpm": {
+      "default": 340,
+      "min": 280,
+      "max": 440
+    },
+    "difficulty": "intermediate",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        2,
+        0,
+        2,
+        0,
+        2,
+        0,
+        0
+      ],
+      "SN": [
+        0,
+        1,
+        0,
+        1,
+        0,
+        1,
+        0,
+        1,
+        1
+      ],
+      "HH": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ]
+    },
+    "defaultKit": "frameDrum",
+    "region": "balkans",
+    "country": "BG",
+    "tags": [
+      "dance",
+      "bulgarian"
+    ],
+    "instruments": [
+      "gaida",
+      "kaval"
+    ],
+    "swingable": false,
+    "story": "Same 2+2+2+3 skeleton as Karşılama but faster, bouncier, pan-flute territory.",
+    "relatedIds": [
+      "karsilama",
+      "aksak",
+      "roman-havasi",
+      "uyghur-muqam-78"
+    ]
+  },
+  {
+    "id": "cocek",
+    "name": "Čoček",
+    "origin": "Balkans · Romani",
+    "tradition": "Romani dance",
+    "genre": "folk-dance",
+    "timeSig": "2/4",
+    "grouping": [
+      4,
+      4
+    ],
+    "stepUnit": 16,
+    "steps": 8,
+    "bpm": {
+      "default": 240,
+      "min": 180,
+      "max": 340
+    },
+    "difficulty": "intermediate",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      "SN": [
+        0,
+        0,
+        2,
+        0,
+        2,
+        0,
+        1,
+        0
+      ],
+      "HH": [
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1
+      ]
+    },
+    "defaultKit": "frameDrum",
+    "country": "RS",
+    "region": "balkans",
+    "tags": [
+      "romani",
+      "dance",
+      "ottoman",
+      "syncopated"
+    ],
+    "instruments": [
+      "zurna",
+      "tupan",
+      "clarinet"
+    ],
+    "swingable": false,
+    "story": "The signature Romani dance of the Balkans — descended from Ottoman court dance, played on zurna and tupan at weddings.",
+    "relatedIds": [
+      "roman-havasi",
+      "chiftetelli",
+      "karsilama"
+    ]
+  },
+  {
+    "id": "kalamatianos",
+    "name": "Kalamatianós",
+    "origin": "Greece · Peloponnese",
+    "tradition": "Circle dance",
+    "genre": "folk-dance",
+    "timeSig": "7/8",
+    "grouping": [
+      3,
+      2,
+      2
+    ],
+    "stepUnit": 8,
+    "steps": 7,
+    "bpm": {
+      "default": 270,
+      "min": 220,
+      "max": 340
+    },
+    "difficulty": "intermediate",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        2,
+        0,
+        2,
+        0
+      ],
+      "SN": [
+        0,
+        0,
+        1,
+        0,
+        1,
+        0,
+        1
+      ],
+      "HH": [
+        2,
+        1,
+        1,
+        2,
+        1,
+        2,
+        1
+      ]
+    },
+    "defaultKit": "frameDrum",
+    "country": "GR",
+    "region": "balkans",
+    "tags": [
+      "dance",
+      "circle",
+      "greek"
+    ],
+    "instruments": [
+      "bouzouki",
+      "klarino",
+      "toubeleki"
+    ],
+    "swingable": false,
+    "story": "The Greek national circle dance. Long-short-short, everyone holding hands.",
+    "relatedIds": [
+      "lesnoto",
+      "devri-hindi",
+      "afghan-attan",
+      "kurdish-7-8"
+    ]
+  },
+  {
+    "id": "gankino",
+    "name": "Gankino",
+    "origin": "Bulgaria · Thrace",
+    "tradition": "Folk dance",
+    "genre": "folk-dance",
+    "timeSig": "11/8",
+    "grouping": [
+      2,
+      2,
+      3,
+      2,
+      2
+    ],
+    "stepUnit": 8,
+    "steps": 11,
+    "bpm": {
+      "default": 360,
+      "min": 280,
+      "max": 440
+    },
+    "difficulty": "advanced",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        2,
+        0,
+        2,
+        0,
+        0,
+        2,
+        0,
+        2,
+        0
+      ],
+      "SN": [
+        0,
+        1,
+        0,
+        1,
+        0,
+        1,
+        1,
+        0,
+        1,
+        0,
+        1
+      ],
+      "HH": [
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        1,
+        2,
+        1,
+        2,
+        1
+      ]
+    },
+    "defaultKit": "frameDrum",
+    "country": "BG",
+    "region": "balkans",
+    "tags": [
+      "dance",
+      "bulgarian",
+      "11-8"
+    ],
+    "instruments": [
+      "gaida",
+      "tapan",
+      "gadulka"
+    ],
+    "swingable": false,
+    "story": "Kopanitsa by another name — the Thracian take on 11/8. Slightly more relaxed, but the same quick-quick-slow-quick-quick drive.",
+    "relatedIds": [
+      "kopanitsa"
+    ]
+  },
+  {
+    "id": "pravo-horo",
+    "name": "Pravo Horo",
+    "origin": "Bulgaria",
+    "tradition": "Folk line dance",
+    "genre": "folk-dance",
+    "timeSig": "2/4",
+    "grouping": [
+      4,
+      4
+    ],
+    "stepUnit": 16,
+    "steps": 8,
+    "bpm": {
+      "default": 220,
+      "min": 180,
+      "max": 280
+    },
+    "difficulty": "beginner",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0
+      ],
+      "SN": [
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        2,
+        0
+      ],
+      "HH": [
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1
+      ]
+    },
+    "defaultKit": "frameDrum",
+    "country": "BG",
+    "region": "balkans",
+    "tags": [
+      "dance",
+      "bulgarian",
+      "line-dance",
+      "beginner"
+    ],
+    "instruments": [
+      "gaida",
+      "gadulka",
+      "tapan"
+    ],
+    "swingable": false,
+    "story": "The \"straight\" dance — the 2/4 baseline of Bulgarian horo. Simple meter, elaborate ornaments on top from the gaida."
+  },
+  {
+    "id": "lesnoto",
+    "name": "Lesnoto",
+    "origin": "North Macedonia",
+    "tradition": "Folk circle dance",
+    "genre": "folk-dance",
+    "timeSig": "7/8",
+    "grouping": [
+      3,
+      2,
+      2
+    ],
+    "stepUnit": 8,
+    "steps": 7,
+    "bpm": {
+      "default": 200,
+      "min": 160,
+      "max": 260
+    },
+    "difficulty": "intermediate",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        2,
+        0,
+        2,
+        0
+      ],
+      "SN": [
+        0,
+        1,
+        1,
+        0,
+        1,
+        0,
+        1
+      ],
+      "HH": [
+        2,
+        1,
+        1,
+        2,
+        1,
+        2,
+        1
+      ]
+    },
+    "defaultKit": "frameDrum",
+    "country": "MK",
+    "region": "balkans",
+    "tags": [
+      "dance",
+      "macedonian",
+      "circle"
+    ],
+    "instruments": [
+      "gaida",
+      "tupan",
+      "kaval"
+    ],
+    "swingable": false,
+    "story": "\"The easy one\" — in name only. Long-short-short Macedonian oro, stately and communal, every wedding opens with it.",
+    "relatedIds": [
+      "kalamatianos",
+      "devri-hindi",
+      "afghan-attan",
+      "kurdish-7-8"
+    ]
+  },
+  {
+    "id": "syrtos",
+    "name": "Syrtós",
+    "origin": "Greece",
+    "tradition": "Circle dance",
+    "genre": "folk-dance",
+    "timeSig": "4/4",
+    "grouping": [
+      4,
+      4,
+      4,
+      4
+    ],
+    "stepUnit": 16,
+    "steps": 16,
+    "bpm": {
+      "default": 520,
+      "min": 440,
+      "max": 640
+    },
+    "difficulty": "beginner",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0
+      ],
+      "SN": [
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        2,
+        0
+      ],
+      "HH": [
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1
+      ]
+    },
+    "defaultKit": "frameDrum",
+    "country": "GR",
+    "region": "balkans",
+    "tags": [
+      "dance",
+      "greek",
+      "circle",
+      "ancient"
+    ],
+    "instruments": [
+      "lyra",
+      "laouto",
+      "daouli"
+    ],
+    "swingable": false,
+    "story": "The \"dragging\" dance — the oldest and most widespread Greek folk form. A gliding 4/4, smooth where kalamatianos is bouncy."
+  },
+  {
+    "id": "tsamiko",
+    "name": "Tsámiko",
+    "origin": "Greece",
+    "tradition": "Warrior dance",
+    "genre": "folk-dance",
+    "timeSig": "3/4",
+    "grouping": [
+      4,
+      4,
+      4
+    ],
+    "stepUnit": 16,
+    "steps": 12,
+    "bpm": {
+      "default": 400,
+      "min": 320,
+      "max": 520
+    },
+    "difficulty": "intermediate",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "SN": [
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        1,
+        0,
+        2,
+        0,
+        1,
+        0
+      ],
+      "HH": [
+        2,
+        0,
+        1,
+        0,
+        2,
+        0,
+        1,
+        0,
+        2,
+        0,
+        1,
+        0
+      ]
+    },
+    "defaultKit": "frameDrum",
+    "country": "GR",
+    "region": "balkans",
+    "tags": [
+      "dance",
+      "greek",
+      "warrior",
+      "3-4"
+    ],
+    "instruments": [
+      "klarino",
+      "laouto",
+      "daouli"
+    ],
+    "swingable": false,
+    "story": "The proud warrior dance of the Greek War of Independence — danced by men with high leaps. Stately 3/4 with a martial weight."
+  },
+  {
+    "id": "hasapiko",
+    "name": "Hasápiko",
+    "origin": "Greece · Constantinople",
+    "tradition": "Butchers' guild dance",
+    "genre": "folk-dance",
+    "timeSig": "2/4",
+    "grouping": [
+      4,
+      4
+    ],
+    "stepUnit": 16,
+    "steps": 8,
+    "bpm": {
+      "default": 560,
+      "min": 400,
+      "max": 800
+    },
+    "difficulty": "intermediate",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0
+      ],
+      "SN": [
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        2,
+        0
+      ],
+      "HH": [
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1
+      ]
+    },
+    "defaultKit": "frameDrum",
+    "country": "GR",
+    "region": "balkans",
+    "tags": [
+      "dance",
+      "greek",
+      "rebetiko",
+      "ottoman"
+    ],
+    "instruments": [
+      "bouzouki",
+      "baglama",
+      "toubeleki"
+    ],
+    "swingable": false,
+    "story": "The butchers' dance of Constantinople — from kasap (Turkish for butcher). The fast version became the Zorba sirtaki the world knows.",
+    "relatedIds": [
+      "kasap-havasi",
+      "cocek"
+    ]
+  },
+  {
+    "id": "eleno-mome",
+    "name": "Eleno Mome",
+    "origin": "Bulgaria",
+    "tradition": "Wedding song",
+    "genre": "folk-dance",
+    "timeSig": "7/8",
+    "grouping": [
+      2,
+      2,
+      3
+    ],
+    "stepUnit": 8,
+    "steps": 7,
+    "bpm": {
+      "default": 280,
+      "min": 220,
+      "max": 360
+    },
+    "difficulty": "intermediate",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        2,
+        0,
+        2,
+        0,
+        0
+      ],
+      "SN": [
+        0,
+        1,
+        0,
+        1,
+        0,
+        1,
+        1
+      ],
+      "HH": [
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        1
+      ]
+    },
+    "defaultKit": "frameDrum",
+    "country": "BG",
+    "region": "balkans",
+    "tags": [
+      "dance",
+      "bulgarian",
+      "wedding",
+      "song"
+    ],
+    "instruments": [
+      "gaida",
+      "voice",
+      "tapan"
+    ],
+    "swingable": false,
+    "story": "\"Elena, girl\" — one of the most beloved Bulgarian folk songs, recorded by Le Mystère des Voix Bulgares. Same 7/8 as ruchenitsa, line-dance feel.",
+    "relatedIds": [
+      "ruchenitsa"
+    ]
+  },
+  {
+    "id": "sadi-moma",
+    "name": "Sadi Moma",
+    "origin": "Bulgaria",
+    "tradition": "Folk dance (extended asymmetric)",
+    "genre": "folk-dance",
+    "timeSig": "22/16",
+    "grouping": [
+      2,
+      2,
+      2,
+      3,
+      2,
+      2,
+      2,
+      3,
+      2,
+      2
+    ],
+    "stepUnit": 16,
+    "steps": 22,
+    "bpm": {
+      "default": 360,
+      "min": 280,
+      "max": 440
+    },
+    "difficulty": "advanced",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        2,
+        0,
+        2,
+        0,
+        0,
+        0,
+        2,
+        0,
+        2,
+        0,
+        2,
+        0,
+        2,
+        0,
+        0,
+        0,
+        2,
+        0,
+        2,
+        0
+      ],
+      "SN": [
+        0,
+        1,
+        0,
+        1,
+        0,
+        1,
+        1,
+        0,
+        0,
+        1,
+        0,
+        1,
+        0,
+        1,
+        0,
+        1,
+        1,
+        0,
+        0,
+        1,
+        0,
+        1
+      ],
+      "HH": [
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        1,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        1,
+        1,
+        2,
+        1,
+        2,
+        1
+      ]
+    },
+    "defaultKit": "frameDrum",
+    "country": "BG",
+    "region": "balkans",
+    "tags": [
+      "dance",
+      "bulgarian",
+      "asymmetric",
+      "advanced",
+      "22-16"
+    ],
+    "instruments": [
+      "gaida",
+      "kaval",
+      "tapan"
+    ],
+    "swingable": false,
+    "story": "22/16 danced by entire villages — ten beats of \"quick-quick-quick-slow-quick-quick-quick-slow-quick-quick.\" The math terrifies; the feet know."
+  },
+  {
+    "id": "krivo-horo",
+    "name": "Krivo Horo",
+    "origin": "Bulgaria · Plovdiv",
+    "tradition": "Folk line dance",
+    "genre": "folk-dance",
+    "timeSig": "13/16",
+    "grouping": [
+      2,
+      2,
+      3,
+      2,
+      2,
+      2
+    ],
+    "stepUnit": 16,
+    "steps": 13,
+    "bpm": {
+      "default": 380,
+      "min": 300,
+      "max": 460
+    },
+    "difficulty": "advanced",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        2,
+        0,
+        2,
+        0,
+        0,
+        2,
+        0,
+        2,
+        0,
+        2,
+        0
+      ],
+      "SN": [
+        0,
+        1,
+        0,
+        1,
+        0,
+        1,
+        1,
+        0,
+        1,
+        0,
+        1,
+        0,
+        1
+      ],
+      "HH": [
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1
+      ]
+    },
+    "defaultKit": "frameDrum",
+    "country": "BG",
+    "region": "balkans",
+    "tags": [
+      "dance",
+      "bulgarian",
+      "asymmetric",
+      "13-16",
+      "plovdiv"
+    ],
+    "instruments": [
+      "gaida",
+      "tapan",
+      "gadulka"
+    ],
+    "swingable": false,
+    "story": "The \"crooked dance of Plovdiv\" — 13/16 with the long beat early. Krivo literally means \"bent\" — Bulgarians hear asymmetry as a kink in the line."
+  },
+  {
+    "id": "pajdusko",
+    "name": "Pajduško",
+    "origin": "North Macedonia · Bulgaria",
+    "tradition": "Folk line dance",
+    "genre": "folk-dance",
+    "timeSig": "5/8",
+    "grouping": [
+      2,
+      3
+    ],
+    "stepUnit": 8,
+    "steps": 5,
+    "bpm": {
+      "default": 300,
+      "min": 240,
+      "max": 380
+    },
+    "difficulty": "intermediate",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        2,
+        0,
+        0
+      ],
+      "SN": [
+        0,
+        1,
+        0,
+        1,
+        1
+      ],
+      "HH": [
+        2,
+        1,
+        2,
+        1,
+        1
+      ]
+    },
+    "defaultKit": "frameDrum",
+    "country": "MK",
+    "region": "balkans",
+    "tags": [
+      "dance",
+      "macedonian",
+      "bulgarian",
+      "5-8",
+      "limp"
+    ],
+    "instruments": [
+      "gaida",
+      "tapan",
+      "kaval"
+    ],
+    "swingable": false,
+    "story": "The \"limping\" dance — 5/8 as short-long. One foot hops longer than the other; the limp is the point, not a flaw."
+  },
+  {
+    "id": "trite-puti",
+    "name": "Trite Pŭti",
+    "origin": "North Macedonia",
+    "tradition": "Folk oro",
+    "genre": "folk-dance",
+    "timeSig": "7/8",
+    "grouping": [
+      2,
+      2,
+      3
+    ],
+    "stepUnit": 8,
+    "steps": 7,
+    "bpm": {
+      "default": 260,
+      "min": 200,
+      "max": 320
+    },
+    "difficulty": "intermediate",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        2,
+        0,
+        2,
+        0,
+        0
+      ],
+      "SN": [
+        0,
+        1,
+        0,
+        1,
+        0,
+        1,
+        1
+      ],
+      "HH": [
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        1
+      ]
+    },
+    "defaultKit": "frameDrum",
+    "country": "MK",
+    "region": "balkans",
+    "tags": [
+      "dance",
+      "macedonian",
+      "7-8",
+      "circle"
+    ],
+    "instruments": [
+      "gaida",
+      "kaval",
+      "tupan"
+    ],
+    "swingable": false,
+    "story": "\"Three times\" — a Macedonian 7/8 oro where each phrase crosses the circle in three gestures. Quick-quick-slow, the third beat holding the group together.",
+    "relatedIds": [
+      "ruchenitsa",
+      "lesnoto"
+    ]
+  },
+  {
+    "id": "oro-kolo",
+    "name": "Oro (Standard)",
+    "origin": "Former Yugoslavia",
+    "tradition": "South Slavic circle dance",
+    "genre": "folk-dance",
+    "timeSig": "2/4",
+    "grouping": [
+      4,
+      4
+    ],
+    "stepUnit": 16,
+    "steps": 8,
+    "bpm": {
+      "default": 240,
+      "min": 200,
+      "max": 300
+    },
+    "difficulty": "beginner",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        0,
+        2,
+        0,
+        1,
+        0
+      ],
+      "SN": [
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        2,
+        0
+      ],
+      "HH": [
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1
+      ]
+    },
+    "defaultKit": "frameDrum",
+    "country": "RS",
+    "region": "balkans",
+    "tags": [
+      "dance",
+      "serbian",
+      "macedonian",
+      "circle",
+      "kolo"
+    ],
+    "instruments": [
+      "accordion",
+      "violin",
+      "tupan"
+    ],
+    "swingable": false,
+    "story": "The pan-Balkan \"wheel\" — kolo in Serbian, oro in Macedonian. The 2/4 default every band can fall into without a word."
+  },
+  {
+    "id": "kukunesko",
+    "name": "Kukuneško Horo",
+    "origin": "Bulgaria",
+    "tradition": "Folk line dance",
+    "genre": "folk-dance",
+    "timeSig": "15/16",
+    "grouping": [
+      2,
+      2,
+      2,
+      2,
+      3,
+      2,
+      2
+    ],
+    "stepUnit": 16,
+    "steps": 15,
+    "bpm": {
+      "default": 380,
+      "min": 300,
+      "max": 460
+    },
+    "difficulty": "advanced",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        2,
+        0,
+        2,
+        0,
+        2,
+        0,
+        2,
+        0,
+        0,
+        2,
+        0,
+        2,
+        0
+      ],
+      "SN": [
+        0,
+        1,
+        0,
+        1,
+        0,
+        1,
+        0,
+        1,
+        0,
+        1,
+        1,
+        0,
+        1,
+        0,
+        1
+      ],
+      "HH": [
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        1,
+        2,
+        1,
+        2,
+        1
+      ]
+    },
+    "defaultKit": "frameDrum",
+    "country": "BG",
+    "region": "balkans",
+    "tags": [
+      "dance",
+      "bulgarian",
+      "asymmetric",
+      "15-16"
+    ],
+    "instruments": [
+      "gaida",
+      "tapan",
+      "kaval"
+    ],
+    "swingable": false,
+    "story": "15/16 in seven beats — six shorts around a single long. At tempo the subdivisions blur and the ear hears only that one moment of expansion.",
+    "relatedIds": [
+      "kopanitsa"
+    ]
+  },
+  {
+    "id": "sandansko-horo",
+    "name": "Sandansko Horo",
+    "origin": "Bulgaria · Sandanski",
+    "tradition": "Folk line dance",
+    "genre": "folk-dance",
+    "timeSig": "22/16",
+    "grouping": [
+      2,
+      2,
+      2,
+      3,
+      2,
+      2,
+      2,
+      3,
+      2,
+      2
+    ],
+    "stepUnit": 16,
+    "steps": 22,
+    "bpm": {
+      "default": 400,
+      "min": 320,
+      "max": 480
+    },
+    "difficulty": "advanced",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        2,
+        0,
+        2,
+        0,
+        0,
+        0,
+        2,
+        0,
+        2,
+        0,
+        2,
+        0,
+        2,
+        0,
+        0,
+        0,
+        2,
+        0,
+        2,
+        0
+      ],
+      "SN": [
+        0,
+        1,
+        0,
+        1,
+        0,
+        1,
+        1,
+        0,
+        0,
+        1,
+        0,
+        1,
+        0,
+        1,
+        0,
+        1,
+        1,
+        0,
+        0,
+        1,
+        0,
+        1
+      ],
+      "HH": [
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        1,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        1,
+        1,
+        2,
+        1,
+        2,
+        1
+      ]
+    },
+    "defaultKit": "frameDrum",
+    "country": "BG",
+    "region": "balkans",
+    "tags": [
+      "dance",
+      "bulgarian",
+      "asymmetric",
+      "22-16",
+      "advanced"
+    ],
+    "instruments": [
+      "gaida",
+      "tapan",
+      "gadulka"
+    ],
+    "swingable": false,
+    "story": "Among the longest standard folk meters on Earth — a doubled 11-beat cycle from the town of Sandanski. Mathematicians love it; dancers live inside it.",
+    "relatedIds": [
+      "sadi-moma",
+      "kopanitsa"
+    ]
+  },
+  {
+    "id": "bucimis",
+    "name": "Bučimiš",
+    "origin": "Bulgaria · Shope",
+    "tradition": "Folk line dance",
+    "genre": "folk-dance",
+    "timeSig": "15/16",
+    "grouping": [
+      2,
+      2,
+      2,
+      2,
+      3,
+      2,
+      2
+    ],
+    "stepUnit": 16,
+    "steps": 15,
+    "bpm": {
+      "default": 420,
+      "min": 340,
+      "max": 500
+    },
+    "difficulty": "advanced",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        2,
+        0,
+        2,
+        0,
+        2,
+        0,
+        2,
+        0,
+        0,
+        2,
+        0,
+        2,
+        0
+      ],
+      "SN": [
+        0,
+        1,
+        0,
+        1,
+        0,
+        1,
+        0,
+        1,
+        0,
+        1,
+        1,
+        0,
+        1,
+        0,
+        1
+      ],
+      "HH": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        1,
+        1,
+        2,
+        2,
+        2,
+        2
+      ]
+    },
+    "defaultKit": "frameDrum",
+    "country": "BG",
+    "region": "balkans",
+    "tags": [
+      "dance",
+      "bulgarian",
+      "asymmetric",
+      "15-16",
+      "shope",
+      "competition"
+    ],
+    "instruments": [
+      "gaida",
+      "tapan",
+      "kaval"
+    ],
+    "swingable": false,
+    "story": "Competition-tempo 15/16 from the Shope region around Sofia — the pattern every folk ensemble shows off with. Seven beats, one long, pure exhilaration.",
+    "relatedIds": [
+      "kukunesko",
+      "kopanitsa"
+    ]
+  },
+  {
+    "id": "zonaradikos",
+    "name": "Zonarádikos",
+    "origin": "Greece · Thrace",
+    "tradition": "Thracian line dance",
+    "genre": "folk-dance",
+    "timeSig": "6/8",
+    "grouping": [
+      3,
+      3
+    ],
+    "stepUnit": 8,
+    "steps": 6,
+    "bpm": {
+      "default": 140,
+      "min": 120,
+      "max": 165
+    },
+    "difficulty": "intermediate",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        2,
+        0,
+        0
+      ],
+      "SN": [
+        0,
+        0,
+        2,
+        0,
+        1,
+        2
+      ],
+      "HH": [
+        2,
+        1,
+        2,
+        2,
+        1,
+        2
+      ]
+    },
+    "defaultKit": "frameDrum",
+    "country": "GR",
+    "region": "balkans",
+    "tags": [
+      "greek",
+      "thracian",
+      "zonaradikos",
+      "belt-dance",
+      "line-dance"
+    ],
+    "instruments": [
+      "kaval",
+      "gaida",
+      "daouli"
+    ],
+    "swingable": false,
+    "story": "The \"belt-holding dance\" — Thracian Greeks form a line gripping each other's sashes, crossing three-steps in a 6/8 lilt. Descended from Byzantine processional dances.",
+    "relatedIds": [
+      "lesnoto",
+      "kalamatianos"
+    ]
+  },
+  {
+    "id": "beranche",
+    "name": "Beranče",
+    "origin": "North Macedonia · Western Macedonia",
+    "tradition": "Folk line dance",
+    "genre": "folk-dance",
+    "timeSig": "12/8",
+    "grouping": [
+      3,
+      2,
+      2,
+      3,
+      2
+    ],
+    "stepUnit": 8,
+    "steps": 12,
+    "bpm": {
+      "default": 170,
+      "min": 140,
+      "max": 200
+    },
+    "difficulty": "advanced",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        2,
+        0,
+        2,
+        0,
+        2,
+        0,
+        0,
+        2,
+        0
+      ],
+      "SN": [
+        0,
+        1,
+        1,
+        0,
+        1,
+        0,
+        1,
+        0,
+        1,
+        1,
+        0,
+        1
+      ],
+      "HH": [
+        2,
+        1,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        1,
+        2,
+        1
+      ]
+    },
+    "defaultKit": "frameDrum",
+    "country": "MK",
+    "region": "balkans",
+    "tags": [
+      "macedonian",
+      "beranche",
+      "12-8",
+      "aksak",
+      "asymmetric"
+    ],
+    "instruments": [
+      "zurla",
+      "tapan",
+      "kaval"
+    ],
+    "swingable": false,
+    "story": "A Macedonian 12/8 divided as 3+2+2+3+2 — one of the region's most asymmetric long-meters. Zurla and tapan outside the village square at Easter, the line snaking for hours."
+  },
+  {
+    "id": "moravac",
+    "name": "Moravac",
+    "origin": "Serbia · Morava Valley",
+    "tradition": "Serbian national kolo",
+    "genre": "folk-dance",
+    "timeSig": "2/4",
+    "grouping": [
+      4,
+      4
+    ],
+    "stepUnit": 16,
+    "steps": 8,
+    "bpm": {
+      "default": 280,
+      "min": 240,
+      "max": 320
+    },
+    "difficulty": "intermediate",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0
+      ],
+      "SN": [
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        2,
+        1
+      ],
+      "HH": [
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1
+      ]
+    },
+    "defaultKit": "frameDrum",
+    "country": "RS",
+    "region": "balkans",
+    "tags": [
+      "serbian",
+      "kolo",
+      "moravac",
+      "morava-valley"
+    ],
+    "instruments": [
+      "accordion",
+      "violin",
+      "frula"
+    ],
+    "swingable": false,
+    "story": "Serbia's most internationally famous kolo — Morava valley origin, 1920s urban-band arrangements made it the national party dance. Faster than užičko, slower than a ruchenitsa.",
+    "relatedIds": [
+      "oro-kolo",
+      "uzicko-kolo"
+    ]
+  },
+  {
+    "id": "uzicko-kolo",
+    "name": "Užičko Kolo",
+    "origin": "Serbia · Užice",
+    "tradition": "Serbian western kolo",
+    "genre": "folk-dance",
+    "timeSig": "2/4",
+    "grouping": [
+      4,
+      4
+    ],
+    "stepUnit": 16,
+    "steps": 8,
+    "bpm": {
+      "default": 320,
+      "min": 280,
+      "max": 380
+    },
+    "difficulty": "intermediate",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        2,
+        2,
+        0,
+        0,
+        0
+      ],
+      "SN": [
+        0,
+        0,
+        2,
+        0,
+        0,
+        1,
+        2,
+        0
+      ],
+      "HH": [
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1
+      ]
+    },
+    "defaultKit": "frameDrum",
+    "country": "RS",
+    "region": "balkans",
+    "tags": [
+      "serbian",
+      "kolo",
+      "uzice",
+      "western-serbia"
+    ],
+    "instruments": [
+      "frula",
+      "accordion",
+      "tapan"
+    ],
+    "swingable": false,
+    "story": "The kolo of Užice in western Serbia — faster and grittier than Moravac, with a characteristic extra stomp on beat 4 that marks every phrase boundary.",
+    "relatedIds": [
+      "oro-kolo",
+      "moravac"
+    ]
+  },
+  {
+    "id": "devetorka",
+    "name": "Devetorka",
+    "origin": "North Macedonia · Bulgaria",
+    "tradition": "Folk asymmetric dance",
+    "genre": "folk-dance",
+    "timeSig": "9/16",
+    "grouping": [
+      2,
+      2,
+      2,
+      3
+    ],
+    "stepUnit": 16,
+    "steps": 9,
+    "bpm": {
+      "default": 340,
+      "min": 280,
+      "max": 420
+    },
+    "difficulty": "advanced",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        2,
+        0,
+        2,
+        0,
+        2,
+        0,
+        0
+      ],
+      "SN": [
+        0,
+        1,
+        0,
+        1,
+        0,
+        1,
+        0,
+        1,
+        1
+      ],
+      "HH": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        1,
+        1
+      ]
+    },
+    "defaultKit": "frameDrum",
+    "country": "MK",
+    "region": "balkans",
+    "tags": [
+      "macedonian",
+      "devetorka",
+      "9-16",
+      "aksak",
+      "asymmetric"
+    ],
+    "instruments": [
+      "gaida",
+      "tapan",
+      "kaval"
+    ],
+    "swingable": false,
+    "story": "\"The nine-er\" — a Macedonian-Bulgarian 9/16 dance faster than its daichovo 9/8 cousin. The long beat closes each cycle with the definitive stomp.",
+    "relatedIds": [
+      "daichovo"
+    ]
+  },
+  {
+    "id": "romanian-hora",
+    "name": "Romanian Hora",
+    "origin": "Romania",
+    "tradition": "National circle dance",
+    "genre": "folk-dance",
+    "timeSig": "6/8",
+    "grouping": [
+      3,
+      3
+    ],
+    "stepUnit": 8,
+    "steps": 6,
+    "bpm": {
+      "default": 130,
+      "min": 110,
+      "max": 150
+    },
+    "difficulty": "beginner",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        2,
+        0,
+        0
+      ],
+      "SN": [
+        0,
+        0,
+        2,
+        0,
+        1,
+        2
+      ],
+      "HH": [
+        2,
+        1,
+        2,
+        2,
+        1,
+        2
+      ]
+    },
+    "defaultKit": "frameDrum",
+    "country": "RO",
+    "region": "balkans",
+    "tags": [
+      "romanian",
+      "hora",
+      "circle-dance",
+      "lautari"
+    ],
+    "instruments": [
+      "violin",
+      "cimbalom",
+      "accordion"
+    ],
+    "swingable": false,
+    "story": "Romania's national circle dance — every village has one. The lăutari brass bands play hora at weddings until dawn; Bartók transcribed hundreds of them.",
+    "relatedIds": [
+      "romanian-sarba",
+      "klezmer-hora"
+    ]
+  },
+  {
+    "id": "romanian-sarba",
+    "name": "Sârba",
+    "origin": "Romania",
+    "tradition": "Romanian fast couple dance",
+    "genre": "folk-dance",
+    "timeSig": "2/4",
+    "grouping": [
+      4,
+      4
+    ],
+    "stepUnit": 16,
+    "steps": 8,
+    "bpm": {
+      "default": 280,
+      "min": 240,
+      "max": 320
+    },
+    "difficulty": "intermediate",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        2,
+        2,
+        0,
+        0,
+        0
+      ],
+      "SN": [
+        0,
+        0,
+        2,
+        0,
+        0,
+        2,
+        2,
+        0
+      ],
+      "HH": [
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1
+      ]
+    },
+    "defaultKit": "frameDrum",
+    "country": "RO",
+    "region": "balkans",
+    "tags": [
+      "romanian",
+      "sarba",
+      "fast",
+      "lautari",
+      "brass-band"
+    ],
+    "instruments": [
+      "violin",
+      "accordion",
+      "brass"
+    ],
+    "swingable": false,
+    "story": "Romania's fast couple dance — the brass-band equivalent of Serbia's moravac. Driving 2/4 with a syncopated after-beat that makes the whole line bounce forward.",
+    "relatedIds": [
+      "romanian-hora",
+      "moravac"
+    ]
+  },
+  {
+    "id": "geampara",
+    "name": "Geampara",
+    "origin": "Romania · Dobruja",
+    "tradition": "Dobrujan asymmetric dance",
+    "genre": "folk-dance",
+    "timeSig": "7/16",
+    "grouping": [
+      2,
+      2,
+      3
+    ],
+    "stepUnit": 16,
+    "steps": 7,
+    "bpm": {
+      "default": 320,
+      "min": 260,
+      "max": 380
+    },
+    "difficulty": "advanced",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        2,
+        0,
+        2,
+        0,
+        0
+      ],
+      "SN": [
+        0,
+        1,
+        0,
+        1,
+        0,
+        1,
+        1
+      ],
+      "HH": [
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        1
+      ]
+    },
+    "defaultKit": "frameDrum",
+    "country": "RO",
+    "region": "balkans",
+    "tags": [
+      "romanian",
+      "dobruja",
+      "geampara",
+      "7-16",
+      "aksak",
+      "turkish-heritage"
+    ],
+    "instruments": [
+      "violin",
+      "tambal",
+      "cimpoi"
+    ],
+    "swingable": false,
+    "story": "The Turkish-influenced 7/8 of the Dobruja coast — Romania's answer to the ruchenitsa, preserved in the villages between the Danube and the Black Sea.",
+    "relatedIds": [
+      "ruchenitsa",
+      "eleno-mome"
+    ]
+  },
+  {
+    "id": "briul",
+    "name": "Brîul",
+    "origin": "Romania",
+    "tradition": "Men's belt dance",
+    "genre": "folk-dance",
+    "timeSig": "2/4",
+    "grouping": [
+      4,
+      4
+    ],
+    "stepUnit": 16,
+    "steps": 8,
+    "bpm": {
+      "default": 300,
+      "min": 260,
+      "max": 340
+    },
+    "difficulty": "intermediate",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0
+      ],
+      "SN": [
+        0,
+        0,
+        2,
+        0,
+        2,
+        0,
+        2,
+        0
+      ],
+      "HH": [
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1
+      ]
+    },
+    "defaultKit": "frameDrum",
+    "country": "RO",
+    "region": "balkans",
+    "tags": [
+      "romanian",
+      "briul",
+      "belt-dance",
+      "men",
+      "virtuoso"
+    ],
+    "instruments": [
+      "violin",
+      "cobza",
+      "tambal"
+    ],
+    "swingable": false,
+    "story": "\"The belt\" — a Romanian men's line-dance where virtuoso solos break out of the chain before returning, like instrumental breaks in a jazz head.",
+    "relatedIds": [
+      "zonaradikos",
+      "romanian-sarba"
+    ]
+  },
+  {
+    "id": "klezmer-freylekhs",
+    "name": "Freylekhs",
+    "origin": "Eastern Europe · Yiddish",
+    "tradition": "Klezmer wedding dance",
+    "genre": "folk-dance",
+    "timeSig": "4/4",
+    "grouping": [
+      4,
+      4,
+      4,
+      4
+    ],
+    "stepUnit": 16,
+    "steps": 16,
+    "bpm": {
+      "default": 240,
+      "min": 200,
+      "max": 280
+    },
+    "difficulty": "beginner",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0
+      ],
+      "SN": [
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        2,
+        0
+      ],
+      "HH": [
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1
+      ]
+    },
+    "defaultKit": "frameDrum",
+    "country": "UA",
+    "region": "balkans",
+    "tags": [
+      "klezmer",
+      "yiddish",
+      "freylekhs",
+      "wedding",
+      "simcha"
+    ],
+    "instruments": [
+      "clarinet",
+      "violin",
+      "accordion",
+      "poyk"
+    ],
+    "swingable": false,
+    "story": "\"Joyful one\" — the default Ashkenazi wedding dance. A plain 4/4 with all the emotion above: clarinets wailing the freygish mode while the whole wedding circles.",
+    "relatedIds": [
+      "klezmer-bulgar",
+      "klezmer-hora"
+    ]
+  },
+  {
+    "id": "klezmer-bulgar",
+    "name": "Bulgar (Klezmer)",
+    "origin": "Eastern Europe · Yiddish",
+    "tradition": "Klezmer dance (American-Jewish era)",
+    "genre": "folk-dance",
+    "timeSig": "4/4",
+    "grouping": [
+      4,
+      4,
+      4,
+      4
+    ],
+    "stepUnit": 16,
+    "steps": 16,
+    "bpm": {
+      "default": 260,
+      "min": 220,
+      "max": 320
+    },
+    "difficulty": "intermediate",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        2,
+        0,
+        0,
+        2,
+        0,
+        2,
+        0,
+        0,
+        2,
+        0,
+        0,
+        2,
+        0
+      ],
+      "SN": [
+        0,
+        0,
+        2,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        2,
+        0,
+        0,
+        0
+      ],
+      "HH": [
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1
+      ]
+    },
+    "defaultKit": "frameDrum",
+    "country": "US",
+    "region": "balkans",
+    "tags": [
+      "klezmer",
+      "bulgar",
+      "bessarabian",
+      "american-jewish",
+      "catskills"
+    ],
+    "instruments": [
+      "clarinet",
+      "violin",
+      "accordion"
+    ],
+    "swingable": false,
+    "story": "The Bessarabian-origin bulgar became the signature klezmer form in 1920s-60s America — Catskills weddings, Andy Statman, Naftule Brandwein. A 3+3+2 tresillo under a klezmer head.",
+    "relatedIds": [
+      "klezmer-freylekhs",
+      "klezmer-hora"
+    ]
+  },
+  {
+    "id": "klezmer-hora",
+    "name": "Hora (Klezmer · Slow)",
+    "origin": "Eastern Europe · Romania / Yiddish",
+    "tradition": "Klezmer slow processional",
+    "genre": "folk-dance",
+    "timeSig": "3/8",
+    "grouping": [
+      3,
+      3
+    ],
+    "stepUnit": 8,
+    "steps": 6,
+    "bpm": {
+      "default": 140,
+      "min": 110,
+      "max": 170
+    },
+    "difficulty": "intermediate",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        2,
+        0,
+        0
+      ],
+      "SN": [
+        0,
+        0,
+        2,
+        0,
+        0,
+        2
+      ],
+      "HH": [
+        2,
+        0,
+        2,
+        2,
+        0,
+        2
+      ]
+    },
+    "defaultKit": "frameDrum",
+    "country": "UA",
+    "region": "balkans",
+    "tags": [
+      "klezmer",
+      "hora",
+      "slow",
+      "romanian-heritage",
+      "doina"
+    ],
+    "instruments": [
+      "violin",
+      "clarinet",
+      "tsimbl"
+    ],
+    "swingable": false,
+    "story": "The klezmer hora — not the fast Israeli hora but the slow Romanian limping-3 used as a processional to precede a freylekhs. Often played as a doina leading into the wedding proper.",
+    "relatedIds": [
+      "klezmer-freylekhs",
+      "klezmer-bulgar",
+      "romanian-hora"
+    ]
+  }
+]

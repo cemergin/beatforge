@@ -1,0 +1,940 @@
+[
+  {
+    "id": "reng",
+    "name": "Reng",
+    "origin": "Iran",
+    "tradition": "Persian classical finale",
+    "genre": "classical",
+    "timeSig": "6/8",
+    "grouping": [
+      3,
+      3
+    ],
+    "stepUnit": 8,
+    "steps": 6,
+    "bpm": {
+      "default": 150,
+      "min": 120,
+      "max": 200
+    },
+    "difficulty": "intermediate",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        2,
+        0,
+        0
+      ],
+      "SN": [
+        0,
+        0,
+        2,
+        0,
+        2,
+        1
+      ],
+      "HH": [
+        2,
+        1,
+        2,
+        2,
+        1,
+        2
+      ]
+    },
+    "defaultKit": "frameDrum",
+    "country": "IR",
+    "region": "persia",
+    "tags": [
+      "classical",
+      "dastgah",
+      "dance",
+      "finale"
+    ],
+    "instruments": [
+      "tombak",
+      "daf",
+      "tar"
+    ],
+    "swingable": false,
+    "story": "The dance finale of a Persian dastgah suite — light, playful, a release after the meditative avaz sections."
+  },
+  {
+    "id": "tasnif-4-4",
+    "name": "Tasnif",
+    "origin": "Iran",
+    "tradition": "Persian art song",
+    "genre": "classical",
+    "timeSig": "4/4",
+    "grouping": [
+      4,
+      4,
+      4,
+      4
+    ],
+    "stepUnit": 16,
+    "steps": 16,
+    "bpm": {
+      "default": 360,
+      "min": 280,
+      "max": 480
+    },
+    "difficulty": "intermediate",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0
+      ],
+      "SN": [
+        0,
+        0,
+        2,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        2,
+        0,
+        0,
+        0
+      ],
+      "HH": [
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1
+      ]
+    },
+    "defaultKit": "frameDrum",
+    "country": "IR",
+    "region": "persia",
+    "tags": [
+      "art-song",
+      "classical",
+      "vocal"
+    ],
+    "instruments": [
+      "tombak",
+      "tar",
+      "setar"
+    ],
+    "swingable": false,
+    "story": "The metric art-song form at the heart of Persian classical music — a poem set within a rhythmic cycle, where tombak and voice weave together."
+  },
+  {
+    "id": "chaharmezrab",
+    "name": "Chaharmezrab",
+    "origin": "Iran",
+    "tradition": "Persian virtuoso piece",
+    "genre": "classical",
+    "timeSig": "6/16",
+    "grouping": [
+      3,
+      3
+    ],
+    "stepUnit": 16,
+    "steps": 6,
+    "bpm": {
+      "default": 720,
+      "min": 560,
+      "max": 960
+    },
+    "difficulty": "advanced",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        2,
+        0,
+        0
+      ],
+      "SN": [
+        0,
+        2,
+        1,
+        0,
+        2,
+        1
+      ],
+      "HH": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ]
+    },
+    "defaultKit": "frameDrum",
+    "country": "IR",
+    "region": "persia",
+    "tags": [
+      "virtuoso",
+      "fast",
+      "dastgah"
+    ],
+    "instruments": [
+      "santur",
+      "tombak",
+      "tar"
+    ],
+    "swingable": false,
+    "story": "\"Four-plectrum-strokes\" — a fast, virtuosic instrumental étude built on a repeating rhythmic cell, used to display technique in a dastgah."
+  },
+  {
+    "id": "kereshmeh",
+    "name": "Kereshmeh",
+    "origin": "Iran",
+    "tradition": "Persian classical gusheh",
+    "genre": "classical",
+    "timeSig": "6/8",
+    "grouping": [
+      3,
+      3
+    ],
+    "stepUnit": 8,
+    "steps": 6,
+    "bpm": {
+      "default": 110,
+      "min": 90,
+      "max": 140
+    },
+    "difficulty": "intermediate",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        2,
+        0,
+        0,
+        0
+      ],
+      "SN": [
+        0,
+        0,
+        0,
+        2,
+        0,
+        2
+      ],
+      "HH": [
+        2,
+        1,
+        2,
+        2,
+        1,
+        2
+      ]
+    },
+    "defaultKit": "frameDrum",
+    "country": "IR",
+    "region": "persia",
+    "tags": [
+      "classical",
+      "dastgah",
+      "gusheh",
+      "radif"
+    ],
+    "instruments": [
+      "tombak",
+      "setar",
+      "tar"
+    ],
+    "swingable": false,
+    "story": "The name means a coquettish glance — two toms leaning into the first half of the bar, two baks rocking the second back. A purely Persian gesture, distinct from every Arabic and Turkish cousin."
+  },
+  {
+    "id": "reng-basic",
+    "name": "Reng (Basic)",
+    "origin": "Iran",
+    "tradition": "Dastgah dance finale",
+    "genre": "classical",
+    "timeSig": "6/8",
+    "grouping": [
+      3,
+      3
+    ],
+    "stepUnit": 8,
+    "steps": 6,
+    "bpm": {
+      "default": 130,
+      "min": 110,
+      "max": 160
+    },
+    "difficulty": "beginner",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        2,
+        0,
+        0
+      ],
+      "SN": [
+        0,
+        0,
+        2,
+        0,
+        0,
+        2
+      ],
+      "HH": [
+        2,
+        1,
+        2,
+        2,
+        1,
+        2
+      ]
+    },
+    "defaultKit": "frameDrum",
+    "country": "IR",
+    "region": "persia",
+    "tags": [
+      "dance",
+      "dastgah",
+      "finale",
+      "classical"
+    ],
+    "instruments": [
+      "tombak",
+      "santur",
+      "tar"
+    ],
+    "swingable": false,
+    "story": "The simplest reng — two strokes per half-bar, light on the feet. Toward the end of a radif performance the tombak drops this figure and the ensemble finally exhales into dance.",
+    "relatedIds": [
+      "reng"
+    ]
+  },
+  {
+    "id": "fast-reng",
+    "name": "Fast Reng",
+    "origin": "Iran",
+    "tradition": "Dastgah virtuoso dance",
+    "genre": "classical",
+    "timeSig": "6/8",
+    "grouping": [
+      3,
+      3
+    ],
+    "stepUnit": 8,
+    "steps": 6,
+    "bpm": {
+      "default": 175,
+      "min": 150,
+      "max": 220
+    },
+    "difficulty": "advanced",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        2,
+        0,
+        0
+      ],
+      "SN": [
+        0,
+        2,
+        2,
+        0,
+        2,
+        2
+      ],
+      "HH": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ]
+    },
+    "defaultKit": "frameDrum",
+    "country": "IR",
+    "region": "persia",
+    "tags": [
+      "dance",
+      "fast",
+      "virtuoso",
+      "dastgah"
+    ],
+    "instruments": [
+      "tombak",
+      "santur",
+      "tar"
+    ],
+    "swingable": false,
+    "story": "Reng wound up to concert-finale speed — tom on 1 and 4, doubled baks filling every gap. A tombak player will sweat through this one before the applause arrives.",
+    "relatedIds": [
+      "reng",
+      "reng-basic"
+    ]
+  },
+  {
+    "id": "zarbi-shur",
+    "name": "Zarbi (Shur)",
+    "origin": "Iran",
+    "tradition": "Dastgah metric section",
+    "genre": "classical",
+    "timeSig": "6/8",
+    "grouping": [
+      3,
+      3
+    ],
+    "stepUnit": 8,
+    "steps": 6,
+    "bpm": {
+      "default": 95,
+      "min": 75,
+      "max": 120
+    },
+    "difficulty": "intermediate",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        2,
+        0,
+        0
+      ],
+      "SN": [
+        0,
+        0,
+        2,
+        0,
+        2,
+        0
+      ],
+      "HH": [
+        2,
+        1,
+        2,
+        2,
+        1,
+        2
+      ]
+    },
+    "defaultKit": "frameDrum",
+    "country": "IR",
+    "region": "persia",
+    "tags": [
+      "dastgah",
+      "shur",
+      "zarbi",
+      "metric"
+    ],
+    "instruments": [
+      "tombak",
+      "setar",
+      "kamancheh"
+    ],
+    "swingable": false,
+    "story": "When the avaz finally gathers itself into meter, this is how the Shur dastgah enters zarbi time — contemplative, bowed-low, still steeped in Shur's mystical longing."
+  },
+  {
+    "id": "zarbi-chahargah",
+    "name": "Zarbi (Chahargah)",
+    "origin": "Iran",
+    "tradition": "Dastgah metric section",
+    "genre": "classical",
+    "timeSig": "6/8",
+    "grouping": [
+      3,
+      3
+    ],
+    "stepUnit": 8,
+    "steps": 6,
+    "bpm": {
+      "default": 145,
+      "min": 120,
+      "max": 180
+    },
+    "difficulty": "intermediate",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        2,
+        0,
+        0
+      ],
+      "SN": [
+        0,
+        2,
+        2,
+        0,
+        2,
+        2
+      ],
+      "HH": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ]
+    },
+    "defaultKit": "frameDrum",
+    "country": "IR",
+    "region": "persia",
+    "tags": [
+      "dastgah",
+      "chahargah",
+      "zarbi",
+      "driving"
+    ],
+    "instruments": [
+      "tombak",
+      "tar",
+      "kamancheh"
+    ],
+    "swingable": false,
+    "story": "Chahargah's augmented intervals demand intensity — and its zarbi pattern answers with relentless compound pulse. The dastgah that moves fastest toward climax.",
+    "relatedIds": [
+      "zarbi-shur"
+    ]
+  },
+  {
+    "id": "mahur-68",
+    "name": "Mahur 6/8",
+    "origin": "Iran",
+    "tradition": "Dastgah-e Mahur",
+    "genre": "classical",
+    "timeSig": "6/8",
+    "grouping": [
+      3,
+      3
+    ],
+    "stepUnit": 8,
+    "steps": 6,
+    "bpm": {
+      "default": 120,
+      "min": 100,
+      "max": 150
+    },
+    "difficulty": "beginner",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        2,
+        0,
+        0
+      ],
+      "SN": [
+        0,
+        0,
+        2,
+        0,
+        2,
+        0
+      ],
+      "HH": [
+        2,
+        1,
+        2,
+        2,
+        1,
+        2
+      ]
+    },
+    "defaultKit": "frameDrum",
+    "country": "IR",
+    "region": "persia",
+    "tags": [
+      "dastgah",
+      "mahur",
+      "joyful",
+      "classical"
+    ],
+    "instruments": [
+      "tombak",
+      "tar",
+      "ney"
+    ],
+    "swingable": false,
+    "story": "Mahur is the sunlit dastgah — structurally cognate with a Western major scale, emotionally buoyant. In its metric moments the tombak sets this buoyant 6/8 and the melody skips across it."
+  },
+  {
+    "id": "kurdish-7-8",
+    "name": "Kurdish 7/8",
+    "origin": "Iran · Kurdistan",
+    "tradition": "Kurdish folk",
+    "genre": "folk-dance",
+    "timeSig": "7/8",
+    "grouping": [
+      3,
+      2,
+      2
+    ],
+    "stepUnit": 8,
+    "steps": 7,
+    "bpm": {
+      "default": 140,
+      "min": 110,
+      "max": 170
+    },
+    "difficulty": "intermediate",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0
+      ],
+      "SN": [
+        0,
+        0,
+        2,
+        0,
+        2,
+        0,
+        2
+      ],
+      "HH": [
+        2,
+        1,
+        2,
+        2,
+        1,
+        2,
+        1
+      ]
+    },
+    "defaultKit": "frameDrum",
+    "country": "IR",
+    "region": "persia",
+    "tags": [
+      "kurdish",
+      "folk",
+      "asymmetric",
+      "daf"
+    ],
+    "instruments": [
+      "daf",
+      "tanbur",
+      "shamshal"
+    ],
+    "swingable": false,
+    "story": "The asymmetric lilt of Kurdish folk — daf shimmering behind a tanbur drone. Played at Nowruz, sung for lost villages, stomped under the hem of a thousand-year-old line dance.",
+    "relatedIds": [
+      "devri-hindi",
+      "kalamatianos",
+      "lesnoto",
+      "afghan-attan"
+    ]
+  },
+  {
+    "id": "daf-zikr",
+    "name": "Daf Zikr",
+    "origin": "Iran · Kurdistan",
+    "tradition": "Sufi dhikr ceremony",
+    "genre": "devotional",
+    "timeSig": "4/4",
+    "grouping": [
+      4,
+      4,
+      4,
+      4
+    ],
+    "stepUnit": 16,
+    "steps": 16,
+    "bpm": {
+      "default": 400,
+      "min": 240,
+      "max": 640
+    },
+    "difficulty": "intermediate",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0
+      ],
+      "SN": [
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        2,
+        0
+      ],
+      "HH": [
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1
+      ]
+    },
+    "defaultKit": "frameDrum",
+    "country": "IR",
+    "region": "persia",
+    "tags": [
+      "sufi",
+      "dhikr",
+      "kurdish",
+      "trance",
+      "qadiri"
+    ],
+    "instruments": [
+      "daf",
+      "tanbur",
+      "voice"
+    ],
+    "swingable": false,
+    "story": "The Qadiri dervish lifts the daf, ringlets shimmering, and begins the long ascent toward ecstasy. Slow invocation at 60 BPM, relentless drive at 140 — the same pattern, carrying the zikr up the mountain.",
+    "relatedIds": [
+      "sufi-dhikr-circular",
+      "sufi-dhikr-sudan",
+      "dhamaal-sufi",
+      "ayoub"
+    ]
+  },
+  {
+    "id": "bandari",
+    "name": "Bandari",
+    "origin": "Iran · Hormozgan · Bushehr",
+    "tradition": "Afro-Iranian Gulf",
+    "genre": "folk-dance",
+    "timeSig": "6/8",
+    "grouping": [
+      3,
+      3
+    ],
+    "stepUnit": 8,
+    "steps": 6,
+    "bpm": {
+      "default": 140,
+      "min": 120,
+      "max": 170
+    },
+    "difficulty": "intermediate",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        2,
+        2,
+        0,
+        2
+      ],
+      "SN": [
+        0,
+        2,
+        0,
+        0,
+        2,
+        0
+      ],
+      "HH": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ]
+    },
+    "defaultKit": "frameDrum",
+    "country": "IR",
+    "region": "persia",
+    "tags": [
+      "bandari",
+      "afro-iranian",
+      "gulf",
+      "polyrhythmic",
+      "zar"
+    ],
+    "instruments": [
+      "dohol",
+      "kaser",
+      "jofti"
+    ],
+    "swingable": false,
+    "story": "A Bushehr wedding — dohol, kaser, and the cymbals of the tus cutting through. Bandari is the African strand woven into Persian music, carrying zar healing rites across the Indian Ocean and depositing them on Iran's southern shore.",
+    "relatedIds": [
+      "persian-tehran-club",
+      "stambali",
+      "gnawa",
+      "khaliji-saudi"
+    ]
+  },
+  {
+    "id": "pishdaramad",
+    "name": "Pishdaramad",
+    "origin": "Iran",
+    "tradition": "Dastgah overture",
+    "genre": "classical",
+    "timeSig": "4/4",
+    "grouping": [
+      4,
+      4,
+      4,
+      4
+    ],
+    "stepUnit": 16,
+    "steps": 16,
+    "bpm": {
+      "default": 280,
+      "min": 220,
+      "max": 360
+    },
+    "difficulty": "intermediate",
+    "tracks": {
+      "KK": [
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "SN": [
+        0,
+        0,
+        2,
+        0,
+        2,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0
+      ],
+      "HH": [
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1
+      ]
+    },
+    "defaultKit": "frameDrum",
+    "country": "IR",
+    "region": "persia",
+    "tags": [
+      "classical",
+      "dastgah",
+      "overture",
+      "ensemble"
+    ],
+    "instruments": [
+      "tombak",
+      "tar",
+      "kamancheh",
+      "santur"
+    ],
+    "swingable": false,
+    "story": "The formal overture that opens a dastgah performance — a stately instrumental procession through the mode's key gushehs before the soloist takes over. Slow, ensemble-wide, tombak keeping time for everyone.",
+    "relatedIds": [
+      "tasnif-4-4"
+    ]
+  }
+]
