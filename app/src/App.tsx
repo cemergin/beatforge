@@ -72,6 +72,10 @@ export default function App() {
   // Transient patterns decoded from ?p= share links. Not persisted to IDB;
   // live only in-memory for the session. Keyed by a stable share id.
   const sharedPatternsRef = useRef<Map<string, Pattern>>(new Map());
+  // Bumped whenever non-seed pattern sources change (user cache hydrated,
+  // shared pattern registered). URL-sync + Practice can depend on this
+  // without using the refs' identity.
+  const [patternSourcesTick, setPatternSourcesTick] = useState(0);
 
   const refreshUserCache = useCallback(async () => {
     const all = await loadAllSafe();
@@ -80,6 +84,7 @@ export default function App() {
       if (entry.pattern) map.set(entry.pattern.id, entry.pattern);
     }
     userCacheRef.current = map;
+    setPatternSourcesTick((n) => n + 1);
   }, []);
 
   // Expose user patterns + shared patterns to seed.patternById.
@@ -113,12 +118,11 @@ export default function App() {
       const shareId = `shared-${pattern.id}-${Date.now().toString(36)}`;
       const seeded: Pattern = { ...pattern, id: shareId };
       sharedPatternsRef.current.set(shareId, seeded);
+      setPatternSourcesTick((n) => n + 1);
       setPatternId(shareId);
       setTab('practice');
-      // Replace URL: drop ?p=, keep tab+pattern so future reloads point at
-      // the transient id (which will be lost on tab close — acceptable).
-      const next = new URLSearchParams({ tab: 'practice', pattern: shareId });
-      window.history.replaceState(null, '', `${window.location.pathname}?${next.toString()}`);
+      // URL sync effect below will re-encode as ?p= once the sources tick
+      // propagates — we don't rewrite the URL here to avoid a flicker.
     })();
     return () => { cancelled = true; };
   }, []);
@@ -132,20 +136,53 @@ export default function App() {
     localStorage.setItem('bf_tab', tab);
   }, [tab]);
 
-  // Reflect (tab, patternId) into the URL without adding a history entry.
-  // pushState would make the back-button traverse tab switches, which feels
-  // broken for a single-page app. Only Practice carries ?pattern=.
+  // Reflect (tab, patternId) into the URL. For seed patterns we write
+  // `?pattern=<id>` (compact, stable). For user/shared patterns — which
+  // only exist in this browser's storage — we write `?p=<hash>` so the
+  // URL is genuinely shareable. Copying from the URL bar "just works"
+  // regardless of whether the pattern is built-in or authored locally.
   useEffect(() => {
-    const params = new URLSearchParams();
-    params.set('tab', tab);
-    if (tab === 'practice') params.set('pattern', patternId);
-    const nextSearch = `?${params.toString()}`;
-    // No-op if the URL already matches — prevents replaceState loops when
-    // state echoes back from popstate.
-    if (window.location.search === nextSearch) return;
-    const nextUrl = `${window.location.pathname}${nextSearch}${window.location.hash}`;
-    window.history.replaceState(null, '', nextUrl);
-  }, [tab, patternId]);
+    if (tab !== 'practice') {
+      const nextSearch = `?tab=${tab}`;
+      if (window.location.search === nextSearch) return;
+      window.history.replaceState(null, '', `${window.location.pathname}${nextSearch}${window.location.hash}`);
+      return;
+    }
+    // Is this a seed pattern we can round-trip via short id?
+    const resolved = patternById(patternId);
+    const isSeed = !!resolved
+      && !userCacheRef.current.has(patternId)
+      && !sharedPatternsRef.current.has(patternId);
+
+    if (isSeed) {
+      const search = `?tab=practice&pattern=${encodeURIComponent(patternId)}`;
+      if (window.location.search === search) return;
+      window.history.replaceState(null, '', `${window.location.pathname}${search}${window.location.hash}`);
+      return;
+    }
+
+    // User / shared pattern → encode full pattern into ?p=<hash> so it
+    // resolves for recipients who don't have it in their storage.
+    if (!resolved) return;   // pattern cache not hydrated yet — skip this tick
+    let cancelled = false;
+    (async () => {
+      try {
+        const { serializePattern } = await import('./patterns/serialize');
+        const hash = await serializePattern(resolved);
+        if (cancelled) return;
+        const search = `?tab=practice&p=${hash}`;
+        if (window.location.search === search) return;
+        window.history.replaceState(null, '', `${window.location.pathname}${search}${window.location.hash}`);
+      } catch {
+        // Fall back to short-id URL if encoding fails — better than nothing.
+        const search = `?tab=practice&pattern=${encodeURIComponent(patternId)}`;
+        if (window.location.search !== search) {
+          window.history.replaceState(null, '', `${window.location.pathname}${search}${window.location.hash}`);
+        }
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [tab, patternId, patternSourcesTick]);
 
   // Browser back/forward: re-read URL and apply to state. The URL-sync effect
   // above is guarded against no-op replaceState, so this won't loop.
