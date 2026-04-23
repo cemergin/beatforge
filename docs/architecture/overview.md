@@ -130,8 +130,8 @@ Walk-through for the most common path (Practice mode, default pattern, no count-
 ┌───────────────────────────────────────────────────────────────────────┐
 │ 4. tick() — engine.ts:237-304                                         │
 │                                                                       │
-│    Lookahead scheduler: every 25ms, schedule all notes                │
-│    whose time ≤ currentTime + 120ms horizon.                          │
+│    Lookahead scheduler: every 15ms (worker tick), schedule notes      │
+│    whose time ≤ currentTime + 300ms horizon.                          │
 │                                                                       │
 │    For each track:                                                    │
 │      while (nextNoteTimes[tr] < horizon) {                            │
@@ -141,7 +141,7 @@ Walk-through for the most common path (Practice mode, default pattern, no count-
 │        nextIdx[tr] += 1                                               │
 │      }                                                                │
 │                                                                       │
-│    setTimeout(tick, 25) — scheduler re-arms.                          │
+│    Worker posts next "tick" message in 15ms — re-arm.                 │
 └──────────────────────────────┬────────────────────────────────────────┘
                                │
                                ▼
@@ -202,8 +202,10 @@ And the bar-boundary side channel:
 │     }                                                                 │
 │   };                                                                  │
 │                                                                       │
-│ Engine fires onBar via setTimeout scheduled at bar-boundary time      │
-│ (engine.ts:292-301).                                                  │
+│ Engine fires all bar listeners via setTimeout scheduled at the exact  │
+│ bar-boundary time. `subscribeOnBar()` returns an unsubscribe fn so    │
+│ Practice and Studio can each own their own handler without            │
+│ clobbering each other on tab switches.                                │
 └───────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -227,9 +229,9 @@ Each track in a pattern has its own `subdivisions` count and its own `stepSec`. 
 
 Patterns only ever reference `KK | SN | HH | OH | CP`. Each of the 7 kits (808, 909, 707, 727, frameDrum, tabla, gamelan) provides a synthesis recipe for those 5 voices. The 727 remaps `KK` to a low conga; the tabla kit remaps `KK` to a bayan bass with upward pitch bend; etc. This lets any pattern play through any kit without voice-level remapping in the pattern JSON.
 
-### 5. Lookahead scheduler (25ms timer, 120ms horizon)
+### 5. Lookahead scheduler (15ms worker tick, 300ms horizon)
 
-Classic `setTimeout`-based JavaScript scheduler from Chris Wilson's pattern. `tick()` runs every 25ms; each tick schedules any notes whose time falls within the next 120ms using Web Audio's sample-accurate `AudioBufferSourceNode.start(when)` API. See `engine.ts:39-40` for constants. Visual cursors update during `tick()` immediately (before audio fires), so visual lag is at most 120ms.
+Chris Wilson lookahead pattern, with the tick timer moved into a dedicated Web Worker (`src/audio/scheduler-worker.ts`). The worker posts a `"tick"` message every 15ms; the main thread receives it and schedules any notes whose time falls within the next 300ms using Web Audio's sample-accurate `.start(when)` API. The worker is immune to React re-renders, devtools activity, and background-tab throttling — audio timing stays locked to the audio clock (`ctx.currentTime`) regardless of main-thread load. A catch-up branch in `tick()` handles the pathological case where a stall exceeds 300ms (snap to `ctx.currentTime + 5ms` instead of scheduling into the past). See [audio-engine.md](./audio-engine.md#the-scheduler) for the full treatment.
 
 ### 6. Opacity = velocity (consistent everywhere)
 

@@ -1,6 +1,6 @@
 # BeatForge
 
-A browser-based world-rhythm metronome. 294 rhythms across 16 traditions, 7 synthesized kits, polyrhythm overlay, per-track subdivisions. Works offline. No install, no signup, no backend. Open source.
+A browser-based world-rhythm metronome. 536 rhythms across 23 regions, 7 synthesized kits, polyrhythm overlay, per-track subdivisions. Works offline. No install, no signup, no backend. Open source.
 
 **Live:** [cemergin.github.io/beatforge](https://cemergin.github.io/beatforge/)
 
@@ -36,15 +36,15 @@ Three modes, one audio engine:
 
 - **Practice** — daily driver. BPM, grouping, speed trainer, tap-tempo, count-in, stop-after, polyrhythm overlay, per-group accents, all 7 kits, 3 view modes (circular / linear / pill).
 - **Studio** — step sequencer for sketching patterns. Full Practice-parity controls + per-track subdivisions editor. Save to IndexedDB, export/import JSON.
-- **Library** — zoned-scroll browse surface for all 294 patterns. Search, filter chips, world map, starter paths, grouping browser, related-rhythm algorithm.
+- **Library** — zoned-scroll browse surface for all 536 patterns. Search, filter chips, world map, starter paths, grouping browser, related-rhythm algorithm.
 
-The audio engine is pure Web Audio (no Tone.js). Per-track independent scheduler for true polyrhythm. 7 kits: 808/909/707/727 (drum machine family) + frameDrum (SWANA/Balkans) + tabla (Indian) + gamelan (Indonesian metal percussion). See [`docs/architecture/audio-engine.md`](docs/architecture/audio-engine.md) for the deep dive.
+The audio engine is pure Web Audio (no Tone.js). Per-track independent scheduler for true polyrhythm. Scheduler tick runs on a dedicated Web Worker (300ms lookahead) so audio timing stays rock-solid across React renders, devtools activity, and background-tab throttling. 7 kits: 808/909/707/727 (drum machine family) + frameDrum (SWANA/Balkans) + tabla (Indian) + gamelan (Indonesian metal percussion). See [`docs/architecture/audio-engine.md`](docs/architecture/audio-engine.md) for the deep dive.
 
 ---
 
 ## The research corpus (`research/`)
 
-Built up over many sessions — 50,000+ lines across 27 musicology files, 19 pattern files, 8 technical references, 5 design references. The app's 294 seed patterns are a curated subset; the corpus goes much deeper.
+Built up over many sessions — 50,000+ lines across 27 musicology files, 19 pattern files, 8 technical references, 5 design references. The app's 536 seed patterns are a curated subset; the corpus goes much deeper.
 
 Navigate via:
 

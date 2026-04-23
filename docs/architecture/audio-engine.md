@@ -136,19 +136,46 @@ Individual voices can multiply the send level with a `wetAmount` arg to `connect
 
 BeatForge uses the classic two-clock lookahead scheduler (Chris Wilson's pattern). There are two timers:
 
-1. **`setTimeout`** — fires every `lookaheadMs` (25ms). Not sample-accurate. Just a wake-up.
+1. **Scheduler tick** — fires every `lookaheadMs` (15ms). Runs off a dedicated Web Worker when available (`src/audio/scheduler-worker.ts`), else falls back to a main-thread `setTimeout`. Not sample-accurate — just a wake-up.
 2. **Web Audio's sample clock** — `ctx.currentTime`, advances with the hardware. All note scheduling uses this clock via `.start(when)` with `when` in seconds.
 
-On each tick (`engine.ts:237-304`), the scheduler asks: "what notes are due in the next 120ms?" and schedules every one of them at a precise `ctx.currentTime` offset. JavaScript GC pauses don't cause audio glitches because Web Audio has already queued the notes on the audio thread.
+On each tick, the scheduler asks: "what notes are due in the next 300ms?" and schedules every one of them at a precise `ctx.currentTime` offset. JavaScript GC pauses don't cause audio glitches because Web Audio has already queued the notes on the audio thread.
 
-Constants (`engine.ts:39-40`):
+Constants:
 
 ```ts
-private readonly lookaheadMs = 25;
-private readonly scheduleAheadS = 0.12;
+private readonly lookaheadMs = 15;
+private readonly scheduleAheadS = 0.30;
 ```
 
-25ms tick, 120ms horizon. Pick tick ≪ horizon so no notes slip past the horizon between ticks even under GC.
+15ms tick, 300ms horizon. The 300ms cushion is sized to survive main-thread stalls — React re-renders, devtools activity, or briefly backgrounded tabs can freeze the event loop for 100+ms on slow devices. A 120ms horizon (the original value) left zero margin and was the root cause of "notes get skipped at high swing" — swung notes, being shifted slightly later, are the first to fall off the cliff when the horizon slips.
+
+### Worker offload
+
+The scheduler tick runs in `src/audio/scheduler-worker.ts`. The worker's only job is to post a `"tick"` message every `lookaheadMs` via its own `setInterval`. The main thread receives the message, runs `tick()`, and uses `ctx.currentTime` to schedule notes into Web Audio's future.
+
+Why this matters:
+
+- Workers don't throttle when the tab is backgrounded (main-thread `setTimeout` clamps to once-per-second on inactive tabs — a full audio dropout).
+- Workers don't compete with React renders or devtools. A 200ms main-thread stall has zero effect on the tick cadence.
+- Audio timing is locked to the audio clock (`ctx.currentTime`), not the JS clock — the worker is *just* a metronome saying "look at your queue."
+
+The engine still runs `tick()` on the main thread (it needs access to `ctx` and the audio graph). The worker replaces only the wake-up timer. If `new Worker(...)` fails (very old browsers, some embed contexts), the engine transparently falls back to `setTimeout`.
+
+### Catch-up branch
+
+Even with the worker, a single frame where the main thread was frozen for > 300ms will push `nextNoteTimes[tr]` into the past. Web Audio silently drops notes scheduled before `ctx.currentTime`, which used to manifest as "half the bar goes missing after a devtools hiccup."
+
+The loop's first defense is a catch-up check:
+
+```ts
+const nowCatchUp = this.ctx.currentTime;
+if (this.nextNoteTimes[tr] < nowCatchUp) {
+  this.nextNoteTimes[tr] = nowCatchUp + 0.005;
+}
+```
+
+If we're late, snap forward to `now + 5ms` and keep scheduling from there. One audible phase-jog instead of sustained silence — a much better failure mode.
 
 ### Per-track scheduling
 
@@ -198,13 +225,17 @@ Key points:
 
 ### Swing
 
-Only applies to main-division 16th-note tracks. The swing value is 0.5 (straight) to ~0.67 (triplet feel); each odd-indexed step gets pushed later by `(swing - 0.5) * 2 * stepSec` seconds. The `(swing - 0.5) * 2` maps the [0.5, 1.0] range to [0, 1].
+Only applies to main-division 16th-step tracks. The swing value is 0.5 (straight) to ~0.67 (triplet feel); each odd-indexed step gets pushed later by `(swing - 0.5) * 2 * stepSec` seconds. The `(swing - 0.5) * 2` maps the [0.5, 1.0] range to [0, 1].
 
-Polyrhythm tracks explicitly skip swing (condition `isMainDivision`). Non-swingable patterns never see a non-0.5 swing value because `Practice.tsx:174` gates the setter:
+Polyrhythm tracks explicitly skip swing (condition `isMainDivision`). Non-swingable patterns never see a non-0.5 swing value because `Practice.tsx` gates the setter:
 
 ```ts
 engine.setSwing(pattern.swingable ? 0.5 + ((swing - 50) / 100) * 0.34 : 0.5);
 ```
+
+**Per-pattern canonical swing (`swingDefault`)**: patterns declare their natural swing amount in the JSON (optional field, 0.5–1.0). Practice hydrates the slider from `pattern.swingDefault` on load — jazz swing arrives at 0.67 (triplet), boom-bap at 0.58 (Dilla lag), reggae and son at 0.52 (behind-the-beat), rock and techno at 0.5 (straight). The user can still override via slider; the default is just the starting position.
+
+**Shuffle vs. swing**: the engine swings only 16th-step tracks. For true triplet-feel patterns (blues shuffle, rockabilly, Purdie half-time shuffle) the microtiming must be encoded directly in the grid as 12/8 with 3-step groupings — the strokes land on the 1st and 3rd of every triplet by position, not by a swing setting. See `blues-shuffle` / `shuffle-rock` / `half-time-shuffle` in `electronic-western.json`.
 
 ## Bar-boundary derivation (the bug we just solved)
 
@@ -223,9 +254,17 @@ while (this.nextBarTime < horizon) {
   if (barIndex > 0) {
     const b = barIndex;
     const delayMs = Math.max(0, (tBar - this.ctx.currentTime) * 1000);
-    setTimeout(() => { this.bar = b; this.onBar?.(b); }, delayMs);
+    setTimeout(() => {
+      this.bar = b;
+      for (const fn of [...this.barListeners]) {
+        try { fn(b); } catch { /* isolate */ }
+      }
+    }, delayMs);
   }
-  this.nextBarTime += barSec;
+  // Derive next bar time from startTime + (barIndex+1)*barSec instead of
+  // `+= barSec` so cumulative float-add drift stays bounded across long
+  // sessions / high BPMs.
+  this.nextBarTime = this.startTime + (barIndex + 1) * barSec;
 }
 ```
 
@@ -250,6 +289,29 @@ This manifested as the speed trainer stalling forever at the first BPM increment
 Derive the bar index from **elapsed time** (`Math.round((tBar - this.startTime) / barSec)`) rather than an incrementing mutable counter. Each iteration of the outer `while` gets a unique, correct `barIndex` because it's pure math against the invariant `startTime` and a known-good `barSec`.
 
 `Math.round` is used rather than `Math.floor` to tolerate tiny floating-point drift; `barIndex > 0` skips the zero-index bar (the downbeat of the first bar isn't a "bar passed" event).
+
+## Hot-swap loadPattern (preserve scheduler phase)
+
+`loadPattern()` is called frequently during playback — every cell toggle, every grouping change, every group-accent tweak fires the React effect that reloads the pattern into the engine. The naive implementation reset `nextIdx = 0` per track on every call, which audibly snapped the playhead back to step 0 mid-bar. Especially painful at high BPM because restarts happen more often.
+
+The current behavior branches on `this.running`:
+
+- **Fresh load** (not running): resets `nextIdx`, `cursors`, and `nextNoteTimes` as before. `start()` will re-seed from `startTime`.
+- **Hot swap** (running): **preserves** per-track scheduler state for tracks that survive the swap, initializes newly-added tracks at `this.nextBarTime` (so they enter cleanly on the next bar), and prunes removed tracks so `tick()` doesn't touch stale entries.
+
+This means cell edits in Practice and Studio no longer restart the pattern — playback stays continuous through arbitrary user edits. The three regression tests in `engine.test.ts` pin this invariant.
+
+## Bar listeners (multi-subscribe)
+
+`engine.subscribeOnBar(fn): () => unsubscribe` — every mode (Practice, Studio) can own its own bar-boundary handler without clobbering other modes' handlers on tab switches. The dispatch loop in `tick()` snapshots the listener set before iterating so listeners can safely unsubscribe during their own callback:
+
+```ts
+for (const fn of [...this.barListeners]) {
+  try { fn(b); } catch { /* isolate — one bad listener shouldn't kill the rest */ }
+}
+```
+
+A legacy `engine.onBar` single-listener setter is preserved as a shim for simpler call sites; it wraps the same set but guarantees only one listener.
 
 ## Count-in
 

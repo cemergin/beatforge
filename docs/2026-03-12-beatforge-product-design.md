@@ -9,7 +9,7 @@
 
 ## 1. What This Is
 
-A browser-based rhythm playground that starts as a metronome and evolves into a drum machine. Two modes share one audio engine: Practice for daily musician use, Studio for beat creation. A Library lets users explore 350+ world rhythms with their cultural stories.
+A browser-based rhythm playground that starts as a metronome and evolves into a drum machine. Two modes share one audio engine: Practice for daily musician use, Studio for beat creation. A Library lets users explore 536 world rhythms with their cultural stories.
 
 Works offline. No install. No signup. No backend. Open source.
 

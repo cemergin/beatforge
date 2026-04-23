@@ -40,6 +40,7 @@ export interface Pattern {
   tags: string[];
   instruments?: string[];
   swingable: boolean;
+  swingDefault?: number;             // 0.5 straight → 0.67 triplet
   relatedIds?: string[];
 
   // Narrative
@@ -70,6 +71,7 @@ export type Velocity = 0 | 1 | 2;   // 0 = off, 1 = ghost, 2 = accent
 | `tracks` | `Partial<Record<VoiceId, Track>>` | The notes themselves |
 | `defaultKit` | `KitId` | Auto-loaded when pattern is loaded in Practice; Studio uses it as the starting kit |
 | `swingable` | boolean | Gates the swing control in Practice UI; false patterns ignore swing |
+| `swingDefault` | 0.5–1.0, optional | Natural swing for this rhythm (0.5 = straight, 0.67 = triplet). Practice hydrates the slider from this on load. Jazz: 0.67, boom-bap: 0.58, reggae/son: 0.52, rock/techno: 0.5 |
 | `poly` | boolean (informational) | Not read by the engine. Lets UI filter polyrhythm exercises |
 
 ### Track encoding
@@ -289,7 +291,7 @@ for (const [path, raw] of Object.entries(modules)) {
 export const PATTERNS: Pattern[] = parsed;
 ```
 
-One file per region: `turkey-ottoman.json`, `balkans.json`, … `internet-born.json` (23 regions, 526 patterns as of this writing). The barrel enumerates a known `REGION_ORDER` first so `PATTERNS` is deterministic, then falls through to any new JSON alphabetically so new regions can't be silently dropped.
+One file per region: `turkey-ottoman.json`, `balkans.json`, … `internet-born.json` (23 regions, 536 patterns as of this writing). The barrel enumerates a known `REGION_ORDER` first so `PATTERNS` is deterministic, then falls through to any new JSON alphabetically so new regions can't be silently dropped.
 
 **Why JSON**: community contributors can add a pattern via a single-file PR editing the region's JSON — no TypeScript knowledge required. The Zod schema (`src/patterns/schema.ts`) is the authoritative shape spec; a malformed submission fails CI with a pattern-id-qualified error like `[seed/india] invalid pattern "new-tala": grouping: grouping must sum to steps`.
 

@@ -134,6 +134,7 @@ When the Drum Synth project begins:
 
 - **Pure Web Audio API.** No Tone.js. Original spec included Tone.js; prototype dropped it; keeping that. Amending the original spec.
 - **Per-track independent scheduler.** Each track runs its own scheduling loop at its own step duration. See §4.5 for polyrhythm.
+- **Web Worker tick timer.** The lookahead scheduler ticks on a dedicated Worker (`src/audio/scheduler-worker.ts`); the main thread receives `"tick"` messages and schedules Web Audio notes against `ctx.currentTime`. Immune to React renders, devtools activity, and background-tab throttling. 15ms tick cadence, 300ms lookahead horizon, with a catch-up branch for pathological main-thread stalls.
 - **Master chain:** mixdown → compressor → destination + reverb send tap (per-kit reverb level).
 - **Visual callback** drives UI via `requestAnimationFrame` reading last-scheduled step — not `setTimeout` (jittery at high step rates).
 
