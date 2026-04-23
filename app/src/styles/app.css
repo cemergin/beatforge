@@ -422,9 +422,34 @@ input[type="number"] { font: inherit; color: inherit; }
   .bf-bpm-num { font-size: 62px; }
 }
 @media (max-width: 860px) {
-  .bf-main { grid-template-columns: 1fr; grid-template-rows: auto auto auto; overflow-y: auto; }
+  /* One scrollable page on narrow screens — no nested scroll regions. */
+  html, body { overflow: auto; overscroll-behavior-y: contain; }
+  .bf-root { height: auto; min-height: 100vh; }
+  .bf-top { position: sticky; top: 0; z-index: 50; }
+  .bf-main {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    gap: 14px; padding: 14px;
+    height: auto;
+    overflow: visible;
+  }
+  .bf-left, .bf-right {
+    overflow: visible;
+    max-height: none;
+  }
+  .bf-grid-wrap, .bf-grid-stage {
+    overflow: visible;
+  }
   .bf-grid-stage { min-height: 360px; }
-  .bf-pattern-card, .bf-grid-wrap { overflow-x: hidden; }
+  .bf-pattern-list { max-height: none; }
+  .bf-strip { overflow-x: auto; }
+  .bf-strip-chips { flex-wrap: nowrap; }
+
+  /* Studio shares the same unified-scroll treatment. */
+  .bf-studio-main { overflow: visible; }
+  .bf-studio-main .bf-left,
+  .bf-studio-main .bf-grid-wrap,
+  .bf-studio-main .bf-right { overflow: visible; }
 }
 
 
