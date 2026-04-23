@@ -18,6 +18,16 @@ import SchedulerWorker from './scheduler-worker.ts?worker';
 
 type BarListener = (bar: number) => void;
 
+interface TrackCache {
+  voiceId: VoiceId;
+  subdivisions: number;
+  cycle: number;
+  pattern: Velocity[];
+  isMainDivision: boolean;
+  stepsPerBar: number; // p.steps / subdivisions — stepSec = stepsPerBar * (60/bpm)
+  hasAccents: boolean; // all-zero tracks can be skipped entirely in tick()
+}
+
 export class AudioEngine {
   ctx: AudioContext | null = null;
   master: GainNode | null = null;
@@ -74,8 +84,21 @@ export class AudioEngine {
   private timerId: ReturnType<typeof setTimeout> | null = null;
   private nextNoteTimes: Record<string, number> = {};
   private nextIdx: Record<string, number> = {};
+  // Anchors per track for bounded-drift derivation. nextNoteTime[tr] is
+  // derived as `anchorTime + (nextIdx - anchorIdx) * stepSec` each tick
+  // rather than accumulated via `+= stepSec`. Re-anchored on BPM change
+  // so rate changes take effect smoothly without jumping the phase.
+  private anchorTime: Record<string, number> = {};
+  private anchorIdx: Record<string, number> = {};
   private nextBarTime = 0;
+  private barAnchorTime = 0;
+  private barAnchorIdx = 0;
   private startTime = 0;
+
+  // Per-pattern track caches. Built once in loadPattern() so tick() avoids
+  // Object.keys() + trackMeta() allocations every 15ms. Null until a
+  // pattern is loaded.
+  private trackCaches: TrackCache[] = [];
 
   // Polyrhythm overlay — ephemeral click track at chosen subdivisions.
   overlay: { subdivisions: number } | null = null;
@@ -127,7 +150,21 @@ export class AudioEngine {
     this.kit = k;
     if (this.reverbSend) this.reverbSend.gain.value = kitRecipes[k].reverbSend;
   }
-  setBpm(b: number): void { this.bpm = b; }
+  setBpm(b: number): void {
+    // Re-anchor each track so the rate change takes effect from "now"
+    // without jumping phase. The anchor-derive formula in tick() computes
+    // nextNoteTime from (nextIdx - anchorIdx) * stepSec — if we didn't
+    // re-anchor, the new stepSec would apply retroactively to every step
+    // since startTime, resulting in an instant phase shift.
+    if (this.running) {
+      for (const tr of Object.keys(this.nextIdx)) {
+        this.anchorTime[tr] = this.nextNoteTimes[tr];
+        this.anchorIdx[tr] = this.nextIdx[tr];
+      }
+      this.barAnchorTime = this.nextBarTime;
+    }
+    this.bpm = b;
+  }
 
   // Master volume 0..1; persists via the master gain node.
   // Uses a short linear ramp to avoid the click/pop of an abrupt gain jump.
@@ -174,11 +211,14 @@ export class AudioEngine {
   loadPattern(p: Pattern): void {
     const wasRunning = this.running;
     this.pattern = p;
+    this.rebuildTrackCaches();
 
     if (!wasRunning) {
-      // Fresh load — start() will seed nextNoteTimes from startTime.
+      // Fresh load — start() will seed nextNoteTimes + anchors from startTime.
       this.cursors = {};
       this.nextIdx = {};
+      this.anchorTime = {};
+      this.anchorIdx = {};
       Object.keys(p.tracks).forEach((tr) => {
         this.cursors[tr] = -1;
         this.nextIdx[tr] = 0;
@@ -188,14 +228,16 @@ export class AudioEngine {
 
     // Hot swap while playing: preserve scheduler phase so cell edits,
     // grouping picks, and group-accent tweaks don't snap the playhead
-    // back to step 0. Tracks that existed keep their nextIdx/nextNoteTimes;
-    // new tracks enter at the next bar boundary; removed tracks are pruned
-    // so tick() doesn't touch stale entries.
+    // back to step 0. Tracks that existed keep their state; new tracks
+    // enter at the next bar boundary (re-anchored there); removed tracks
+    // are pruned so tick() doesn't touch stale entries.
     for (const tr of Object.keys(p.tracks)) {
       if (!(tr in this.nextIdx)) {
         this.nextIdx[tr] = 0;
         this.cursors[tr] = -1;
         this.nextNoteTimes[tr] = this.nextBarTime;
+        this.anchorTime[tr] = this.nextBarTime;
+        this.anchorIdx[tr] = 0;
       }
     }
     for (const tr of Object.keys(this.nextIdx)) {
@@ -203,7 +245,33 @@ export class AudioEngine {
         delete this.nextIdx[tr];
         delete this.nextNoteTimes[tr];
         delete this.cursors[tr];
+        delete this.anchorTime[tr];
+        delete this.anchorIdx[tr];
       }
+    }
+  }
+
+  /** Build per-track caches once per loadPattern so tick() avoids the
+   * Object.keys() + trackMeta() call for every track, every 15ms. */
+  private rebuildTrackCaches(): void {
+    const p = this.pattern;
+    this.trackCaches = [];
+    if (!p) return;
+    for (const voiceId of Object.keys(p.tracks) as VoiceId[]) {
+      const trackData = p.tracks[voiceId];
+      if (!trackData) continue;
+      const meta = trackMeta(trackData, p.steps);
+      if (!Number.isFinite(meta.subdivisions) || meta.subdivisions <= 0) continue;
+      if (!meta.pattern || meta.pattern.length === 0) continue;
+      this.trackCaches.push({
+        voiceId,
+        subdivisions: meta.subdivisions,
+        cycle: meta.cycle,
+        pattern: meta.pattern,
+        isMainDivision: meta.subdivisions === p.steps,
+        stepsPerBar: p.steps / meta.subdivisions,
+        hasAccents: meta.pattern.some((v) => v > 0),
+      });
     }
   }
 
@@ -235,12 +303,16 @@ export class AudioEngine {
 
     this.startTime = now + countInBars * barSec;
     this.nextBarTime = this.startTime;
+    this.barAnchorTime = this.startTime;
+    this.barAnchorIdx = 0;
     this.bar = 0;
 
     Object.keys(this.pattern.tracks).forEach((tr) => {
       this.nextNoteTimes[tr] = this.startTime;
       this.nextIdx[tr] = 0;
       this.cursors[tr] = -1;
+      this.anchorTime[tr] = this.startTime;
+      this.anchorIdx[tr] = 0;
     });
 
     if (this.overlay) {
@@ -336,57 +408,60 @@ export class AudioEngine {
 
   private tick = (): void => {
     if (!this.running || !this.ctx || !this.pattern) return;
-    const horizon = this.ctx.currentTime + this.scheduleAheadS;
-    const p = this.pattern;
-    const barSec = this.barSeconds();
+    const ctx = this.ctx;
+    const horizon = ctx.currentTime + this.scheduleAheadS;
+    const nowCatchUp = ctx.currentTime;
+    const stepUnit = this.pattern.stepUnit;
+    const swing = this.swing;
+    const beatSec = 60 / this.bpm;
+    const caches = this.trackCaches;
 
-    for (const tr of Object.keys(p.tracks) as VoiceId[]) {
-      const trackData = p.tracks[tr];
-      if (!trackData) continue;
-      const meta = trackMeta(trackData, p.steps);
-      // Guard against malformed data causing div-by-zero → infinite loop.
-      if (!Number.isFinite(meta.subdivisions) || meta.subdivisions <= 0) continue;
-      if (!meta.pattern || meta.pattern.length === 0) continue;
-      const stepSec = barSec / meta.subdivisions;
-      const isMainDivision = meta.subdivisions === p.steps;
+    // Per-track scheduling — iterate pre-computed caches (no per-tick
+    // Object.keys or trackMeta allocations).
+    for (let ci = 0; ci < caches.length; ci++) {
+      const c = caches[ci];
+      const tr = c.voiceId;
+      if (!c.hasAccents) continue; // skip silent tracks entirely
+      const stepSec = c.stepsPerBar * beatSec; // (steps/subdiv) * (60/bpm)
 
       // Catch-up: if a main-thread stall pushed us past nextNoteTimes
-       // (tick fired late), snap the next note up to the audio clock so
-       // Web Audio doesn't silently drop notes scheduled in the past.
-       // This trades phase for continuity — audible glitch once, better
-       // than a sustained dropout across the rest of the bar.
-       const nowCatchUp = this.ctx.currentTime;
-       if (this.nextNoteTimes[tr] < nowCatchUp) {
-         this.nextNoteTimes[tr] = nowCatchUp + 0.005;
-       }
+      // (tick fired late), snap up to the audio clock so Web Audio
+      // doesn't silently drop notes scheduled in the past. Also re-anchor
+      // so subsequent derive-from-anchor math stays consistent.
+      if (this.nextNoteTimes[tr] < nowCatchUp) {
+        this.nextNoteTimes[tr] = nowCatchUp + 0.005;
+        this.anchorTime[tr] = this.nextNoteTimes[tr];
+        this.anchorIdx[tr] = this.nextIdx[tr];
+      }
 
       while (this.nextNoteTimes[tr] < horizon) {
         let tPlay = this.nextNoteTimes[tr];
 
         // Swing applies only to main-division 16th-step tracks.
-        if (p.stepUnit === 16 && isMainDivision && this.nextIdx[tr] % 2 === 1) {
-          const swingDelay = (this.swing - 0.5) * 2 * stepSec;
-          tPlay += swingDelay;
+        if (stepUnit === 16 && c.isMainDivision && (this.nextIdx[tr] % 2 === 1)) {
+          tPlay += (swing - 0.5) * 2 * stepSec;
         }
 
-        const idx = this.nextIdx[tr] % meta.cycle;
-        const vel = meta.pattern[idx];
-        // Per-group accents only meaningful on main-division tracks —
-        // polyrhythm tracks don't align to the grouping.
-        if (vel > 0) this.trigger(tr, tPlay, vel, isMainDivision ? idx : -1);
+        const idx = this.nextIdx[tr] % c.cycle;
+        const vel = c.pattern[idx];
+        if (vel > 0) this.trigger(tr, tPlay, vel, c.isMainDivision ? idx : -1);
 
-        // Visual cursor updates "now playing" step immediately
-        // (audio may fire slightly in the future; visual lag is <=120ms).
         this.cursors[tr] = idx;
 
-        this.nextNoteTimes[tr] += stepSec;
+        // Anchor-derive next note time — `anchor + (idx - anchorIdx) * stepSec`
+        // rather than `+= stepSec` — so cumulative float-add drift stays
+        // bounded across long sessions. Re-anchors happen on setBpm() and
+        // on catch-up, so this formula is always correct for the current
+        // BPM segment.
         this.nextIdx[tr] += 1;
+        this.nextNoteTimes[tr] = this.anchorTime[tr]
+          + (this.nextIdx[tr] - this.anchorIdx[tr]) * stepSec;
       }
     }
 
-    // Polyrhythm overlay scheduling (separate from pattern tracks)
+    // Polyrhythm overlay (single phantom track)
     if (this.overlay) {
-      const overlayStepSec = barSec / this.overlay.subdivisions;
+      const overlayStepSec = this.pattern.steps * beatSec / this.overlay.subdivisions;
       while (this.overlayNextTime < horizon) {
         if (this.overlayNextTime >= this.startTime) {
           this.overlayClick(this.overlayNextTime);
@@ -397,30 +472,26 @@ export class AudioEngine {
     }
 
     // Bar boundary — count off full bars (for trainer / stop-after).
-    // Derive each bar's index from elapsed time so multiple bars scheduled
-    // in one tick get unique b values (prev code captured this.bar+1, which
-    // was the same for every bar in the batch because this.bar only
-    // updated inside the async setTimeout — all callbacks fired with the
-    // same index and the speed-trainer stalled at 1).
+    // Uses the same anchor-derive pattern: barIndex is computed relative to
+    // barAnchor (not startTime), so a setBpm mid-session doesn't retroactively
+    // rewrite bar numbering. Multiple bars scheduled in one tick all get
+    // correct, unique indices.
+    const barSec = this.pattern.steps * beatSec;
     while (this.nextBarTime < horizon) {
       const tBar = this.nextBarTime;
-      const barIndex = Math.round((tBar - this.startTime) / barSec);
+      const barIndex = Math.round((tBar - this.barAnchorTime) / barSec) + this.barAnchorIdx;
       if (barIndex > 0) {
         const b = barIndex;
-        const delayMs = Math.max(0, (tBar - this.ctx.currentTime) * 1000);
+        const delayMs = Math.max(0, (tBar - ctx.currentTime) * 1000);
         setTimeout(() => {
           this.bar = b;
-          // Dispatch to every subscriber. Snapshot to iterate so listeners
-          // can safely unsubscribe during callback.
           for (const fn of [...this.barListeners]) {
-            try { fn(b); } catch { /* isolate — one bad listener shouldn't kill the rest */ }
+            try { fn(b); } catch { /* isolate */ }
           }
         }, delayMs);
       }
-      // Derive next bar time from startTime + (barIndex+1)*barSec instead
-      // of `+= barSec` so cumulative float-add drift stays bounded across
-      // long sessions / high BPMs.
-      this.nextBarTime = this.startTime + (barIndex + 1) * barSec;
+      this.nextBarTime = this.barAnchorTime
+        + (barIndex + 1 - this.barAnchorIdx) * barSec;
     }
 
     // Re-arm only when the worker isn't available — it drives the cadence
