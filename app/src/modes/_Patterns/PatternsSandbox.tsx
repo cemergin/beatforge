@@ -295,7 +295,6 @@ function DraftCard({
         <span className="bf-meta-badge">{draft.timeSig}</span>
         <span className="bf-meta-badge alt">{draft.grouping.join('+')}</span>
         <span className="bf-meta-badge alt">♩={draft.bpm.default}</span>
-        <span className={`bf-diff bf-diff-${draft.difficulty}`}>{draft.difficulty}</span>
         <span className="bf-meta-badge alt">{draft.defaultKit}</span>
       </div>
 

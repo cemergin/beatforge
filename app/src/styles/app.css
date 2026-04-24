@@ -670,10 +670,6 @@ input[type="number"] { font: inherit; color: inherit; }
 .bf-lib-tile-badges { display: flex; flex-direction: column; gap: 4px; align-items: flex-end; }
 .bf-lib-tile-dots { min-height: 18px; }
 .bf-lib-tile-meta { display: flex; gap: 8px; flex-wrap: wrap; font-family: var(--mono); font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
-.bf-diff { padding: 2px 8px; border-radius: 999px; background: var(--bg-sunk); }
-.bf-diff-beginner { color: var(--grp-4); }
-.bf-diff-intermediate { color: var(--grp-5); }
-.bf-diff-advanced { color: var(--grp-1); }
 .bf-poly-badge { color: var(--grp-6); background: color-mix(in oklab, var(--grp-6) 12%, var(--bg-sunk)); padding: 2px 8px; border-radius: 999px; }
 .bf-user-badge { color: var(--grp-3); background: color-mix(in oklab, var(--grp-3) 14%, var(--bg-sunk)); padding: 2px 8px; border-radius: 999px; }
 .bf-lib-tile-tradition { font-family: var(--sans); font-size: 13px; color: var(--fg); opacity: 0.72; font-style: italic; }

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Fuse from 'fuse.js';
 import type { AudioEngine } from '../../audio/engine';
-import type { Difficulty, Genre, KitId, Pattern, RegionId } from '../../patterns/types';
+import type { Genre, KitId, Pattern, RegionId } from '../../patterns/types';
 import { PATTERNS, patternById } from '../../patterns/seed';
 import { getHighlights, getRecent, toggleHighlight } from '../../lib/storage';
 import { Filters } from './Filters';
@@ -141,7 +141,6 @@ export function Library({ engine, onLoadInPractice, onOpenInStudio }: Props) {
       if (filters.regions.length && !filters.regions.includes(p.region)) return false;
       if (filters.genres.length && !filters.genres.includes(p.genre)) return false;
       if (filters.kits.length && !filters.kits.includes(p.defaultKit)) return false;
-      if (filters.levels.length && !(filters.levels as Difficulty[]).includes(p.difficulty)) return false;
       return true;
     });
   }, [searched, filters, activePath]);

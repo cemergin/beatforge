@@ -55,7 +55,6 @@ export function PatternCard({ pattern, starred, onClick, onToggleStar }: Props) 
       <div className="bf-lib-tile-meta">
         <span className="bf-meta-badge">{pattern.timeSig}</span>
         <span className="bf-meta-badge alt">{pattern.grouping.join('+')}</span>
-        <span className={`bf-diff bf-diff-${pattern.difficulty}`}>{pattern.difficulty}</span>
         {pattern.poly && <span className="bf-poly-badge">poly</span>}
       </div>
       <div className="bf-lib-tile-meta">

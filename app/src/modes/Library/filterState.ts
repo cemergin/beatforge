@@ -1,11 +1,10 @@
-import type { Difficulty, Genre, KitId, RegionId } from '../../patterns/types';
+import type { Genre, KitId, RegionId } from '../../patterns/types';
 
 export interface FilterState {
   meters: string[];
   regions: RegionId[];
   genres: Genre[];
   kits: KitId[];
-  levels: Difficulty[];
 }
 
 export const DEFAULT_FILTERS: FilterState = {
@@ -13,5 +12,4 @@ export const DEFAULT_FILTERS: FilterState = {
   regions: [],
   genres: [],
   kits: [],
-  levels: [],
 };

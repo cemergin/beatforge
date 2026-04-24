@@ -1,11 +1,10 @@
 // Studio left sidebar: metadata form + "Yours" list.
 
-import type { Difficulty, Genre, KitId, Pattern, RegionId } from '../../patterns/types';
+import type { Genre, KitId, Pattern, RegionId } from '../../patterns/types';
 import type { LoadedUserPattern } from '../../lib/db';
 import { REGIONS } from '../Library/regions';
 
 const ALL_KITS: KitId[] = ['808', '909', '707', '727', 'frameDrum', 'tabla', 'gamelan'];
-const DIFFS: Difficulty[] = ['beginner', 'intermediate', 'advanced'];
 const GENRES: Genre[] = [
   'folk-dance', 'classical', 'devotional', 'popular',
   'electronic', 'hip-hop', 'jazz', 'ceremonial', 'exercise',
@@ -113,21 +112,6 @@ export function StudioSidebar({
               <option key={k} value={k}>{k === 'frameDrum' ? 'frameDrum' : k}</option>
             ))}
           </select>
-        </label>
-        <label className="bf-studio-field">
-          <span className="bf-mini-label">difficulty</span>
-          <div className="bf-seg">
-            {DIFFS.map((d) => (
-              <button
-                key={d}
-                className={draft.difficulty === d ? 'on' : ''}
-                onClick={() => updateDraft({ difficulty: d })}
-                type="button"
-              >
-                {d}
-              </button>
-            ))}
-          </div>
         </label>
         <label className="bf-studio-field">
           <span className="bf-mini-label">swingable</span>

@@ -1,4 +1,4 @@
-import type { Difficulty, Genre, KitId, RegionId } from '../../patterns/types';
+import type { Genre, KitId, RegionId } from '../../patterns/types';
 import { REGIONS } from './regions';
 import type { FilterState } from './filterState';
 
@@ -19,7 +19,6 @@ function toggle<T>(arr: T[], v: T): T[] {
 export function Filters({
   filters, setFilters, allMeters, allGenres, allKits, count, total,
 }: Props) {
-  const ALL_LEVELS: Difficulty[] = ['beginner', 'intermediate', 'advanced'];
   return (
     <div className="bf-lib-filters-block">
       <FilterRow
@@ -51,13 +50,6 @@ export function Filters({
         renderLabel={(v) => (v === 'frameDrum' ? 'frame' : v)}
         onToggle={(v) => setFilters({ ...filters, kits: toggle(filters.kits, v as KitId) })}
         onClear={() => setFilters({ ...filters, kits: [] })}
-      />
-      <FilterRow
-        label="level"
-        values={ALL_LEVELS}
-        selected={filters.levels}
-        onToggle={(v) => setFilters({ ...filters, levels: toggle(filters.levels, v as Difficulty) })}
-        onClear={() => setFilters({ ...filters, levels: [] })}
       />
 
       <div className="bf-filter-row-wrap bf-filter-count-row">

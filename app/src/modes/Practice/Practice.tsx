@@ -412,7 +412,6 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
           <div className="bf-pattern-meta">
             <span className="bf-meta-badge">{pattern.timeSig}</span>
             <span className="bf-meta-badge alt">{grouping.join('+')}</span>
-            <span className="bf-meta-badge alt">{pattern.difficulty}</span>
             {pattern.poly && <span className="bf-meta-badge alt">poly</span>}
           </div>
           {shareToast && <div className="bf-share-toast">{shareToast}</div>}
@@ -476,6 +475,12 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
           </div>
         </div>
 
+        {pattern.story && (
+          <Disclosure className="bf-story" summary="about this rhythm">
+            <p>{pattern.story}</p>
+          </Disclosure>
+        )}
+
         <Disclosure
           className="bf-panel bf-pattern-list-panel"
           summaryClassName="bf-panel-head"
@@ -499,12 +504,6 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
             ))}
           </div>
         </Disclosure>
-
-        {pattern.story && (
-          <Disclosure className="bf-story" summary="about this rhythm">
-            <p>{pattern.story}</p>
-          </Disclosure>
-        )}
       </aside>
 
       <section className={`bf-grid-wrap ${countingIn ? 'counting-in' : ''}`}>

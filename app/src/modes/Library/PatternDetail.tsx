@@ -140,7 +140,6 @@ export function PatternDetail({
             <span className="bf-meta-badge">{pattern.timeSig}</span>
             <span className="bf-meta-badge alt">{pattern.grouping.join('+')}</span>
             <span className="bf-meta-badge alt">♩={pattern.bpm.default}</span>
-            <span className={`bf-diff bf-diff-${pattern.difficulty}`}>{pattern.difficulty}</span>
             <span className="bf-meta-badge alt">{pattern.defaultKit}</span>
             {region && (
               <span className="bf-meta-badge alt" style={{ color: region.color }}>
