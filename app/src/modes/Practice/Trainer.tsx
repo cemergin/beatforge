@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react';
+
 export interface TrainerCfg {
   from: number;
   to: number;
@@ -13,11 +15,31 @@ interface Props {
   setOn: (on: boolean) => void;
   bar: number;
   bpm: number;
+  cycleStartMs: number | null;
 }
 
-export function Trainer({ cfg, setCfg, on, setOn, bar, bpm }: Props) {
+export function Trainer({ cfg, setCfg, on, setOn, bar, bpm, cycleStartMs }: Props) {
   const progress = Math.max(0, Math.min(1, (bpm - cfg.from) / Math.max(1, cfg.to - cfg.from)));
   const barsInCycle = cfg.mode === 'cycles' ? bar % cfg.bars : 0;
+
+  // Local rAF clock for the time-mode fill bar — only runs while the
+  // trainer's time cycle is actively counting down.
+  const [now, setNow] = useState(() => performance.now());
+  useEffect(() => {
+    if (!on || cfg.mode !== 'time' || cycleStartMs == null) return;
+    let raf = 0;
+    const tick = () => {
+      setNow(performance.now());
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [on, cfg.mode, cycleStartMs]);
+
+  const cycleSec = Math.max(1, cfg.bars);
+  const elapsed = cycleStartMs == null ? 0 : (now - cycleStartMs) / 1000;
+  const cycleProgress = Math.max(0, Math.min(1, elapsed / cycleSec));
+  const remaining = Math.max(0, cycleSec - elapsed);
 
   return (
     <div className="bf-panel bf-trainer">
@@ -68,6 +90,20 @@ export function Trainer({ cfg, setCfg, on, setOn, bar, bpm }: Props) {
               <span key={i} className={`bf-pip ${i < barsInCycle ? 'on' : ''}`} />
             ))}
           </div>
+        </div>
+      )}
+      {on && cfg.mode === 'time' && cycleStartMs != null && (
+        <div className="bf-trainer-cyclecount">
+          <span className="bf-mini-label">next bump</span>
+          <div className="bf-trainer-cyclebar" aria-hidden="true">
+            <div
+              className="bf-trainer-cyclebar-fill"
+              style={{ width: `${cycleProgress * 100}%` }}
+            />
+          </div>
+          <span className="bf-mini-label bf-trainer-cycle-remaining">
+            {Math.ceil(remaining)}s
+          </span>
         </div>
       )}
     </div>

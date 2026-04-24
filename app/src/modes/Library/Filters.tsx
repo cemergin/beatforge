@@ -60,33 +60,7 @@ export function Filters({
         onClear={() => setFilters({ ...filters, levels: [] })}
       />
 
-      <div className="bf-filter-row-wrap">
-        <span className="bf-filter-label">tempo</span>
-        <div className="bf-tempo-slider">
-          <input
-            type="range"
-            min={30}
-            max={500}
-            value={filters.tempo[0]}
-            onChange={(e) => {
-              const v = Number(e.target.value);
-              setFilters({ ...filters, tempo: [Math.min(v, filters.tempo[1]), filters.tempo[1]] });
-            }}
-          />
-          <input
-            type="range"
-            min={30}
-            max={500}
-            value={filters.tempo[1]}
-            onChange={(e) => {
-              const v = Number(e.target.value);
-              setFilters({ ...filters, tempo: [filters.tempo[0], Math.max(v, filters.tempo[0])] });
-            }}
-          />
-          <span className="bf-tempo-read">
-            {filters.tempo[0]}–{filters.tempo[1]} BPM
-          </span>
-        </div>
+      <div className="bf-filter-row-wrap bf-filter-count-row">
         <span className="bf-lib-count">{count} / {total} match</span>
       </div>
     </div>

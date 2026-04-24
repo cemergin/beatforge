@@ -6,7 +6,6 @@ export interface FilterState {
   genres: Genre[];
   kits: KitId[];
   levels: Difficulty[];
-  tempo: [number, number];
 }
 
 export const DEFAULT_FILTERS: FilterState = {
@@ -15,5 +14,4 @@ export const DEFAULT_FILTERS: FilterState = {
   genres: [],
   kits: [],
   levels: [],
-  tempo: [30, 500],
 };

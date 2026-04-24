@@ -1,14 +1,15 @@
 import type { Pattern, RegionId } from '../../patterns/types';
-import { REGIONS, REGION_BY_ID } from './regions';
+import { REGIONS } from './regions';
 
 interface Props {
   patterns: Pattern[];
   previewId: RegionId | null;
   setPreviewId: (id: RegionId | null) => void;
   onPickRegion: (id: RegionId) => void;
+  compact?: boolean;
 }
 
-export function WorldMap({ patterns, previewId, setPreviewId, onPickRegion }: Props) {
+export function WorldMap({ patterns, previewId, setPreviewId, onPickRegion, compact }: Props) {
   const counts = patterns.reduce<Record<string, number>>((acc, p) => {
     acc[p.region] = (acc[p.region] ?? 0) + 1;
     return acc;
@@ -19,11 +20,9 @@ export function WorldMap({ patterns, previewId, setPreviewId, onPickRegion }: Pr
     onPickRegion(id);
   };
 
-  const preview = previewId ? REGION_BY_ID[previewId] : null;
-
   return (
-    <div className="bf-worldmap-wrap">
-      <div className="bf-worldmap">
+    <div className={`bf-worldmap-wrap ${compact ? 'is-compact' : ''}`}>
+      <div className={`bf-worldmap ${compact ? 'is-compact' : ''}`}>
         {REGIONS.map((r) => {
           const count = counts[r.id] ?? 0;
           const disabled = count === 0;
@@ -49,48 +48,6 @@ export function WorldMap({ patterns, previewId, setPreviewId, onPickRegion }: Pr
           );
         })}
       </div>
-
-      {preview && (
-        <aside
-          className="bf-region-intro-card"
-          style={{ borderColor: preview.color }}
-          aria-live="polite"
-        >
-          <div className="bf-region-intro-head">
-            <h3
-              className="bf-region-intro-title"
-              style={{ color: preview.color }}
-            >
-              {preview.label}
-            </h3>
-            <button
-              className="bf-region-intro-close"
-              onClick={() => setPreviewId(null)}
-              aria-label="Dismiss region intro"
-              type="button"
-            >
-              ×
-            </button>
-          </div>
-          <p className="bf-region-intro-body">{preview.intro}</p>
-          {(preview.keyRhythms?.length || preview.instruments?.length) && (
-            <dl className="bf-region-intro-meta">
-              {preview.keyRhythms && preview.keyRhythms.length > 0 && (
-                <div className="bf-region-intro-row">
-                  <dt>signature rhythms</dt>
-                  <dd>{preview.keyRhythms.join(' · ')}</dd>
-                </div>
-              )}
-              {preview.instruments && preview.instruments.length > 0 && (
-                <div className="bf-region-intro-row">
-                  <dt>characteristic instruments</dt>
-                  <dd>{preview.instruments.join(' · ')}</dd>
-                </div>
-              )}
-            </dl>
-          )}
-        </aside>
-      )}
     </div>
   );
 }
