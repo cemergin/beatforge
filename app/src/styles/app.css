@@ -632,7 +632,6 @@ input[type="number"] { font: inherit; color: inherit; }
 .bf-filter-group { display: flex; flex-direction: column; gap: 6px; }
 .bf-chip-row { display: flex; flex-wrap: wrap; gap: 6px; }
 .bf-chip-row.wrap { flex-wrap: wrap; }
-.bf-lib-count { margin-left: auto; font-family: var(--mono); font-size: 12px; color: var(--muted); letter-spacing: 0.08em; }
 
 .bf-lib-full-grid {
   display: grid; gap: 16px;
@@ -734,11 +733,6 @@ input[type="number"] { font: inherit; color: inherit; }
 .bf-tempo-read {
   font-family: var(--mono); font-size: 11px;
   color: var(--muted);
-}
-.bf-lib-count {
-  font-family: var(--mono); font-size: 11px;
-  color: var(--muted); letter-spacing: 0.06em;
-  margin-left: auto;
 }
 
 /* World Map — 15 region blobs laid out in a 3-col grid */

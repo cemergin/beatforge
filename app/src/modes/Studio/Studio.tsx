@@ -19,6 +19,12 @@ import {
   type UserPattern,
 } from '../../lib/db';
 import { BeatDots } from '../../components/BeatDots';
+import { BpmHero } from '../../components/metronome/BpmHero';
+import { PlayVolume } from '../../components/metronome/PlayVolume';
+import { CountInPanel } from '../../components/metronome/CountInPanel';
+import { AccentsPanel } from '../../components/metronome/AccentsPanel';
+import { SwingPanel } from '../../components/metronome/SwingPanel';
+import { KitPanel } from '../../components/metronome/KitPanel';
 import { ALL_VOICES, VOICE_LABELS, autoNormalizeGrouping, blankPattern, generateId, METER_PRESETS } from './presets';
 import { StudioGrid } from './StudioGrid';
 import { StudioSidebar } from './StudioSidebar';
@@ -26,14 +32,6 @@ import { SaveDialog } from './SaveDialog';
 import { ExportImport } from './ExportImport';
 import { Trainer, type TrainerCfg } from '../Practice/Trainer';
 import { getMasterVolume, setMasterVolume as storeMasterVolume } from '../../lib/storage';
-
-const ALL_KITS: KitId[] = ['808', '909', '707', '727', 'frameDrum', 'tabla', 'gamelan'];
-const OVERLAY_OPTIONS = [0, 3, 4, 5, 6, 7, 8, 9, 12];
-const EXPERIMENTAL_OVERLAY = new Set([5, 7, 9, 12]);
-const GROUP_AMP_DEFAULT = 1;
-
-type StopAfterMode = 'off' | 'cycles' | 'time';
-interface StopAfter { mode: StopAfterMode; value: number }
 
 interface Props {
   engine: AudioEngine;
@@ -137,17 +135,13 @@ export function Studio({
     from: 100, to: 160, step: 5, bars: 4, mode: 'cycles',
   });
   const [trainerBar, setTrainerBar] = useState(0);
+  const [trainerCycleStartMs, setTrainerCycleStartMs] = useState<number | null>(null);
   const [countInBars, setCountInBars] = useState(0);
-  const [stopAfter, setStopAfter] = useState<StopAfter>({ mode: 'off', value: 0 });
-  const [overlaySubdivisions, setOverlaySubdivisions] = useState(0);
   const [countingIn, setCountingIn] = useState(false);
   const [tapTimes, setTapTimes] = useState<number[]>([]);
   const [strong, setStrong] = useState(100);
   const [weak, setWeak] = useState(55);
   const [swing, setSwing] = useState(50);
-  const [groupAmps, setGroupAmps] = useState<number[]>(
-    () => draft.grouping.map(() => GROUP_AMP_DEFAULT),
-  );
   const [masterVolume, setMasterVolumeState] = useState(() => getMasterVolume());
 
   // Follow the draft's default kit only until the user explicitly picks one.
@@ -188,33 +182,10 @@ export function Studio({
     engine.setSwing(draft.swingable ? 0.5 + ((swing - 50) / 100) * 0.34 : 0.5);
   }, [engine, swing, draft.swingable]);
   useEffect(() => { engine.setAccents(strong / 100, weak / 100); }, [engine, strong, weak]);
-  useEffect(() => { engine.setGroupAccents(groupAmps); }, [engine, groupAmps]);
-  useEffect(() => {
-    if (overlaySubdivisions > 0) engine.setOverlay({ subdivisions: overlaySubdivisions });
-    else engine.setOverlay(null);
-  }, [engine, overlaySubdivisions]);
 
-  // Bar-boundary callback — trainer + stop-after. Uses subscribe API
-  // so Practice and Studio coexist without stripping each other's handler.
   useEffect(() => {
-    return engine.subscribeOnBar((bar) => {
-      setTrainerBar(bar);
-      if (stopAfter.mode === 'cycles' && bar >= stopAfter.value) {
-        engine.stop();
-        setPlaying(false);
-      }
-    });
-  }, [engine, stopAfter]);
-
-  // Stop-after time mode.
-  useEffect(() => {
-    if (!playing || stopAfter.mode !== 'time') return;
-    const id = setTimeout(() => {
-      engine.stop();
-      setPlaying(false);
-    }, stopAfter.value * 60_000);
-    return () => clearTimeout(id);
-  }, [playing, engine, stopAfter]);
+    return engine.subscribeOnBar((bar) => setTrainerBar(bar));
+  }, [engine]);
 
   // Speed trainer — cycles mode.
   useEffect(() => {
@@ -224,24 +195,23 @@ export function Studio({
     }
   }, [trainerBar, trainerOn, playing, trainerCfg]);
 
-  // Speed trainer — time mode.
+  // Speed trainer — time mode. Tracks cycle start so the Trainer can
+  // render a countdown (fill-bar + remaining seconds).
   useEffect(() => {
-    if (!trainerOn || trainerCfg.mode !== 'time' || !playing) return;
+    if (!trainerOn || trainerCfg.mode !== 'time' || !playing) {
+      setTrainerCycleStartMs(null);
+      return;
+    }
+    setTrainerCycleStartMs(performance.now());
     const iv = setInterval(() => {
       setBpm((b) => Math.min(trainerCfg.to, b + trainerCfg.step));
+      setTrainerCycleStartMs(performance.now());
     }, trainerCfg.bars * 1000);
     return () => clearInterval(iv);
   }, [trainerOn, trainerCfg, playing]);
 
-  // Keep per-group accents array in sync with current grouping length.
-  useEffect(() => {
-    setGroupAmps((cur) => {
-      if (cur.length === draft.grouping.length) return cur;
-      return draft.grouping.map(() => GROUP_AMP_DEFAULT);
-    });
-  }, [draft.grouping]);
-
-  // Tap-tempo.
+  // Tap-tempo. Pushes BPM to the engine directly so the change is
+  // audible immediately, no useEffect lag.
   const tap = useCallback(() => {
     const now = performance.now();
     setTapTimes((ts) => {
@@ -251,17 +221,17 @@ export function Studio({
         const intervals: number[] = [];
         for (let i = 1; i < next.length; i++) intervals.push(next[i] - next[i - 1]);
         const sorted = [...intervals].sort((a, b) => a - b);
-        // True median: average the two middle values for even length.
         const mid = Math.floor(sorted.length / 2);
         const median = sorted.length % 2 === 0
           ? (sorted[mid - 1] + sorted[mid]) / 2
           : sorted[mid];
-        const tapBpm = Math.round(60_000 / median);
-        setBpm(Math.max(30, Math.min(800, tapBpm)));
+        const tapBpm = Math.max(30, Math.min(800, Math.round(60_000 / median)));
+        setBpm(tapBpm);
+        engine.setBpm(tapBpm);
       }
       return next;
     });
-  }, []);
+  }, [engine]);
 
   // Keyboard: T for tap.
   useEffect(() => {
@@ -445,7 +415,7 @@ export function Studio({
     setDraft((d) => ({ ...d, id }));
     setSavedId(id);
     setShowSave(false);
-    setToast('Saved to Yours');
+    setToast('Saved to Local');
     setTimeout(() => setToast(null), 1800);
     refreshYours();
   }, [draft, savedId, yours, refreshYours]);
@@ -699,75 +669,24 @@ export function Studio({
       </section>
 
       <aside className="bf-right">
-        <div className={`bf-bpm-hero ${countingIn ? 'counting-in' : ''}`}>
-          <div className="bf-bpm-num">{bpm}</div>
-          <div className="bf-bpm-unit">
-            BPM <span style={{ opacity: 0.7, fontSize: '0.7em' }}>· step/min</span>
-          </div>
-          <div className="bf-bpm-controls">
-            <button onClick={() => setBpm((b) => Math.max(30, b - 1))} type="button">−</button>
-            <input
-              type="range"
-              min={30}
-              max={800}
-              value={bpm}
-              onChange={(e) => setBpm(Number(e.target.value))}
-            />
-            <button onClick={() => setBpm((b) => Math.min(800, b + 1))} type="button">+</button>
-          </div>
-          {countingIn && <div className="bf-counting-in-badge">counting in…</div>}
-        </div>
+        <BpmHero
+          bpm={bpm}
+          setBpm={setBpm}
+          onTap={tap}
+          tapArmed={tapTimes.length > 0}
+          countingIn={countingIn}
+        />
 
-        <div className="bf-play-volume">
-          <button className={`bf-play ${playing ? 'on' : ''}`} onClick={togglePlay} type="button">
-            {playing ? (
-              <span><span className="bf-stop-ico" /> stop</span>
-            ) : (
-              <span><span className="bf-play-ico" /> play</span>
-            )}
-          </button>
-          <div className="bf-volume" title="Master volume">
-            <span className="bf-volume-ico" aria-hidden="true">
-              {masterVolume === 0 ? '🔇' : masterVolume < 0.35 ? '🔈' : masterVolume < 0.7 ? '🔉' : '🔊'}
-            </span>
-            <input
-              type="range"
-              min={0}
-              max={100}
-              value={Math.round(masterVolume * 100)}
-              onChange={(e) => {
-                const v = Number(e.target.value) / 100;
-                setMasterVolumeState(v);
-                engine.setMasterVolume(v);
-                storeMasterVolume(v);
-              }}
-              aria-label="Master volume"
-            />
-          </div>
-        </div>
-
-        <div className="bf-panel">
-          <div className="bf-panel-head">tap tempo</div>
-          <div className="bf-tap-row">
-            <button
-              className="bf-tap-btn"
-              onClick={tap}
-              type="button"
-              title="Tap repeatedly (or press T) to set tempo"
-            >
-              <span className="bf-tap-shortcut">T</span>
-              TAP
-            </button>
-            <div className="bf-tap-hint">
-              {tapTimes.length < 2 ? 'tap 4+ times' : `${tapTimes.length} taps`}
-              <div className="bf-tap-dots">
-                {Array.from({ length: 8 }).map((_, i) => (
-                  <span key={i} className={`bf-tap-dot ${i < tapTimes.length ? 'on' : ''}`} />
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
+        <PlayVolume
+          playing={playing}
+          onToggle={togglePlay}
+          volume={masterVolume}
+          onVolumeChange={(v) => {
+            setMasterVolumeState(v);
+            engine.setMasterVolume(v);
+            storeMasterVolume(v);
+          }}
+        />
 
         <Trainer
           cfg={trainerCfg}
@@ -776,194 +695,24 @@ export function Studio({
           setOn={setTrainerOn}
           bar={trainerBar}
           bpm={bpm}
+          cycleStartMs={trainerCycleStartMs}
         />
 
-        <div className="bf-panel">
-          <div className="bf-panel-head">
-            <span>per-group accents</span>
-            <button
-              className="bf-linkbtn"
-              onClick={() => setGroupAmps(draft.grouping.map(() => GROUP_AMP_DEFAULT))}
-              type="button"
-              title="Reset all to 1.00×"
-            >
-              reset
-            </button>
-          </div>
-          {draft.grouping.map((glen, gi) => (
-            <div key={gi} className="bf-group-accents-row">
-              <span
-                className="bf-group-accents-label"
-                style={{ color: `var(--grp-${(gi % 7) + 1})` }}
-              >
-                g{gi + 1} ·{glen}
-              </span>
-              <input
-                type="range"
-                min={50}
-                max={130}
-                value={Math.round((groupAmps[gi] ?? GROUP_AMP_DEFAULT) * 100)}
-                onChange={(e) => {
-                  const v = Number(e.target.value) / 100;
-                  setGroupAmps((amps) => {
-                    const next = amps.length === draft.grouping.length
-                      ? [...amps]
-                      : draft.grouping.map(() => GROUP_AMP_DEFAULT);
-                    next[gi] = v;
-                    return next;
-                  });
-                }}
-              />
-              <span className="bf-val">
-                {(groupAmps[gi] ?? GROUP_AMP_DEFAULT).toFixed(2)}×
-              </span>
-            </div>
-          ))}
-          <div className="bf-mini-label">multiplies on top of strong/weak</div>
-        </div>
+        <CountInPanel countInBars={countInBars} setCountInBars={setCountInBars} />
 
-        <div className="bf-panel">
-          <div className="bf-panel-head">count-in</div>
-          <div className="bf-seg">
-            {[0, 1, 2, 4].map((n) => (
-              <button
-                key={n}
-                className={countInBars === n ? 'on' : ''}
-                onClick={() => setCountInBars(n)}
-                type="button"
-              >
-                {n === 0 ? 'off' : `${n} bar${n > 1 ? 's' : ''}`}
-              </button>
-            ))}
-          </div>
-        </div>
+        <AccentsPanel
+          strong={strong}
+          setStrong={setStrong}
+          weak={weak}
+          setWeak={setWeak}
+        />
 
-        <div className="bf-panel">
-          <div className="bf-panel-head">stop after</div>
-          <div className="bf-row">
-            <label>cycles</label>
-            <div className="bf-seg">
-              {[0, 4, 8, 16, 32].map((n) => (
-                <button
-                  key={n}
-                  className={stopAfter.mode === 'cycles' && stopAfter.value === n
-                    ? 'on' : (n === 0 && stopAfter.mode === 'off' ? 'on' : '')}
-                  onClick={() => setStopAfter(n === 0
-                    ? { mode: 'off', value: 0 }
-                    : { mode: 'cycles', value: n })}
-                  type="button"
-                >
-                  {n === 0 ? '∞' : n}
-                </button>
-              ))}
-            </div>
-          </div>
-          <div className="bf-row">
-            <label>min</label>
-            <div className="bf-seg">
-              {[1, 5, 10, 15, 30].map((n) => (
-                <button
-                  key={n}
-                  className={stopAfter.mode === 'time' && stopAfter.value === n ? 'on' : ''}
-                  onClick={() => setStopAfter({ mode: 'time', value: n })}
-                  type="button"
-                >
-                  {n}
-                </button>
-              ))}
-            </div>
-          </div>
-          {stopAfter.mode !== 'off' && playing && (
-            <div className="bf-mini-label">
-              {stopAfter.mode === 'cycles'
-                ? `${Math.max(0, stopAfter.value - trainerBar)} cycles remaining`
-                : `stops after ${stopAfter.value} min`}
-            </div>
-          )}
-        </div>
+        {draft.swingable && <SwingPanel swing={swing} setSwing={setSwing} />}
 
-        <div className="bf-panel">
-          <div className="bf-panel-head">polyrhythm overlay</div>
-          <div className="bf-seg wrap">
-            {OVERLAY_OPTIONS.map((n) => (
-              <button
-                key={n}
-                className={overlaySubdivisions === n ? 'on' : ''}
-                onClick={() => setOverlaySubdivisions(n)}
-                type="button"
-                title={n === 0 ? 'Off' : `${n} over main${EXPERIMENTAL_OVERLAY.has(n) ? ' (experimental)' : ''}`}
-              >
-                {n === 0 ? 'off' : `${n}`}
-                {EXPERIMENTAL_OVERLAY.has(n) && <sup className="bf-exp">exp</sup>}
-              </button>
-            ))}
-          </div>
-          {overlaySubdivisions > 0 && (
-            <div className="bf-mini-label">
-              {overlaySubdivisions} clicks over {draft.steps} main steps
-            </div>
-          )}
-        </div>
-
-        <div className="bf-panel">
-          <div className="bf-panel-head">accents</div>
-          <div className="bf-row">
-            <label>strong</label>
-            <input
-              type="range"
-              min={50}
-              max={100}
-              value={strong}
-              onChange={(e) => setStrong(Number(e.target.value))}
-            />
-            <span className="bf-val">{strong}%</span>
-          </div>
-          <div className="bf-row">
-            <label>weak</label>
-            <input
-              type="range"
-              min={0}
-              max={100}
-              value={weak}
-              onChange={(e) => setWeak(Number(e.target.value))}
-            />
-            <span className="bf-val">{weak}%</span>
-          </div>
-        </div>
-
-        {draft.swingable && (
-          <div className="bf-panel">
-            <div className="bf-panel-head">swing</div>
-            <div className="bf-row">
-              <input
-                type="range"
-                min={50}
-                max={75}
-                value={swing}
-                onChange={(e) => setSwing(Number(e.target.value))}
-              />
-              <span className="bf-val">
-                {swing === 50 ? 'straight' : swing >= 66 ? 'triplet' : `${swing}%`}
-              </span>
-            </div>
-          </div>
-        )}
-
-        <div className="bf-panel">
-          <div className="bf-panel-head">kit</div>
-          <div className="bf-kit-grid">
-            {ALL_KITS.map((k) => (
-              <button
-                key={k}
-                className={`bf-kit-btn ${kit === k ? 'on' : ''}`}
-                onClick={() => { kitOverrideRef.current = true; setKit(k); }}
-                type="button"
-              >
-                {k === 'frameDrum' ? 'frame' : k}
-              </button>
-            ))}
-          </div>
-        </div>
+        <KitPanel
+          activeKit={kit}
+          onSelect={(k) => { kitOverrideRef.current = true; setKit(k); }}
+        />
 
         <div className="bf-panel">
           <div className="bf-panel-head">backup</div>

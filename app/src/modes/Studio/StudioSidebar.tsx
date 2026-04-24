@@ -174,10 +174,10 @@ export function StudioSidebar({
       </div>
 
       <div className="bf-panel">
-        <div className="bf-panel-head">yours ({yours.length})</div>
+        <div className="bf-panel-head">local ({yours.length})</div>
         {yours.length === 0 ? (
           <div className="bf-studio-yours-empty">
-            Your saved patterns will appear here.
+            Your locally saved patterns will appear here.
           </div>
         ) : (
           <div className="bf-studio-yours-list">

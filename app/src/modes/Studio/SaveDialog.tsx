@@ -75,7 +75,7 @@ export function SaveDialog({ draft, onCancel, onConfirm }: Props) {
             disabled={!ok}
             type="button"
           >
-            Save to Yours
+            Save to Local
           </button>
         </div>
       </div>

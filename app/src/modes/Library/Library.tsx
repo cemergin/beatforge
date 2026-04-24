@@ -291,8 +291,6 @@ export function Library({ engine, onLoadInPractice, onOpenInStudio }: Props) {
           allMeters={allMeters}
           allGenres={allGenres}
           allKits={allKits}
-          count={filtered.length}
-          total={PATTERNS.length}
         />
       </section>
 

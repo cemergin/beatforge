@@ -20,11 +20,15 @@ import { Disclosure } from '../../components/Disclosure';
 import { CircularGrid } from '../../components/CircularGrid';
 import { LinearGrid } from '../../components/LinearGrid';
 import { PillGrid } from '../../components/PillGrid';
+import { BpmHero } from '../../components/metronome/BpmHero';
+import { PlayVolume } from '../../components/metronome/PlayVolume';
+import { CountInPanel } from '../../components/metronome/CountInPanel';
+import { AccentsPanel } from '../../components/metronome/AccentsPanel';
+import { SwingPanel } from '../../components/metronome/SwingPanel';
+import { KitPanel } from '../../components/metronome/KitPanel';
 import { Trainer, type TrainerCfg } from './Trainer';
 
 type View = 'circular' | 'linear' | 'pill';
-
-const ALL_KITS: KitId[] = ['808', '909', '707', '727', 'frameDrum', 'tabla', 'gamelan'];
 
 function swingDefaultToSlider(s: number | undefined): number {
   if (s === undefined) return 50;
@@ -417,63 +421,26 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
           {shareToast && <div className="bf-share-toast">{shareToast}</div>}
         </div>
 
-        <div className={`bf-bpm-hero ${countingIn ? 'counting-in' : ''}`}>
-          <div className="bf-bpm-num">{bpm}</div>
-          <div className="bf-bpm-unit" title="Beats per minute — where one beat is one grid step">
-            BPM <span style={{ opacity: 0.7, fontSize: '0.7em' }}>· step/min</span>
-          </div>
-          <div className="bf-bpm-controls">
-            <button onClick={() => setBpm((b) => Math.max(30, b - 1))} aria-label="Decrease BPM">−</button>
-            <input
-              type="range"
-              min={30}
-              max={800}
-              value={bpm}
-              aria-label="BPM (steps per minute)"
-              onChange={(e) => setBpm(Number(e.target.value))}
-            />
-            <button onClick={() => setBpm((b) => Math.min(800, b + 1))} aria-label="Increase BPM">+</button>
-            <button
-              className={`bf-bpm-tap ${tapTimes.length > 0 ? 'armed' : ''}`}
-              onClick={handleTap}
-              title="Tap repeatedly to set BPM (or press T)"
-              aria-label="Tap to set tempo"
-              type="button"
-            >
-              t
-            </button>
-          </div>
+        <BpmHero
+          bpm={bpm}
+          setBpm={setBpm}
+          onTap={handleTap}
+          tapArmed={tapTimes.length > 0}
+          countingIn={countingIn}
+        >
           <BeatDots grouping={grouping} currentStep={curStep} size={12} />
-          {countingIn && <div className="bf-counting-in-badge">counting in…</div>}
-        </div>
+        </BpmHero>
 
-        <div className="bf-play-volume">
-          <button className={`bf-play ${playing ? 'on' : ''}`} onClick={toggle}>
-            {playing ? (
-              <span><span className="bf-stop-ico" /> stop</span>
-            ) : (
-              <span><span className="bf-play-ico" /> play</span>
-            )}
-          </button>
-          <div className="bf-volume" title="Master volume">
-            <span className="bf-volume-ico" aria-hidden="true">
-              {masterVolume === 0 ? '🔇' : masterVolume < 0.35 ? '🔈' : masterVolume < 0.7 ? '🔉' : '🔊'}
-            </span>
-            <input
-              type="range"
-              min={0}
-              max={100}
-              value={Math.round(masterVolume * 100)}
-              onChange={(e) => {
-                const v = Number(e.target.value) / 100;
-                setMasterVolumeState(v);
-                engine.setMasterVolume(v);
-                storeMasterVolume(v);
-              }}
-              aria-label="Master volume"
-            />
-          </div>
-        </div>
+        <PlayVolume
+          playing={playing}
+          onToggle={toggle}
+          volume={masterVolume}
+          onVolumeChange={(v) => {
+            setMasterVolumeState(v);
+            engine.setMasterVolume(v);
+            storeMasterVolume(v);
+          }}
+        />
 
         {pattern.story && (
           <Disclosure className="bf-story" summary="about this rhythm">
@@ -558,99 +525,34 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
           cycleStartMs={trainerCycleStartMs}
         />
 
-        <div className="bf-panel">
-          <div className="bf-panel-head">count-in</div>
-          <div className="bf-seg">
-            {[0, 1, 2, 4].map((n) => (
-              <button
-                key={n}
-                className={countInBars === n ? 'on' : ''}
-                onClick={() => setCountInBars(n)}
-              >
-                {n === 0 ? 'off' : `${n} bar${n > 1 ? 's' : ''}`}
-              </button>
-            ))}
-          </div>
-        </div>
+        <CountInPanel countInBars={countInBars} setCountInBars={setCountInBars} />
 
-        <div className="bf-panel">
-          <div className="bf-panel-head">accents</div>
-          <div className="bf-row">
-            <label>strong</label>
-            <input
-              type="range"
-              min={50}
-              max={100}
-              value={strong}
-              onChange={(e) => setStrong(Number(e.target.value))}
-            />
-            <span className="bf-val">{strong}%</span>
-          </div>
-          <div className="bf-row">
-            <label>weak</label>
-            <input
-              type="range"
-              min={0}
-              max={100}
-              value={weak}
-              onChange={(e) => setWeak(Number(e.target.value))}
-            />
-            <span className="bf-val">{weak}%</span>
-          </div>
-        </div>
-        {pattern.swingable && (
-          <div className="bf-panel">
-            <div className="bf-panel-head">swing</div>
-            <div className="bf-row">
-              <input
-                type="range"
-                min={50}
-                max={75}
-                value={swing}
-                onChange={(e) => setSwing(Number(e.target.value))}
-              />
-              <span className="bf-val">
-                {swing === 50 ? 'straight' : swing >= 66 ? 'triplet' : `${swing}%`}
-              </span>
-            </div>
-          </div>
-        )}
-        <div className="bf-panel">
-          <div className="bf-panel-head">
-            kit
-            {kitOverride && (
-              <button
-                className="bf-kit-reset"
-                onClick={() => {
-                  clearKitOverride(pattern.id);
-                  setKitOverrideState(null);
-                }}
-                title={`Reset to pattern default: ${pattern.defaultKit}`}
-              >
-                ⤺ {pattern.defaultKit}
-              </button>
-            )}
-          </div>
-          <div className="bf-kit-grid">
-            {ALL_KITS.map((k) => (
-              <button
-                key={k}
-                className={`bf-kit-btn ${activeKit === k ? 'on' : ''}`}
-                onClick={() => {
-                  if (k === pattern.defaultKit) {
-                    clearKitOverride(pattern.id);
-                    setKitOverrideState(null);
-                  } else {
-                    setKitOverride(pattern.id, k);
-                    setKitOverrideState(k);
-                  }
-                }}
-              >
-                {k === 'frameDrum' ? 'frame' : k}
-              </button>
-            ))}
-          </div>
-        </div>
+        <AccentsPanel
+          strong={strong}
+          setStrong={setStrong}
+          weak={weak}
+          setWeak={setWeak}
+        />
+
+        {pattern.swingable && <SwingPanel swing={swing} setSwing={setSwing} />}
+
+        <KitPanel
+          activeKit={activeKit}
+          onSelect={(k) => {
+            if (k === pattern.defaultKit) {
+              clearKitOverride(pattern.id);
+              setKitOverrideState(null);
+            } else {
+              setKitOverride(pattern.id, k);
+              setKitOverrideState(k);
+            }
+          }}
+          resetTo={kitOverride ? pattern.defaultKit : null}
+          onReset={() => {
+            clearKitOverride(pattern.id);
+            setKitOverrideState(null);
+          }}
+        />
       </aside>
     </main>
   );

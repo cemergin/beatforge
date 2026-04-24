@@ -8,8 +8,6 @@ interface Props {
   allMeters: string[];
   allGenres: Genre[];
   allKits: KitId[];
-  count: number;
-  total: number;
 }
 
 function toggle<T>(arr: T[], v: T): T[] {
@@ -17,7 +15,7 @@ function toggle<T>(arr: T[], v: T): T[] {
 }
 
 export function Filters({
-  filters, setFilters, allMeters, allGenres, allKits, count, total,
+  filters, setFilters, allMeters, allGenres, allKits,
 }: Props) {
   return (
     <div className="bf-lib-filters-block">
@@ -51,10 +49,6 @@ export function Filters({
         onToggle={(v) => setFilters({ ...filters, kits: toggle(filters.kits, v as KitId) })}
         onClear={() => setFilters({ ...filters, kits: [] })}
       />
-
-      <div className="bf-filter-row-wrap bf-filter-count-row">
-        <span className="bf-lib-count">{count} / {total} match</span>
-      </div>
     </div>
   );
 }
