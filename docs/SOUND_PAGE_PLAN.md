@@ -902,6 +902,33 @@ yet.
 └─────────────────────────────────────────────────────────────────┘
 ```
 
+### Master spectrum analyzer (FFT visualization)
+
+The Sound page surfaces a real-time **spectrum analyzer** of the
+master output (post comp + drive) so the user can see what they're
+hearing. Built on Web Audio's `AnalyserNode`:
+
+- 1024-sample FFT, ~43 Hz bin width at 44.1 kHz
+- Logarithmic frequency axis (20 Hz → 20 kHz, since musical hearing
+  is log)
+- 60fps update via `requestAnimationFrame`
+- Optional second view: time-domain waveform (oscilloscope) — toggle
+  in the analyzer header
+
+UX: a slim band along the top of the Sound page, ~80px tall. Stays
+visible as the user tweaks. Two modes:
+- **Spectrum** (default): bar/line plot of frequency energy. Spikes
+  show harmonic content; you can see "the kick has a fundamental at
+  60 Hz and a click around 2 kHz."
+- **Waveform**: time-domain trace. Useful for envelope-shape work
+  ("does my snare actually decay in 80ms?")
+
+Implementation cost is small: one `AnalyserNode` tap on the master
+bus + ~80 lines of canvas drawing code. Lives in
+`audio/runtime/sound-engine.ts` and a `<SpectrumAnalyzer>` component.
+The analyzer node taps the master *output* so it sees comp + drive +
+all sends mixed — what the user actually hears.
+
 ### Per-channel trigger button (audition)
 
 Each of the 5 channel cards has a small `▶` button that fires the
@@ -912,8 +939,28 @@ sends) so you hear the voice as it would mix in context.
 
 Behaviour: click the channel `▶` → the engine plays that channel's
 machine through the live effect chain at `amp = 1.0`. No scheduling,
-no metering — just a one-shot. Keyboard shortcut: `1`-`5` triggers
-channels 1-5 (handy for quickly comparing sounds).
+no metering — just a one-shot.
+
+**Keyboard mapping** (DAW convention — QWERTY-as-pad-grid, home row):
+
+| Key | Channel | Optional accent variant |
+|---|---|---|
+| `A` | ch 1 | `Q` (2× velocity) |
+| `S` | ch 2 | `W` |
+| `D` | ch 3 | `E` |
+| `F` | ch 4 | `R` |
+| `G` | ch 5 | `T` |
+
+Numeric `1`-`5` is also accepted as an alternative (some users prefer
+the numeric mapping; both work simultaneously). The QWERTY-row variant
+(Q-T) plays the same channel at higher velocity (2.0 instead of 1.0)
+so you can quickly A/B "ghost vs. accent" hits while designing — same
+muscle memory as a real drum-pad controller's velocity rows.
+
+Implementation note: `keydown` listener on the Sound page root,
+filtered by `target` like the existing keyboard shortcuts in Practice
+(skip if input/textarea has focus). Repeat-fire is suppressed (one
+trigger per keydown, no auto-repeat).
 
 Why top-down (vs. left-rail kit / center channel / right effects):
 - Stacks naturally on narrow screens (mobile, small windows)

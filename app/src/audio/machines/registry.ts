@@ -7,13 +7,14 @@
 // migrates the existing kits to use these.
 
 import type { FxMachine, VoiceMachine } from './types';
+import { Kick } from './voice/kick';
 
 // ── Voice machines ───────────────────────────────────────────────
 // Add archetypes here as they're implemented. The exhaustiveness
 // check via `satisfies` ensures every key has a matching machine.
 
 export const VOICE_MACHINES = {
-  // populated by phase-1 commits, archetype-by-archetype
+  kick: Kick,
 } as const satisfies Record<string, VoiceMachine>;
 
 export type VoiceArchetypeId = keyof typeof VOICE_MACHINES;
