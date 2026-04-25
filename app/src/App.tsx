@@ -1,10 +1,13 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { Suspense, lazy, useCallback, useEffect, useRef, useState } from 'react';
 import { AudioEngine } from './audio/engine';
 import { Practice } from './modes/Practice/Practice';
-import { Library } from './modes/Library/Library';
-import { Studio } from './modes/Studio/Studio';
-import { PatternsSandbox } from './modes/_Patterns/PatternsSandbox';
 import type { KitId, Pattern } from './patterns/types';
+
+// Library + Studio are split into their own chunks. Practice is the
+// landing tab and stays in the main bundle.
+const Library = lazy(() => import('./modes/Library/Library').then((m) => ({ default: m.Library })));
+const Studio = lazy(() => import('./modes/Studio/Studio').then((m) => ({ default: m.Studio })));
+const PatternsSandbox = lazy(() => import('./modes/_Patterns/PatternsSandbox').then((m) => ({ default: m.PatternsSandbox })));
 import { patternById, registerPatternSource } from './patterns/seed';
 import { deserializePattern } from './patterns/serialize';
 import { loadAllSafe } from './lib/db';
@@ -306,22 +309,28 @@ export default function App() {
         />
       )}
       {tab === 'studio' && (
-        <Studio
-          engine={engine}
-          initialPattern={initialStudioPattern}
-          onConsumedInitial={() => setInitialStudioPattern(null)}
-          onLoadInPractice={(id) => { refreshUserCache(); loadInPractice(id); }}
-        />
+        <Suspense fallback={<div className="bf-mode-loading">loading studio…</div>}>
+          <Studio
+            engine={engine}
+            initialPattern={initialStudioPattern}
+            onConsumedInitial={() => setInitialStudioPattern(null)}
+            onLoadInPractice={(id) => { refreshUserCache(); loadInPractice(id); }}
+          />
+        </Suspense>
       )}
       {tab === 'library' && (
-        <Library
-          engine={engine}
-          onLoadInPractice={loadInPractice}
-          onOpenInStudio={openInStudio}
-        />
+        <Suspense fallback={<div className="bf-mode-loading">loading library…</div>}>
+          <Library
+            engine={engine}
+            onLoadInPractice={loadInPractice}
+            onOpenInStudio={openInStudio}
+          />
+        </Suspense>
       )}
       {DEV_MODE && tab === '_patterns' && (
-        <PatternsSandbox engine={engine} />
+        <Suspense fallback={<div className="bf-mode-loading">loading…</div>}>
+          <PatternsSandbox engine={engine} />
+        </Suspense>
       )}
       <UpdateBanner />
     </div>
