@@ -20,6 +20,7 @@ import { Noise } from './voice/noise';
 import { Wavefolder } from './voice/wavefolder';
 import { Crackle } from './voice/crackle';
 import { Chip } from './voice/chip';
+import { Formant } from './voice/formant';
 
 // ── Voice machines ───────────────────────────────────────────────
 // Add archetypes here as they're implemented. The exhaustiveness
@@ -39,6 +40,7 @@ export const VOICE_MACHINES = {
   wavefolder: Wavefolder,
   crackle: Crackle,
   chip: Chip,
+  formant: Formant,
 } as const satisfies Record<string, VoiceMachine>;
 
 export type VoiceArchetypeId = keyof typeof VOICE_MACHINES;
