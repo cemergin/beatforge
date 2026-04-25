@@ -58,56 +58,62 @@ export const Chip: VoiceMachine<ChipConfig> = {
     const pwmRate    = knobValue(cfg, 'pwmRate', mod);
     const decay      = knobValue(cfg, 'decay', mod) / 1000;
 
-    // Web Audio doesn't have a square+PWM oscillator natively, but
-    // we can synthesise one with a sawtooth → WaveShaper. The
-    // shaper's transfer function compares input to a threshold
-    // (driven by pulseWidth + LFO).
+    // PWM via the SID/SuperGAS comparator trick. Web Audio doesn't
+    // have a native PWM oscillator, but we can synthesise one:
+    //
+    //   sawtooth (-1..1)          ↘
+    //   pulseWidth bias (DC)       → SUM → sign() WaveShaper → amp env
+    //   PWM LFO × pwmDepth        ↗
+    //
+    // The signals are SUMMED at audio rate (all three connect into the
+    // input of a unity-gain GainNode — connecting to a node's input
+    // sums; connecting to a node's `.gain` AudioParam multiplies).
+    // The shaper outputs +1 above zero and -1 below — the proportion
+    // of time spent above zero IS the pulse width. PWM LFO sweeps
+    // that bias over time → pulse width modulation.
     const saw = createOsc(ctx);
     saw.type = 'sawtooth';
     saw.frequency.value = pitch;
 
-    // Threshold comparator: positive output if above threshold,
-    // negative below. The threshold itself is controlled by an
-    // adder: pulseWidth + LFO * pwmDepth.
+    // Sign-comparator WaveShaper.
     const shaper = ctx.createWaveShaper();
     {
       const len = 2048;
       const curve = new Float32Array(new ArrayBuffer(len * 4));
       for (let i = 0; i < len; i++) {
         const x = (i / (len - 1)) * 2 - 1;
-        // x > 0 → +1 ; x < 0 → -1 (square)
         curve[i] = x > 0 ? 1 : -1;
       }
       shaper.curve = curve;
     }
 
-    // Sum sawtooth + DC offset (controlled by an LFO) so the comparator
-    // shifts its zero-crossing → effectively shifts pulse width.
-    const sumGain = createGain(ctx);
-    sumGain.gain.value = 1.0;
-    saw.connect(sumGain);
+    // Passive summer — every signal connected to its input adds.
+    const sum = createGain(ctx);
+    sum.gain.value = 1.0;
+    saw.connect(sum);
 
+    // DC bias (pulseWidth): center at 0 = 50% duty, ±1 swings to
+    // limits (saw range is ±1, so a DC of ±1 pegs the comparator).
+    const dc = ctx.createConstantSource();
+    dc.offset.value = (pulseWidth - 0.5) * 2;
+    dc.connect(sum);
+    dc.start(when);
+    dc.stop(when + decay + 0.05);
+
+    // PWM LFO: a sine that nudges the bias up and down, sweeping the
+    // duty cycle over time at `pwmRate` Hz with `pwmDepth` amplitude.
     if (pwmDepth > 0) {
       const lfo = createOsc(ctx);
       lfo.type = 'sine';
       lfo.frequency.value = pwmRate;
       const lfoGain = createGain(ctx);
       lfoGain.gain.value = pwmDepth;
-      lfo.connect(lfoGain).connect(sumGain.gain);
+      lfo.connect(lfoGain).connect(sum);
       lfo.start(when);
       lfo.stop(when + decay + 0.05);
     }
 
-    // DC offset from pulseWidth (centered at 0.5 = 0 offset).
-    const dc = ctx.createConstantSource();
-    dc.offset.value = (pulseWidth - 0.5) * 2;
-    const dcGain = createGain(ctx);
-    dcGain.gain.value = 1.0;
-    dc.connect(dcGain).connect(sumGain.gain);
-    dc.start(when);
-    dc.stop(when + decay + 0.05);
-
-    sumGain.connect(shaper);
+    sum.connect(shaper);
 
     const env = ampEnvelope(ctx, when, amp * 0.4, 0.003, decay);
     shaper.connect(env);

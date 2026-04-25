@@ -6,6 +6,22 @@
 
 export { createOsc, createGain, createBiquad, createNoise } from '../../kits/_util';
 
+/** Short-burst transient duration shared by clap, comb-pluck excitation,
+ *  crackle, etc. 12 ms is short enough to register as a click but long
+ *  enough that band-passed envelopes settle cleanly. */
+export const BURST_SEC = 0.012;
+
+/** A 30 Hz highpass — DC-blocker. Use when a renderer's signal path
+ *  (e.g., asymmetric WaveShaper) injects DC the amp envelope can't
+ *  cancel; otherwise you get a "clunk" on attack/release. */
+export function dcBlocker(ctx: AudioContext): BiquadFilterNode {
+  const hp = ctx.createBiquadFilter();
+  hp.type = 'highpass';
+  hp.frequency.value = 30;
+  hp.Q.value = 0.5;
+  return hp;
+}
+
 /** Standard percussion amp envelope: linear ramp up to peak, then
  *  exponential decay to silence. Returns a configured GainNode that
  *  the caller is responsible for connecting. */

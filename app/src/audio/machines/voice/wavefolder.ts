@@ -6,7 +6,7 @@
 import { z } from 'zod';
 import type { KnobSpec, ModValues, VoiceCtx, VoiceMachine } from '../types';
 import { knobValue } from '../types';
-import { ampEnvelope, createGain, createOsc } from '../_shared/audio';
+import { ampEnvelope, createGain, createOsc, dcBlocker } from '../_shared/audio';
 
 const KNOBS = [
   { id: 'pitch',     label: 'Pitch',     min: 50,  max: 1500, default: 220, curve: 'exp', unit: 'Hz' },
@@ -94,8 +94,14 @@ export const Wavefolder: VoiceMachine<WavefolderConfig> = {
     shaper.oversample = '4x';
     driveGain.connect(shaper);
 
+    // DC-blocker — asymmetric fold curves bake in DC the amp envelope
+    // can't cancel, audible as "clunk" at attack/release on
+    // high-asymmetry presets (metal, buchla, pulse).
+    const hp = dcBlocker(ctx);
+    shaper.connect(hp);
+
     const env = ampEnvelope(ctx, when, amp * 0.5, 0.005, decay);
-    shaper.connect(env);
+    hp.connect(env);
     env.connect(destination);
 
     osc.start(when);

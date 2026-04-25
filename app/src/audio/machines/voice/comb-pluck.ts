@@ -17,6 +17,13 @@ const KNOBS = [
   { id: 'decay',      label: 'Decay',      min: 100, max: 4000, default: 1200, curve: 'exp', unit: 'ms' },
 ] as const satisfies readonly KnobSpec[];
 
+// Max delay buffer = 1 / minPitch × safety margin. Auto-scales with
+// the knob's lower bound so future automation can't push pitch below
+// the buffer's capacity (Web Audio silently truncates → wrong tuning,
+// hard to debug from UI). 1.5× margin handles slight automation
+// undershoot.
+const MAX_DELAY_SEC = (1 / KNOBS[0].min) * 1.5;
+
 const CombPluckConfigSchema = z.object({
   archetype:  z.literal('comb-pluck'),
   pitch:      z.number().min(KNOBS[0].min).max(KNOBS[0].max),
@@ -62,7 +69,7 @@ export const CombPluck: VoiceMachine<CombPluckConfig> = {
     const delayTime = 1 / pitch;
 
     // Loop: delay → fb gain → LP filter → back into delay.
-    const delay = ctx.createDelay(0.05);
+    const delay = ctx.createDelay(MAX_DELAY_SEC);
     delay.delayTime.value = delayTime;
     const fb = createGain(ctx);
     fb.gain.value = feedback;

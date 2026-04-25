@@ -14,13 +14,17 @@ interface Channel {
   machine: MachineConfig;
 }
 
+// Default kit — leans into the system's range so first-visit users
+// hear what's possible. Kick + snare anchor familiar territory; modal
+// (bell) and comb-pluck (kalimba) showcase the new synthesis the
+// existing kits can't do; hat keeps the rhythm tight.
 function defaultChannels(): Channel[] {
   return [
-    { label: 'Kick',  short: 'Kic', machine: { ...VOICE_MACHINES.kick.defaults } },
-    { label: 'Snare', short: 'Sna', machine: { ...VOICE_MACHINES.snare.defaults } },
-    { label: 'Hat',   short: 'Hat', machine: { ...VOICE_MACHINES.hat.defaults } },
-    { label: 'Clap',  short: 'Cla', machine: { ...VOICE_MACHINES.clap.defaults } },
-    { label: 'Tom',   short: 'Tom', machine: { ...VOICE_MACHINES.tom.defaults, ...VOICE_MACHINES.tom.presets?.mid } },
+    { label: 'Kick',    short: 'Kic', machine: { ...VOICE_MACHINES.kick.defaults } },
+    { label: 'Snare',   short: 'Sna', machine: { ...VOICE_MACHINES.snare.defaults } },
+    { label: 'Hat',     short: 'Hat', machine: { ...VOICE_MACHINES.hat.defaults } },
+    { label: 'Bell',    short: 'Bel', machine: { ...VOICE_MACHINES.modal.defaults, ...VOICE_MACHINES.modal.presets?.bell } },
+    { label: 'Kalimba', short: 'Kal', machine: { ...VOICE_MACHINES['comb-pluck'].defaults, ...VOICE_MACHINES['comb-pluck'].presets?.kalimba } },
   ];
 }
 
