@@ -115,10 +115,10 @@ describe('AudioEngine.loadPattern() hot swap', () => {
     e.loadPattern(fourFour());
     const inner = e as unknown as {
       nextIdx: Record<string, number>;
-      cursors: Record<string, number>;
+      _cursors: Record<string, number>;
     };
     expect(inner.nextIdx.KK).toBe(0);
-    expect(inner.cursors.KK).toBe(-1);
+    expect(inner._cursors.KK).toBe(-1);
   });
 
   it('hot swap while running preserves scheduler phase for surviving tracks', () => {
@@ -129,14 +129,14 @@ describe('AudioEngine.loadPattern() hot swap', () => {
     const e = new AudioEngine();
     e.loadPattern(fourFour());
     const inner = e as unknown as {
-      running: boolean;
+      _running: boolean;
+      _cursors: Record<string, number>;
       nextIdx: Record<string, number>;
-      cursors: Record<string, number>;
       nextNoteTimes: Record<string, number>;
     };
-    inner.running = true;
+    inner._running = true;
     inner.nextIdx.KK = 7;
-    inner.cursors.KK = 7;
+    inner._cursors.KK = 7;
     inner.nextNoteTimes.KK = 4.25;
 
     // Cell edit: same track shape, different velocities.
@@ -145,7 +145,7 @@ describe('AudioEngine.loadPattern() hot swap', () => {
     e.loadPattern(edited);
 
     expect(inner.nextIdx.KK).toBe(7);          // phase preserved
-    expect(inner.cursors.KK).toBe(7);
+    expect(inner._cursors.KK).toBe(7);
     expect(inner.nextNoteTimes.KK).toBe(4.25); // schedule preserved
   });
 
@@ -153,13 +153,13 @@ describe('AudioEngine.loadPattern() hot swap', () => {
     const e = new AudioEngine();
     e.loadPattern(fourFour());
     const inner = e as unknown as {
-      running: boolean;
+      _running: boolean;
+      _cursors: Record<string, number>;
       nextIdx: Record<string, number>;
-      cursors: Record<string, number>;
       nextNoteTimes: Record<string, number>;
       nextBarTime: number;
     };
-    inner.running = true;
+    inner._running = true;
     inner.nextBarTime = 3.14;
 
     const withSnare = fourFour();
@@ -171,7 +171,7 @@ describe('AudioEngine.loadPattern() hot swap', () => {
     expect(inner.nextIdx.KK).toBeUndefined();  // pruned
     expect(inner.nextIdx.SN).toBe(0);           // initialised
     expect(inner.nextNoteTimes.SN).toBe(3.14);  // at next bar
-    expect(inner.cursors.SN).toBe(-1);
+    expect(inner._cursors.SN).toBe(-1);
   });
 });
 

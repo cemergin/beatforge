@@ -29,23 +29,37 @@ interface TrackCache {
 }
 
 export class AudioEngine {
-  ctx: AudioContext | null = null;
-  master: GainNode | null = null;
+  // ── Audio graph (private to the class) ──────────────────────────
+  private ctx: AudioContext | null = null;
+  private master: GainNode | null = null;
   // The reverb ConvolverNode is kept alive by the audio graph (master
   // chain + reverbReturn both hold it), no class field needed.
   private reverbSend: GainNode | null = null;
 
-  kit: KitId = '808';
-  running = false;
-  pattern: Pattern | null = null;
-  bpm = 120;
-  swing = 0.5;
-  strongAmp = 1.0;
-  weakAmp = 0.5;
+  // ── Public state ────────────────────────────────────────────────
+  // Readable from anywhere; mutation only through the setX() methods
+  // below. The setters fire side effects (gain ramps, scheduler
+  // re-anchoring, listener fan-out) that direct assignment would skip.
+  private _kit: KitId = '808';
+  private _running = false;
+  private _pattern: Pattern | null = null;
+  private _bpm = 120;
+  private _swing = 0.5;
+  private _strongAmp = 1.0;
+  private _weakAmp = 0.5;
+  // Per-frame visual state (rAF reads via audibleCursors()).
+  private _cursors: Record<string, number> = {};
+  private _bar = 0;
 
-  // Public state for visuals (read each frame via rAF).
-  cursors: Record<string, number> = {};   // last-triggered step per track
-  bar = 0;
+  get kit(): KitId { return this._kit; }
+  get running(): boolean { return this._running; }
+  get pattern(): Pattern | null { return this._pattern; }
+  get bpm(): number { return this._bpm; }
+  get swing(): number { return this._swing; }
+  get strongAmp(): number { return this._strongAmp; }
+  get weakAmp(): number { return this._weakAmp; }
+  get cursors(): Readonly<Record<string, number>> { return this._cursors; }
+  get bar(): number { return this._bar; }
 
   // Bar-boundary listeners. Multiple modes can subscribe concurrently —
   // prevents the "last-mode-wins" race where Practice unmount stripped
@@ -56,15 +70,6 @@ export class AudioEngine {
   subscribeOnBar(fn: BarListener): () => void {
     this.barListeners.add(fn);
     return () => { this.barListeners.delete(fn); };
-  }
-
-  /** Legacy single-listener shim. Prefer subscribeOnBar(). */
-  private legacyBarListener: BarListener | null = null;
-  get onBar(): BarListener | null { return this.legacyBarListener; }
-  set onBar(fn: BarListener | null) {
-    if (this.legacyBarListener) this.barListeners.delete(this.legacyBarListener);
-    this.legacyBarListener = fn;
-    if (fn) this.barListeners.add(fn);
   }
 
   // Scheduler timing. lookaheadMs is how often tick() fires; scheduleAheadS
@@ -165,7 +170,7 @@ export class AudioEngine {
   }
 
   setKit(k: KitId): void {
-    this.kit = k;
+    this._kit = k;
     if (this.reverbSend) this.reverbSend.gain.value = kitRecipes[k].reverbSend;
   }
 
@@ -224,7 +229,7 @@ export class AudioEngine {
       }
       this.barAnchorTime = this.nextBarTime;
     }
-    this.bpm = b;
+    this._bpm = b;
   }
 
   // Master volume 0..1; persists via the master gain node.
@@ -241,25 +246,25 @@ export class AudioEngine {
     }
   }
   getMasterVolume(): number { return this.masterVolume; }
-  setSwing(s: number): void { this.swing = s; }
+  setSwing(s: number): void { this._swing = s; }
   setAccents(strong: number, weak: number): void {
-    this.strongAmp = strong;
-    this.weakAmp = weak;
+    this._strongAmp = strong;
+    this._weakAmp = weak;
   }
 
   loadPattern(p: Pattern): void {
     const wasRunning = this.running;
-    this.pattern = p;
+    this._pattern = p;
     this.rebuildTrackCaches();
 
     if (!wasRunning) {
       // Fresh load — start() will seed nextNoteTimes + anchors from startTime.
-      this.cursors = {};
+      this._cursors = {};
       this.nextIdx = {};
       this.anchorTime = {};
       this.anchorIdx = {};
       Object.keys(p.tracks).forEach((tr) => {
-        this.cursors[tr] = -1;
+        this._cursors[tr] = -1;
         this.nextIdx[tr] = 0;
       });
       return;
@@ -273,7 +278,7 @@ export class AudioEngine {
     for (const tr of Object.keys(p.tracks)) {
       if (!(tr in this.nextIdx)) {
         this.nextIdx[tr] = 0;
-        this.cursors[tr] = -1;
+        this._cursors[tr] = -1;
         this.nextNoteTimes[tr] = this.nextBarTime;
         this.anchorTime[tr] = this.nextBarTime;
         this.anchorIdx[tr] = 0;
@@ -283,7 +288,7 @@ export class AudioEngine {
       if (!(tr in p.tracks)) {
         delete this.nextIdx[tr];
         delete this.nextNoteTimes[tr];
-        delete this.cursors[tr];
+        delete this._cursors[tr];
         delete this.anchorTime[tr];
         delete this.anchorIdx[tr];
       }
@@ -316,7 +321,7 @@ export class AudioEngine {
 
   start(countInBars = 0): void {
     if (!this.pattern || !this.ctx || this.running) return;
-    this.running = true;
+    this._running = true;
     const now = this.ctx.currentTime + 0.06;
     const barSec = this.pattern.steps * (60 / this.bpm);
 
@@ -344,12 +349,12 @@ export class AudioEngine {
     this.nextBarTime = this.startTime;
     this.barAnchorTime = this.startTime;
     this.barAnchorIdx = 0;
-    this.bar = 0;
+    this._bar = 0;
 
     Object.keys(this.pattern.tracks).forEach((tr) => {
       this.nextNoteTimes[tr] = this.startTime;
       this.nextIdx[tr] = 0;
-      this.cursors[tr] = -1;
+      this._cursors[tr] = -1;
       this.anchorTime[tr] = this.startTime;
       this.anchorIdx[tr] = 0;
     });
@@ -395,7 +400,7 @@ export class AudioEngine {
   }
 
   stop(): void {
-    this.running = false;
+    this._running = false;
     if (this.timerId) {
       clearTimeout(this.timerId);
       this.timerId = null;
@@ -470,7 +475,7 @@ export class AudioEngine {
         const vel = c.pattern[idx];
         if (vel > 0) this.trigger(tr, tPlay, vel);
 
-        this.cursors[tr] = idx;
+        this._cursors[tr] = idx;
 
         // Anchor-derive next note time — `anchor + (idx - anchorIdx) * stepSec`
         // rather than `+= stepSec` — so cumulative float-add drift stays
@@ -496,7 +501,7 @@ export class AudioEngine {
         const b = barIndex;
         const delayMs = Math.max(0, (tBar - ctx.currentTime) * 1000);
         setTimeout(() => {
-          this.bar = b;
+          this._bar = b;
           for (const fn of [...this.barListeners]) {
             try { fn(b); } catch { /* isolate */ }
           }

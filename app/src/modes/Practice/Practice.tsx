@@ -118,13 +118,17 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
     });
   }, [engine]);
 
+  // Pattern-change reset. Resets UI state (bpm, swing, grouping, kit) +
+  // stops playback. The engine.loadPattern call lives in the dependent
+  // effect below — pattern object identity changes when patternId
+  // changes, so the [pattern, grouping] effect re-fires once and we
+  // don't need a redundant load here.
   useEffect(() => {
     engine.stop();
     setPlaying(false);
     setCountingIn(false);
     clearCountInTimer();
     setEditedTracks({});
-    engine.loadPattern({ ...pattern, grouping: pattern.grouping });
     setBpm(stepToNaturalBpm(pattern.bpm.default, pattern.stepUnit, parseTimeSigDenom(pattern.timeSig)));
     setSwing(swingDefaultToSlider(pattern.swingDefault));
     setGrouping(pattern.grouping);
