@@ -14,6 +14,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { AudioEngine } from '../../audio/engine';
+import { naturalTempo } from '../../audio/tempo';
 import type { KitId, Pattern, RegionId, VoiceId, Velocity } from '../../patterns/types';
 import { BeatDots } from '../../components/BeatDots';
 
@@ -294,7 +295,10 @@ function DraftCard({
       <div className="bf-detail-meta">
         <span className="bf-meta-badge">{draft.timeSig}</span>
         <span className="bf-meta-badge alt">{draft.grouping.join('+')}</span>
-        <span className="bf-meta-badge alt">♩={draft.bpm.default}</span>
+        {(() => {
+          const t = naturalTempo(draft.bpm.default, draft.stepUnit, draft.timeSig);
+          return <span className="bf-meta-badge alt">{t.glyph}={t.value}</span>;
+        })()}
         <span className="bf-meta-badge alt">{draft.defaultKit}</span>
       </div>
 
@@ -358,7 +362,10 @@ function DraftCard({
         <strong>Proof-hearing checklist</strong>
         <ul>
           <li>Kick on canonical downbeats of the grouping?</li>
-          <li>Tempo feels natural at {draft.bpm.default} BPM?</li>
+          {(() => {
+            const t = naturalTempo(draft.bpm.default, draft.stepUnit, draft.timeSig);
+            return <li>Tempo feels natural at {t.glyph}={t.value}?</li>;
+          })()}
           <li>Meter matches {draft.timeSig}?</li>
           <li>Default kit ({draft.defaultKit}) is culturally coherent?</li>
         </ul>

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { AudioEngine } from '../../audio/engine';
 import type { Pattern } from '../../patterns/types';
+import { naturalTempo } from '../../audio/tempo';
 import { PATTERNS, patternById } from '../../patterns/seed';
 import { BeatDots } from '../../components/BeatDots';
 import { isHighlighted, toggleHighlight } from '../../lib/storage';
@@ -139,7 +140,10 @@ export function PatternDetail({
           <div className="bf-detail-meta">
             <span className="bf-meta-badge">{pattern.timeSig}</span>
             <span className="bf-meta-badge alt">{pattern.grouping.join('+')}</span>
-            <span className="bf-meta-badge alt">♩={pattern.bpm.default}</span>
+            {(() => {
+              const t = naturalTempo(pattern.bpm.default, pattern.stepUnit, pattern.timeSig);
+              return <span className="bf-meta-badge alt">{t.glyph}={t.value}</span>;
+            })()}
             <span className="bf-meta-badge alt">{pattern.defaultKit}</span>
             {region && (
               <span className="bf-meta-badge alt" style={{ color: region.color }}>

@@ -1,5 +1,6 @@
 import type { Pattern } from '../../patterns/types';
 import { BeatDots } from '../../components/BeatDots';
+import { naturalTempo } from '../../audio/tempo';
 import { REGION_BY_ID } from './regions';
 
 interface Props {
@@ -11,6 +12,7 @@ interface Props {
 
 export function PatternCard({ pattern, starred, onClick, onToggleStar }: Props) {
   const region = REGION_BY_ID[pattern.region];
+  const tempo = naturalTempo(pattern.bpm.default, pattern.stepUnit, pattern.timeSig);
   return (
     <button
       className="bf-lib-tile"
@@ -58,7 +60,7 @@ export function PatternCard({ pattern, starred, onClick, onToggleStar }: Props) 
         {pattern.poly && <span className="bf-poly-badge">poly</span>}
       </div>
       <div className="bf-lib-tile-meta">
-        <span className="bf-lib-bpm">♩={pattern.bpm.default}</span>
+        <span className="bf-lib-bpm">{tempo.glyph}={tempo.value}</span>
         <span
           className="bf-lib-region-chip"
           style={{ color: region?.color }}

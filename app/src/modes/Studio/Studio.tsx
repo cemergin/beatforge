@@ -3,7 +3,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { AudioEngine } from '../../audio/engine';
-import { quarterToStepBpm, stepToQuarterBpm } from '../../audio/tempo';
+import { naturalToStepBpm, parseTimeSigDenom, stepToNaturalBpm } from '../../audio/tempo';
 import type {
   KitId,
   Pattern,
@@ -123,9 +123,10 @@ export function Studio({
   }, [initialPattern, onConsumedInitial]);
 
   const [playing, setPlaying] = useState(false);
-  // bpm is QUARTER BPM. Engine receives the stepUnit conversion via
-  // quarterToStepBpm in the sync effect below.
-  const [bpm, setBpm] = useState(stepToQuarterBpm(draft.bpm.default, draft.stepUnit));
+  // bpm is NATURAL BPM (rate of the time-signature denominator). Engine
+  // receives the conversion to step BPM in the sync effect below.
+  const denom = parseTimeSigDenom(draft.timeSig);
+  const [bpm, setBpm] = useState(stepToNaturalBpm(draft.bpm.default, draft.stepUnit, denom));
   const [kit, setKit] = useState<KitId>(draft.defaultKit);
   const [cursors, setCursors] = useState<Record<string, number>>({});
   const [showSave, setShowSave] = useState(false);
@@ -180,8 +181,8 @@ export function Studio({
     engine.loadPattern(draft);
   }, [engine, draft]);
   useEffect(() => {
-    engine.setBpm(quarterToStepBpm(bpm, draft.stepUnit));
-  }, [engine, bpm, draft.stepUnit]);
+    engine.setBpm(naturalToStepBpm(bpm, draft.stepUnit, denom));
+  }, [engine, bpm, draft.stepUnit, denom]);
   useEffect(() => { engine.setKit(kit); }, [engine, kit]);
   useEffect(() => {
     engine.setSwing(draft.swingable ? 0.5 + ((swing - 50) / 100) * 0.34 : 0.5);
@@ -230,14 +231,14 @@ export function Studio({
         const median = sorted.length % 2 === 0
           ? (sorted[mid - 1] + sorted[mid]) / 2
           : sorted[mid];
-        // Tap intervals are quarter-note rate by convention.
-        const tapQuarter = Math.max(30, Math.min(300, Math.round(60_000 / median)));
-        setBpm(tapQuarter);
-        engine.setBpm(quarterToStepBpm(tapQuarter, draft.stepUnit));
+        // Tap intervals are at the natural pulse (time-sig denominator).
+        const tapNatural = Math.max(30, Math.min(400, Math.round(60_000 / median)));
+        setBpm(tapNatural);
+        engine.setBpm(naturalToStepBpm(tapNatural, draft.stepUnit, denom));
       }
       return next;
     });
-  }, [engine, draft.stepUnit]);
+  }, [engine, draft.stepUnit, denom]);
 
   // Keyboard: T for tap.
   useEffect(() => {
@@ -267,9 +268,9 @@ export function Studio({
   const updateBpm = useCallback((partial: Partial<Pattern['bpm']>) => {
     setDraft((d) => {
       const next = { ...d, bpm: { ...d.bpm, ...partial } };
-      // Sync the live (quarter) BPM when the user edits the metadata default.
+      // Sync the live natural BPM when the user edits the metadata default.
       if (partial.default !== undefined) {
-        setBpm(stepToQuarterBpm(partial.default, d.stepUnit));
+        setBpm(stepToNaturalBpm(partial.default, d.stepUnit, parseTimeSigDenom(d.timeSig)));
       }
       return next;
     });
@@ -295,7 +296,7 @@ export function Studio({
       clearCountInTimer();
     } else {
       if (bpm < trainerCfg.from && trainerOn) setBpm(trainerCfg.from);
-      const stepBpm = quarterToStepBpm(bpm, draft.stepUnit);
+      const stepBpm = naturalToStepBpm(bpm, draft.stepUnit, denom);
       engine.setBpm(stepBpm);
       engine.start(countInBars);
       setPlaying(true);
@@ -309,7 +310,7 @@ export function Studio({
         }, countInBars * barSec * 1000);
       }
     }
-  }, [engine, playing, bpm, countInBars, draft.steps, draft.stepUnit, trainerOn, trainerCfg.from, clearCountInTimer]);
+  }, [engine, playing, bpm, countInBars, draft.steps, draft.stepUnit, denom, trainerOn, trainerCfg.from, clearCountInTimer]);
 
   // Edits.
   const toggleCell = useCallback((tr: VoiceId, step: number) => {
@@ -440,7 +441,7 @@ export function Studio({
     setPlaying(false);
     const p = clonePattern(entry.pattern);
     setDraft(p);
-    setBpm(stepToQuarterBpm(p.bpm.default, p.stepUnit));
+    setBpm(stepToNaturalBpm(p.bpm.default, p.stepUnit, parseTimeSigDenom(p.timeSig)));
     setKit(p.defaultKit);
     kitOverrideRef.current = false;
     setSavedId(id);
@@ -480,7 +481,7 @@ export function Studio({
     setPlaying(false);
     const fresh = blankPattern();
     setDraft(fresh);
-    setBpm(stepToQuarterBpm(fresh.bpm.default, fresh.stepUnit));
+    setBpm(stepToNaturalBpm(fresh.bpm.default, fresh.stepUnit, parseTimeSigDenom(fresh.timeSig)));
     setKit(fresh.defaultKit);
     kitOverrideRef.current = false;
     setSavedId(null);
@@ -688,7 +689,7 @@ export function Studio({
           onTap={tap}
           tapArmed={tapTimes.length > 0}
           countingIn={countingIn}
-          stepUnit={draft.stepUnit}
+          timeSig={draft.timeSig}
         />
 
         <PlayVolume

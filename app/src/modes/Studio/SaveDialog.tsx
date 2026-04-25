@@ -3,6 +3,7 @@
 import { useMemo } from 'react';
 import type { Pattern, VoiceId } from '../../patterns/types';
 import { trackMeta } from '../../patterns/types';
+import { naturalTempo, parseTimeSigDenom, stepToNaturalBpm } from '../../audio/tempo';
 
 interface Props {
   draft: Pattern;
@@ -48,7 +49,13 @@ export function SaveDialog({ draft, onCancel, onConfirm }: Props) {
             <div><dt>Name</dt><dd>{draft.name || <em>— missing —</em>}</dd></div>
             <div><dt>Meter</dt><dd>{draft.timeSig} ({draft.grouping.join('+')})</dd></div>
             <div><dt>Steps</dt><dd>{draft.steps} · {draft.stepUnit === 4 ? 'quarters' : draft.stepUnit === 8 ? 'eighths' : 'sixteenths'}</dd></div>
-            <div><dt>Tempo</dt><dd>♩={draft.bpm.default} (min {draft.bpm.min}, max {draft.bpm.max})</dd></div>
+            {(() => {
+              const t = naturalTempo(draft.bpm.default, draft.stepUnit, draft.timeSig);
+              const denom = parseTimeSigDenom(draft.timeSig);
+              const minN = stepToNaturalBpm(draft.bpm.min, draft.stepUnit, denom);
+              const maxN = stepToNaturalBpm(draft.bpm.max, draft.stepUnit, denom);
+              return <div><dt>Tempo</dt><dd>{t.glyph}={t.value} (min {minN}, max {maxN})</dd></div>;
+            })()}
             <div><dt>Default kit</dt><dd>{draft.defaultKit}</dd></div>
             <div><dt>Region</dt><dd>{draft.region}</dd></div>
             <div><dt>Tracks</dt><dd>{Object.keys(draft.tracks).join(', ') || <em>none</em>}</dd></div>

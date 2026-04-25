@@ -2,6 +2,7 @@
 
 import type { Genre, KitId, Pattern, RegionId } from '../../patterns/types';
 import type { LoadedUserPattern } from '../../lib/db';
+import { naturalToStepBpm, parseTimeSigDenom, stepToNaturalBpm, denomGlyph } from '../../audio/tempo';
 import { REGIONS } from '../Library/regions';
 
 const ALL_KITS: KitId[] = ['808', '909', '707', '727', 'frameDrum', 'tabla', 'gamelan'];
@@ -134,44 +135,52 @@ export function StudioSidebar({
         </label>
       </div>
 
-      <div className="bf-panel">
-        <div className="bf-panel-head">tempo</div>
-        <div className="bf-studio-bpm-row">
-          <label>
-            <span className="bf-mini-label">default</span>
-            <input
-              type="number"
-              className="bf-studio-input sm"
-              min={30}
-              max={800}
-              value={draft.bpm.default}
-              onChange={(e) => updateBpm({ default: Number(e.target.value) })}
-            />
-          </label>
-          <label>
-            <span className="bf-mini-label">min</span>
-            <input
-              type="number"
-              className="bf-studio-input sm"
-              min={30}
-              max={800}
-              value={draft.bpm.min}
-              onChange={(e) => updateBpm({ min: Number(e.target.value) })}
-            />
-          </label>
-          <label>
-            <span className="bf-mini-label">max</span>
-            <input
-              type="number"
-              className="bf-studio-input sm"
-              min={30}
-              max={800}
-              value={draft.bpm.max}
-              onChange={(e) => updateBpm({ max: Number(e.target.value) })}
-            />
-          </label>
-        </div>
-      </div>
+      {(() => {
+        const denom = parseTimeSigDenom(draft.timeSig);
+        const glyph = denomGlyph(denom);
+        const toStep = (n: number) => naturalToStepBpm(n, draft.stepUnit, denom);
+        const toNatural = (n: number) => stepToNaturalBpm(n, draft.stepUnit, denom);
+        return (
+          <div className="bf-panel">
+            <div className="bf-panel-head">tempo · {glyph}</div>
+            <div className="bf-studio-bpm-row">
+              <label>
+                <span className="bf-mini-label">default</span>
+                <input
+                  type="number"
+                  className="bf-studio-input sm"
+                  min={30}
+                  max={400}
+                  value={toNatural(draft.bpm.default)}
+                  onChange={(e) => updateBpm({ default: toStep(Number(e.target.value)) })}
+                />
+              </label>
+              <label>
+                <span className="bf-mini-label">min</span>
+                <input
+                  type="number"
+                  className="bf-studio-input sm"
+                  min={30}
+                  max={400}
+                  value={toNatural(draft.bpm.min)}
+                  onChange={(e) => updateBpm({ min: toStep(Number(e.target.value)) })}
+                />
+              </label>
+              <label>
+                <span className="bf-mini-label">max</span>
+                <input
+                  type="number"
+                  className="bf-studio-input sm"
+                  min={30}
+                  max={400}
+                  value={toNatural(draft.bpm.max)}
+                  onChange={(e) => updateBpm({ max: toStep(Number(e.target.value)) })}
+                />
+              </label>
+            </div>
+          </div>
+        );
+      })()}
 
       <div className="bf-panel">
         <div className="bf-panel-head">local ({yours.length})</div>

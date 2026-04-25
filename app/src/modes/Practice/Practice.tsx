@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { AudioEngine } from '../../audio/engine';
-import { quarterToStepBpm, stepToQuarterBpm } from '../../audio/tempo';
+import { naturalToStepBpm, parseTimeSigDenom, stepToNaturalBpm } from '../../audio/tempo';
 import type { KitId, Pattern, Track, Velocity, VoiceId } from '../../patterns/types';
 import { trackMeta } from '../../patterns/types';
 import { PATTERNS, patternById } from '../../patterns/seed';
@@ -62,9 +62,11 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
   );
 
   const [playing, setPlaying] = useState(false);
-  // bpm is in QUARTER BPM (display value). Engine receives the stepUnit
-  // conversion via quarterToStepBpm.
-  const [bpm, setBpm] = useState(stepToQuarterBpm(pattern.bpm.default, pattern.stepUnit));
+  // bpm is in "natural" BPM — the rate at the time-signature denominator
+  // (♩ for 4/4, ♪ for 9/8). Engine receives the conversion to step BPM
+  // via naturalToStepBpm at the boundary.
+  const denom = parseTimeSigDenom(pattern.timeSig);
+  const [bpm, setBpm] = useState(stepToNaturalBpm(pattern.bpm.default, pattern.stepUnit, denom));
   const [cursors, setCursors] = useState<Record<string, number>>({});
   // Kit override is hydrated from localStorage per-pattern (spec §9 v1.3).
   const [kitOverride, setKitOverrideState] = useState<KitId | null>(
@@ -123,7 +125,7 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
     clearCountInTimer();
     setEditedTracks({});
     engine.loadPattern({ ...pattern, grouping: pattern.grouping });
-    setBpm(stepToQuarterBpm(pattern.bpm.default, pattern.stepUnit));
+    setBpm(stepToNaturalBpm(pattern.bpm.default, pattern.stepUnit, parseTimeSigDenom(pattern.timeSig)));
     setSwing(swingDefaultToSlider(pattern.swingDefault));
     setGrouping(pattern.grouping);
     setKitOverrideState(getKitOverride(pattern.id));
@@ -139,8 +141,8 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
   }, [engine, pattern, grouping]);
 
   useEffect(() => {
-    engine.setBpm(quarterToStepBpm(bpm, pattern.stepUnit));
-  }, [engine, bpm, pattern.stepUnit]);
+    engine.setBpm(naturalToStepBpm(bpm, pattern.stepUnit, denom));
+  }, [engine, bpm, pattern.stepUnit, denom]);
   useEffect(() => { engine.setKit(activeKit); }, [engine, activeKit]);
   useEffect(() => {
     engine.setSwing(pattern.swingable ? 0.5 + ((swing - 50) / 100) * 0.34 : 0.5);
@@ -193,15 +195,16 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
       : sorted[mid];
     if (medianMs <= 0) return;
 
-    // Tap intervals are quarter-note rate by convention. Convert pattern's
-    // step-BPM range to quarter-BPM for the clamp.
-    const rawQuarterBpm = 60_000 / medianMs;
-    const minBpm = stepToQuarterBpm(pattern.bpm.min ?? 30, pattern.stepUnit);
-    const maxBpm = stepToQuarterBpm(pattern.bpm.max ?? 800, pattern.stepUnit);
-    const clamped = Math.max(minBpm, Math.min(maxBpm, Math.round(rawQuarterBpm)));
+    // Tap intervals are at the time-sig denominator's note value (the user
+    // taps the natural pulse). Result is already natural BPM; clamp using
+    // the pattern's natural BPM range.
+    const rawNaturalBpm = 60_000 / medianMs;
+    const minBpm = stepToNaturalBpm(pattern.bpm.min ?? 30, pattern.stepUnit, denom);
+    const maxBpm = stepToNaturalBpm(pattern.bpm.max ?? 800, pattern.stepUnit, denom);
+    const clamped = Math.max(minBpm, Math.min(maxBpm, Math.round(rawNaturalBpm)));
     setBpm(clamped);
-    engine.setBpm(quarterToStepBpm(clamped, pattern.stepUnit));
-  }, [pattern.bpm.min, pattern.bpm.max, pattern.stepUnit, engine]);
+    engine.setBpm(naturalToStepBpm(clamped, pattern.stepUnit, denom));
+  }, [pattern.bpm.min, pattern.bpm.max, pattern.stepUnit, denom, engine]);
 
   // Stored count-in timer so stop/pattern-change/unmount can cancel it.
   const countInTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -229,7 +232,7 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
       clearCountInTimer();
     } else {
       if (bpm < trainerCfg.from && trainerOn) setBpm(trainerCfg.from);
-      const stepBpm = quarterToStepBpm(bpm, pattern.stepUnit);
+      const stepBpm = naturalToStepBpm(bpm, pattern.stepUnit, denom);
       engine.setBpm(stepBpm);
       engine.start(countInBars);
       setPlaying(true);
@@ -243,7 +246,7 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
         }, countInBars * barSec * 1000);
       }
     }
-  }, [engine, playing, bpm, trainerOn, trainerCfg.from, countInBars, pattern.steps, pattern.stepUnit, clearCountInTimer]);
+  }, [engine, playing, bpm, trainerOn, trainerCfg.from, countInBars, pattern.steps, pattern.stepUnit, denom, clearCountInTimer]);
 
   // Keyboard shortcuts — Space for play/stop, 1-9 for highlights,
   // T for tap-tempo, S for toggle star.
@@ -435,7 +438,7 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
           onTap={handleTap}
           tapArmed={tapTimes.length > 0}
           countingIn={countingIn}
-          stepUnit={pattern.stepUnit}
+          timeSig={pattern.timeSig}
         >
           <BeatDots grouping={grouping} currentStep={curStep} size={12} />
         </BpmHero>
