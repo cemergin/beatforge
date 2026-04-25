@@ -3,7 +3,7 @@
 import { useRef, useState } from 'react';
 import type { UserPattern } from '../../lib/db';
 import { bulkImport, isValidUserPattern, isValidPattern } from '../../lib/db';
-import { logError } from '../../lib/errors';
+import { logError } from '../../lib/log';
 
 interface Props {
   userPatterns: UserPattern[];

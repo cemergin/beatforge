@@ -19,7 +19,6 @@ const svg = readFileSync(svgPath);
 
 async function tryRaster(size: number, out: string, maskable = false): Promise<boolean> {
   try {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const sharp = (await import('sharp')).default;
     let pipeline = sharp(svg, { density: 300 }).resize(size, size);
     if (maskable) {

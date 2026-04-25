@@ -124,7 +124,6 @@ describe('Pattern library invariants', () => {
     // a warning test for now.
     const orphans = PATTERNS.filter((p) => p.swingDefault !== undefined && !p.swingable);
     if (orphans.length > 0) {
-      // eslint-disable-next-line no-console
       console.warn(`${orphans.length} patterns have swingDefault but swingable=false:`, orphans.map((p) => p.id));
     }
     // Assert nothing — just surface it.

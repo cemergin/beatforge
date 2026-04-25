@@ -1,11 +1,11 @@
 // Local-storage-backed quick-access state. We stub localStorage with a
 // Map-backed shim so each test starts clean + can simulate quota / JSON
-// corruption failures. `./errors` is mocked to avoid pulling the JSX
-// ErrorToasts module into a pure test.
+// corruption failures. `./log` is mocked to avoid noisy console output
+// during tests.
 
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-vi.mock('./errors', () => ({
+vi.mock('./log', () => ({
   logWarn: vi.fn(),
   logError: vi.fn(),
 }));

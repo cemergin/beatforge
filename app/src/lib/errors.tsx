@@ -1,47 +1,28 @@
-// Tiny error surface — toast-based visible logging for runtime failures
-// the silent-failure audit flagged. Not a Sentry, not remote-reporting;
-// just enough that users and devs see when things go wrong instead of
-// silent no-ops. Zero deps, mounted from main.tsx alongside PWAStatus.
+// Visible error toasts + root error boundary.
+// The plain logging API lives in `./log` so this module only exports
+// React components (Fast Refresh requirement).
 
 import { Component, useEffect, useState, type ErrorInfo, type ReactNode } from 'react';
+import { logError, subscribeLog, type LogEntry } from './log';
 
-interface LogEntry { id: number; severity: 'warn' | 'error'; message: string; at: number }
-
-let nextId = 1;
-const listeners = new Set<(entries: LogEntry[]) => void>();
-const entries: LogEntry[] = [];
-
-function push(severity: 'warn' | 'error', message: string) {
-  const entry: LogEntry = { id: nextId++, severity, message, at: Date.now() };
-  entries.push(entry);
-  if (entries.length > 20) entries.shift();
-  const snap = [...entries];
-  listeners.forEach((fn) => fn(snap));
-  // Keep console visible for devs.
-  if (severity === 'error') console.error(`[BeatForge] ${message}`);
-  else console.warn(`[BeatForge] ${message}`);
-}
-
-export function logError(message: string, err?: unknown): void {
-  const detail = err instanceof Error ? err.message : err ? String(err) : '';
-  push('error', detail ? `${message} · ${detail}` : message);
-}
-export function logWarn(message: string): void { push('warn', message); }
+const TOAST_TTL_MS = 6000;
 
 export function ErrorToasts() {
-  const [log, setLog] = useState<LogEntry[]>([]);
-  useEffect(() => {
-    const fn = (snap: LogEntry[]) => setLog(snap);
-    listeners.add(fn);
-    return () => { listeners.delete(fn); };
-  }, []);
+  // Visible toasts are derived in an effect from the log + a ticking
+  // clock — keeps render pure (no Date.now() during render).
+  const [visible, setVisible] = useState<LogEntry[]>([]);
 
-  // Auto-dismiss each entry after 6s.
-  const visible = log.filter((e) => Date.now() - e.at < 6000).slice(-3);
+  useEffect(() => subscribeLog((all) => {
+    setVisible(all.filter((e) => Date.now() - e.at < TOAST_TTL_MS).slice(-3));
+  }), []);
+
+  // While anything is visible, sweep expired entries every second.
   useEffect(() => {
     if (visible.length === 0) return;
-    const t = setTimeout(() => setLog((cur) => [...cur]), 1000);
-    return () => clearTimeout(t);
+    const id = setInterval(() => {
+      setVisible((cur) => cur.filter((e) => Date.now() - e.at < TOAST_TTL_MS));
+    }, 1000);
+    return () => clearInterval(id);
   }, [visible.length]);
 
   if (visible.length === 0) return null;

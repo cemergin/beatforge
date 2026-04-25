@@ -9,7 +9,7 @@ import { patternById, registerPatternSource } from './patterns/seed';
 import { deserializePattern } from './patterns/serialize';
 import { loadAllSafe } from './lib/db';
 import { getMasterVolume } from './lib/storage';
-import { logError } from './lib/errors';
+import { logError } from './lib/log';
 import { UpdateBanner } from './components/UpdateBanner';
 import './styles/app.css';
 

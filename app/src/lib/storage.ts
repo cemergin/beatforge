@@ -1,7 +1,7 @@
 // Client-side persistence for quick-access state. No backend, per spec.
 
 import type { KitId } from '../patterns/types';
-import { logWarn } from './errors';
+import { logWarn } from './log';
 
 const HIGHLIGHTS_KEY = 'bf_highlights';
 const RECENT_KEY = 'bf_recent';
