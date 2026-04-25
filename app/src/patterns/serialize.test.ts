@@ -4,6 +4,7 @@
 import { describe, it, expect } from 'vitest';
 import type { Pattern } from './types';
 import { serializePattern, deserializePattern } from './serialize';
+import { PATTERNS } from './seed';
 
 const SUPPORTED = typeof CompressionStream !== 'undefined' && typeof DecompressionStream !== 'undefined';
 
@@ -75,5 +76,31 @@ describe.skipIf(!SUPPORTED)('serializePattern / deserializePattern', () => {
     const payload = btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
     const restored = await deserializePattern(`p1:${payload}`);
     expect(restored).toBeNull();
+  });
+
+  // Smoke test against real seed patterns. Picks a representative
+  // sample across regions/meters/stepUnits — round-tripping every
+  // pattern would be slow and add little signal once a few are covered.
+  it('round-trips real seed patterns', async () => {
+    // Pick patterns with diverse meters + stepUnits.
+    const sampleIds = ['karsilama', 'soukous', 'maqsum', 'rumba-clave-23'];
+    const samples = sampleIds
+      .map((id) => PATTERNS.find((p) => p.id === id))
+      .filter((p): p is Pattern => !!p);
+    expect(samples.length).toBeGreaterThan(0);
+
+    for (const seed of samples) {
+      const hash = await serializePattern(seed);
+      const restored = await deserializePattern(hash);
+      expect(restored, `seed "${seed.id}" failed round-trip`).not.toBeNull();
+      expect(restored?.id).toBe(seed.id);
+      expect(restored?.timeSig).toBe(seed.timeSig);
+      expect(restored?.steps).toBe(seed.steps);
+      expect(restored?.stepUnit).toBe(seed.stepUnit);
+      expect(restored?.grouping).toEqual(seed.grouping);
+      expect(restored?.bpm).toEqual(seed.bpm);
+      expect(Object.keys(restored?.tracks ?? {}).sort())
+        .toEqual(Object.keys(seed.tracks).sort());
+    }
   });
 });

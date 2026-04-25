@@ -5,6 +5,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { AudioEngine } from '../../audio/engine';
 import { denomGlyph, naturalToStepBpm, parseTimeSigDenom, stepToNaturalBpm } from '../../audio/tempo';
 import { useMetronome } from '../../audio/useMetronome';
+import { clonePattern, resizeTracksToSteps } from './patternOps';
 import type {
   KitId,
   Pattern,
@@ -39,63 +40,6 @@ interface Props {
   initialPattern: Pattern | null;
   onConsumedInitial: () => void;
   onLoadInPractice: (id: string) => void;
-}
-
-/** Deep-clone a Pattern so edits never mutate seed data. */
-function clonePattern(p: Pattern): Pattern {
-  const tracks: Partial<Record<VoiceId, Track>> = {};
-  for (const k of Object.keys(p.tracks) as VoiceId[]) {
-    const td = p.tracks[k];
-    if (!td) continue;
-    if (Array.isArray(td)) {
-      tracks[k] = [...td];
-    } else {
-      tracks[k] = { ...td, pattern: [...td.pattern] };
-    }
-  }
-  return {
-    ...p,
-    grouping: [...p.grouping],
-    tags: [...p.tags],
-    instruments: p.instruments ? [...p.instruments] : undefined,
-    relatedIds: p.relatedIds ? [...p.relatedIds] : undefined,
-    bpm: { ...p.bpm },
-    tracks,
-  };
-}
-
-/** Resize a track array to `newSteps`, preserving leading values. */
-function resizeVelocityArray(arr: Velocity[], newSteps: number): Velocity[] {
-  const out = new Array<Velocity>(newSteps).fill(0);
-  for (let i = 0; i < Math.min(arr.length, newSteps); i++) out[i] = arr[i];
-  return out;
-}
-
-/** Apply a new step count to every track that rides the main division. */
-function resizeTracksToSteps(
-  tracks: Partial<Record<VoiceId, Track>>,
-  oldSteps: number,
-  newSteps: number,
-): Partial<Record<VoiceId, Track>> {
-  const out: Partial<Record<VoiceId, Track>> = {};
-  for (const k of Object.keys(tracks) as VoiceId[]) {
-    const td = tracks[k];
-    if (!td) continue;
-    if (Array.isArray(td)) {
-      out[k] = resizeVelocityArray(td, newSteps);
-    } else if ((td.subdivisions ?? oldSteps) === oldSteps) {
-      // Main-division track in object form — resize pattern + drop stale cycle.
-      out[k] = {
-        ...td,
-        pattern: resizeVelocityArray(td.pattern, newSteps),
-        cycle: newSteps,
-      };
-    } else {
-      // Polyrhythm track with its own subdivisions — leave alone.
-      out[k] = td;
-    }
-  }
-  return out;
 }
 
 export function Studio({
