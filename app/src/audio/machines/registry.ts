@@ -8,6 +8,8 @@
 
 import type { FxMachine, VoiceMachine } from './types';
 import { Kick } from './voice/kick';
+import { Snare } from './voice/snare';
+import { Hat } from './voice/hat';
 
 // ── Voice machines ───────────────────────────────────────────────
 // Add archetypes here as they're implemented. The exhaustiveness
@@ -15,6 +17,8 @@ import { Kick } from './voice/kick';
 
 export const VOICE_MACHINES = {
   kick: Kick,
+  snare: Snare,
+  hat: Hat,
 } as const satisfies Record<string, VoiceMachine>;
 
 export type VoiceArchetypeId = keyof typeof VOICE_MACHINES;
