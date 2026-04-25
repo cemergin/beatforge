@@ -211,20 +211,7 @@ export function Library({ engine, onLoadInPractice, onOpenInStudio }: Props) {
             <button className="bf-chip on" onClick={surprise} type="button">
               🎲 Surprise me
             </button>
-            <span className="bf-zone-sub">
-              Loads a random pattern in Practice{filtered.length !== PATTERNS.length ? ' from the filtered set' : ''}.
-            </span>
           </div>
-        </div>
-        <div className="bf-lib-search">
-          <input
-            ref={searchRef}
-            className="bf-search-input"
-            placeholder="Search rhythms, origins, tags…  ( / )"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            type="search"
-          />
         </div>
       </header>
 
@@ -294,22 +281,35 @@ export function Library({ engine, onLoadInPractice, onOpenInStudio }: Props) {
         />
       </section>
 
+      <div className="bf-lib-search-row">
+        <input
+          ref={searchRef}
+          className="bf-search-input"
+          placeholder="Search rhythms, origins, tags…  ( / )"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          type="search"
+        />
+      </div>
+
       {/* Results grid — moved up so patterns are visible on landing.
           Discovery widgets (map, paths, grouping) live below. */}
       <section className="bf-lib-zone" ref={resultsRef}>
         {activePath ? (
           <div className="bf-path-view">
+            <button
+              className="bf-path-close"
+              onClick={clearActivePath}
+              aria-label="Close starter path"
+              title="Close starter path"
+              type="button"
+            >
+              ×
+            </button>
             <div className="bf-path-head">
               <div>
                 <div className="bf-path-kicker">
                   <span className="bf-mini-label">Starter path</span>
-                  <button
-                    className="bf-linkbtn"
-                    onClick={clearActivePath}
-                    type="button"
-                  >
-                    × close path
-                  </button>
                 </div>
                 <h2 className="bf-path-title">{activePath.title}</h2>
                 <p className="bf-path-subtitle">{activePath.subtitle}</p>

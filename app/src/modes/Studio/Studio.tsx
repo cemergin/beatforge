@@ -3,6 +3,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { AudioEngine } from '../../audio/engine';
+import { quarterToStepBpm, stepToQuarterBpm } from '../../audio/tempo';
 import type {
   KitId,
   Pattern,
@@ -122,7 +123,9 @@ export function Studio({
   }, [initialPattern, onConsumedInitial]);
 
   const [playing, setPlaying] = useState(false);
-  const [bpm, setBpm] = useState(draft.bpm.default);
+  // bpm is QUARTER BPM. Engine receives the stepUnit conversion via
+  // quarterToStepBpm in the sync effect below.
+  const [bpm, setBpm] = useState(stepToQuarterBpm(draft.bpm.default, draft.stepUnit));
   const [kit, setKit] = useState<KitId>(draft.defaultKit);
   const [cursors, setCursors] = useState<Record<string, number>>({});
   const [showSave, setShowSave] = useState(false);
@@ -176,7 +179,9 @@ export function Studio({
   useEffect(() => {
     engine.loadPattern(draft);
   }, [engine, draft]);
-  useEffect(() => { engine.setBpm(bpm); }, [engine, bpm]);
+  useEffect(() => {
+    engine.setBpm(quarterToStepBpm(bpm, draft.stepUnit));
+  }, [engine, bpm, draft.stepUnit]);
   useEffect(() => { engine.setKit(kit); }, [engine, kit]);
   useEffect(() => {
     engine.setSwing(draft.swingable ? 0.5 + ((swing - 50) / 100) * 0.34 : 0.5);
@@ -225,13 +230,14 @@ export function Studio({
         const median = sorted.length % 2 === 0
           ? (sorted[mid - 1] + sorted[mid]) / 2
           : sorted[mid];
-        const tapBpm = Math.max(30, Math.min(800, Math.round(60_000 / median)));
-        setBpm(tapBpm);
-        engine.setBpm(tapBpm);
+        // Tap intervals are quarter-note rate by convention.
+        const tapQuarter = Math.max(30, Math.min(300, Math.round(60_000 / median)));
+        setBpm(tapQuarter);
+        engine.setBpm(quarterToStepBpm(tapQuarter, draft.stepUnit));
       }
       return next;
     });
-  }, [engine]);
+  }, [engine, draft.stepUnit]);
 
   // Keyboard: T for tap.
   useEffect(() => {
@@ -259,8 +265,14 @@ export function Studio({
   }, []);
 
   const updateBpm = useCallback((partial: Partial<Pattern['bpm']>) => {
-    setDraft((d) => ({ ...d, bpm: { ...d.bpm, ...partial } }));
-    if (partial.default !== undefined) setBpm(partial.default);
+    setDraft((d) => {
+      const next = { ...d, bpm: { ...d.bpm, ...partial } };
+      // Sync the live (quarter) BPM when the user edits the metadata default.
+      if (partial.default !== undefined) {
+        setBpm(stepToQuarterBpm(partial.default, d.stepUnit));
+      }
+      return next;
+    });
   }, []);
 
   // Count-in timer ref so stop / unmount / pattern-change can cancel it,
@@ -283,20 +295,21 @@ export function Studio({
       clearCountInTimer();
     } else {
       if (bpm < trainerCfg.from && trainerOn) setBpm(trainerCfg.from);
-      engine.setBpm(bpm);
+      const stepBpm = quarterToStepBpm(bpm, draft.stepUnit);
+      engine.setBpm(stepBpm);
       engine.start(countInBars);
       setPlaying(true);
       clearCountInTimer();
       if (countInBars > 0) {
         setCountingIn(true);
-        const barSec = draft.steps * (60 / bpm);
+        const barSec = draft.steps * (60 / stepBpm);
         countInTimerRef.current = setTimeout(() => {
           setCountingIn(false);
           countInTimerRef.current = null;
         }, countInBars * barSec * 1000);
       }
     }
-  }, [engine, playing, bpm, countInBars, draft.steps, trainerOn, trainerCfg.from, clearCountInTimer]);
+  }, [engine, playing, bpm, countInBars, draft.steps, draft.stepUnit, trainerOn, trainerCfg.from, clearCountInTimer]);
 
   // Edits.
   const toggleCell = useCallback((tr: VoiceId, step: number) => {
@@ -427,7 +440,7 @@ export function Studio({
     setPlaying(false);
     const p = clonePattern(entry.pattern);
     setDraft(p);
-    setBpm(p.bpm.default);
+    setBpm(stepToQuarterBpm(p.bpm.default, p.stepUnit));
     setKit(p.defaultKit);
     kitOverrideRef.current = false;
     setSavedId(id);
@@ -467,7 +480,7 @@ export function Studio({
     setPlaying(false);
     const fresh = blankPattern();
     setDraft(fresh);
-    setBpm(fresh.bpm.default);
+    setBpm(stepToQuarterBpm(fresh.bpm.default, fresh.stepUnit));
     setKit(fresh.defaultKit);
     kitOverrideRef.current = false;
     setSavedId(null);
@@ -675,6 +688,7 @@ export function Studio({
           onTap={tap}
           tapArmed={tapTimes.length > 0}
           countingIn={countingIn}
+          stepUnit={draft.stepUnit}
         />
 
         <PlayVolume
@@ -698,6 +712,11 @@ export function Studio({
           cycleStartMs={trainerCycleStartMs}
         />
 
+        <KitPanel
+          activeKit={kit}
+          onSelect={(k) => { kitOverrideRef.current = true; setKit(k); }}
+        />
+
         <CountInPanel countInBars={countInBars} setCountInBars={setCountInBars} />
 
         <AccentsPanel
@@ -708,11 +727,6 @@ export function Studio({
         />
 
         {draft.swingable && <SwingPanel swing={swing} setSwing={setSwing} />}
-
-        <KitPanel
-          activeKit={kit}
-          onSelect={(k) => { kitOverrideRef.current = true; setKit(k); }}
-        />
 
         <div className="bf-panel">
           <div className="bf-panel-head">backup</div>
