@@ -41,12 +41,16 @@ const DEFAULTS: KickConfig = {
 
 /** Knob-value bundles matching the existing built-in kit voices.
  *  Phase 2 will reference these when migrating the 808/909/707 kits. */
+// Presets target faithful re-creation of the legacy 808/909/707 kick
+// voices in audio/kits/drum-machine.ts (where the click is fixed at
+// `amp * 0.2` for 909/707). Legacy click → `click: 0.4` here because
+// the renderer maps 0..1 → `amp * 0..0.5` for headroom.
 export const KICK_PRESETS: Record<string, Partial<KickConfig>> = {
   '808': { pitch: 150, pitchEnd: 40, pitchDecay: 80, decay: 600, click: 0 },
   '909': { pitch: 180, pitchEnd: 42, pitchDecay: 80, decay: 350, click: 0.4 },
-  '707': { pitch: 140, pitchEnd: 55, pitchDecay: 80, decay: 280, click: 0.3 },
+  '707': { pitch: 140, pitchEnd: 55, pitchDecay: 80, decay: 280, click: 0.4 },
   sub:   { pitch: 90,  pitchEnd: 30, pitchDecay: 120, decay: 900, click: 0 },
-  punch: { pitch: 200, pitchEnd: 60, pitchDecay: 40, decay: 250, click: 0.6 },
+  punch: { pitch: 200, pitchEnd: 60, pitchDecay: 40, decay: 250, click: 0.7 },
 };
 
 export const Kick: VoiceMachine<KickConfig> = {
@@ -81,12 +85,16 @@ export const Kick: VoiceMachine<KickConfig> = {
     osc.stop(when + decay + 0.05);
 
     // Click: optional 2.4 kHz square burst layered with the body.
+    // Legacy 909/707 used `amp * 0.2` always — we expose `click` 0..1
+    // mapped to `amp * 0..0.5` so 0=clean 808 and 1=harder than legacy
+    // (giving headroom for crunchier kicks). Legacy 909 → click=1.0
+    // hits `amp * 0.5`; legacy 909 had `amp * 0.2`.
     if (click > 0) {
       const tick = createOsc(ctx);
       tick.type = 'square';
       tick.frequency.value = 2400;
       const cg = createGain(ctx);
-      cg.gain.setValueAtTime(amp * 0.2 * click, when);
+      cg.gain.setValueAtTime(amp * 0.5 * click, when);
       cg.gain.exponentialRampToValueAtTime(0.0001, when + 0.01);
       tick.connect(cg);
       cg.connect(destination);

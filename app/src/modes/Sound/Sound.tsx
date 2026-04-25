@@ -109,12 +109,22 @@ export function Sound() {
       <section className="bf-sound-channels">
         {channels.map((c, i) => {
           const m = VOICE_MACHINES[c.machine.archetype as VoiceArchetypeId];
+          // Outer is a div with role=button — can't nest a real
+          // <button> inside another <button> (HTML / React 19 / Safari
+          // all complain). KeyDown handles space + enter for a11y.
           return (
-            <button
+            <div
               key={i}
+              role="button"
+              tabIndex={0}
               className={`bf-sound-channel ${i === selectedIdx ? 'on' : ''}`}
               onClick={() => setSelectedIdx(i)}
-              type="button"
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  setSelectedIdx(i);
+                }
+              }}
             >
               <span className="bf-sound-channel-num">ch {i + 1}</span>
               <span className="bf-sound-channel-name">{c.label}</span>
@@ -127,7 +137,7 @@ export function Sound() {
               >
                 ▶
               </button>
-            </button>
+            </div>
           );
         })}
       </section>

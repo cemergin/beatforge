@@ -11,6 +11,7 @@
 
 import { trackMeta, type KitId, type Pattern, type Velocity, type VoiceId } from '../patterns/types';
 import { buildVoiceCtx, kitRecipes } from './kits';
+import { createAudioContext } from './audio-context';
 // Vite's explicit `?worker` import emits a dedicated chunk with correct
 // JS MIME — avoids the `new URL()` pattern falling back to an inlined
 // data URL tagged `video/mp2t` because the source file has a .ts ext.
@@ -125,9 +126,8 @@ export class AudioEngine {
   }
 
   private async initCtxOnce(): Promise<void> {
-    const Ctor = window.AudioContext
-      || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
-    const ctx = new Ctor();
+    const ctx = createAudioContext();
+    if (!ctx) return;   // Web Audio not supported — engine stays inert
     const master = ctx.createGain();
     master.gain.value = this.masterVolume;
 

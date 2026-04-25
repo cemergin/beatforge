@@ -30,17 +30,22 @@ const HatConfigSchema = z.object({
 
 export type HatConfig = z.infer<typeof HatConfigSchema>;
 
+// Legacy 808/909/707 closed/open hats were always HP→BP cascade with
+// HP=7kHz and BP center=10kHz. Presets default to `bp` to match.
+// `hp`-only is the cleaner "swept noise" character — useful for
+// shakers, less for cymbal-derived sounds.
 const DEFAULTS: HatConfig = {
   archetype: 'hat',
-  cutoff: 7000, q: 0.7, decay: 50, pitch: 0.4, character: 'hp',
+  cutoff: 7000, q: 0.7, decay: 50, pitch: 0.75, character: 'bp',
 };
 
 export const HAT_PRESETS: Record<string, Partial<HatConfig>> = {
-  closed: { cutoff: 7000, q: 0.7,  decay: 50,  pitch: 0.4, character: 'hp' },
-  open:   { cutoff: 7000, q: 0.7,  decay: 320, pitch: 0.4, character: 'hp' },
-  pedal:  { cutoff: 5500, q: 0.6,  decay: 80,  pitch: 0.3, character: 'hp' },
-  ride:   { cutoff: 9000, q: 0.5,  decay: 600, pitch: 0.5, character: 'hp' },
-  shaker: { cutoff: 4500, q: 0.4,  decay: 120, pitch: 0.2, character: 'bp' },
+  closed: { cutoff: 7000, q: 0.7,  decay: 50,  pitch: 0.75, character: 'bp' },
+  open:   { cutoff: 7000, q: 0.7,  decay: 320, pitch: 0.75, character: 'bp' },
+  pedal:  { cutoff: 5500, q: 0.6,  decay: 80,  pitch: 0.6,  character: 'bp' },
+  ride:   { cutoff: 9000, q: 0.5,  decay: 600, pitch: 0.85, character: 'bp' },
+  shaker: { cutoff: 4500, q: 0.4,  decay: 120, pitch: 0.2,  character: 'hp' },
+  sizzle: { cutoff: 8500, q: 0.6,  decay: 240, pitch: 0.9,  character: 'bp' },
 };
 
 export const Hat: VoiceMachine<HatConfig> = {

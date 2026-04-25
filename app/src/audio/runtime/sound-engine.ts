@@ -10,20 +10,37 @@
 
 import { triggerVoice } from '../machines/registry';
 import type { MachineConfig, VoiceCtx } from '../machines/types';
+import { createAudioContext, resumeIfSuspended } from '../audio-context';
 
 export class SoundEngine {
   private ctx: AudioContext | null = null;
   private master: GainNode | null = null;
   private analyser: AnalyserNode | null = null;
+  /** Race guard: two simultaneous `ensureCtx()` calls (e.g. two
+   *  rapid keypresses before the first context resolves) must not
+   *  build two parallel audio graphs. Mirrors AudioEngine's pattern. */
+  private ctxInitPromise: Promise<void> | null = null;
 
-  /** Resume / construct the AudioContext on first user interaction. */
+  /** Resume / construct the AudioContext on first user interaction.
+   *  Safe to call concurrently — second caller awaits the first's
+   *  in-flight promise. */
   async ensureCtx(): Promise<void> {
     if (this.ctx) {
-      if (this.ctx.state === 'suspended') await this.ctx.resume();
+      await resumeIfSuspended(this.ctx);
       return;
     }
-    const ctx = new AudioContext();
-    this.ctx = ctx;
+    if (!this.ctxInitPromise) {
+      this.ctxInitPromise = this.initCtxOnce().finally(() => {
+        // Clear so a future re-init (after dispose, HMR) can run.
+        this.ctxInitPromise = null;
+      });
+    }
+    await this.ctxInitPromise;
+  }
+
+  private async initCtxOnce(): Promise<void> {
+    const ctx = createAudioContext();
+    if (!ctx) return;   // Web Audio not supported — silently no-op
     const master = ctx.createGain();
     master.gain.value = 0.85;
     const analyser = ctx.createAnalyser();
@@ -31,6 +48,8 @@ export class SoundEngine {
     analyser.smoothingTimeConstant = 0.78;
     master.connect(analyser);
     analyser.connect(ctx.destination);
+    // Atomic commit — either everything is set or nothing is.
+    this.ctx = ctx;
     this.master = master;
     this.analyser = analyser;
   }
