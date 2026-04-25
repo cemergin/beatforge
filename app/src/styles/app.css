@@ -700,7 +700,6 @@ input[type="number"] { font: inherit; color: inherit; }
 
 
 /* ── Library page ─────────────────────────────────────────── */
-.bf-lib-page { padding: 28px 40px 80px; max-width: 1400px; margin: 0 auto; }
 .bf-lib-hero { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; margin-bottom: 22px; padding-bottom: 22px; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
 .bf-lib-title { font-family: var(--serif); font-size: 44px; font-weight: 700; margin: 0 0 8px; letter-spacing: -0.01em; }
 .bf-lib-sub { margin: 0; color: var(--muted); max-width: 620px; line-height: 1.5; }
@@ -1124,18 +1123,6 @@ input[type="number"] { font: inherit; color: inherit; }
   margin: 4px 0 10px; outline: none;
 }
 .bf-studio-name-input:focus { border-bottom-color: var(--grp-3); }
-.bf-bpm-hero.sm { padding: 14px 16px; }
-.bf-bpm-hero.sm .bf-bpm-num { font-size: 44px; }
-
-.bf-studio-actions { display: flex; flex-direction: column; gap: 6px; }
-
-.bf-studio-section { background: var(--bg-2); border: 1.5px solid var(--line); border-radius: var(--r-lg); padding: 16px 18px; }
-.bf-studio-section-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 10px; }
-.bf-studio-hint { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; color: var(--muted); text-transform: uppercase; }
-.bf-studio-sum { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; display: flex; gap: 6px; align-items: center; }
-.bf-studio-sum.ok { color: var(--grp-4); }
-.bf-studio-sum.bad { color: var(--grp-1); }
-
 .bf-studio-grouping { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 10px; }
 .bf-group-pill {
   display: inline-flex; align-items: center; gap: 4px; border: 1.5px solid;
@@ -1151,15 +1138,6 @@ input[type="number"] { font: inherit; color: inherit; }
 .bf-studio-dots { padding-top: 4px; }
 
 .bf-studio-stage { padding: 18px 0 8px; display: flex; justify-content: center; overflow-x: auto; }
-
-.bf-voice-chip {
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 5px 6px 5px 12px; border-radius: var(--r-pill); border: 1.5px solid var(--line);
-  background: var(--bg-sunk); font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
-}
-.bf-voice-chip.on { border-color: var(--grp-3); color: var(--fg); }
-.bf-voice-chip button { border: none; background: transparent; color: var(--muted); cursor: pointer; font-size: 14px; padding: 0 4px; }
-.bf-voice-chip button:hover { color: var(--grp-1); }
 
 .bf-studio-story {
   width: 100%; min-height: 70px; padding: 8px 10px; font-family: var(--sans); font-size: 13px;
@@ -1740,8 +1718,6 @@ input[type="number"] { font: inherit; color: inherit; }
   from { opacity: 0; transform: translateX(-50%) translateY(8px); }
   to   { opacity: 1; transform: translateX(-50%) translateY(0); }
 }
-
-.bf-bpm-hero.sm { padding: 10px 12px; }
 
 /* ── Tap tempo (v1.3) ── */
 .bf-tap-panel { }

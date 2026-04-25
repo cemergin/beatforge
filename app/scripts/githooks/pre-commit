@@ -1,0 +1,29 @@
+#!/bin/sh
+# BeatForge pre-commit hook.
+# Runs typecheck + lint before every commit. Installed by `bun install`
+# via the `prepare` script in app/package.json (sets core.hooksPath).
+#
+# To bypass for a single commit (rare — fix the issue instead):
+#   git commit --no-verify
+
+set -e
+
+# Find the app/ directory regardless of where git invokes the hook from.
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+APP_DIR="$REPO_ROOT/app"
+
+if [ ! -f "$APP_DIR/package.json" ]; then
+  echo "pre-commit: cannot find app/package.json at $APP_DIR — skipping checks."
+  exit 0
+fi
+
+cd "$APP_DIR"
+
+echo "→ Pre-commit: typecheck + lint"
+if ! bun run check; then
+  echo ""
+  echo "✖ Pre-commit checks failed."
+  echo "  Fix the errors above, then re-run \`git commit\`."
+  echo "  (Run \`bun run lint:fix\` in app/ to auto-fix lint issues.)"
+  exit 1
+fi

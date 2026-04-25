@@ -6,13 +6,20 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "typecheck": "tsc -b --noEmit",
     "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "eslint . --fix",
+    "check": "bun run typecheck",
+    "check:lint": "bun run typecheck && bun run lint",
+    "check:full": "bun run typecheck && bun run lint && bun run test",
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "migrate-patterns": "bun scripts/migrate-patterns-to-json.ts",
-    "audit-pattern-schema": "bun scripts/audit-pattern-schema.ts"
+    "audit-pattern-schema": "bun scripts/audit-pattern-schema.ts",
+    "prepare": "git -C .. config core.hooksPath app/scripts/githooks 2>/dev/null || true"
   },
   "dependencies": {
     "dexie": "^4.4.2",

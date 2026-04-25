@@ -2,3 +2,7 @@
 firebase-debug.log
 .superpowers/
 .vscode/
+.claude/
+app/coverage/
+app/dist/
+app/node_modules/

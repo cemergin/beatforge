@@ -1,9 +1,12 @@
-// Service-worker registration + update toast + install-prompt banner.
-// Mounted once from main.tsx so App.tsx stays focused on tabs/routing.
-// Styles inline to stay self-contained and avoid conflicting with app.css.
+// PWA install-prompt banner.
+//
+// Service-worker registration + update toast lives in
+// `components/UpdateBanner.tsx` — that's the single SW lifecycle owner.
+// This component handles only the `beforeinstallprompt` flow (Add to
+// Home Screen). They are mounted from different roots (main.tsx vs
+// App.tsx) but no longer compete over registerSW().
 
 import { useEffect, useState } from 'react';
-import { registerSW } from 'virtual:pwa-register';
 
 type BeforeInstallPromptEvent = Event & {
   prompt: () => Promise<void>;
@@ -59,18 +62,8 @@ const mutedButtonStyle: React.CSSProperties = {
 };
 
 export function PWAStatus() {
-  const [needRefresh, setNeedRefresh] = useState(false);
   const [installEvent, setInstallEvent] = useState<BeforeInstallPromptEvent | null>(null);
   const [installDismissed, setInstallDismissed] = useState(false);
-  const [refresh, setRefresh] = useState<(() => void) | null>(null);
-
-  useEffect(() => {
-    const update = registerSW({
-      onNeedRefresh() { setNeedRefresh(true); },
-      onOfflineReady() { /* silent — offline is the default posture */ },
-    });
-    setRefresh(() => () => void update(true));
-  }, []);
 
   useEffect(() => {
     const onInstallable = (e: Event) => {
@@ -92,26 +85,19 @@ export function PWAStatus() {
   const dismissInstall = () => {
     try {
       localStorage.setItem(INSTALL_STORAGE_KEY, JSON.stringify({ dismissedAt: Date.now() }));
-    } catch {}
+    } catch {
+      // localStorage unavailable (private browsing, quota) — non-fatal.
+    }
     setInstallDismissed(true);
   };
 
+  if (!installEvent || installDismissed) return null;
+
   return (
-    <>
-      {needRefresh && (
-        <div style={toastStyle}>
-          <span>New version available</span>
-          <button style={buttonStyle} onClick={() => refresh?.()}>Reload</button>
-          <button style={mutedButtonStyle} onClick={() => setNeedRefresh(false)}>Later</button>
-        </div>
-      )}
-      {installEvent && !installDismissed && (
-        <div style={{ ...toastStyle, bottom: needRefresh ? 80 : 16 }}>
-          <span>Install BeatForge · works offline</span>
-          <button style={buttonStyle} onClick={install}>Install</button>
-          <button style={mutedButtonStyle} onClick={dismissInstall}>Not now</button>
-        </div>
-      )}
-    </>
+    <div style={toastStyle}>
+      <span>Install BeatForge · works offline</span>
+      <button style={buttonStyle} onClick={install}>Install</button>
+      <button style={mutedButtonStyle} onClick={dismissInstall}>Not now</button>
+    </div>
   );
 }

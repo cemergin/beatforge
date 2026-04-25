@@ -124,6 +124,37 @@ const m = useMetronome(engine, {
 
 ---
 
+## P5a — Lint debt (React 19 strict rules)
+
+Pre-commit currently runs **typecheck only** (`bun run check`). Lint
+runs are advisory (`bun run check:lint`). The codebase has 25 preexisting
+errors from `eslint-plugin-react-hooks` v7's stricter rules:
+
+- **`react-hooks/refs`** ("Cannot access refs during render"): `App.tsx:45`,
+  `Practice.tsx:100`. Lazy-init engine/timer ref pattern. Needs refactor
+  to a `useState` lazy initializer or a custom `useEngine` hook.
+- **`react-hooks/set-state-in-effect`**: `App.tsx:110`, `UpdateBanner.tsx:27`,
+  `Library.tsx:65`, `Practice.tsx:121`, `Studio.tsx:393`. Most are
+  legit cases (sync state to a prop change) but the modern pattern is to
+  compute during render where possible.
+- **`react-hooks/impure-during-render`**: `errors.tsx:40` — `Date.now()` in
+  filter. Move to a state with rAF/interval refresh, or accept that
+  filtering by `at` is fine and silence with `// eslint-disable-next-line`.
+- **`react-refresh/only-export-components`**: `errors.tsx:25,29` — file
+  exports both components AND `logError`/`logWarn` functions. Split the
+  helpers into `lib/log.ts`.
+- **`react-hooks/preserve-manual-memoization`**: `Practice.tsx:123` —
+  `clearCountInTimer` referenced before declaration in a useEffect dep.
+
+Once these are fixed, ratchet up the pre-commit hook to:
+```sh
+bun run check:lint   # typecheck + lint, no test
+```
+
+Update `app/scripts/githooks/pre-commit` to call `check:lint` instead of
+`check`. The `check:full` script runs the test suite too — wire that
+into CI when you set CI up.
+
 ## P5 — Test gaps to backfill
 
 Nothing under `app/src/components/metronome/` has tests. Specifically:

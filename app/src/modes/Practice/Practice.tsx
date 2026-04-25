@@ -551,6 +551,17 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
             setKitOverrideState(null);
           }}
         />
+
+        <CountInPanel countInBars={countInBars} setCountInBars={setCountInBars} />
+
+        <AccentsPanel
+          strong={strong}
+          setStrong={setStrong}
+          weak={weak}
+          setWeak={setWeak}
+        />
+
+        {pattern.swingable && <SwingPanel swing={swing} setSwing={setSwing} />}
       </aside>
     </main>
   );

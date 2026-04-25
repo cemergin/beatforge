@@ -124,5 +124,5 @@ export function getMasterVolume(): number {
 }
 
 export function setMasterVolume(v: number): void {
-  try { localStorage.setItem(MASTER_VOLUME_KEY, String(Math.max(0, Math.min(1, v)))); } catch {}
+  try { localStorage.setItem(MASTER_VOLUME_KEY, String(Math.max(0, Math.min(1, v)))); } catch { /* localStorage unavailable */ }
 }
