@@ -19,7 +19,7 @@ fi
 
 cd "$APP_DIR"
 
-echo "→ Pre-commit: typecheck + lint"
+echo "→ Pre-commit: typecheck"
 if ! bun run check; then
   echo ""
   echo "✖ Pre-commit checks failed."
