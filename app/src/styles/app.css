@@ -2011,3 +2011,118 @@ input[type="number"] { font: inherit; color: inherit; }
 .bf-detail-sources li::before {
   content: "— "; color: var(--line);
 }
+
+/* ── Sound page — phase 1 v0 ──────────────────────────────────── */
+.bf-sound-page {
+  overflow-y: auto;
+  height: 100%;
+  padding: var(--sp-9) var(--sp-10);
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+  display: flex; flex-direction: column; gap: var(--sp-9);
+}
+.bf-sound-hero { display: flex; flex-direction: column; gap: var(--sp-2); }
+.bf-sound-title {
+  font-family: var(--serif); font-size: var(--fs-hero); font-weight: 700;
+  margin: 0; letter-spacing: -0.01em;
+}
+.bf-sound-sub { color: var(--muted); margin: 0; max-width: 720px; line-height: 1.5; }
+.bf-sound-sub kbd {
+  font-family: var(--mono); font-size: var(--fs-mini);
+  border: var(--bw-1) solid var(--line); padding: 1px 6px;
+  border-radius: var(--r-xs); background: var(--bg-2);
+}
+
+.bf-sound-analyzer {
+  position: relative;
+  background: var(--bg-2); border: var(--bw-1) solid var(--line);
+  border-radius: var(--r-md); height: 88px; overflow: hidden;
+}
+.bf-sound-analyzer canvas { width: 100%; height: 100%; display: block; }
+.bf-sound-analyzer-modes {
+  position: absolute; top: 6px; right: 6px;
+  display: inline-flex; gap: var(--sp-1);
+  background: color-mix(in oklab, var(--bg) 70%, transparent);
+  padding: 2px; border-radius: var(--r-sm);
+  font-family: var(--mono); font-size: var(--fs-mini);
+}
+.bf-sound-analyzer-modes button {
+  padding: 3px 8px; border-radius: var(--r-xs);
+  color: var(--muted); border: none; background: transparent; cursor: pointer;
+}
+.bf-sound-analyzer-modes button.on { background: var(--bg-2); color: var(--fg); }
+
+.bf-sound-channels {
+  display: grid; grid-template-columns: repeat(5, 1fr);
+  gap: var(--sp-3);
+}
+.bf-sound-channel {
+  display: flex; flex-direction: column; align-items: stretch; gap: var(--sp-1);
+  padding: var(--sp-5);
+  background: var(--bg-2); border: var(--bw-2) solid var(--line);
+  border-radius: var(--r-lg); cursor: pointer; text-align: left;
+  position: relative;
+  transition: border-color var(--t-fast), transform var(--t-fast);
+}
+.bf-sound-channel:hover { transform: translateY(-2px); }
+.bf-sound-channel.on { border-color: var(--accent); }
+.bf-sound-channel-num {
+  font-family: var(--mono); font-size: var(--fs-mini);
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);
+}
+.bf-sound-channel-name {
+  font-family: var(--serif); font-size: var(--fs-lg); font-weight: 700;
+}
+.bf-sound-channel-arch {
+  font-family: var(--mono); font-size: var(--fs-xs); color: var(--accent);
+  letter-spacing: 0.04em;
+}
+.bf-sound-channel-trigger {
+  position: absolute; top: var(--sp-3); right: var(--sp-3);
+  width: 32px; height: 32px; border-radius: var(--r-circle);
+  border: var(--bw-1) solid var(--line); background: var(--bg-sunk);
+  color: var(--fg); cursor: pointer; font-size: var(--fs-md);
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: background var(--t-fast), color var(--t-fast), border-color var(--t-fast);
+}
+.bf-sound-channel-trigger:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+.bf-sound-channel-trigger:active { transform: scale(0.92); }
+
+.bf-sound-edit {
+  background: var(--bg-2); border: var(--bw-1) solid var(--line);
+  border-radius: var(--r-lg); padding: var(--sp-9);
+  display: flex; flex-direction: column; gap: var(--sp-7);
+}
+.bf-sound-edit-head {
+  display: flex; gap: var(--sp-7); align-items: flex-end; flex-wrap: wrap;
+}
+.bf-sound-edit-head h2 {
+  font-family: var(--serif); font-size: var(--fs-2xl); margin: 0;
+  letter-spacing: -0.01em;
+}
+.bf-sound-arch-pick, .bf-sound-preset-pick {
+  display: flex; flex-direction: column; gap: 2px;
+}
+.bf-sound-arch-pick select, .bf-sound-preset-pick select {
+  font-family: var(--mono); font-size: var(--fs-sm);
+  padding: 6px 10px; border: var(--bw-1) solid var(--line);
+  border-radius: var(--r-sm); background: var(--bg-2); color: var(--fg);
+}
+
+.bf-sound-knobs {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--sp-7);
+}
+.bf-sound-knob {
+  display: flex; flex-direction: column; gap: var(--sp-1);
+}
+.bf-sound-knob-label {
+  font-family: var(--mono); font-size: var(--fs-mini);
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);
+}
+.bf-sound-knob input[type="range"] { accent-color: var(--accent); }
+.bf-sound-knob-val {
+  font-family: var(--mono); font-size: var(--fs-xs);
+  color: var(--fg);
+}

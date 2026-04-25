@@ -6,7 +6,7 @@
 // Phase 1 starts empty and fills in archetype-by-archetype. Phase 2
 // migrates the existing kits to use these.
 
-import type { FxMachine, VoiceMachine } from './types';
+import type { FxMachine, MachineConfig, ModValues, VoiceCtx, VoiceMachine } from './types';
 import { Kick } from './voice/kick';
 import { Snare } from './voice/snare';
 import { Hat } from './voice/hat';
@@ -41,3 +41,21 @@ export const KIT_FX = {
 } as const satisfies Record<string, FxMachine>;
 
 export type KitFxId = keyof typeof KIT_FX;
+
+/** Look up a voice machine by archetype id. The intersection of all
+ *  per-machine config types is `never` (their discriminators conflict),
+ *  so a cast is required to dispatch. The cast is safe because the
+ *  config's `archetype` field IS the discriminator we used to look up
+ *  the machine — runtime contract guarantees alignment. */
+export function triggerVoice(
+  cfg: MachineConfig,
+  vc: VoiceCtx,
+  when: number,
+  amp: number,
+  mod?: ModValues,
+): void {
+  const machine = VOICE_MACHINES[cfg.archetype as VoiceArchetypeId];
+  if (!machine) return;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- runtime-checked discriminator dispatch
+  (machine as VoiceMachine<any>).render(cfg, vc, when, amp, mod);
+}

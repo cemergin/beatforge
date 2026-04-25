@@ -3,10 +3,11 @@ import { AudioEngine } from './audio/engine';
 import { Practice } from './modes/Practice/Practice';
 import type { KitId, Pattern } from './patterns/types';
 
-// Library + Studio are split into their own chunks. Practice is the
-// landing tab and stays in the main bundle.
+// Library + Studio + Sound are split into their own chunks. Practice
+// is the landing tab and stays in the main bundle.
 const Library = lazy(() => import('./modes/Library/Library').then((m) => ({ default: m.Library })));
 const Studio = lazy(() => import('./modes/Studio/Studio').then((m) => ({ default: m.Studio })));
+const Sound = lazy(() => import('./modes/Sound/Sound').then((m) => ({ default: m.Sound })));
 const PatternsSandbox = lazy(() => import('./modes/_Patterns/PatternsSandbox').then((m) => ({ default: m.PatternsSandbox })));
 import { patternById, registerPatternSource } from './patterns/seed';
 import { deserializePattern } from './patterns/serialize';
@@ -53,7 +54,7 @@ export default function App() {
     const url = readCurrentUrl();
     if (url.tab) return url.tab;
     const t = localStorage.getItem('bf_tab');
-    if (t === 'library' || t === 'studio' || t === 'practice') return t;
+    if (t === 'library' || t === 'studio' || t === 'practice' || t === 'sound') return t;
     // _patterns is dev-only — never restore it in production builds.
     if (t === '_patterns' && DEV_MODE) return '_patterns';
     return 'practice';
@@ -273,6 +274,13 @@ export default function App() {
           >
             Library
           </button>
+          <button
+            className={`bf-chip ${tab === 'sound' ? 'on' : 'ghost'}`}
+            onClick={() => switchTab('sound')}
+            type="button"
+          >
+            Sound
+          </button>
           {DEV_MODE && (
             <button
               className={`bf-chip ${tab === '_patterns' ? 'on' : 'ghost'}`}
@@ -327,6 +335,11 @@ export default function App() {
             onLoadInPractice={loadInPractice}
             onOpenInStudio={openInStudio}
           />
+        </Suspense>
+      )}
+      {tab === 'sound' && (
+        <Suspense fallback={<div className="bf-mode-loading">loading sound lab…</div>}>
+          <Sound />
         </Suspense>
       )}
       {DEV_MODE && tab === '_patterns' && (
