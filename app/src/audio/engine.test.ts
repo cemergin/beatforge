@@ -96,45 +96,6 @@ describe('AudioEngine.subscribeOnBar()', () => {
   });
 });
 
-describe('AudioEngine.setOverlay() guards', () => {
-  it('rejects NaN subdivisions → overlay=null', () => {
-    const e = new AudioEngine();
-    e.setOverlay({ subdivisions: NaN });
-    expect(e.overlay).toBeNull();
-  });
-
-  it('rejects zero subdivisions → overlay=null', () => {
-    const e = new AudioEngine();
-    e.setOverlay({ subdivisions: 0 });
-    expect(e.overlay).toBeNull();
-  });
-
-  it('rejects negative subdivisions → overlay=null', () => {
-    const e = new AudioEngine();
-    e.setOverlay({ subdivisions: -3 });
-    expect(e.overlay).toBeNull();
-  });
-
-  it('rejects Infinity subdivisions → overlay=null', () => {
-    const e = new AudioEngine();
-    e.setOverlay({ subdivisions: Infinity });
-    expect(e.overlay).toBeNull();
-  });
-
-  it('accepts valid positive subdivisions', () => {
-    const e = new AudioEngine();
-    e.setOverlay({ subdivisions: 5 });
-    expect(e.overlay).toEqual({ subdivisions: 5 });
-  });
-
-  it('null clears overlay', () => {
-    const e = new AudioEngine();
-    e.setOverlay({ subdivisions: 3 });
-    e.setOverlay(null);
-    expect(e.overlay).toBeNull();
-  });
-});
-
 describe('AudioEngine.setMasterVolume()', () => {
   it('clamps above 1 → 1, below 0 → 0, preserves in-range', () => {
     const e = new AudioEngine();
@@ -229,13 +190,5 @@ describe('AudioEngine simple setters', () => {
     e.setAccents(0.9, 0.4);
     expect(e.strongAmp).toBe(0.9);
     expect(e.weakAmp).toBe(0.4);
-  });
-
-  it('setGroupAccents copies the input (no shared reference)', () => {
-    const e = new AudioEngine();
-    const amps = [1, 0.5, 1];
-    e.setGroupAccents(amps);
-    amps[0] = 99;
-    expect(e.groupAmps[0]).toBe(1);
   });
 });

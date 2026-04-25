@@ -42,9 +42,6 @@ export class AudioEngine {
   swing = 0.5;
   strongAmp = 1.0;
   weakAmp = 0.5;
-  // Per-group accent multipliers (spec §9 v1.3). Indexed by grouping
-  // position; multiplies on top of strong/weak. Default 1.0 per group.
-  groupAmps: number[] = [];
 
   // Public state for visuals (read each frame via rAF).
   cursors: Record<string, number> = {};   // last-triggered step per track
@@ -100,11 +97,6 @@ export class AudioEngine {
   // Object.keys() + trackMeta() allocations every 15ms. Null until a
   // pattern is loaded.
   private trackCaches: TrackCache[] = [];
-
-  // Polyrhythm overlay — ephemeral click track at chosen subdivisions.
-  overlay: { subdivisions: number } | null = null;
-  private overlayNextTime = 0;
-  private overlayNextIdx = 0;
 
   // Race guard: two concurrent play clicks (or play + preview)
   // fire ensureCtx() simultaneously; without this, both would race
@@ -255,28 +247,6 @@ export class AudioEngine {
     this.weakAmp = weak;
   }
 
-  // Per-group accent multipliers — array indexed by grouping position
-  // (0 = first group). Values outside the grouping range default to 1.0.
-  setGroupAccents(amps: number[]): void {
-    this.groupAmps = amps.slice();
-  }
-
-  private groupAmpForStep(idx: number): number {
-    const p = this.pattern;
-    if (!p || !this.groupAmps.length) return 1;
-    const grouping = p.grouping;
-    if (!grouping || grouping.length === 0) return 1;
-    // Steps in a track cycle may exceed pattern.steps for short loops;
-    // fold into the bar, then walk grouping to find the owning group.
-    const folded = ((idx % p.steps) + p.steps) % p.steps;
-    let acc = 0;
-    for (let g = 0; g < grouping.length; g++) {
-      acc += grouping[g];
-      if (folded < acc) return this.groupAmps[g] ?? 1;
-    }
-    return this.groupAmps[grouping.length - 1] ?? 1;
-  }
-
   loadPattern(p: Pattern): void {
     const wasRunning = this.running;
     this.pattern = p;
@@ -384,11 +354,6 @@ export class AudioEngine {
       this.anchorIdx[tr] = 0;
     });
 
-    if (this.overlay) {
-      this.overlayNextTime = this.startTime;
-      this.overlayNextIdx = 0;
-    }
-
     this.ensureWorker();
     if (this.worker) {
       this.worker.postMessage({ type: 'start', intervalMs: this.lookaheadMs });
@@ -427,38 +392,6 @@ export class AudioEngine {
     g.connect(master);
     osc.start(when);
     osc.stop(when + 0.05);
-  }
-
-  // Polyrhythm overlay click — used for the ephemeral practice overlay.
-  private overlayClick(when: number): void {
-    const ctx = this.ctx;
-    const master = this.master;
-    if (!ctx || !master) return;
-    const osc = ctx.createOscillator();
-    const g = ctx.createGain();
-    osc.frequency.value = 1800;
-    g.gain.setValueAtTime(0.6, when);
-    g.gain.exponentialRampToValueAtTime(0.0001, when + 0.04);
-    osc.connect(g);
-    g.connect(master);
-    osc.start(when);
-    osc.stop(when + 0.05);
-  }
-
-  setOverlay(cfg: { subdivisions: number } | null): void {
-    // Refuse invalid subdivision counts — prevents div-by-zero in tick().
-    if (cfg && (!Number.isFinite(cfg.subdivisions) || cfg.subdivisions <= 0)) {
-      this.overlay = null;
-      return;
-    }
-    this.overlay = cfg;
-    if (this.running && this.ctx && cfg) {
-      // Snap to the next bar boundary (nextBarTime), not the previous one.
-      // The old code subtracted barSeconds() which yielded a past timestamp
-      // and forced a catch-up burst of immediate clicks.
-      this.overlayNextTime = Math.max(this.ctx.currentTime + 0.02, this.nextBarTime);
-      this.overlayNextIdx = 0;
-    }
   }
 
   stop(): void {
@@ -535,7 +468,7 @@ export class AudioEngine {
 
         const idx = this.nextIdx[tr] % c.cycle;
         const vel = c.pattern[idx];
-        if (vel > 0) this.trigger(tr, tPlay, vel, c.isMainDivision ? idx : -1);
+        if (vel > 0) this.trigger(tr, tPlay, vel);
 
         this.cursors[tr] = idx;
 
@@ -547,18 +480,6 @@ export class AudioEngine {
         this.nextIdx[tr] += 1;
         this.nextNoteTimes[tr] = this.anchorTime[tr]
           + (this.nextIdx[tr] - this.anchorIdx[tr]) * stepSec;
-      }
-    }
-
-    // Polyrhythm overlay (single phantom track)
-    if (this.overlay) {
-      const overlayStepSec = this.pattern.steps * beatSec / this.overlay.subdivisions;
-      while (this.overlayNextTime < horizon) {
-        if (this.overlayNextTime >= this.startTime) {
-          this.overlayClick(this.overlayNextTime);
-        }
-        this.overlayNextTime += overlayStepSec;
-        this.overlayNextIdx += 1;
       }
     }
 
@@ -592,13 +513,12 @@ export class AudioEngine {
     }
   };
 
-  private trigger(voice: VoiceId, when: number, velLevel: Velocity, stepIdx: number): void {
-    const base = velLevel === 2 ? this.strongAmp : this.weakAmp;
-    const groupMul = stepIdx >= 0 ? this.groupAmpForStep(stepIdx) : 1;
+  private trigger(voice: VoiceId, when: number, velLevel: Velocity): void {
+    const amp = velLevel === 2 ? this.strongAmp : this.weakAmp;
     // Dispatch into the kit registry. Pre-ensureCtx() calls are ignored
     // (ctx is null) — scheduler won't reach this path before start().
     if (!this.ctx || !this.master) return;
     const vc = buildVoiceCtx(this.ctx, this.master, this.reverbSend);
-    kitRecipes[this.kit].voices[voice](vc, when, base * groupMul);
+    kitRecipes[this.kit].voices[voice](vc, when, amp);
   }
 }
