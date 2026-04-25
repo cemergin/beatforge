@@ -4,6 +4,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { AudioEngine } from '../../audio/engine';
 import { denomGlyph, naturalToStepBpm, parseTimeSigDenom, stepToNaturalBpm } from '../../audio/tempo';
+import { useMetronome } from '../../audio/useMetronome';
 import type {
   KitId,
   Pattern,
@@ -31,8 +32,7 @@ import { StudioGrid } from './StudioGrid';
 import { StudioSidebar } from './StudioSidebar';
 import { SaveDialog } from './SaveDialog';
 import { ExportImport } from './ExportImport';
-import { Trainer, type TrainerCfg } from '../Practice/Trainer';
-import { getMasterVolume, setMasterVolume as storeMasterVolume } from '../../lib/storage';
+import { Trainer } from '../Practice/Trainer';
 
 interface Props {
   engine: AudioEngine;
@@ -123,30 +123,30 @@ export function Studio({
   }, [initialPattern, onConsumedInitial]);
 
   const [playing, setPlaying] = useState(false);
-  // bpm is NATURAL BPM (rate of the time-signature denominator). Engine
-  // receives the conversion to step BPM in the sync effect below.
   const denom = parseTimeSigDenom(draft.timeSig);
-  const [bpm, setBpm] = useState(stepToNaturalBpm(draft.bpm.default, draft.stepUnit, denom));
+
+  const m = useMetronome(engine, {
+    stepUnit: draft.stepUnit,
+    timeSig: draft.timeSig,
+    swingable: draft.swingable ?? false,
+    initialBpm: stepToNaturalBpm(draft.bpm.default, draft.stepUnit, denom),
+    initialSwing: 50,
+    playing,
+  });
+  const {
+    bpm, setBpm, handleTap: tap, tapTimes,
+    trainerOn, setTrainerOn, trainerCfg, setTrainerCfg, trainerBar, trainerCycleStartMs,
+    countInBars, setCountInBars, countingIn, setCountingIn,
+    strong, setStrong, weak, setWeak,
+    swing, setSwing,
+    masterVolume, setMasterVolume,
+  } = m;
+
   const [kit, setKit] = useState<KitId>(draft.defaultKit);
   const [cursors, setCursors] = useState<Record<string, number>>({});
   const [showSave, setShowSave] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
   const [yours, setYours] = useState<LoadedUserPattern[]>([]);
-
-  // Practice-parity controls (spec: let Studio "do whatever you want").
-  const [trainerOn, setTrainerOn] = useState(false);
-  const [trainerCfg, setTrainerCfg] = useState<TrainerCfg>({
-    from: 100, to: 160, step: 5, bars: 4, mode: 'cycles',
-  });
-  const [trainerBar, setTrainerBar] = useState(0);
-  const [trainerCycleStartMs, setTrainerCycleStartMs] = useState<number | null>(null);
-  const [countInBars, setCountInBars] = useState(0);
-  const [countingIn, setCountingIn] = useState(false);
-  const [tapTimes, setTapTimes] = useState<number[]>([]);
-  const [strong, setStrong] = useState(100);
-  const [weak, setWeak] = useState(55);
-  const [swing, setSwing] = useState(50);
-  const [masterVolume, setMasterVolumeState] = useState(() => getMasterVolume());
 
   // Follow the draft's default kit only until the user explicitly picks one.
   const kitOverrideRef = useRef(false);
@@ -176,69 +176,12 @@ export function Studio({
   }, []);
   useEffect(() => { refreshYours(); }, [refreshYours]);
 
-  // Keep engine in sync with draft.
+  // Keep engine in sync with draft pattern + kit. BPM, swing, accents,
+  // trainer, and bar-subscription live in useMetronome.
   useEffect(() => {
     engine.loadPattern(draft);
   }, [engine, draft]);
-  useEffect(() => {
-    engine.setBpm(naturalToStepBpm(bpm, draft.stepUnit, denom));
-  }, [engine, bpm, draft.stepUnit, denom]);
   useEffect(() => { engine.setKit(kit); }, [engine, kit]);
-  useEffect(() => {
-    engine.setSwing(draft.swingable ? 0.5 + ((swing - 50) / 100) * 0.34 : 0.5);
-  }, [engine, swing, draft.swingable]);
-  useEffect(() => { engine.setAccents(strong / 100, weak / 100); }, [engine, strong, weak]);
-
-  useEffect(() => {
-    return engine.subscribeOnBar((bar) => setTrainerBar(bar));
-  }, [engine]);
-
-  // Speed trainer — cycles mode.
-  useEffect(() => {
-    if (!trainerOn || !playing) return;
-    if (trainerCfg.mode === 'cycles' && trainerBar > 0 && trainerBar % trainerCfg.bars === 0) {
-      setBpm((b) => Math.min(trainerCfg.to, b + trainerCfg.step));
-    }
-  }, [trainerBar, trainerOn, playing, trainerCfg]);
-
-  // Speed trainer — time mode. Tracks cycle start so the Trainer can
-  // render a countdown (fill-bar + remaining seconds).
-  useEffect(() => {
-    if (!trainerOn || trainerCfg.mode !== 'time' || !playing) {
-      setTrainerCycleStartMs(null);
-      return;
-    }
-    setTrainerCycleStartMs(performance.now());
-    const iv = setInterval(() => {
-      setBpm((b) => Math.min(trainerCfg.to, b + trainerCfg.step));
-      setTrainerCycleStartMs(performance.now());
-    }, trainerCfg.bars * 1000);
-    return () => clearInterval(iv);
-  }, [trainerOn, trainerCfg, playing]);
-
-  // Tap-tempo. Pushes BPM to the engine directly so the change is
-  // audible immediately, no useEffect lag.
-  const tap = useCallback(() => {
-    const now = performance.now();
-    setTapTimes((ts) => {
-      const recent = ts.length && now - ts[ts.length - 1] > 2000 ? [] : ts;
-      const next = [...recent, now].slice(-8);
-      if (next.length >= 2) {
-        const intervals: number[] = [];
-        for (let i = 1; i < next.length; i++) intervals.push(next[i] - next[i - 1]);
-        const sorted = [...intervals].sort((a, b) => a - b);
-        const mid = Math.floor(sorted.length / 2);
-        const median = sorted.length % 2 === 0
-          ? (sorted[mid - 1] + sorted[mid]) / 2
-          : sorted[mid];
-        // Tap intervals are at the natural pulse (time-sig denominator).
-        const tapNatural = Math.max(30, Math.min(400, Math.round(60_000 / median)));
-        setBpm(tapNatural);
-        engine.setBpm(naturalToStepBpm(tapNatural, draft.stepUnit, denom));
-      }
-      return next;
-    });
-  }, [engine, draft.stepUnit, denom]);
 
   // Keyboard: T for tap.
   useEffect(() => {
@@ -736,11 +679,7 @@ export function Studio({
           playing={playing}
           onToggle={togglePlay}
           volume={masterVolume}
-          onVolumeChange={(v) => {
-            setMasterVolumeState(v);
-            engine.setMasterVolume(v);
-            storeMasterVolume(v);
-          }}
+          onVolumeChange={setMasterVolume}
         />
 
         <Trainer

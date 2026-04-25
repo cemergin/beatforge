@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { AudioEngine } from '../../audio/engine';
 import { naturalToStepBpm, parseTimeSigDenom, stepToNaturalBpm } from '../../audio/tempo';
+import { useMetronome } from '../../audio/useMetronome';
 import type { KitId, Pattern, Track, Velocity, VoiceId } from '../../patterns/types';
 import { trackMeta } from '../../patterns/types';
 import { PATTERNS, patternById } from '../../patterns/seed';
@@ -8,12 +9,10 @@ import {
   clearKitOverride,
   getHighlights,
   getKitOverride,
-  getMasterVolume,
   getRecent,
   isHighlighted,
   pushRecent,
   setKitOverride,
-  setMasterVolume as storeMasterVolume,
   toggleHighlight,
 } from '../../lib/storage';
 import { BeatDots } from '../../components/BeatDots';
@@ -27,7 +26,7 @@ import { CountInPanel } from '../../components/metronome/CountInPanel';
 import { AccentsPanel } from '../../components/metronome/AccentsPanel';
 import { SwingPanel } from '../../components/metronome/SwingPanel';
 import { KitPanel } from '../../components/metronome/KitPanel';
-import { Trainer, type TrainerCfg } from './Trainer';
+import { Trainer } from './Trainer';
 
 type View = 'circular' | 'linear' | 'pill';
 
@@ -35,10 +34,6 @@ function swingDefaultToSlider(s: number | undefined): number {
   if (s === undefined) return 50;
   return Math.round(50 + ((s - 0.5) / 0.34) * 100);
 }
-
-const TAP_WINDOW = 8;
-const TAP_MIN_TAPS = 2;
-const TAP_RESET_MS = 2000;
 
 interface Props {
   engine: AudioEngine;
@@ -62,12 +57,26 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
   );
 
   const [playing, setPlaying] = useState(false);
-  // bpm is in "natural" BPM — the rate at the time-signature denominator
-  // (♩ for 4/4, ♪ for 9/8). Engine receives the conversion to step BPM
-  // via naturalToStepBpm at the boundary.
-  const denom = parseTimeSigDenom(pattern.timeSig);
-  const [bpm, setBpm] = useState(stepToNaturalBpm(pattern.bpm.default, pattern.stepUnit, denom));
   const [cursors, setCursors] = useState<Record<string, number>>({});
+  const denom = parseTimeSigDenom(pattern.timeSig);
+
+  const m = useMetronome(engine, {
+    stepUnit: pattern.stepUnit,
+    timeSig: pattern.timeSig,
+    swingable: pattern.swingable ?? false,
+    initialBpm: stepToNaturalBpm(pattern.bpm.default, pattern.stepUnit, denom),
+    initialSwing: swingDefaultToSlider(pattern.swingDefault),
+    playing,
+  });
+  const {
+    bpm, setBpm, handleTap, tapTimes, resetTaps,
+    trainerOn, setTrainerOn, trainerCfg, setTrainerCfg, trainerBar, setTrainerBar, trainerCycleStartMs,
+    countInBars, setCountInBars, countingIn, setCountingIn,
+    strong, setStrong, weak, setWeak,
+    swing, setSwing,
+    masterVolume, setMasterVolume,
+  } = m;
+
   // Kit override is hydrated from localStorage per-pattern (spec §9 v1.3).
   const [kitOverride, setKitOverrideState] = useState<KitId | null>(
     () => getKitOverride(pattern.id),
@@ -78,28 +87,10 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
     () => (localStorage.getItem('bf_view') as View) || 'circular',
   );
   const [grouping, setGrouping] = useState<number[]>(pattern.grouping);
-  const [swing, setSwing] = useState(() => swingDefaultToSlider(pattern.swingDefault));
-  const [strong, setStrong] = useState(100);
-  const [weak, setWeak] = useState(55);
-
-  const [trainerOn, setTrainerOn] = useState(false);
-  const [trainerCfg, setTrainerCfg] = useState<TrainerCfg>({
-    from: 100, to: 160, step: 5, bars: 4, mode: 'cycles',
-  });
-  const [trainerBar, setTrainerBar] = useState(0);
-  const [trainerCycleStartMs, setTrainerCycleStartMs] = useState<number | null>(null);
-
-  const [countInBars, setCountInBars] = useState(0);
-  const [countingIn, setCountingIn] = useState(false);
 
   const [highlights, setHighlights] = useState<string[]>(() => getHighlights());
   const [recent, setRecent] = useState<string[]>(() => getRecent());
-  const [masterVolume, setMasterVolumeState] = useState(() => getMasterVolume());
   const [shareToast, setShareToast] = useState<string | null>(null);
-
-  const [tapTimes, setTapTimes] = useState<number[]>([]);
-  const tapTimesRef = useRef<number[]>([]);
-  tapTimesRef.current = tapTimes;
 
   // rAF cursor polling
   useEffect(() => {
@@ -110,12 +101,6 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
     };
     raf = requestAnimationFrame(loop);
     return () => cancelAnimationFrame(raf);
-  }, [engine]);
-
-  useEffect(() => {
-    return engine.subscribeOnBar((bar: number) => {
-      setTrainerBar(bar);
-    });
   }, [engine]);
 
   // Pattern-change reset. Resets UI state (bpm, swing, grouping, kit) +
@@ -133,7 +118,7 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
     setSwing(swingDefaultToSlider(pattern.swingDefault));
     setGrouping(pattern.grouping);
     setKitOverrideState(getKitOverride(pattern.id));
-    setTapTimes([]);
+    resetTaps();
     localStorage.setItem('bf_pattern', pattern.id);
     setTrainerBar(0);
     setRecent(pushRecent(pattern.id));
@@ -144,71 +129,8 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
     engine.loadPattern({ ...pattern, grouping });
   }, [engine, pattern, grouping]);
 
-  useEffect(() => {
-    engine.setBpm(naturalToStepBpm(bpm, pattern.stepUnit, denom));
-  }, [engine, bpm, pattern.stepUnit, denom]);
   useEffect(() => { engine.setKit(activeKit); }, [engine, activeKit]);
-  useEffect(() => {
-    engine.setSwing(pattern.swingable ? 0.5 + ((swing - 50) / 100) * 0.34 : 0.5);
-  }, [engine, swing, pattern.swingable]);
-  useEffect(() => { engine.setAccents(strong / 100, weak / 100); }, [engine, strong, weak]);
   useEffect(() => { localStorage.setItem('bf_view', view); }, [view]);
-
-  // Speed trainer — cycles mode
-  useEffect(() => {
-    if (!trainerOn || !playing) return;
-    if (trainerCfg.mode === 'cycles' && trainerBar > 0 && trainerBar % trainerCfg.bars === 0) {
-      setBpm((b) => Math.min(trainerCfg.to, b + trainerCfg.step));
-    }
-  }, [trainerBar, trainerOn, playing, trainerCfg]);
-
-  // Speed trainer — time mode. Tracks cycle start so the Trainer can
-  // render a countdown (fill-bar + remaining seconds).
-  useEffect(() => {
-    if (!trainerOn || trainerCfg.mode !== 'time' || !playing) {
-      setTrainerCycleStartMs(null);
-      return;
-    }
-    setTrainerCycleStartMs(performance.now());
-    const iv = setInterval(() => {
-      setBpm((b) => Math.min(trainerCfg.to, b + trainerCfg.step));
-      setTrainerCycleStartMs(performance.now());
-    }, trainerCfg.bars * 1000);
-    return () => clearInterval(iv);
-  }, [trainerOn, trainerCfg, playing]);
-
-  // Tap tempo — median interval of last 4-8 taps sets the master BPM.
-  // Pushes to engine directly (in addition to React state) so the change
-  // is audible immediately, no useEffect lag.
-  const handleTap = useCallback(() => {
-    const now = performance.now();
-    const prev = tapTimesRef.current;
-    const last = prev[prev.length - 1];
-    const base = last !== undefined && (now - last) > TAP_RESET_MS ? [] : prev;
-    const next = [...base, now].slice(-TAP_WINDOW);
-    setTapTimes(next);
-    if (next.length < TAP_MIN_TAPS) return;
-
-    const window = next.slice(-Math.min(TAP_WINDOW, next.length));
-    const intervals: number[] = [];
-    for (let i = 1; i < window.length; i++) intervals.push(window[i] - window[i - 1]);
-    const sorted = [...intervals].sort((a, b) => a - b);
-    const mid = sorted.length >> 1;
-    const medianMs = sorted.length % 2 === 0
-      ? (sorted[mid - 1] + sorted[mid]) / 2
-      : sorted[mid];
-    if (medianMs <= 0) return;
-
-    // Tap intervals are at the time-sig denominator's note value (the user
-    // taps the natural pulse). Result is already natural BPM; clamp using
-    // the pattern's natural BPM range.
-    const rawNaturalBpm = 60_000 / medianMs;
-    const minBpm = stepToNaturalBpm(pattern.bpm.min ?? 30, pattern.stepUnit, denom);
-    const maxBpm = stepToNaturalBpm(pattern.bpm.max ?? 800, pattern.stepUnit, denom);
-    const clamped = Math.max(minBpm, Math.min(maxBpm, Math.round(rawNaturalBpm)));
-    setBpm(clamped);
-    engine.setBpm(naturalToStepBpm(clamped, pattern.stepUnit, denom));
-  }, [pattern.bpm.min, pattern.bpm.max, pattern.stepUnit, denom, engine]);
 
   // Stored count-in timer so stop/pattern-change/unmount can cancel it.
   const countInTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -451,11 +373,7 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
           playing={playing}
           onToggle={toggle}
           volume={masterVolume}
-          onVolumeChange={(v) => {
-            setMasterVolumeState(v);
-            engine.setMasterVolume(v);
-            storeMasterVolume(v);
-          }}
+          onVolumeChange={setMasterVolume}
         />
 
         {pattern.story && (
