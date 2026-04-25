@@ -40,25 +40,36 @@ export function emptyTracks(voices: VoiceId[], steps: number): Partial<Record<Vo
   return t;
 }
 
-/** Build a blank 16-step pattern in 4/4 as the Studio default start state. */
-export function blankPattern(): Pattern {
+/** Build a blank pattern. Defaults to 4/4 in 16ths; pass a meter preset
+ *  to start in a different time signature. The bpm.default scales with
+ *  stepUnit so a fresh pattern feels musical out of the box (≈120 ♩ in
+ *  4/4, ≈200 ♪ in 9/8, etc.). */
+export function blankPattern(meter?: MeterPreset): Pattern {
+  const m: MeterPreset = meter ?? METER_PRESETS[0];
+  // Aim for ~120 quarter BPM equivalent regardless of stepUnit:
+  //   stepBpm = quarterBpm × stepUnit / 4
+  const defaultStepBpm = Math.round((120 * m.stepUnit) / 4);
   return {
     id: 'draft',
     name: 'Untitled',
     origin: 'Your Studio',
     tradition: 'Custom',
     genre: 'popular',
-    timeSig: '4/4',
-    grouping: [4, 4, 4, 4],
-    steps: 16,
-    stepUnit: 16,
-    bpm: { default: 120, min: 60, max: 200 },
-    tracks: emptyTracks(DEFAULT_VOICES, 16),
+    timeSig: m.timeSig,
+    grouping: [...m.grouping],
+    steps: m.steps,
+    stepUnit: m.stepUnit,
+    bpm: {
+      default: defaultStepBpm,
+      min: Math.round((60 * m.stepUnit) / 4),
+      max: Math.round((200 * m.stepUnit) / 4),
+    },
+    tracks: emptyTracks(DEFAULT_VOICES, m.steps),
     defaultKit: '808',
     region: 'electronic-western',
     difficulty: 'beginner',
     tags: [],
-    swingable: true,
+    swingable: m.stepUnit !== 4,
   };
 }
 

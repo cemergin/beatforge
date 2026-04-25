@@ -3,7 +3,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { AudioEngine } from '../../audio/engine';
-import { naturalToStepBpm, parseTimeSigDenom, stepToNaturalBpm } from '../../audio/tempo';
+import { denomGlyph, naturalToStepBpm, parseTimeSigDenom, stepToNaturalBpm } from '../../audio/tempo';
 import type {
   KitId,
   Pattern,
@@ -378,14 +378,42 @@ export function Studio({
     }));
   }, []);
 
-  // Manual steps change.
-  const setSteps = useCallback((newSteps: number) => {
-    setDraft((d) => ({
-      ...d,
-      steps: newSteps,
-      tracks: resizeTracksToSteps(d.tracks, d.steps, newSteps),
-    }));
+  // Parse the live time signature into editable num/den inputs.
+  const [tsNum, tsDen] = useMemo(() => {
+    const m = draft.timeSig.match(/^(\d+)\/(\d+)$/);
+    if (!m) return [4, 4] as const;
+    return [parseInt(m[1], 10), parseInt(m[2], 10)] as const;
+  }, [draft.timeSig]);
+
+  // Pick a stepUnit that divides (num × stepUnit) evenly by den. Prefer
+  // the current stepUnit if it works so granularity is preserved.
+  const pickStepUnit = useCallback((num: number, den: number, current: number): 4 | 8 | 16 => {
+    const order: Array<4 | 8 | 16> = [current as 4 | 8 | 16, 16, 8, 4];
+    for (const su of order) {
+      if ((num * su) % den === 0) return su;
+    }
+    return 16;
   }, []);
+
+  // Apply a (num, den) edit from the inline time-signature inputs.
+  // Recomputes steps + grouping; resizes existing tracks to fit.
+  const applyTimeSig = useCallback((num: number, den: number) => {
+    if (!Number.isFinite(num) || num < 1 || num > 32) return;
+    if (![2, 4, 8, 16].includes(den)) return;
+    setDraft((d) => {
+      const stepUnit = pickStepUnit(num, den, d.stepUnit);
+      const steps = (num * stepUnit) / den;
+      const grouping = autoNormalizeGrouping(steps);
+      return {
+        ...d,
+        timeSig: `${num}/${den}`,
+        steps,
+        stepUnit,
+        grouping,
+        tracks: resizeTracksToSteps(d.tracks, d.steps, steps),
+      };
+    });
+  }, [pickStepUnit]);
 
   // Grouping editor — accepts comma-separated ints.
   const [groupingText, setGroupingText] = useState(draft.grouping.join(','));
@@ -574,7 +602,7 @@ export function Studio({
 
         <div className="bf-studio-section">
           <div className="bf-studio-section-head">
-            <span className="bf-mini-label">meter preset</span>
+            <span className="bf-mini-label">meter · {denomGlyph(parseTimeSigDenom(draft.timeSig))}</span>
           </div>
           <div className="bf-chip-row wrap">
             {METER_PRESETS.map((m, i) => (
@@ -587,19 +615,34 @@ export function Studio({
                 {m.label}
               </button>
             ))}
-            <label className="bf-studio-steps-inline">
-              <span className="bf-mini-label">steps</span>
+            <label className="bf-studio-timesig-inline" title="Custom time signature">
               <input
                 type="number"
                 min={1}
-                max={256}
-                className="bf-studio-input sm"
-                value={draft.steps}
+                step={1}
+                className="bf-studio-input sm bf-studio-timesig-num"
+                value={tsNum}
                 onChange={(e) => {
-                  const n = Number(e.target.value);
-                  if (n >= 1 && n <= 256) setSteps(n);
+                  const n = Math.max(1, Math.floor(Number(e.target.value) || 1));
+                  applyTimeSig(n, tsDen);
                 }}
+                aria-label="Time signature numerator"
               />
+              <span className="bf-studio-timesig-slash" aria-hidden="true">/</span>
+              <select
+                className="bf-studio-input sm bf-studio-timesig-den"
+                value={tsDen}
+                onChange={(e) => {
+                  const d = Number(e.target.value);
+                  applyTimeSig(tsNum, d);
+                }}
+                aria-label="Time signature denominator"
+              >
+                <option value={2}>2</option>
+                <option value={4}>4</option>
+                <option value={8}>8</option>
+                <option value={16}>16</option>
+              </select>
             </label>
           </div>
         </div>
