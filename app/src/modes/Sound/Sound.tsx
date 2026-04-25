@@ -16,11 +16,11 @@ interface Channel {
 
 function defaultChannels(): Channel[] {
   return [
-    { label: 'Kick',     short: 'Kic', machine: { ...VOICE_MACHINES.kick.defaults } },
-    { label: 'Snare',    short: 'Sna', machine: { ...VOICE_MACHINES.snare.defaults } },
-    { label: 'Closed',   short: 'CHa', machine: { ...VOICE_MACHINES.hat.defaults } },
-    { label: 'Open',     short: 'OHa', machine: { ...VOICE_MACHINES.hat.defaults, decay: 320 } },
-    { label: 'Snap',     short: 'Snp', machine: { ...VOICE_MACHINES.snare.defaults, snap: 3000, tone: 0.7, decay: 90 } },
+    { label: 'Kick',  short: 'Kic', machine: { ...VOICE_MACHINES.kick.defaults } },
+    { label: 'Snare', short: 'Sna', machine: { ...VOICE_MACHINES.snare.defaults } },
+    { label: 'Hat',   short: 'Hat', machine: { ...VOICE_MACHINES.hat.defaults } },
+    { label: 'Clap',  short: 'Cla', machine: { ...VOICE_MACHINES.clap.defaults } },
+    { label: 'Tom',   short: 'Tom', machine: { ...VOICE_MACHINES.tom.defaults, ...VOICE_MACHINES.tom.presets?.mid } },
   ];
 }
 

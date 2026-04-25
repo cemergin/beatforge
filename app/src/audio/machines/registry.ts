@@ -10,6 +10,10 @@ import type { FxMachine, MachineConfig, ModValues, VoiceCtx, VoiceMachine } from
 import { Kick } from './voice/kick';
 import { Snare } from './voice/snare';
 import { Hat } from './voice/hat';
+import { Clap } from './voice/clap';
+import { Tom } from './voice/tom';
+import { Cowbell } from './voice/cowbell';
+import { Modal } from './voice/modal';
 
 // ── Voice machines ───────────────────────────────────────────────
 // Add archetypes here as they're implemented. The exhaustiveness
@@ -19,6 +23,10 @@ export const VOICE_MACHINES = {
   kick: Kick,
   snare: Snare,
   hat: Hat,
+  clap: Clap,
+  tom: Tom,
+  cowbell: Cowbell,
+  modal: Modal,
 } as const satisfies Record<string, VoiceMachine>;
 
 export type VoiceArchetypeId = keyof typeof VOICE_MACHINES;
