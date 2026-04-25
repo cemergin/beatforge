@@ -14,6 +14,9 @@ import { Clap } from './voice/clap';
 import { Tom } from './voice/tom';
 import { Cowbell } from './voice/cowbell';
 import { Modal } from './voice/modal';
+import { Fm } from './voice/fm';
+import { CombPluck } from './voice/comb-pluck';
+import { Noise } from './voice/noise';
 
 // ── Voice machines ───────────────────────────────────────────────
 // Add archetypes here as they're implemented. The exhaustiveness
@@ -27,6 +30,9 @@ export const VOICE_MACHINES = {
   tom: Tom,
   cowbell: Cowbell,
   modal: Modal,
+  fm: Fm,
+  'comb-pluck': CombPluck,
+  noise: Noise,
 } as const satisfies Record<string, VoiceMachine>;
 
 export type VoiceArchetypeId = keyof typeof VOICE_MACHINES;
