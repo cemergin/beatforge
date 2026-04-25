@@ -62,6 +62,7 @@ export function Library({ engine, onLoadInPractice, onOpenInStudio }: Props) {
 
   // Reset to page 1 whenever the result set could change.
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- legitimate sync of derived state to query/filter inputs.
     setPage(1);
   }, [query, filters, activePath]);
 

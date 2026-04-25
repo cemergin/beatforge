@@ -103,6 +103,18 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
     return () => cancelAnimationFrame(raf);
   }, [engine]);
 
+  // Stored count-in timer so stop/pattern-change/unmount can cancel it.
+  // Declared before the pattern-change reset effect that calls it.
+  const countInTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const clearCountInTimer = useCallback(() => {
+    if (countInTimerRef.current !== null) {
+      clearTimeout(countInTimerRef.current);
+      countInTimerRef.current = null;
+    }
+  }, []);
+  useEffect(() => clearCountInTimer, [clearCountInTimer]);
+
+  /* eslint-disable react-hooks/set-state-in-effect -- legitimate sync of UI state when the user picks a new pattern. */
   // Pattern-change reset. Resets UI state (bpm, swing, grouping, kit) +
   // stops playback. The engine.loadPattern call lives in the dependent
   // effect below — pattern object identity changes when patternId
@@ -124,6 +136,7 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
     setRecent(pushRecent(pattern.id));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [patternId]);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   useEffect(() => {
     engine.loadPattern({ ...pattern, grouping });
@@ -131,16 +144,6 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
 
   useEffect(() => { engine.setKit(activeKit); }, [engine, activeKit]);
   useEffect(() => { localStorage.setItem('bf_view', view); }, [view]);
-
-  // Stored count-in timer so stop/pattern-change/unmount can cancel it.
-  const countInTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const clearCountInTimer = useCallback(() => {
-    if (countInTimerRef.current !== null) {
-      clearTimeout(countInTimerRef.current);
-      countInTimerRef.current = null;
-    }
-  }, []);
-  useEffect(() => clearCountInTimer, [clearCountInTimer]);
 
   const toggle = useCallback(async () => {
     try {
@@ -172,7 +175,7 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
         }, countInBars * barSec * 1000);
       }
     }
-  }, [engine, playing, bpm, trainerOn, trainerCfg.from, countInBars, pattern.steps, pattern.stepUnit, denom, clearCountInTimer]);
+  }, [engine, playing, bpm, trainerOn, trainerCfg.from, countInBars, pattern.steps, pattern.stepUnit, denom, clearCountInTimer, setBpm, setCountingIn]);
 
   // Keyboard shortcuts — Space for play/stop, 1-9 for highlights,
   // T for tap-tempo, S for toggle star.

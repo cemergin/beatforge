@@ -41,21 +41,16 @@ function readUrlState(): { tab: Tab | null; pattern: string | null } {
 }
 
 export default function App() {
-  const engineRef = useRef<AudioEngine | null>(null);
-  if (engineRef.current === null) {
-    engineRef.current = new AudioEngine();
-  }
-  const engine = engineRef.current;
+  // useState lazy initializer creates the engine once. Refs were the
+  // older pattern but React 19 lint flags `ref.current` reads during
+  // render — a lazy useState is the supported equivalent.
+  const [engine] = useState(() => new AudioEngine());
 
   // On unmount (HMR, full-tree teardown) release the Worker + ctx so
   // they don't leak across reloads. React 19 StrictMode double-mounts
   // in dev; dispose() is idempotent.
   useEffect(() => {
-    const e = engine;
-    return () => {
-      e.dispose();
-      engineRef.current = null;
-    };
+    return () => { engine.dispose(); };
   }, [engine]);
 
   const [theme, setTheme] = useState<Theme>(
@@ -110,6 +105,7 @@ export default function App() {
     const unregisterShared = registerPatternSource(
       (id) => sharedPatternsRef.current.get(id),
     );
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- async IDB hydration on mount.
     refreshUserCache();
     return () => { unregisterUser(); unregisterShared(); };
   }, [refreshUserCache]);

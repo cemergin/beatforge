@@ -116,12 +116,17 @@ export function useMetronome(engine: AudioEngine, opts: MetronomeOptions): UseMe
     engine.setAccents(strong / 100, weak / 100);
   }, [engine, strong, weak]);
 
+  /* eslint-disable react-hooks/set-state-in-effect */
   // ── Bar-boundary subscription ────────────────────────────────────
+  // setTrainerBar fires from the engine's onBar callback (async, not
+  // during render). React-19's lint can't see through the indirection.
   useEffect(() => {
     return engine.subscribeOnBar((bar) => setTrainerBar(bar));
   }, [engine]);
 
   // ── Speed trainer — cycles mode ──────────────────────────────────
+  // BPM ramp triggered by bar-count boundaries — the bar count IS the
+  // trigger we react to, so set-state-in-effect is the right pattern.
   useEffect(() => {
     if (!trainerOn || !playing) return;
     if (trainerCfg.mode === 'cycles' && trainerBar > 0 && trainerBar % trainerCfg.bars === 0) {
@@ -130,6 +135,8 @@ export function useMetronome(engine: AudioEngine, opts: MetronomeOptions): UseMe
   }, [trainerBar, trainerOn, playing, trainerCfg]);
 
   // ── Speed trainer — time mode (countdown drives BpmHero/Trainer) ─
+  // Interval-driven BPM ramp + cycle-start clock; the setInterval body
+  // is cleanup-bound so React doesn't see it as a render-time write.
   useEffect(() => {
     if (!trainerOn || trainerCfg.mode !== 'time' || !playing) {
       setTrainerCycleStartMs(null);
@@ -142,6 +149,7 @@ export function useMetronome(engine: AudioEngine, opts: MetronomeOptions): UseMe
     }, trainerCfg.bars * 1000);
     return () => clearInterval(iv);
   }, [trainerOn, trainerCfg, playing]);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   // ── Master volume (state + storage write-through) ────────────────
   const setMasterVolume = useCallback((v: number) => {
@@ -153,8 +161,10 @@ export function useMetronome(engine: AudioEngine, opts: MetronomeOptions): UseMe
   // ── Tap tempo ────────────────────────────────────────────────────
   // tapTimes ref so the callback always sees the latest list without
   // adding tapTimes to its dep array (would re-create callback per tap).
+  // The effect-based sync sidesteps "no ref writes during render" — one
+  // tick of staleness is unobservable at human tap-rates.
   const tapTimesRef = useRef<number[]>([]);
-  tapTimesRef.current = tapTimes;
+  useEffect(() => { tapTimesRef.current = tapTimes; }, [tapTimes]);
 
   const handleTap = useCallback(() => {
     const now = performance.now();

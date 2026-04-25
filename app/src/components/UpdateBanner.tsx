@@ -24,6 +24,7 @@ export function UpdateBanner() {
         // No UI for this — silent "you can use me offline now."
       },
     });
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- one-shot capture of the registerSW handle for the user's "Refresh" click.
     setUpdateSW(() => register);
   }, []);
 

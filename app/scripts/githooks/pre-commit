@@ -19,8 +19,8 @@ fi
 
 cd "$APP_DIR"
 
-echo "→ Pre-commit: typecheck"
-if ! bun run check; then
+echo "→ Pre-commit: typecheck + lint"
+if ! bun run check:lint; then
   echo ""
   echo "✖ Pre-commit checks failed."
   echo "  Fix the errors above, then re-run \`git commit\`."

@@ -118,6 +118,7 @@ export function Studio({
     const all = await loadAllSafe();
     setYours(all);
   }, []);
+  // eslint-disable-next-line react-hooks/set-state-in-effect -- async IDB hydration on mount; setYours fires after the awaited load.
   useEffect(() => { refreshYours(); }, [refreshYours]);
 
   // Keep engine in sync with draft pattern + kit. BPM, swing, accents,
@@ -161,7 +162,7 @@ export function Studio({
       }
       return next;
     });
-  }, []);
+  }, [setBpm]);
 
   // Count-in timer ref so stop / unmount / pattern-change can cancel it,
   // preventing a ghost "countingIn=false" setter firing after unmount.
@@ -197,7 +198,7 @@ export function Studio({
         }, countInBars * barSec * 1000);
       }
     }
-  }, [engine, playing, bpm, countInBars, draft.steps, draft.stepUnit, denom, trainerOn, trainerCfg.from, clearCountInTimer]);
+  }, [engine, playing, bpm, countInBars, draft.steps, draft.stepUnit, denom, trainerOn, trainerCfg.from, clearCountInTimer, setBpm, setCountingIn]);
 
   // Edits.
   const toggleCell = useCallback((tr: VoiceId, step: number) => {
@@ -306,6 +307,7 @@ export function Studio({
   const [groupingText, setGroupingText] = useState(draft.grouping.join(','));
   // Sync external grouping changes into the text field when they come from presets etc.
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- mirror an external prop change into the text-input controlled value.
     setGroupingText(draft.grouping.join(','));
   }, [draft.grouping]);
 
@@ -360,7 +362,7 @@ export function Studio({
     setKit(p.defaultKit);
     kitOverrideRef.current = false;
     setSavedId(id);
-  }, [yours, engine]);
+  }, [yours, engine, setBpm]);
 
   const handleDelete = useCallback(async (id: string) => {
     await deleteUserPattern(id);
@@ -400,7 +402,7 @@ export function Studio({
     setKit(fresh.defaultKit);
     kitOverrideRef.current = false;
     setSavedId(null);
-  }, [engine]);
+  }, [engine, setBpm]);
 
   // Share the current draft. Always hash-encodes — Studio drafts have
   // arbitrary edits vs seed patterns, so the recipient can't resolve
