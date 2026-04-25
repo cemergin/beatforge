@@ -173,6 +173,50 @@ describe('AudioEngine.loadPattern() hot swap', () => {
     expect(inner.nextNoteTimes.SN).toBe(3.14);  // at next bar
     expect(inner._cursors.SN).toBe(-1);
   });
+
+  it('hot swap re-anchors surviving tracks (regression: stepSec change)', () => {
+    // When the user changes meter / steps / stepUnit mid-playback,
+    // surviving tracks need their anchor refreshed — otherwise the
+    // tick() formula `anchorTime + (nextIdx - anchorIdx) * NEW_stepSec`
+    // produces wrong note times for ~1 bar (visible cursor jump).
+    // The fix mirrors setBpm's re-anchor: anchorTime ← nextNoteTimes,
+    // anchorIdx ← nextIdx, so the next step lands exactly where the
+    // schedule already promised.
+    const e = new AudioEngine();
+    e.loadPattern(fourFour());
+    const inner = e as unknown as {
+      _running: boolean;
+      nextIdx: Record<string, number>;
+      nextNoteTimes: Record<string, number>;
+      anchorTime: Record<string, number>;
+      anchorIdx: Record<string, number>;
+      nextBarTime: number;
+      barAnchorTime: number;
+    };
+    inner._running = true;
+    inner.nextIdx.KK = 9;
+    inner.nextNoteTimes.KK = 5.5;
+    inner.anchorTime.KK = 1.0;   // stale from before the meter change
+    inner.anchorIdx.KK = 0;      // stale
+    inner.nextBarTime = 8.0;
+
+    // Meter / step change (e.g., 4/4 16-step → 3/4 12-step).
+    const threeFour = fourFour();
+    threeFour.steps = 12;
+    threeFour.grouping = [4, 4, 4];
+    threeFour.tracks = { KK: new Array(12).fill(0) as never };
+    e.loadPattern(threeFour);
+
+    // anchorTime should now equal nextNoteTimes (the "from now" point),
+    // and anchorIdx should equal nextIdx — so the next computed step
+    // lands at nextNoteTimes regardless of the new stepSec.
+    expect(inner.anchorTime.KK).toBe(5.5);
+    expect(inner.anchorIdx.KK).toBe(9);
+    expect(inner.barAnchorTime).toBe(8.0);
+    // Phase preserved (not snapped to 0).
+    expect(inner.nextIdx.KK).toBe(9);
+    expect(inner.nextNoteTimes.KK).toBe(5.5);
+  });
 });
 
 describe('AudioEngine simple setters', () => {

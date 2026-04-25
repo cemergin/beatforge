@@ -272,9 +272,20 @@ export class AudioEngine {
 
     // Hot swap while playing: preserve scheduler phase so cell edits,
     // grouping picks, and group-accent tweaks don't snap the playhead
-    // back to step 0. Tracks that existed keep their state; new tracks
-    // enter at the next bar boundary (re-anchored there); removed tracks
-    // are pruned so tick() doesn't touch stale entries.
+    // back to step 0.
+    //   - SURVIVING tracks: re-anchor so a changed stepSec (from a
+    //     steps or stepUnit change in Studio mid-playback) takes effect
+    //     from "now" without retroactively warping the past. Mirrors
+    //     setBpm's re-anchor logic.
+    //   - NEW tracks: enter at the next bar boundary.
+    //   - REMOVED tracks: pruned so tick() doesn't touch stale entries.
+    for (const tr of Object.keys(this.nextIdx)) {
+      if (tr in p.tracks) {
+        this.anchorTime[tr] = this.nextNoteTimes[tr];
+        this.anchorIdx[tr] = this.nextIdx[tr];
+      }
+    }
+    this.barAnchorTime = this.nextBarTime;
     for (const tr of Object.keys(p.tracks)) {
       if (!(tr in this.nextIdx)) {
         this.nextIdx[tr] = 0;

@@ -13,31 +13,21 @@ import { deserializePattern } from './patterns/serialize';
 import { loadAllSafe } from './lib/db';
 import { getMasterVolume } from './lib/storage';
 import { logError } from './lib/log';
+import { readUrlState, type Tab, type UrlState } from './lib/urlState';
 import { UpdateBanner } from './components/UpdateBanner';
 import './styles/app.css';
 
 type Theme = 'warm' | 'noir' | 'paper';
-type Tab = 'practice' | 'studio' | 'library' | '_patterns';
+const THEMES: readonly Theme[] = ['warm', 'noir', 'paper'];
 
 const DEV_MODE = import.meta.env.DEV;
 
-// Parse the current URL into a (tab, pattern) tuple. Unknown values are
-// dropped — the caller falls back to localStorage/defaults.
-function readUrlState(): { tab: Tab | null; pattern: string | null } {
-  const params = new URLSearchParams(window.location.search);
-  const rawTab = params.get('tab');
-  let tab: Tab | null = null;
-  if (rawTab === 'practice' || rawTab === 'studio' || rawTab === 'library') {
-    tab = rawTab;
-  } else if (rawTab === '_patterns' && DEV_MODE) {
-    tab = '_patterns';
-  }
-  const rawPattern = params.get('pattern');
-  // patternById resolves seed patterns + registered user sources. We only
-  // validate seeds here (user patterns load async) — an unknown id falls
-  // through silently.
-  const pattern = rawPattern && patternById(rawPattern) ? rawPattern : null;
-  return { tab, pattern };
+// Pull the URL parser from a separate module so it's pure + testable.
+function readCurrentUrl(): UrlState {
+  return readUrlState(window.location.search, {
+    seedExists: (id) => !!patternById(id),
+    devMode: DEV_MODE,
+  });
 }
 
 export default function App() {
@@ -53,13 +43,14 @@ export default function App() {
     return () => { engine.dispose(); };
   }, [engine]);
 
-  const [theme, setTheme] = useState<Theme>(
-    () => (localStorage.getItem('bf_theme') as Theme) || 'warm',
-  );
+  const [theme, setTheme] = useState<Theme>(() => {
+    const raw = localStorage.getItem('bf_theme');
+    return THEMES.includes(raw as Theme) ? (raw as Theme) : 'warm';
+  });
 
   const [tab, setTab] = useState<Tab>(() => {
     // URL first, so shared links are the source of truth on load.
-    const url = readUrlState();
+    const url = readCurrentUrl();
     if (url.tab) return url.tab;
     const t = localStorage.getItem('bf_tab');
     if (t === 'library' || t === 'studio' || t === 'practice') return t;
@@ -69,7 +60,7 @@ export default function App() {
   });
 
   const [patternId, setPatternId] = useState<string>(() => {
-    const url = readUrlState();
+    const url = readCurrentUrl();
     if (url.pattern) return url.pattern;
     return localStorage.getItem('bf_pattern') || 'karsilama';
   });
@@ -152,11 +143,18 @@ export default function App() {
   // only exist in this browser's storage — we write `?p=<hash>` so the
   // URL is genuinely shareable. Copying from the URL bar "just works"
   // regardless of whether the pattern is built-in or authored locally.
+  //
+  // Short-circuit: patternSourcesTick bumps on every cache hydration
+  // (Studio save, Library load, etc). Without this guard we'd
+  // re-encode the user pattern on every bump even if (tab, patternId)
+  // didn't change.
+  const lastEncodedRef = useRef<{ tab: Tab; patternId: string } | null>(null);
   useEffect(() => {
     if (tab !== 'practice') {
       const nextSearch = `?tab=${tab}`;
       if (window.location.search === nextSearch) return;
       window.history.replaceState(null, '', `${window.location.pathname}${nextSearch}${window.location.hash}`);
+      lastEncodedRef.current = { tab, patternId };
       return;
     }
     // Is this a seed pattern we can round-trip via short id?
@@ -169,12 +167,18 @@ export default function App() {
       const search = `?tab=practice&pattern=${encodeURIComponent(patternId)}`;
       if (window.location.search === search) return;
       window.history.replaceState(null, '', `${window.location.pathname}${search}${window.location.hash}`);
+      lastEncodedRef.current = { tab, patternId };
       return;
     }
 
     // User / shared pattern → encode full pattern into ?p=<hash> so it
     // resolves for recipients who don't have it in their storage.
     if (!resolved) return;   // pattern cache not hydrated yet — skip this tick
+    // Skip the expensive serialize round-trip if (tab, patternId) hasn't
+    // changed since we last wrote a hash URL — patternSourcesTick alone
+    // shouldn't trigger a re-encode.
+    const last = lastEncodedRef.current;
+    if (last && last.tab === tab && last.patternId === patternId) return;
     let cancelled = false;
     (async () => {
       try {
@@ -184,12 +188,14 @@ export default function App() {
         const search = `?tab=practice&p=${hash}`;
         if (window.location.search === search) return;
         window.history.replaceState(null, '', `${window.location.pathname}${search}${window.location.hash}`);
+        lastEncodedRef.current = { tab, patternId };
       } catch {
         // Fall back to short-id URL if encoding fails — better than nothing.
         const search = `?tab=practice&pattern=${encodeURIComponent(patternId)}`;
         if (window.location.search !== search) {
           window.history.replaceState(null, '', `${window.location.pathname}${search}${window.location.hash}`);
         }
+        lastEncodedRef.current = { tab, patternId };
       }
     })();
     return () => { cancelled = true; };
@@ -199,7 +205,7 @@ export default function App() {
   // above is guarded against no-op replaceState, so this won't loop.
   useEffect(() => {
     const onPop = () => {
-      const url = readUrlState();
+      const url = readCurrentUrl();
       if (url.tab && url.tab !== tab) setTab(url.tab);
       if (url.pattern && url.pattern !== patternId) setPatternId(url.pattern);
     };
@@ -280,7 +286,7 @@ export default function App() {
         </nav>
         <div className="bf-topright">
           <div className="bf-theme-seg" role="group" aria-label="theme">
-            {(['warm', 'noir', 'paper'] as Theme[]).map((t) => (
+            {THEMES.map((t) => (
               <button
                 key={t}
                 className={`bf-theme-btn bf-theme-${t} ${theme === t ? 'on' : ''}`}

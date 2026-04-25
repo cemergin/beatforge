@@ -8,6 +8,21 @@ export type KitId =
   | '808' | '909' | '707' | '727'
   | 'frameDrum' | 'tabla' | 'gamelan';
 
+// Single source of truth for kit + voice enumerations. Adding a new
+// kit or voice means updating the union above AND this list — TS will
+// flag drift via the `satisfies readonly KitId[]` constraint.
+export const ALL_KITS = ['808', '909', '707', '727', 'frameDrum', 'tabla', 'gamelan'] as const satisfies readonly KitId[];
+export const ALL_VOICES = ['KK', 'SN', 'HH', 'OH', 'CP'] as const satisfies readonly VoiceId[];
+
+/** Type-safe Object.keys over a Partial<Record<VoiceId, ...>>. Replaces
+ *  the `Object.keys(record) as VoiceId[]` cast pattern that bypasses
+ *  runtime safety. */
+export function voiceKeys<T>(record: Partial<Record<VoiceId, T>>): VoiceId[] {
+  return Object.keys(record).filter((k): k is VoiceId =>
+    (ALL_VOICES as readonly string[]).includes(k),
+  );
+}
+
 export type RegionId =
   | 'turkey-ottoman'
   | 'arabic-swana'

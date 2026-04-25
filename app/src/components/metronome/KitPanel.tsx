@@ -1,6 +1,4 @@
-import type { KitId } from '../../patterns/types';
-
-const ALL_KITS: KitId[] = ['808', '909', '707', '727', 'frameDrum', 'tabla', 'gamelan'];
+import { ALL_KITS, type KitId } from '../../patterns/types';
 
 interface Props {
   activeKit: KitId;

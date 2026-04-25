@@ -23,7 +23,10 @@ export const METER_PRESETS: MeterPreset[] = [
 ];
 
 export const DEFAULT_VOICES: VoiceId[] = ['KK', 'SN', 'HH'];
-export const ALL_VOICES: VoiceId[] = ['KK', 'SN', 'HH', 'OH', 'CP'];
+// ALL_VOICES is re-exported from patterns/types so the source of truth
+// stays in one place. Existing callers that import from './presets'
+// keep working.
+export { ALL_VOICES } from '../../patterns/types';
 export const VOICE_LABELS: Record<VoiceId, string> = {
   KK: 'Kick',
   SN: 'Snare',

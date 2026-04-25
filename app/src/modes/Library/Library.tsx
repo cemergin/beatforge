@@ -5,7 +5,7 @@ import type { Genre, KitId, Pattern, RegionId } from '../../patterns/types';
 import { PATTERNS, patternById } from '../../patterns/seed';
 import { getHighlights, getRecent, toggleHighlight } from '../../lib/storage';
 import { Filters } from './Filters';
-import { DEFAULT_FILTERS, type FilterState } from './filterState';
+import { applyFilters, DEFAULT_FILTERS, type FilterState } from './filterState';
 import { WorldMap } from './WorldMap';
 import { REGION_BY_ID } from './regions';
 import { StarterPaths } from './StarterPaths';
@@ -137,13 +137,7 @@ export function Library({ engine, onLoadInPractice, onOpenInStudio }: Props) {
         .map((id) => known.get(id))
         .filter((p): p is Pattern => !!p);
     }
-    return searched.filter((p) => {
-      if (filters.meters.length && !filters.meters.includes(p.timeSig)) return false;
-      if (filters.regions.length && !filters.regions.includes(p.region)) return false;
-      if (filters.genres.length && !filters.genres.includes(p.genre)) return false;
-      if (filters.kits.length && !filters.kits.includes(p.defaultKit)) return false;
-      return true;
-    });
+    return applyFilters(searched, filters);
   }, [searched, filters, activePath]);
 
   const scrollToResults = useCallback(() => {

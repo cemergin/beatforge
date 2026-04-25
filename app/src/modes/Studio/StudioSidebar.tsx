@@ -1,11 +1,10 @@
 // Studio left sidebar: metadata form + "Yours" list.
 
-import type { Genre, KitId, Pattern, RegionId } from '../../patterns/types';
+import { ALL_KITS, type Genre, type KitId, type Pattern, type RegionId } from '../../patterns/types';
 import type { LoadedUserPattern } from '../../lib/db';
 import { naturalToStepBpm, parseTimeSigDenom, stepToNaturalBpm, denomGlyph } from '../../audio/tempo';
 import { REGIONS } from '../Library/regions';
 
-const ALL_KITS: KitId[] = ['808', '909', '707', '727', 'frameDrum', 'tabla', 'gamelan'];
 const GENRES: Genre[] = [
   'folk-dance', 'classical', 'devotional', 'popular',
   'electronic', 'hip-hop', 'jazz', 'ceremonial', 'exercise',

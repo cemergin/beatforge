@@ -1,6 +1,6 @@
 // Client-side persistence for quick-access state. No backend, per spec.
 
-import type { KitId } from '../patterns/types';
+import { ALL_KITS, type KitId } from '../patterns/types';
 import { logWarn } from './log';
 
 const HIGHLIGHTS_KEY = 'bf_highlights';
@@ -61,10 +61,6 @@ export function pushRecent(id: string): string[] {
 // Persists the user's preferred kit for a given pattern so it sticks
 // across sessions (spec §9 v1.3). Keyed by patternId → KitId.
 
-const VALID_KITS: readonly KitId[] = [
-  '808', '909', '707', '727', 'frameDrum', 'tabla', 'gamelan',
-];
-
 function readKitOverrides(): Record<string, KitId> {
   try {
     const raw = localStorage.getItem(KIT_OVERRIDES_KEY);
@@ -74,7 +70,7 @@ function readKitOverrides(): Record<string, KitId> {
     const out: Record<string, KitId> = {};
     for (const [id, kit] of Object.entries(parsed)) {
       if (typeof id === 'string' && typeof kit === 'string'
-          && (VALID_KITS as readonly string[]).includes(kit)) {
+          && (ALL_KITS as readonly string[]).includes(kit)) {
         out[id] = kit as KitId;
       }
     }
