@@ -604,6 +604,32 @@ export function Studio({
           <div className="bf-studio-section-head">
             <span className="bf-mini-label">meter · {denomGlyph(parseTimeSigDenom(draft.timeSig))}</span>
           </div>
+          <div className="bf-studio-timesig">
+            <input
+              type="number"
+              min={1}
+              step={1}
+              className="bf-studio-input sm bf-studio-timesig-num"
+              value={tsNum}
+              onChange={(e) => {
+                const n = Math.max(1, Math.floor(Number(e.target.value) || 1));
+                applyTimeSig(n, tsDen);
+              }}
+              aria-label="Time signature numerator"
+            />
+            <span className="bf-studio-timesig-slash" aria-hidden="true">/</span>
+            <select
+              className="bf-studio-input sm bf-studio-timesig-den"
+              value={tsDen}
+              onChange={(e) => applyTimeSig(tsNum, Number(e.target.value))}
+              aria-label="Time signature denominator"
+            >
+              <option value={2}>2</option>
+              <option value={4}>4</option>
+              <option value={8}>8</option>
+              <option value={16}>16</option>
+            </select>
+          </div>
           <div className="bf-chip-row wrap">
             {METER_PRESETS.map((m, i) => (
               <button
@@ -615,35 +641,6 @@ export function Studio({
                 {m.label}
               </button>
             ))}
-            <label className="bf-studio-timesig-inline" title="Custom time signature">
-              <input
-                type="number"
-                min={1}
-                step={1}
-                className="bf-studio-input sm bf-studio-timesig-num"
-                value={tsNum}
-                onChange={(e) => {
-                  const n = Math.max(1, Math.floor(Number(e.target.value) || 1));
-                  applyTimeSig(n, tsDen);
-                }}
-                aria-label="Time signature numerator"
-              />
-              <span className="bf-studio-timesig-slash" aria-hidden="true">/</span>
-              <select
-                className="bf-studio-input sm bf-studio-timesig-den"
-                value={tsDen}
-                onChange={(e) => {
-                  const d = Number(e.target.value);
-                  applyTimeSig(tsNum, d);
-                }}
-                aria-label="Time signature denominator"
-              >
-                <option value={2}>2</option>
-                <option value={4}>4</option>
-                <option value={8}>8</option>
-                <option value={16}>16</option>
-              </select>
-            </label>
           </div>
         </div>
 
