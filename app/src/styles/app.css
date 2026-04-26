@@ -2053,76 +2053,124 @@ input[type="number"] { font: inherit; color: inherit; }
 }
 .bf-sound-analyzer-modes button.on { background: var(--bg-2); color: var(--fg); }
 
-.bf-sound-channels {
-  display: grid; grid-template-columns: repeat(5, 1fr);
+/* ── Channel grid: 5 strips visible at once ─────────────────── */
+.bf-sound-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
   gap: var(--sp-3);
 }
-.bf-sound-channel {
-  display: flex; flex-direction: column; align-items: stretch; gap: var(--sp-1);
-  padding: var(--sp-5);
-  background: var(--bg-2); border: var(--bw-2) solid var(--line);
-  border-radius: var(--r-lg); cursor: pointer; text-align: left;
-  position: relative;
-  transition: border-color var(--t-fast), transform var(--t-fast);
+.bf-sound-strip {
+  display: flex; flex-direction: column; gap: var(--sp-3);
+  padding: var(--sp-5) var(--sp-4);
+  background: var(--bg-2);
+  border: var(--bw-1) solid var(--line);
+  border-radius: var(--r-lg);
 }
-.bf-sound-channel:hover { transform: translateY(-2px); }
-.bf-sound-channel.on { border-color: var(--accent); }
-.bf-sound-channel-num {
+.bf-sound-strip-head {
+  display: flex; align-items: center; gap: var(--sp-2);
+  border-bottom: var(--bw-1) solid var(--line);
+  padding-bottom: var(--sp-2);
+}
+.bf-sound-strip-num {
   font-family: var(--mono); font-size: var(--fs-mini);
   letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);
+  flex-shrink: 0;
 }
-.bf-sound-channel-name {
-  font-family: var(--serif); font-size: var(--fs-lg); font-weight: 700;
+.bf-sound-strip-name {
+  font-family: var(--serif); font-size: var(--fs-md); font-weight: 700;
+  flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis;
 }
-.bf-sound-channel-arch {
-  font-family: var(--mono); font-size: var(--fs-xs); color: var(--accent);
-  letter-spacing: 0.04em;
-}
-.bf-sound-channel-trigger {
-  position: absolute; top: var(--sp-3); right: var(--sp-3);
-  width: 32px; height: 32px; border-radius: var(--r-circle);
+.bf-sound-strip-trigger {
+  width: 30px; height: 30px; border-radius: var(--r-circle);
   border: var(--bw-1) solid var(--line); background: var(--bg-sunk);
-  color: var(--fg); cursor: pointer; font-size: var(--fs-md);
+  color: var(--fg); cursor: pointer; font-size: var(--fs-sm);
   display: inline-flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
   transition: background var(--t-fast), color var(--t-fast), border-color var(--t-fast);
 }
-.bf-sound-channel-trigger:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
-.bf-sound-channel-trigger:active { transform: scale(0.92); }
+.bf-sound-strip-trigger:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+.bf-sound-strip-trigger:active { transform: scale(0.92); }
 
-.bf-sound-edit {
-  background: var(--bg-2); border: var(--bw-1) solid var(--line);
-  border-radius: var(--r-lg); padding: var(--sp-9);
-  display: flex; flex-direction: column; gap: var(--sp-7);
-}
-.bf-sound-edit-head {
-  display: flex; gap: var(--sp-7); align-items: flex-end; flex-wrap: wrap;
-}
-.bf-sound-edit-head h2 {
-  font-family: var(--serif); font-size: var(--fs-2xl); margin: 0;
-  letter-spacing: -0.01em;
-}
-.bf-sound-arch-pick, .bf-sound-preset-pick {
-  display: flex; flex-direction: column; gap: 2px;
-}
-.bf-sound-arch-pick select, .bf-sound-preset-pick select {
-  font-family: var(--mono); font-size: var(--fs-sm);
-  padding: 6px 10px; border: var(--bw-1) solid var(--line);
-  border-radius: var(--r-sm); background: var(--bg-2); color: var(--fg);
-}
-
-.bf-sound-knobs {
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: var(--sp-7);
-}
-.bf-sound-knob {
+.bf-sound-strip-pickers {
   display: flex; flex-direction: column; gap: var(--sp-1);
 }
-.bf-sound-knob-label {
+.bf-sound-strip-select {
   font-family: var(--mono); font-size: var(--fs-mini);
-  letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);
+  padding: 4px 6px; border: var(--bw-1) solid var(--line);
+  border-radius: var(--r-xs); background: var(--bg);
+  color: var(--fg); width: 100%;
 }
-.bf-sound-knob input[type="range"] { accent-color: var(--accent); }
-.bf-sound-knob-val {
-  font-family: var(--mono); font-size: var(--fs-xs);
+
+.bf-sound-strip-knobs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+  gap: var(--sp-3) var(--sp-2);
+  padding: var(--sp-2) 0;
+}
+
+.bf-sound-strip-discrete {
+  display: flex; flex-direction: column; gap: var(--sp-1);
+  padding-top: var(--sp-2);
+  border-top: var(--bw-1) solid var(--line);
+}
+
+.bf-sound-discrete {
+  display: flex; flex-direction: column; gap: 2px;
+}
+.bf-sound-discrete-label {
+  font-family: var(--mono); font-size: var(--fs-micro);
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);
+}
+.bf-sound-discrete-opts {
+  display: inline-flex; gap: 2px;
+  background: var(--bg-sunk);
+  border-radius: var(--r-xs);
+  padding: 2px;
+}
+.bf-sound-discrete-opts button {
+  flex: 1;
+  padding: 3px 4px;
+  border-radius: var(--r-xs);
+  font-family: var(--mono); font-size: var(--fs-micro);
+  color: var(--muted);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+.bf-sound-discrete-opts button.on {
+  background: var(--bg-2);
   color: var(--fg);
+}
+
+/* ── Circular knob ────────────────────────────────────────────── */
+.bf-sound-strip-knobs .bf-knob {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 2px;
+  user-select: none;
+}
+.bf-sound-strip-knobs .bf-knob svg {
+  cursor: ns-resize;
+  touch-action: none;
+}
+.bf-sound-strip-knobs .bf-knob.dragging svg {
+  cursor: grabbing;
+}
+.bf-sound-strip-knobs .bf-knob-label {
+  font-family: var(--mono); font-size: var(--fs-micro);
+  letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted);
+  text-align: center;
+}
+.bf-sound-strip-knobs .bf-knob-val {
+  font-family: var(--mono); font-size: var(--fs-micro);
+  color: var(--fg);
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Responsive — stack to 1 strip per row when too narrow */
+@media (max-width: 1100px) {
+  .bf-sound-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 720px) {
+  .bf-sound-grid { grid-template-columns: 1fr; }
 }

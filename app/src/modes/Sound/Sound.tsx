@@ -1,12 +1,12 @@
-// Sound page — phase 1 v0: minimal channel browser + knob editor +
-// audition triggers. No 16-step sequencer, color FX, kit FX, or save
-// flow yet — just enough for sound design.
+// Sound page — phase 1 v1: 5 channels visible at once, circular
+// knobs per channel, audition triggers + ASDFG keyboard.
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { SoundEngine } from '../../audio/runtime/sound-engine';
 import { VOICE_MACHINES, type VoiceArchetypeId } from '../../audio/machines/registry';
 import type { MachineConfig } from '../../audio/machines/types';
 import { SpectrumAnalyzer } from './SpectrumAnalyzer';
+import { Knob } from './Knob';
 
 interface Channel {
   label: string;
@@ -14,10 +14,6 @@ interface Channel {
   machine: MachineConfig;
 }
 
-// Default kit — leans into the system's range so first-visit users
-// hear what's possible. Kick + snare anchor familiar territory; modal
-// (bell) and comb-pluck (kalimba) showcase the new synthesis the
-// existing kits can't do; hat keeps the rhythm tight.
 function defaultChannels(): Channel[] {
   return [
     { label: 'Kick',    short: 'Kic', machine: { ...VOICE_MACHINES.kick.defaults } },
@@ -33,11 +29,9 @@ export function Sound() {
   useEffect(() => () => { engine.dispose(); }, [engine]);
 
   const [channels, setChannels] = useState<Channel[]>(() => defaultChannels());
-  const [selectedIdx, setSelectedIdx] = useState(0);
 
-  // Refs the keyboard handler reads (avoids re-binding the listener
-  // on every channel change). Sync via effect — React 19 disallows
-  // ref writes during render.
+  // Refs so the keyboard handler reads the latest channels without
+  // re-binding the listener on every channel change.
   const channelsRef = useRef(channels);
   useEffect(() => { channelsRef.current = channels; }, [channels]);
 
@@ -70,31 +64,33 @@ export function Sound() {
     return () => window.removeEventListener('keydown', onKey);
   }, [trigger]);
 
-  const ch = channels[selectedIdx];
-  const archetypeId = ch.machine.archetype as VoiceArchetypeId;
-  const machine = VOICE_MACHINES[archetypeId];
-
-  const setKnob = useCallback((knobId: string, value: number) => {
+  const setKnob = useCallback((channelIdx: number, knobId: string, value: number) => {
     setChannels((cs) => cs.map((c, i) => (
-      i === selectedIdx ? { ...c, machine: { ...c.machine, [knobId]: value } } : c
+      i === channelIdx ? { ...c, machine: { ...c.machine, [knobId]: value } } : c
     )));
-  }, [selectedIdx]);
+  }, []);
 
-  const swapArchetype = useCallback((id: VoiceArchetypeId) => {
+  const setDiscrete = useCallback((channelIdx: number, fieldId: string, value: string) => {
     setChannels((cs) => cs.map((c, i) => (
-      i === selectedIdx ? { ...c, machine: { ...VOICE_MACHINES[id].defaults } } : c
+      i === channelIdx ? { ...c, machine: { ...c.machine, [fieldId]: value } } : c
     )));
-  }, [selectedIdx]);
+  }, []);
 
-  const applyPreset = useCallback((presetId: string) => {
-    const presets = machine.presets;
-    if (!presets || !presets[presetId]) return;
+  const swapArchetype = useCallback((channelIdx: number, id: VoiceArchetypeId) => {
     setChannels((cs) => cs.map((c, i) => (
-      i === selectedIdx
-        ? { ...c, machine: { ...c.machine, ...presets[presetId] } }
-        : c
+      i === channelIdx ? { ...c, machine: { ...VOICE_MACHINES[id].defaults } } : c
     )));
-  }, [machine, selectedIdx]);
+  }, []);
+
+  const applyPreset = useCallback((channelIdx: number, presetId: string) => {
+    setChannels((cs) => cs.map((c, i) => {
+      if (i !== channelIdx) return c;
+      const m = VOICE_MACHINES[c.machine.archetype as VoiceArchetypeId];
+      const presets = m.presets;
+      if (!presets || !presets[presetId]) return c;
+      return { ...c, machine: { ...c.machine, ...presets[presetId] } };
+    }));
+  }, []);
 
   return (
     <main className="bf-sound-page">
@@ -103,101 +99,108 @@ export function Sound() {
       <header className="bf-sound-hero">
         <h1 className="bf-sound-title">Sound</h1>
         <p className="bf-sound-sub">
-          Pick a channel, swap the archetype, dial knobs. Tap <kbd>▶</kbd>
+          Drag knobs to dial. Tap <kbd>▶</kbd> on a channel —
           or use <kbd>A</kbd>/<kbd>S</kbd>/<kbd>D</kbd>/<kbd>F</kbd>/<kbd>G</kbd>
-          to audition. <kbd>Q</kbd>/<kbd>W</kbd>/<kbd>E</kbd>/<kbd>R</kbd>/<kbd>T</kbd>
-          for accent (2× velocity).
+          to audition; <kbd>Q</kbd>/<kbd>W</kbd>/<kbd>E</kbd>/<kbd>R</kbd>/<kbd>T</kbd>
+          for accent. Double-click a knob to reset.
         </p>
       </header>
 
-      <section className="bf-sound-channels">
+      <section className="bf-sound-grid">
         {channels.map((c, i) => {
-          const m = VOICE_MACHINES[c.machine.archetype as VoiceArchetypeId];
-          // Outer is a div with role=button — can't nest a real
-          // <button> inside another <button> (HTML / React 19 / Safari
-          // all complain). KeyDown handles space + enter for a11y.
+          const archetypeId = c.machine.archetype as VoiceArchetypeId;
+          const machine = VOICE_MACHINES[archetypeId];
+          const cfgValues = c.machine as unknown as Record<string, number | string>;
           return (
-            <div
-              key={i}
-              role="button"
-              tabIndex={0}
-              className={`bf-sound-channel ${i === selectedIdx ? 'on' : ''}`}
-              onClick={() => setSelectedIdx(i)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  e.preventDefault();
-                  setSelectedIdx(i);
-                }
-              }}
-            >
-              <span className="bf-sound-channel-num">ch {i + 1}</span>
-              <span className="bf-sound-channel-name">{c.label}</span>
-              <span className="bf-sound-channel-arch">{m.label}</span>
-              <button
-                className="bf-sound-channel-trigger"
-                onClick={(e) => { e.stopPropagation(); void trigger(i); }}
-                aria-label={`Trigger ${c.label}`}
-                type="button"
-              >
-                ▶
-              </button>
+            <div key={i} className="bf-sound-strip">
+              <div className="bf-sound-strip-head">
+                <div className="bf-sound-strip-num">ch {i + 1}</div>
+                <div className="bf-sound-strip-name">{c.label}</div>
+                <button
+                  className="bf-sound-strip-trigger"
+                  onClick={() => void trigger(i)}
+                  aria-label={`Trigger ${c.label}`}
+                  type="button"
+                >
+                  ▶
+                </button>
+              </div>
+
+              <div className="bf-sound-strip-pickers">
+                <select
+                  className="bf-sound-strip-select"
+                  value={archetypeId}
+                  onChange={(e) => swapArchetype(i, e.target.value as VoiceArchetypeId)}
+                  aria-label="Archetype"
+                >
+                  {(Object.keys(VOICE_MACHINES) as VoiceArchetypeId[]).map((id) => (
+                    <option key={id} value={id}>{VOICE_MACHINES[id].label}</option>
+                  ))}
+                </select>
+                {machine.presets && Object.keys(machine.presets).length > 0 && (
+                  <select
+                    className="bf-sound-strip-select"
+                    value=""
+                    onChange={(e) => { if (e.target.value) applyPreset(i, e.target.value); }}
+                    aria-label="Preset"
+                  >
+                    <option value="">preset…</option>
+                    {Object.keys(machine.presets).map((p) => (
+                      <option key={p} value={p}>{p}</option>
+                    ))}
+                  </select>
+                )}
+              </div>
+
+              <div className="bf-sound-strip-knobs">
+                {machine.knobs.map((k) => {
+                  const v = cfgValues[k.id];
+                  const value = typeof v === 'number' ? v : k.default;
+                  return (
+                    <Knob
+                      key={k.id}
+                      label={k.label}
+                      value={value}
+                      min={k.min}
+                      max={k.max}
+                      defaultValue={k.default}
+                      curve={k.curve}
+                      unit={k.unit}
+                      format={k.format}
+                      onChange={(nv) => setKnob(i, k.id, nv)}
+                      size={48}
+                    />
+                  );
+                })}
+              </div>
+
+              {machine.discrete && machine.discrete.length > 0 && (
+                <div className="bf-sound-strip-discrete">
+                  {machine.discrete.map((d) => {
+                    const cur = (cfgValues[d.id] as string) ?? d.default;
+                    return (
+                      <div key={d.id} className="bf-sound-discrete">
+                        <div className="bf-sound-discrete-label">{d.label}</div>
+                        <div className="bf-sound-discrete-opts">
+                          {d.options.map((opt) => (
+                            <button
+                              key={opt}
+                              className={cur === opt ? 'on' : ''}
+                              onClick={() => setDiscrete(i, d.id, opt)}
+                              type="button"
+                            >
+                              {opt}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           );
         })}
-      </section>
-
-      <section className="bf-sound-edit">
-        <div className="bf-sound-edit-head">
-          <h2>{ch.label}</h2>
-          <label className="bf-sound-arch-pick">
-            <span className="bf-mini-label">Archetype</span>
-            <select
-              value={archetypeId}
-              onChange={(e) => swapArchetype(e.target.value as VoiceArchetypeId)}
-            >
-              {(Object.keys(VOICE_MACHINES) as VoiceArchetypeId[]).map((id) => (
-                <option key={id} value={id}>{VOICE_MACHINES[id].label}</option>
-              ))}
-            </select>
-          </label>
-          {machine.presets && Object.keys(machine.presets).length > 0 && (
-            <label className="bf-sound-preset-pick">
-              <span className="bf-mini-label">Preset</span>
-              <select
-                value=""
-                onChange={(e) => { if (e.target.value) applyPreset(e.target.value); }}
-              >
-                <option value="">— pick —</option>
-                {Object.keys(machine.presets).map((p) => (
-                  <option key={p} value={p}>{p}</option>
-                ))}
-              </select>
-            </label>
-          )}
-        </div>
-
-        <div className="bf-sound-knobs">
-          {machine.knobs.map((k) => {
-            const cfg = ch.machine as unknown as Record<string, number>;
-            const value = cfg[k.id] ?? k.default;
-            return (
-              <div key={k.id} className="bf-sound-knob">
-                <div className="bf-sound-knob-label">{k.label}</div>
-                <input
-                  type="range"
-                  min={k.min}
-                  max={k.max}
-                  step={(k.max - k.min) / 200}
-                  value={value}
-                  onChange={(e) => setKnob(k.id, Number(e.target.value))}
-                />
-                <div className="bf-sound-knob-val">
-                  {value.toFixed(k.unit === 'Hz' || k.unit === 'ms' ? 0 : 2)} {k.unit}
-                </div>
-              </div>
-            );
-          })}
-        </div>
       </section>
     </main>
   );
