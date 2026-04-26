@@ -15,7 +15,6 @@ import { Tom } from './voice/tom';
 import { Cowbell } from './voice/cowbell';
 import { Modal } from './voice/modal';
 import { Fm } from './voice/fm';
-import { CombPluck } from './voice/comb-pluck';
 import { Noise } from './voice/noise';
 import { Wavefolder } from './voice/wavefolder';
 import { Crackle } from './voice/crackle';
@@ -36,7 +35,6 @@ export const VOICE_MACHINES = {
   cowbell: Cowbell,
   modal: Modal,
   fm: Fm,
-  'comb-pluck': CombPluck,
   noise: Noise,
   wavefolder: Wavefolder,
   crackle: Crackle,

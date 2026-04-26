@@ -6,9 +6,9 @@
 
 export { createOsc, createGain, createBiquad, createNoise } from '../../kits/_util';
 
-/** Short-burst transient duration shared by clap, comb-pluck excitation,
- *  crackle, etc. 12 ms is short enough to register as a click but long
- *  enough that band-passed envelopes settle cleanly. */
+/** Short-burst transient duration shared by clap, crackle, etc.
+ *  12 ms is short enough to register as a click but long enough that
+ *  band-passed envelopes settle cleanly. */
 export const BURST_SEC = 0.012;
 
 /** A 30 Hz highpass — DC-blocker. Use when a renderer's signal path

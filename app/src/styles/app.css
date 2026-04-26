@@ -2149,6 +2149,26 @@ input[type="number"] { font: inherit; color: inherit; }
   color: var(--fg);
 }
 
+.bf-sound-preset-pills {
+  display: flex; flex-wrap: wrap; gap: 3px;
+}
+.bf-sound-preset-pill {
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-family: var(--mono); font-size: var(--fs-micro);
+  color: var(--muted);
+  background: var(--bg-sunk);
+  border: var(--bw-1) solid var(--line);
+  cursor: pointer;
+  transition: background 0.1s, color 0.1s, border-color 0.1s;
+}
+.bf-sound-preset-pill:hover {
+  background: var(--bg-2);
+  color: var(--fg);
+  border-color: var(--accent);
+}
+.bf-sound-preset-pill:active { transform: scale(0.96); }
+
 /* ── Circular knob ────────────────────────────────────────────── */
 .bf-sound-strip-knobs .bf-knob {
   display: flex; flex-direction: column; align-items: center;
@@ -2174,10 +2194,118 @@ input[type="number"] { font: inherit; color: inherit; }
   font-variant-numeric: tabular-nums;
 }
 
+/* ── Sound page sequencer ────────────────────────────────────── */
+.bf-sound-sequencer {
+  display: flex; flex-direction: column; gap: var(--sp-3);
+  margin-bottom: var(--sp-5);
+  padding: var(--sp-4);
+  background: var(--bg-2);
+  border: var(--bw-1) solid var(--line);
+  border-radius: var(--r-md);
+}
+
+/* Transport bar */
+.bf-transport {
+  display: flex; align-items: center; gap: var(--sp-3);
+  flex-wrap: wrap;
+}
+.bf-transport-play {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  border: var(--bw-1) solid var(--line);
+  background: var(--bg);
+  color: var(--fg);
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.1s, color 0.1s, transform 0.05s;
+}
+.bf-transport-play:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+.bf-transport-play.on { background: var(--accent); color: #fff; border-color: var(--accent); }
+.bf-transport-play:active { transform: scale(0.92); }
+
+.bf-transport-bpm {
+  display: flex; align-items: center; gap: var(--sp-1);
+}
+.bf-transport-bpm-label {
+  font-family: var(--mono); font-size: var(--fs-micro);
+  letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);
+}
+.bf-transport-bpm input {
+  font-family: var(--mono); font-size: var(--fs-mini);
+  width: 56px;
+  padding: 4px 6px;
+  border: var(--bw-1) solid var(--line);
+  border-radius: var(--r-xs);
+  background: var(--bg);
+  color: var(--fg);
+}
+.bf-transport-clear {
+  font-family: var(--mono); font-size: var(--fs-micro);
+  letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 4px 8px;
+  border: var(--bw-1) solid var(--line);
+  border-radius: var(--r-xs);
+  background: var(--bg);
+  color: var(--muted);
+  cursor: pointer;
+}
+.bf-transport-clear:hover { color: var(--fg); border-color: var(--accent); }
+.bf-transport-right { margin-left: auto; }
+
+/* Step grid */
+.bf-stepgrid {
+  display: flex; flex-direction: column; gap: 3px;
+}
+.bf-stepgrid-row {
+  display: grid;
+  grid-template-columns: 44px 1fr;
+  align-items: center;
+  gap: var(--sp-2);
+}
+.bf-stepgrid-label {
+  font-family: var(--mono); font-size: var(--fs-micro);
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--muted);
+  text-align: right;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.bf-stepgrid-cells {
+  display: grid;
+  grid-template-columns: repeat(var(--steps), 1fr);
+  gap: 3px;
+}
+.bf-stepgrid-cell {
+  height: 28px;
+  border: var(--bw-1) solid var(--line);
+  border-radius: var(--r-xs);
+  background: var(--bg-sunk);
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.06s, border-color 0.06s, box-shadow 0.06s;
+}
+.bf-stepgrid-cell.g-b { background: color-mix(in srgb, var(--bg-sunk) 80%, var(--fg) 4%); }
+.bf-stepgrid-cell.head { border-left: 2px solid color-mix(in srgb, var(--accent) 50%, transparent); }
+.bf-stepgrid-cell:hover { border-color: var(--accent); }
+.bf-stepgrid-cell.on {
+  background: color-mix(in srgb, var(--accent) 55%, var(--bg));
+  border-color: var(--accent);
+}
+.bf-stepgrid-cell.accent {
+  background: var(--accent);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent) inset;
+}
+.bf-stepgrid-cell.cur {
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--fg) 70%, transparent);
+}
+
 /* Responsive — stack to 1 strip per row when too narrow */
 @media (max-width: 1100px) {
   .bf-sound-grid { grid-template-columns: repeat(2, 1fr); }
 }
 @media (max-width: 720px) {
   .bf-sound-grid { grid-template-columns: 1fr; }
+  .bf-stepgrid-row { grid-template-columns: 32px 1fr; }
+  .bf-stepgrid-cell { height: 22px; }
 }
