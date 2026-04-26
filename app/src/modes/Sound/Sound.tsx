@@ -87,20 +87,15 @@ function defaultChannels(): Channel[] {
     const preset = presetId && m.presets ? m.presets[presetId] : undefined;
     return { ...m.defaults, ...preset };
   };
-  // Per-channel reverb defaults seed an audible mix on first load. The
-  // master rev wet alone can't help — the bus only sees signal that
-  // channels explicitly send. Kick stays dry (canonical drum-machine
-  // mix); snare/bell/kalimba get reverb because they sound right with it.
-  const fx = (reverbSend: number): ReturnType<typeof defaultChannelEffects> => ({
-    ...defaultChannelEffects(),
-    reverbSend,
-  });
+  // All channels start with 0 sends — user dials in per-channel reverb
+  // and delay deliberately. Master wets default to non-zero so the
+  // moment a send goes up the user hears the master FX in action.
   return [
-    { label: 'Kick',    short: 'Kic', machine: k('kick'),                effects: fx(0)    },
-    { label: 'Snare',   short: 'Sna', machine: k('snare'),               effects: fx(0.30) },
-    { label: 'Hat',     short: 'Hat', machine: k('hat'),                 effects: fx(0.15) },
-    { label: 'Bell',    short: 'Bel', machine: k('modal', 'bell'),       effects: fx(0.40) },
-    { label: 'Kalimba', short: 'Kal', machine: k('fm', 'kalimba'),       effects: fx(0.30) },
+    { label: 'Kick',    short: 'Kic', machine: k('kick'),                effects: defaultChannelEffects() },
+    { label: 'Snare',   short: 'Sna', machine: k('snare'),               effects: defaultChannelEffects() },
+    { label: 'Hat',     short: 'Hat', machine: k('hat'),                 effects: defaultChannelEffects() },
+    { label: 'Bell',    short: 'Bel', machine: k('modal', 'bell'),       effects: defaultChannelEffects() },
+    { label: 'Kalimba', short: 'Kal', machine: k('fm', 'kalimba'),       effects: defaultChannelEffects() },
   ];
 }
 
@@ -133,10 +128,14 @@ export function Sound() {
   const [strongAmp, setStrongAmp] = useState(1.0);
   const [weakAmp, setWeakAmp] = useState(0.55);
   const [masterVolume, setMasterVolume] = useState(0.85);
-  // Master wet defaults audible so the per-channel sends in
-  // defaultChannels() actually produce sound. User can dial dry.
+  // Master wet defaults audible so the moment a per-channel send goes
+  // up, the user hears the master FX. User can dial dry.
   const [reverbWet, setReverbWet] = useState(0.5);
+  const [reverbSize, setReverbSize] = useState(1.8);
+  const [reverbDecay, setReverbDecay] = useState(2.2);
   const [delayWet, setDelayWet] = useState(0.15);
+  const [delayTime, setDelayTime] = useState(0.25);   // seconds (1/8 at 120 BPM)
+  const [delayFeedback, setDelayFeedback] = useState(0.35);
 
   // Hydrate the saved list on mount + after every save/delete. The
   // mount effect uses promise-then form so setState lands in a
@@ -192,7 +191,11 @@ export function Sound() {
   useEffect(() => { engine.setAccents(strongAmp, weakAmp); }, [engine, strongAmp, weakAmp]);
   useEffect(() => { engine.setMasterVolume(masterVolume); }, [engine, masterVolume]);
   useEffect(() => { engine.setReverbWet(reverbWet); }, [engine, reverbWet]);
+  useEffect(() => { engine.setReverbSize(reverbSize); }, [engine, reverbSize]);
+  useEffect(() => { engine.setReverbDecay(reverbDecay); }, [engine, reverbDecay]);
   useEffect(() => { engine.setDelayWet(delayWet); }, [engine, delayWet]);
+  useEffect(() => { engine.setDelayTime(delayTime); }, [engine, delayTime]);
+  useEffect(() => { engine.setDelayFeedback(delayFeedback); }, [engine, delayFeedback]);
 
   // Drive the visual playhead from audibleStep() — what's playing NOW,
   // not what's queued 300ms ahead. Frame loop only runs while playing;
@@ -296,7 +299,11 @@ export function Sound() {
       strongAmp,
       weakAmp,
       reverbWet,
+      reverbSize,
+      reverbDecay,
       delayWet,
+      delayTime,
+      delayFeedback,
       createdAt: existing?.createdAt ?? now,
       updatedAt: now,
     };
@@ -311,7 +318,9 @@ export function Sound() {
     }
   }, [
     name, savedId, savedList, bpm, meter, sequence, channels,
-    countInBars, swing, strongAmp, weakAmp, reverbWet, delayWet,
+    countInBars, swing, strongAmp, weakAmp,
+    reverbWet, reverbSize, reverbDecay,
+    delayWet, delayTime, delayFeedback,
     refreshSavedList,
   ]);
 
@@ -354,8 +363,12 @@ export function Sound() {
     setSwing(p.swing ?? 0.5);
     setStrongAmp(p.strongAmp ?? 1.0);
     setWeakAmp(p.weakAmp ?? 0.55);
-    setReverbWet(p.reverbWet ?? 0);
-    setDelayWet(p.delayWet ?? 0);
+    setReverbWet(p.reverbWet ?? 0.5);
+    setReverbSize(p.reverbSize ?? 1.8);
+    setReverbDecay(p.reverbDecay ?? 2.2);
+    setDelayWet(p.delayWet ?? 0.15);
+    setDelayTime(p.delayTime ?? 0.25);
+    setDelayFeedback(p.delayFeedback ?? 0.35);
     setToast(`Loaded ${p.name}`);
   }, [engine, isPlaying]);
 
@@ -661,6 +674,65 @@ export function Sound() {
               value={delayWet}
               onChange={(e) => setDelayWet(Number(e.target.value))}
               aria-label="Master delay wet"
+            />
+          </div>
+        </div>
+
+        <div className="bf-sound-fxbar">
+          <span className="bf-fx-section">reverb</span>
+
+          <div className="bf-feel-control">
+            <span className="bf-feel-label">size {reverbSize.toFixed(1)}s</span>
+            <input
+              type="range"
+              min={0.3}
+              max={4}
+              step={0.05}
+              value={reverbSize}
+              onChange={(e) => setReverbSize(Number(e.target.value))}
+              aria-label="Reverb size (seconds)"
+            />
+          </div>
+
+          <div className="bf-feel-control">
+            <span className="bf-feel-label">decay {reverbDecay.toFixed(1)}</span>
+            <input
+              type="range"
+              min={1}
+              max={6}
+              step={0.1}
+              value={reverbDecay}
+              onChange={(e) => setReverbDecay(Number(e.target.value))}
+              aria-label="Reverb decay shape"
+            />
+          </div>
+
+          <span className="bf-feel-divider" />
+          <span className="bf-fx-section">delay</span>
+
+          <div className="bf-feel-control">
+            <span className="bf-feel-label">time {Math.round(delayTime * 1000)}ms</span>
+            <input
+              type="range"
+              min={0.02}
+              max={1.5}
+              step={0.01}
+              value={delayTime}
+              onChange={(e) => setDelayTime(Number(e.target.value))}
+              aria-label="Delay time (seconds)"
+            />
+          </div>
+
+          <div className="bf-feel-control">
+            <span className="bf-feel-label">fb {Math.round(delayFeedback * 100)}%</span>
+            <input
+              type="range"
+              min={0}
+              max={0.7}
+              step={0.01}
+              value={delayFeedback}
+              onChange={(e) => setDelayFeedback(Number(e.target.value))}
+              aria-label="Delay feedback"
             />
           </div>
         </div>

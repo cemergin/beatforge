@@ -2432,6 +2432,20 @@ input[type="number"] { font: inherit; color: inherit; }
   margin: 0 var(--sp-1);
 }
 
+/* FX bar — reuses .bf-feel-control internals */
+.bf-sound-fxbar {
+  display: flex; flex-wrap: wrap; align-items: center;
+  gap: var(--sp-3) var(--sp-4);
+  padding: var(--sp-2) 0;
+  border-bottom: var(--bw-1) dashed var(--line);
+}
+.bf-fx-section {
+  font-family: var(--mono); font-size: var(--fs-micro);
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 600;
+}
+
 /* Step grid */
 .bf-stepgrid {
   display: flex; flex-direction: column; gap: 3px;

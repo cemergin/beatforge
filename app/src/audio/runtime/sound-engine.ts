@@ -28,12 +28,20 @@ export class SoundEngine {
   private master: GainNode | null = null;
   private analyser: AnalyserNode | null = null;
   // Master FX buses. ChannelStrips own the per-channel sends into the
-  // bus inputs; we only retain the wet/feedback/delay-line gains
+  // bus inputs; we retain the convolver + wet/feedback/delay-line
   // because those are the nodes the user-facing setters mutate.
+  // reverbConvolver is needed so size/decay setters can swap its
+  // buffer. dlyLine for delayTime, dlyFeedback for feedback gain.
+  private reverbConvolver: ConvolverNode | null = null;
   private revWet: GainNode | null = null;
   private dlyWet: GainNode | null = null;
   private dlyFeedback: GainNode | null = null;
   private dlyLine: DelayNode | null = null;
+  // Cache the reverb shape so size/decay setters can pull the OTHER
+  // value when one changes (size sets without specifying decay re-uses
+  // the cached decay). Defaults match initCtxOnce.
+  private _reverbSize = 1.8;
+  private _reverbDecay = 2.2;
   private strips: ChannelStrip[] = [];
   private ctxInitPromise: Promise<void> | null = null;
 
@@ -112,11 +120,11 @@ export class SoundEngine {
     analyser.connect(ctx.destination);
 
     // Reverb bus: revBus (per-channel sends sum here) → convolver →
-    // revWet (master wet level) → master. Impulse synthesized once;
-    // replacing it later would mean reconstructing the convolver.
+    // revWet (master wet level) → master. The convolver's buffer can
+    // be swapped live to retune size/decay (see setReverbSize/Decay).
     const revBus = ctx.createGain();
     const reverb = ctx.createConvolver();
-    reverb.buffer = makeImpulse(ctx, 1.8, 2.2);
+    reverb.buffer = makeImpulse(ctx, this._reverbSize, this._reverbDecay);
     const revWet = ctx.createGain();
     revWet.gain.value = 0.5;
     revBus.connect(reverb).connect(revWet).connect(master);
@@ -145,6 +153,7 @@ export class SoundEngine {
     this.ctx = ctx;
     this.master = master;
     this.analyser = analyser;
+    this.reverbConvolver = reverb;
     this.revWet = revWet;
     this.dlyLine = dlyLine;
     this.dlyFeedback = dlyFeedback;
@@ -245,6 +254,38 @@ export class SoundEngine {
     if (this.revWet) this.revWet.gain.value = Math.max(0, Math.min(1, v));
   }
 
+  /** Reverb tail length in seconds (0.3..4.0). Rebuilds the impulse
+   *  buffer; cheap. Tails currently in flight finish under the old
+   *  buffer, so the swap doesn't click. */
+  setReverbSize(seconds: number): void {
+    this._reverbSize = Math.max(0.3, Math.min(4.0, seconds));
+    if (this.ctx && this.reverbConvolver) {
+      this.reverbConvolver.buffer = makeImpulse(this.ctx, this._reverbSize, this._reverbDecay);
+    }
+  }
+
+  /** Reverb decay shape exponent (1..6). Higher = faster fade
+   *  (steeper envelope on the noise burst). */
+  setReverbDecay(exp: number): void {
+    this._reverbDecay = Math.max(1, Math.min(6, exp));
+    if (this.ctx && this.reverbConvolver) {
+      this.reverbConvolver.buffer = makeImpulse(this.ctx, this._reverbSize, this._reverbDecay);
+    }
+  }
+
+  /** Delay time in seconds (0.02..2.0). Ramped over 30ms to avoid
+   *  the click that would result from an instant pointer jump on
+   *  the delay line read head. */
+  setDelayTime(seconds: number): void {
+    if (!this.dlyLine || !this.ctx) return;
+    const v = Math.max(0.02, Math.min(2.0, seconds));
+    const t = this.ctx.currentTime;
+    const p = this.dlyLine.delayTime;
+    p.cancelScheduledValues(t);
+    p.setValueAtTime(p.value, t);
+    p.linearRampToValueAtTime(v, t + 0.03);
+  }
+
   /** Master wet level for the delay send bus (0..1). */
   setDelayWet(v: number): void {
     if (this.dlyWet) this.dlyWet.gain.value = Math.max(0, Math.min(1, v));
@@ -294,14 +335,6 @@ export class SoundEngine {
     const countInBars = Math.max(0, Math.floor(opts.countInBars ?? 0));
     const headRoom = ctx.currentTime + 0.06;
     const start = headRoom + countInBars * barSec;
-
-    // Retune the master delay line to 1/8-note at the current BPM. Done
-    // once per play() so the user can switch tempos mid-pattern without
-    // an audible delay-time chirp; if they REALLY want the delay to
-    // track BPM live we'll do that explicitly later.
-    if (this.dlyLine) {
-      this.dlyLine.delayTime.value = Math.min(2.0, 60 / this._bpm / 2);
-    }
 
     // Schedule a wood-tick at the start of each grouping cell of every
     // count-in bar. Step 0 = strong (start of bar); other group heads
@@ -442,6 +475,7 @@ export class SoundEngine {
     this.ctx = null;
     this.master = null;
     this.analyser = null;
+    this.reverbConvolver = null;
     this.revWet = null;
     this.dlyLine = null;
     this.dlyFeedback = null;

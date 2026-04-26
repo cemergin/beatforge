@@ -80,7 +80,11 @@ export interface SoundPattern {
 
   // ── Master FX (optional) ─────────────────────────────────────────
   reverbWet?: number;
+  reverbSize?: number;     // seconds
+  reverbDecay?: number;    // shape exponent
   delayWet?: number;
+  delayTime?: number;      // seconds
+  delayFeedback?: number;  // 0..0.7
 
   createdAt: number;
   updatedAt: number;
