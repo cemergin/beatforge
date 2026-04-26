@@ -10,12 +10,16 @@ import {
   type Channel,
   type ColorFx,
   type SoundPattern,
+  type SoundKit,
   defaultChannelEffects,
 } from '../../patterns/types-sound';
 import {
   saveSoundPattern,
   listSoundPatterns,
   deleteSoundPattern,
+  saveSoundKit,
+  listSoundKits,
+  deleteSoundKit,
 } from '../../lib/db';
 import { SpectrumAnalyzer } from './SpectrumAnalyzer';
 import { Knob } from './Knob';
@@ -262,6 +266,13 @@ export function Sound() {
   const [savedList, setSavedList] = useState<SoundPattern[]>([]);
   const [toast, setToast] = useState<string | null>(null);
 
+  // Kit persistence — separate from pattern; "kit" = the channel
+  // palette only (machine configs + per-channel mixer + colour FX).
+  // One kit can power many patterns; loading a kit only swaps channels.
+  const [kitName, setKitName] = useState('My Kit');
+  const [savedKitId, setSavedKitId] = useState<string | null>(null);
+  const [savedKitList, setSavedKitList] = useState<SoundKit[]>([]);
+
   // Feel + master state. countInBars / swing / accents persist with
   // the pattern (saved-pattern shape captures all of them); master
   // volume + FX wet levels are session-only for now (could move to
@@ -280,22 +291,30 @@ export function Sound() {
   const [delayTime, setDelayTime] = useState(0.25);   // seconds (1/8 at 120 BPM)
   const [delayFeedback, setDelayFeedback] = useState(0.35);
 
-  // Hydrate the saved list on mount + after every save/delete. The
+  // Hydrate the saved lists on mount + after every save/delete. The
   // mount effect uses promise-then form so setState lands in a
   // microtask (React-19's set-state-in-effect rule rejects an inline
   // setState even via an awaited helper). Save/delete handlers can
-  // still call refreshSavedList directly — that runs outside an
-  // effect, so the rule doesn't apply.
+  // still call refresh* directly — that runs outside an effect.
   const refreshSavedList = useCallback(async () => {
     try {
       const list = await listSoundPatterns();
       setSavedList(list);
     } catch { /* IDB unavailable — keep silent, list stays empty */ }
   }, []);
+  const refreshSavedKitList = useCallback(async () => {
+    try {
+      const list = await listSoundKits();
+      setSavedKitList(list);
+    } catch { /* IDB unavailable */ }
+  }, []);
   useEffect(() => {
     let active = true;
     listSoundPatterns()
       .then((list) => { if (active) setSavedList(list); })
+      .catch(() => { /* IDB unavailable */ });
+    listSoundKits()
+      .then((list) => { if (active) setSavedKitList(list); })
       .catch(() => { /* IDB unavailable */ });
     return () => { active = false; };
   }, []);
@@ -587,6 +606,59 @@ export function Sound() {
     }
   }, [savedId, refreshSavedList]);
 
+  // ── Kit save/load/delete ─────────────────────────────────────────
+  // Kits are channels-only (palette). Loading a kit replaces the
+  // active channels but leaves sequence + meter + feel + master FX
+  // alone, so users can A/B kits against the same rhythm.
+  const onSaveKit = useCallback(async () => {
+    const trimmed = kitName.trim() || 'My Kit';
+    const now = Date.now();
+    const id = savedKitId ?? kebabId(trimmed);
+    const existing = savedKitId ? savedKitList.find((k) => k.id === savedKitId) : undefined;
+    const kit: SoundKit = {
+      id,
+      name: trimmed,
+      channels: channels.map((c) => ({
+        label: c.label,
+        machine: { ...c.machine },
+        effects: { ...c.effects, colorFx: { ...c.effects.colorFx } },
+      })),
+      createdAt: existing?.createdAt ?? now,
+      updatedAt: now,
+    };
+    try {
+      await saveSoundKit(kit);
+      setSavedKitId(id);
+      setKitName(trimmed);
+      setToast(savedKitId ? 'Kit updated' : 'Kit saved');
+      await refreshSavedKitList();
+    } catch {
+      setToast('Save failed');
+    }
+  }, [kitName, savedKitId, savedKitList, channels, refreshSavedKitList]);
+
+  const loadSavedKit = useCallback((k: SoundKit) => {
+    setKitName(k.name);
+    setSavedKitId(k.id);
+    setChannels(k.channels.map((c) => ({
+      label: c.label,
+      machine: { ...c.machine },
+      effects: { ...c.effects, colorFx: { ...c.effects.colorFx } },
+    })));
+    setToast(`Kit: ${k.name}`);
+  }, []);
+
+  const onDeleteSavedKit = useCallback(async (id: string) => {
+    try {
+      await deleteSoundKit(id);
+      if (savedKitId === id) setSavedKitId(null);
+      await refreshSavedKitList();
+      setToast('Kit deleted');
+    } catch {
+      setToast('Delete failed');
+    }
+  }, [savedKitId, refreshSavedKitList]);
+
   const onNewBlank = useCallback(() => {
     if (isPlaying) {
       engine.stop();
@@ -733,7 +805,58 @@ export function Sound() {
       </header>
 
       <section className="bf-sound-sequencer">
+        <div className="bf-sound-patternbar bf-sound-kitbar">
+          <span className="bf-sound-bar-tag">kit</span>
+          <input
+            className="bf-sound-name"
+            type="text"
+            value={kitName}
+            onChange={(e) => setKitName(e.target.value)}
+            placeholder="Kit name"
+            aria-label="Kit name"
+          />
+          <button
+            type="button"
+            className="bf-sound-saveBtn"
+            onClick={() => void onSaveKit()}
+            title={savedKitId ? 'Update saved kit' : 'Save the current channel palette'}
+          >
+            {savedKitId ? 'update' : 'save kit'}
+          </button>
+          <div className="bf-sound-savedlist" role="list">
+            {savedKitList.length === 0 && (
+              <span className="bf-sound-savedempty">no saved kits yet</span>
+            )}
+            {savedKitList.map((k) => (
+              <span
+                key={k.id}
+                role="listitem"
+                className={`bf-sound-savedchip ${k.id === savedKitId ? 'on' : ''}`}
+              >
+                <button
+                  type="button"
+                  className="bf-sound-savedchip-load"
+                  onClick={() => loadSavedKit(k)}
+                  title={`Load kit — ${k.channels.map((c) => c.label).join(', ')}`}
+                >
+                  {k.name}
+                </button>
+                <button
+                  type="button"
+                  className="bf-sound-savedchip-del"
+                  onClick={() => void onDeleteSavedKit(k.id)}
+                  title="Delete"
+                  aria-label={`Delete kit ${k.name}`}
+                >
+                  ×
+                </button>
+              </span>
+            ))}
+          </div>
+        </div>
+
         <div className="bf-sound-patternbar">
+          <span className="bf-sound-bar-tag">pattern</span>
           <input
             className="bf-sound-name"
             type="text"

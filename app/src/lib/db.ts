@@ -8,7 +8,7 @@
 
 import Dexie, { type Table } from 'dexie';
 import type { Pattern } from '../patterns/types';
-import type { SoundPattern } from '../patterns/types-sound';
+import type { SoundPattern, SoundKit } from '../patterns/types-sound';
 import { PatternSchema, UserPatternSchema } from '../patterns/schema';
 
 export interface UserPattern extends Pattern {
@@ -20,6 +20,7 @@ export interface UserPattern extends Pattern {
 class BFDatabase extends Dexie {
   userPatterns!: Table<UserPattern, string>;
   soundPatterns!: Table<SoundPattern, string>;
+  soundKits!: Table<SoundKit, string>;
 
   constructor() {
     super('beatforge');
@@ -31,6 +32,13 @@ class BFDatabase extends Dexie {
     this.version(2).stores({
       userPatterns: 'id, region, createdAt, updatedAt',
       soundPatterns: 'id, updatedAt',
+    });
+    // v3: add soundKits — channel palettes saved independently of
+    // patterns. Same untouched-existing-stores migration.
+    this.version(3).stores({
+      userPatterns: 'id, region, createdAt, updatedAt',
+      soundPatterns: 'id, updatedAt',
+      soundKits: 'id, updatedAt',
     });
   }
 }
@@ -137,5 +145,32 @@ export async function listSoundPatterns(): Promise<SoundPattern[]> {
   const raws = await db.soundPatterns.toArray();
   return raws
     .filter(isValidSoundPattern)
+    .sort((a, b) => b.updatedAt - a.updatedAt);
+}
+
+// ── Sound-page kits (v3) ───────────────────────────────────────────
+
+export function isValidSoundKit(p: unknown): p is SoundKit {
+  if (!p || typeof p !== 'object') return false;
+  const o = p as Record<string, unknown>;
+  return typeof o.id === 'string'
+    && typeof o.name === 'string'
+    && Array.isArray(o.channels)
+    && typeof o.createdAt === 'number'
+    && typeof o.updatedAt === 'number';
+}
+
+export async function saveSoundKit(k: SoundKit): Promise<void> {
+  await db.soundKits.put(k);
+}
+
+export async function deleteSoundKit(id: string): Promise<void> {
+  await db.soundKits.delete(id);
+}
+
+export async function listSoundKits(): Promise<SoundKit[]> {
+  const raws = await db.soundKits.toArray();
+  return raws
+    .filter(isValidSoundKit)
     .sort((a, b) => b.updatedAt - a.updatedAt);
 }

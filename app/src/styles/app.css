@@ -2379,11 +2379,27 @@ input[type="number"] { font: inherit; color: inherit; }
   border-radius: var(--r-md);
 }
 
-/* Pattern bar — name + save/update + new + saved chips */
+/* Pattern bar — name + save/update + new + saved chips. Kit bar
+   reuses the same layout via .bf-sound-kitbar for visual symmetry. */
 .bf-sound-patternbar {
   display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-2);
   padding-bottom: var(--sp-2);
   border-bottom: var(--bw-1) dashed var(--line);
+}
+.bf-sound-kitbar {
+  /* Slightly desaturated so the visual hierarchy reads as
+     kit (palette) → pattern (composition) top-down. */
+  opacity: 0.95;
+}
+.bf-sound-bar-tag {
+  font-family: var(--mono); font-size: var(--fs-micro);
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--accent);
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent) 12%, var(--bg));
+  font-weight: 600;
+  margin-right: var(--sp-1);
 }
 .bf-sound-name {
   font-family: var(--mono); font-size: var(--fs-mini);

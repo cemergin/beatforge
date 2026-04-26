@@ -90,3 +90,15 @@ export interface SoundPattern {
   createdAt: number;
   updatedAt: number;
 }
+
+/** A saved kit — just the channel palette, no sequence or rhythm
+ *  state. Decouples sound design (kit) from composition (pattern):
+ *  one kit can power many patterns; one rhythm can be auditioned
+ *  against many kits. Loading a kit only swaps `channels`. */
+export interface SoundKit {
+  id: string;
+  name: string;
+  channels: Channel[];
+  createdAt: number;
+  updatedAt: number;
+}
