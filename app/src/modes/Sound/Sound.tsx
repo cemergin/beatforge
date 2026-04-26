@@ -25,6 +25,7 @@ import { Disclosure } from '../../components/Disclosure';
 import { BeatDots } from '../../components/BeatDots';
 import { CircularGrid } from '../../components/CircularGrid';
 import { PillGrid } from '../../components/PillGrid';
+import { GROUP_COLORS, groupIndexForStep } from '../../components/visual-helpers';
 
 const COLOR_FX_TYPES: ColorFx['type'][] = ['none', 'overdrive', 'bitcrush', 'filter'];
 
@@ -949,7 +950,7 @@ export function Sound() {
               aria-selected={viewMode === 'linear'}
               title="Linear grid"
             >
-              ▦
+              <span className="bf-view-shape bf-view-shape-square" />
             </button>
             <button
               type="button"
@@ -959,7 +960,7 @@ export function Sound() {
               aria-selected={viewMode === 'pill'}
               title="Pill grid"
             >
-              ⬭
+              <span className="bf-view-shape bf-view-shape-pill" />
             </button>
             <button
               type="button"
@@ -969,7 +970,7 @@ export function Sound() {
               aria-selected={viewMode === 'circular'}
               title="Circular grid"
             >
-              ◯
+              <span className="bf-view-shape bf-view-shape-circle" />
             </button>
           </div>
         </div>
@@ -1064,18 +1065,43 @@ export function Sound() {
                 onChange={(n) => setSubdivisions(i, n)}
               />
 
-              <div className="bf-sound-strip-rhythm-mini" aria-hidden>
-                <BeatDots
-                  grouping={
-                    (sequence[i]?.length ?? stepsPerBar) === stepsPerBar
-                      ? grouping
-                      : [sequence[i]?.length ?? stepsPerBar]
-                  }
-                  currentStep={rowCursors[i] ?? -1}
-                  velocities={sequence[i] ?? []}
-                  size={6}
-                />
-              </div>
+              {(() => {
+                const row = sequence[i] ?? [];
+                const ringSteps = row.length;
+                const isPolyRow = ringSteps !== stepsPerBar;
+                const rowCursor = rowCursors[i] ?? -1;
+                const rowGrouping = isPolyRow ? [ringSteps] : grouping;
+                return (
+                  <div
+                    className={`bf-sound-strip-mini ${isPolyRow ? 'poly' : ''}`}
+                    aria-hidden
+                  >
+                    {Array.from({ length: ringSteps }, (_, s) => {
+                      const v = row[s] ?? 0;
+                      // Polyrhythm rows cycle group hues per cell so they
+                      // visually contrast the main grid; non-poly rows use
+                      // the canonical group coloring.
+                      const gi = isPolyRow
+                        ? s % GROUP_COLORS.length
+                        : groupIndexForStep(s, rowGrouping);
+                      const color = GROUP_COLORS[gi % GROUP_COLORS.length];
+                      const isCur = s === rowCursor;
+                      const cls = [
+                        'bf-mini-cell',
+                        v === 1 ? 'on' : v === 2 ? 'accent' : '',
+                        isCur ? 'cur' : '',
+                      ].filter(Boolean).join(' ');
+                      return (
+                        <span
+                          key={s}
+                          className={cls}
+                          style={{ '--grp-color': color } as React.CSSProperties}
+                        />
+                      );
+                    })}
+                  </div>
+                );
+              })()}
 
               <div className="bf-sound-strip-pickers">
                 <select
