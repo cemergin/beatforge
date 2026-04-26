@@ -2079,16 +2079,10 @@ input[type="number"] { font: inherit; color: inherit; }
   letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);
   flex-shrink: 0;
 }
-.bf-sound-strip-name {
-  font-family: var(--serif); font-size: var(--fs-md); font-weight: 700;
-  flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis;
-}
-.bf-sound-strip-name-col {
-  display: flex; flex-direction: column; gap: 2px;
-  flex: 1; min-width: 0;
-}
-/* Inputs masquerade as labels until focus — keeps the strip head
-   visually calm while still being editable on click. */
+/* Channel name input — masquerades as a label until focus, so the
+   strip head reads clean visually while staying click-to-edit. The
+   3-char abbreviation used elsewhere is derived from this label on
+   the fly, no separate field. */
 .bf-sound-strip-name-edit {
   font: 700 var(--fs-md) var(--serif);
   color: var(--fg);
@@ -2096,32 +2090,13 @@ input[type="number"] { font: inherit; color: inherit; }
   border: none;
   border-bottom: var(--bw-1) dashed transparent;
   padding: 1px 2px;
-  width: 100%;
-  min-width: 0;
+  flex: 1; min-width: 0;
 }
 .bf-sound-strip-name-edit:hover { border-bottom-color: var(--line); }
 .bf-sound-strip-name-edit:focus {
   outline: none;
   border-bottom-color: var(--accent);
   background: var(--bg);
-}
-.bf-sound-strip-short-edit {
-  font-family: var(--mono); font-size: var(--fs-micro);
-  letter-spacing: 0.1em; text-transform: uppercase;
-  color: var(--muted);
-  background: transparent;
-  border: none;
-  border-bottom: var(--bw-1) dashed transparent;
-  padding: 0 2px;
-  width: 4em;
-  min-width: 0;
-}
-.bf-sound-strip-short-edit:hover { border-bottom-color: var(--line); color: var(--fg); }
-.bf-sound-strip-short-edit:focus {
-  outline: none;
-  border-bottom-color: var(--accent);
-  background: var(--bg);
-  color: var(--fg);
 }
 .bf-sound-strip-trigger {
   width: 30px; height: 30px; border-radius: var(--r-circle);

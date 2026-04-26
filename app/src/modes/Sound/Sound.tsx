@@ -217,12 +217,18 @@ function defaultChannels(): Channel[] {
   // down on first load. Users still swap any channel to bell/kalimba/
   // FM/etc via the machine picker.
   return [
-    { label: 'Kick',    short: 'Kic', machine: k('kick'),     effects: defaultChannelEffects() },
-    { label: 'Snare',   short: 'Sna', machine: k('snare'),    effects: defaultChannelEffects() },
-    { label: 'Hat',     short: 'Hat', machine: k('hat'),      effects: defaultChannelEffects() },
-    { label: 'Tom',     short: 'Tom', machine: k('tom'),      effects: defaultChannelEffects() },
-    { label: 'Cowbell', short: 'Cow', machine: k('cowbell'),  effects: defaultChannelEffects() },
+    { label: 'Kick',    machine: k('kick'),     effects: defaultChannelEffects() },
+    { label: 'Snare',   machine: k('snare'),    effects: defaultChannelEffects() },
+    { label: 'Hat',     machine: k('hat'),      effects: defaultChannelEffects() },
+    { label: 'Tom',     machine: k('tom'),      effects: defaultChannelEffects() },
+    { label: 'Cowbell', machine: k('cowbell'),  effects: defaultChannelEffects() },
   ];
+}
+
+/** 3-char abbreviation derived from a channel's display name — used as
+ *  the row label in StepGrid, the ring label in CircularGrid, etc. */
+function shortFor(label: string): string {
+  return label.trim().slice(0, 3) || '·';
 }
 
 export function Sound() {
@@ -486,7 +492,6 @@ export function Sound() {
       sequence: sequence.map((row) => [...row]),
       channels: channels.map((c) => ({
         label: c.label,
-        short: c.short,
         machine: { ...c.machine },
         effects: { ...c.effects, colorFx: { ...c.effects.colorFx } },
       })),
@@ -549,7 +554,6 @@ export function Sound() {
     setGrouping([...p.grouping]);
     setChannels(p.channels.map((c) => ({
       label: c.label,
-      short: c.short,
       machine: { ...c.machine },
       effects: { ...c.effects, colorFx: { ...c.effects.colorFx } },
     })));
@@ -677,10 +681,6 @@ export function Sound() {
       if (row.length > target) return row.slice(0, target);
       return [...row, ...Array<SoundStep>(target - row.length).fill(0)];
     }));
-  }, []);
-
-  const setChannelShort = useCallback((channelIdx: number, short: string) => {
-    setChannels((cs) => cs.map((c, i) => (i === channelIdx ? { ...c, short } : c)));
   }, []);
 
   // Color-FX type swap — rebuilds the colorFx object with this type's
@@ -1053,7 +1053,7 @@ export function Sound() {
           <StepGrid
             rows={channels.map((c, i) => ({
               label: c.label,
-              short: c.short,
+              short: shortFor(c.label),
               steps: sequence[i] ?? [],
               cursor: rowCursors[i] ?? -1,
             }))}
@@ -1069,7 +1069,7 @@ export function Sound() {
             stepsPerBar={stepsPerBar}
             grouping={grouping}
             rows={channels.map((c, i) => ({
-              label: c.short,
+              label: shortFor(c.label),
               cells: sequence[i] ?? [],
               cursor: rowCursors[i] ?? -1,
             }))}
@@ -1083,7 +1083,7 @@ export function Sound() {
               stepsPerBar={stepsPerBar}
               grouping={grouping}
               rows={channels.map((c, i) => ({
-                label: c.short,
+                label: shortFor(c.label),
                 cells: sequence[i] ?? [],
                 cursor: rowCursors[i] ?? -1,
               }))}
@@ -1103,26 +1103,15 @@ export function Sound() {
             <div key={i} className="bf-sound-strip">
               <div className="bf-sound-strip-head">
                 <div className="bf-sound-strip-num">ch {i + 1}</div>
-                <div className="bf-sound-strip-name-col">
-                  <input
-                    type="text"
-                    className="bf-sound-strip-name-edit"
-                    value={c.label}
-                    onChange={(e) => setChannelLabel(i, e.target.value)}
-                    placeholder="Channel name"
-                    aria-label={`Channel ${i + 1} name`}
-                    maxLength={24}
-                  />
-                  <input
-                    type="text"
-                    className="bf-sound-strip-short-edit"
-                    value={c.short}
-                    onChange={(e) => setChannelShort(i, e.target.value.slice(0, 4))}
-                    title="Short label (used by step grid)"
-                    aria-label={`Channel ${i + 1} short label`}
-                    maxLength={4}
-                  />
-                </div>
+                <input
+                  type="text"
+                  className="bf-sound-strip-name-edit"
+                  value={c.label}
+                  onChange={(e) => setChannelLabel(i, e.target.value)}
+                  placeholder="Channel name"
+                  aria-label={`Channel ${i + 1} name`}
+                  maxLength={24}
+                />
                 <button
                   className="bf-sound-strip-trigger"
                   onClick={() => void trigger(i)}

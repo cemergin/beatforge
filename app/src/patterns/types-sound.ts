@@ -24,10 +24,11 @@ export type ColorFx =
   | { type: 'filter';    mode: 'lp' | 'hp' | 'bp'; cutoff: number; q: number; mix: number };
 
 /** A single kit channel. Ordered by position in the parent kit's
- *  channels tuple (no id field — position IS the binding). */
+ *  channels tuple (no id field — position IS the binding). The 3-char
+ *  display abbreviation is derived from `label` on the fly — no
+ *  separate field, no sync. */
 export interface Channel {
-  label: string;        // user-facing
-  short: string;        // 3-char Practice/Studio visual
+  label: string;        // user-facing display name
   machine: MachineConfig;
   effects: ChannelEffects;
 }
