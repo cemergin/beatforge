@@ -235,7 +235,17 @@ function shortFor(label: string): string {
   return label.trim().slice(0, 3) || '·';
 }
 
-export function Sound() {
+interface SoundProps {
+  /** Optional: when set, the Sound page auto-loads that soundPattern on
+   *  mount (or when the id changes). Used by Practice's "saved sounds"
+   *  cross-tab handoff so a single click takes the user from "discover"
+   *  → "play in Sound." Cleared by the parent after consumption so a
+   *  subsequent navigation back doesn't re-load. */
+  initialSoundPatternId?: string | null;
+  onConsumedInitial?: () => void;
+}
+
+export function Sound({ initialSoundPatternId, onConsumedInitial }: SoundProps = {}) {
   const [engine] = useState(() => new SoundEngine());
   useEffect(() => () => { engine.dispose(); }, [engine]);
 
@@ -594,6 +604,24 @@ export function Sound() {
     setDelayFeedback(p.delayFeedback ?? 0.35);
     setToast(`Loaded ${p.name}`);
   }, [engine, isPlaying]);
+
+  // Cross-tab handoff — when Practice (or any other surface) routes
+  // here with an `initialSoundPatternId`, fetch + load that pattern
+  // on mount. setState happens inside a microtask (`.then`) so the
+  // React-19 set-state-in-effect rule is satisfied.
+  useEffect(() => {
+    if (!initialSoundPatternId) return;
+    let active = true;
+    listSoundPatterns()
+      .then((list) => {
+        if (!active) return;
+        const p = list.find((sp) => sp.id === initialSoundPatternId);
+        if (p) loadSavedPattern(p);
+        onConsumedInitial?.();
+      })
+      .catch(() => { /* IDB unavailable — silent */ });
+    return () => { active = false; };
+  }, [initialSoundPatternId, loadSavedPattern, onConsumedInitial]);
 
   const onDeleteSaved = useCallback(async (id: string) => {
     try {

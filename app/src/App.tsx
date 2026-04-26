@@ -69,6 +69,11 @@ export default function App() {
   // Library → Studio handoff: a full Pattern object (seed, read-only).
   const [initialStudioPattern, setInitialStudioPattern] = useState<Pattern | null>(null);
 
+  // Practice → Sound handoff: a saved-soundPattern id. Cleared by Sound
+  // after consumption so a navigation back to Sound (without a fresh
+  // Practice click) doesn't re-load the same pattern.
+  const [initialSoundPatternId, setInitialSoundPatternId] = useState<string | null>(null);
+
   // User-pattern cache so Practice/Library can resolve them by id.
   const userCacheRef = useRef<Map<string, Pattern>>(new Map());
   // Transient patterns decoded from ?p= share links. Not persisted to IDB;
@@ -316,6 +321,10 @@ export default function App() {
           engine={engine}
           patternId={patternId}
           onPatternChange={setPatternId}
+          onOpenSoundPattern={(id) => {
+            setInitialSoundPatternId(id);
+            setTab('sound');
+          }}
         />
       )}
       {tab === 'studio' && (
@@ -339,7 +348,10 @@ export default function App() {
       )}
       {tab === 'sound' && (
         <Suspense fallback={<div className="bf-mode-loading">loading sound lab…</div>}>
-          <Sound />
+          <Sound
+            initialSoundPatternId={initialSoundPatternId}
+            onConsumedInitial={() => setInitialSoundPatternId(null)}
+          />
         </Suspense>
       )}
       {DEV_MODE && tab === '_patterns' && (

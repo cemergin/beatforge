@@ -27,6 +27,8 @@ import { AccentsPanel } from '../../components/metronome/AccentsPanel';
 import { SwingPanel } from '../../components/metronome/SwingPanel';
 import { KitPanel } from '../../components/metronome/KitPanel';
 import { Trainer } from './Trainer';
+import { listSoundPatterns, listSoundKits } from '../../lib/db';
+import type { SoundPattern, SoundKit } from '../../patterns/types-sound';
 
 type View = 'circular' | 'linear' | 'pill';
 
@@ -39,9 +41,13 @@ interface Props {
   engine: AudioEngine;
   patternId: string;
   onPatternChange: (id: string) => void;
+  /** When a user clicks one of their saved soundPatterns from the
+   *  sidebar, route them to the Sound tab with that pattern preloaded.
+   *  App.tsx wires this to setTab('sound') + setInitialSoundPatternId. */
+  onOpenSoundPattern?: (id: string) => void;
 }
 
-export function Practice({ engine, patternId, onPatternChange }: Props) {
+export function Practice({ engine, patternId, onPatternChange, onOpenSoundPattern }: Props) {
   const setPatternId = onPatternChange;
   const seedPattern: Pattern = useMemo(
     () => patternById(patternId) ?? PATTERNS[0],
@@ -91,6 +97,22 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
   const [highlights, setHighlights] = useState<string[]>(() => getHighlights());
   const [recent, setRecent] = useState<string[]>(() => getRecent());
   const [shareToast, setShareToast] = useState<string | null>(null);
+
+  // User's saved soundPatterns + soundKits from the new Sound system.
+  // Loaded once on mount via promise-then so the React-19
+  // set-state-in-effect lint stays happy.
+  const [savedSoundPatterns, setSavedSoundPatterns] = useState<SoundPattern[]>([]);
+  const [savedSoundKits, setSavedSoundKits] = useState<SoundKit[]>([]);
+  useEffect(() => {
+    let active = true;
+    listSoundPatterns()
+      .then((list) => { if (active) setSavedSoundPatterns(list); })
+      .catch(() => { /* IDB unavailable */ });
+    listSoundKits()
+      .then((list) => { if (active) setSavedSoundKits(list); })
+      .catch(() => { /* IDB unavailable */ });
+    return () => { active = false; };
+  }, []);
 
   // rAF cursor polling
   useEffect(() => {
@@ -419,6 +441,51 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
         {pattern.story && (
           <Disclosure className="bf-story" summary="about this rhythm">
             <p>{pattern.story}</p>
+          </Disclosure>
+        )}
+
+        {(savedSoundPatterns.length > 0 || savedSoundKits.length > 0) && (
+          <Disclosure
+            className="bf-panel bf-pattern-list-panel"
+            summaryClassName="bf-panel-head"
+            summary={
+              <>
+                <span>your sounds</span>
+                <span className="bf-pattern-list-count">{savedSoundPatterns.length + savedSoundKits.length}</span>
+              </>
+            }
+          >
+            <div className="bf-pattern-list">
+              {savedSoundPatterns.length > 0 && (
+                <div className="bf-mini-label" style={{ padding: '6px 8px 2px' }}>patterns</div>
+              )}
+              {savedSoundPatterns.map((sp) => (
+                <button
+                  key={sp.id}
+                  className="bf-pattern-row"
+                  onClick={() => onOpenSoundPattern?.(sp.id)}
+                  title={`Open in Sound — ${sp.bpm} BPM, ${sp.grouping.join('+')}`}
+                >
+                  <span className="bf-pattern-row-name">{sp.name}</span>
+                  <span className="bf-pattern-row-sig">↗ sound</span>
+                </button>
+              ))}
+              {savedSoundKits.length > 0 && (
+                <div className="bf-mini-label" style={{ padding: '6px 8px 2px' }}>kits</div>
+              )}
+              {savedSoundKits.map((kit) => (
+                <button
+                  key={kit.id}
+                  className="bf-pattern-row"
+                  onClick={() => onOpenSoundPattern?.(kit.id)}
+                  title={`${kit.channels.map((c) => c.label).join(', ')} — open Sound to apply this kit`}
+                  disabled
+                >
+                  <span className="bf-pattern-row-name">{kit.name}</span>
+                  <span className="bf-pattern-row-sig">kit</span>
+                </button>
+              ))}
+            </div>
           </Disclosure>
         )}
 
