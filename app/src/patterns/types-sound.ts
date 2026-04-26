@@ -42,3 +42,28 @@ export function defaultChannelEffects(): ChannelEffects {
     delaySend: 0,
   };
 }
+
+/** A saved Sound-page pattern. Captures BOTH the rhythm (sequence) and
+ *  the sound design (channels' machine configs + effects) — that
+ *  unification is the whole point of the Sound→Studio rewrite. The
+ *  legacy Pattern type in patterns/types.ts uses voice-keyed tracks +
+ *  global kit; this type uses positional channels + per-channel machine. */
+export interface SoundPattern {
+  id: string;
+  name: string;
+
+  bpm: number;                   // quarter-note BPM
+  grouping: number[];            // additive (e.g. [2,2,3] for 7/8)
+  stepUnit: 4 | 8 | 16;          // denominator of the step note value
+
+  /** [channelIdx][stepIdx] — outer length must equal channels.length;
+   *  inner length must equal sum(grouping). */
+  sequence: number[][];
+
+  /** Channels the user has configured. Order is positional — channels[i]
+   *  binds to sequence[i]. */
+  channels: Channel[];
+
+  createdAt: number;
+  updatedAt: number;
+}

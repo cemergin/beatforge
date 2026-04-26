@@ -1,8 +1,14 @@
 // IndexedDB persistence for user patterns (Studio output).
 // See spec §8.3 — IndexedDB via Dexie, `userPatterns` keyed by `id`.
+//
+// As of v2, also persists Sound-page patterns in a parallel
+// `soundPatterns` table. The two schemas are incompatible (voice-keyed
+// vs positional channels), so they coexist until the old Studio is
+// retired and a one-shot migration lifts userPatterns → soundPatterns.
 
 import Dexie, { type Table } from 'dexie';
 import type { Pattern } from '../patterns/types';
+import type { SoundPattern } from '../patterns/types-sound';
 import { PatternSchema, UserPatternSchema } from '../patterns/schema';
 
 export interface UserPattern extends Pattern {
@@ -13,11 +19,18 @@ export interface UserPattern extends Pattern {
 
 class BFDatabase extends Dexie {
   userPatterns!: Table<UserPattern, string>;
+  soundPatterns!: Table<SoundPattern, string>;
 
   constructor() {
     super('beatforge');
     this.version(1).stores({
       userPatterns: 'id, region, createdAt, updatedAt',
+    });
+    // v2: add soundPatterns. No migration needed — Dexie just creates
+    // the new object store; existing userPatterns are untouched.
+    this.version(2).stores({
+      userPatterns: 'id, region, createdAt, updatedAt',
+      soundPatterns: 'id, updatedAt',
     });
   }
 }
@@ -87,4 +100,42 @@ export async function loadAllSafe(): Promise<LoadedUserPattern[]> {
       const bu = b.pattern?.updatedAt ?? 0;
       return bu - au;
     });
+}
+
+// ── Sound-page patterns (v2) ───────────────────────────────────────
+// Lighter-touch validation than userPatterns: we control both sides of
+// the read/write contract (no seed library to validate against), so a
+// shape check is enough to refuse genuinely corrupted IDB rows.
+
+export function isValidSoundPattern(p: unknown): p is SoundPattern {
+  if (!p || typeof p !== 'object') return false;
+  const o = p as Record<string, unknown>;
+  return typeof o.id === 'string'
+    && typeof o.name === 'string'
+    && typeof o.bpm === 'number'
+    && Array.isArray(o.grouping)
+    && (o.stepUnit === 4 || o.stepUnit === 8 || o.stepUnit === 16)
+    && Array.isArray(o.sequence)
+    && Array.isArray(o.channels)
+    && typeof o.createdAt === 'number'
+    && typeof o.updatedAt === 'number';
+}
+
+export async function saveSoundPattern(p: SoundPattern): Promise<void> {
+  await db.soundPatterns.put(p);
+}
+
+export async function deleteSoundPattern(id: string): Promise<void> {
+  await db.soundPatterns.delete(id);
+}
+
+/** Returns valid SoundPatterns sorted by updatedAt desc. Corrupted rows
+ *  are silently skipped (the Studio-side loadAllSafe surfaces them for
+ *  user inspection; for Sound we just drop — corruption is rarer in a
+ *  schema we both own). */
+export async function listSoundPatterns(): Promise<SoundPattern[]> {
+  const raws = await db.soundPatterns.toArray();
+  return raws
+    .filter(isValidSoundPattern)
+    .sort((a, b) => b.updatedAt - a.updatedAt);
 }

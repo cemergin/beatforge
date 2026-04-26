@@ -8,12 +8,27 @@ import { VOICE_MACHINES, type VoiceArchetypeId } from '../../audio/machines/regi
 import type { MachineConfig } from '../../audio/machines/types';
 import {
   type Channel,
+  type SoundPattern,
   defaultChannelEffects,
 } from '../../patterns/types-sound';
+import {
+  saveSoundPattern,
+  listSoundPatterns,
+  deleteSoundPattern,
+} from '../../lib/db';
 import { SpectrumAnalyzer } from './SpectrumAnalyzer';
 import { Knob } from './Knob';
 import { StepGrid } from '../../components/StepGrid';
 import { TransportBar } from '../../components/TransportBar';
+
+function kebabId(name: string): string {
+  const base = name
+    .normalize('NFD')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '') || 'pattern';
+  return `${base}-${Date.now().toString(36)}`;
+}
 
 const NUM_CHANNELS = 5;
 
@@ -93,6 +108,42 @@ export function Sound() {
   const [meter, setMeter] = useState<MeterPreset>(DEFAULT_METER);
   const stepsPerBar = sumGroup(meter.grouping);
 
+  // Pattern persistence — name + last-saved id (`null` until first save).
+  // savedId is preserved across edits so a re-Save updates in place
+  // rather than creating a duplicate.
+  const [name, setName] = useState('Untitled');
+  const [savedId, setSavedId] = useState<string | null>(null);
+  const [savedList, setSavedList] = useState<SoundPattern[]>([]);
+  const [toast, setToast] = useState<string | null>(null);
+
+  // Hydrate the saved list on mount + after every save/delete. The
+  // mount effect uses promise-then form so setState lands in a
+  // microtask (React-19's set-state-in-effect rule rejects an inline
+  // setState even via an awaited helper). Save/delete handlers can
+  // still call refreshSavedList directly — that runs outside an
+  // effect, so the rule doesn't apply.
+  const refreshSavedList = useCallback(async () => {
+    try {
+      const list = await listSoundPatterns();
+      setSavedList(list);
+    } catch { /* IDB unavailable — keep silent, list stays empty */ }
+  }, []);
+  useEffect(() => {
+    let active = true;
+    listSoundPatterns()
+      .then((list) => { if (active) setSavedList(list); })
+      .catch(() => { /* IDB unavailable */ });
+    return () => { active = false; };
+  }, []);
+
+  // Auto-clear toasts after 1.8s. The toast value drives the effect so
+  // setting a NEW toast resets the timer.
+  useEffect(() => {
+    if (!toast) return;
+    const t = setTimeout(() => setToast(null), 1800);
+    return () => clearTimeout(t);
+  }, [toast]);
+
   // Refs so the keyboard handler reads the latest channels without
   // re-binding the listener on every channel change.
   const channelsRef = useRef(channels);
@@ -170,6 +221,117 @@ export function Sound() {
     setSequence((prev) => resizeSequence(prev, sumGroup(m.grouping)));
   }, []);
 
+  // Tap-tempo state. Sliding 2-second window of taps; BPM is the
+  // average over the most recent 2..N intervals. Lives in a ref so it
+  // doesn't trigger re-renders, and so successive taps can read the
+  // latest array without stale-closure issues.
+  const tapTimes = useRef<number[]>([]);
+  const onTap = useCallback(() => {
+    const now = performance.now();
+    tapTimes.current = tapTimes.current.filter((t) => now - t < 2000);
+    tapTimes.current.push(now);
+    const taps = tapTimes.current;
+    if (taps.length < 2) return;
+    let sum = 0;
+    for (let i = 1; i < taps.length; i++) sum += taps[i] - taps[i - 1];
+    const avgInterval = sum / (taps.length - 1);
+    const candidate = Math.round(60000 / avgInterval);
+    if (candidate >= 30 && candidate <= 300) setBpm(candidate);
+  }, []);
+
+  // Save / load / delete handlers. Each `save` either creates a new
+  // pattern (no savedId) or updates the current one (preserves
+  // createdAt). loadSavedPattern fully replaces editor state — name,
+  // bpm, meter, channels, sequence — and resets the playhead.
+  const onSave = useCallback(async () => {
+    const trimmed = name.trim() || 'Untitled';
+    const now = Date.now();
+    const id = savedId ?? kebabId(trimmed);
+    const existing = savedId ? savedList.find((p) => p.id === savedId) : undefined;
+    const pattern: SoundPattern = {
+      id,
+      name: trimmed,
+      bpm,
+      grouping: [...meter.grouping],
+      stepUnit: meter.stepUnit,
+      sequence: sequence.map((row) => [...row]),
+      channels: channels.map((c) => ({
+        label: c.label,
+        short: c.short,
+        machine: { ...c.machine },
+        effects: { ...c.effects, colorFx: { ...c.effects.colorFx } },
+      })),
+      createdAt: existing?.createdAt ?? now,
+      updatedAt: now,
+    };
+    try {
+      await saveSoundPattern(pattern);
+      setSavedId(id);
+      setName(trimmed);
+      setToast(savedId ? 'Updated' : 'Saved');
+      await refreshSavedList();
+    } catch {
+      setToast('Save failed');
+    }
+  }, [name, savedId, savedList, bpm, meter, sequence, channels, refreshSavedList]);
+
+  const loadSavedPattern = useCallback((p: SoundPattern) => {
+    if (isPlaying) {
+      engine.stop();
+      setIsPlaying(false);
+      setCurrentStep(-1);
+    }
+    setName(p.name);
+    setSavedId(p.id);
+    setBpm(p.bpm);
+    // Reconstruct meter from the saved grouping + stepUnit. If it
+    // matches a built-in preset, use that (so the meter chips show
+    // the right one as active); otherwise synthesize an ad-hoc preset.
+    const matchedPreset = SOUND_METERS.find(
+      (m) =>
+        m.stepUnit === p.stepUnit &&
+        m.grouping.length === p.grouping.length &&
+        m.grouping.every((v, i) => v === p.grouping[i]),
+    );
+    setMeter(matchedPreset ?? {
+      label: `${sumGroup(p.grouping) * (p.stepUnit / 4)}/${p.stepUnit}`,
+      grouping: [...p.grouping],
+      stepUnit: p.stepUnit,
+    });
+    setChannels(p.channels.map((c) => ({
+      label: c.label,
+      short: c.short,
+      machine: { ...c.machine },
+      effects: { ...c.effects, colorFx: { ...c.effects.colorFx } },
+    })));
+    // Coerce stored numbers into SoundStep (saved as number[][] for
+    // forward-compat — we may broaden velocity beyond 0/1/2 later).
+    setSequence(p.sequence.map((row) => row.map((v) => (v === 2 ? 2 : v === 1 ? 1 : 0) as SoundStep)));
+    setToast(`Loaded ${p.name}`);
+  }, [engine, isPlaying]);
+
+  const onDeleteSaved = useCallback(async (id: string) => {
+    try {
+      await deleteSoundPattern(id);
+      if (savedId === id) setSavedId(null);
+      await refreshSavedList();
+      setToast('Deleted');
+    } catch {
+      setToast('Delete failed');
+    }
+  }, [savedId, refreshSavedList]);
+
+  const onNewBlank = useCallback(() => {
+    if (isPlaying) {
+      engine.stop();
+      setIsPlaying(false);
+      setCurrentStep(-1);
+    }
+    setName('Untitled');
+    setSavedId(null);
+    setSequence(emptySequence(stepsPerBar));
+  }, [engine, isPlaying, stepsPerBar]);
+
   // ASDFG → channels 1-5 at amp 1.0; QWERT → same channels at amp 2.0
   // (accent). Numeric 1-5 also accepted.
   useEffect(() => {
@@ -193,12 +355,14 @@ export function Sound() {
     return () => window.removeEventListener('keydown', onKey);
   }, [trigger]);
 
-  // Space toggles play/stop. Skipped when typing in an input (e.g. BPM).
+  // Space toggles play/stop. (T-for-tap can't go here — the audition
+  // keyboard already maps T to channel-5 accent.) Skipped when typing
+  // in an input; tap-tempo lives on its transport button instead.
   useEffect(() => {
     const onSpace = (e: KeyboardEvent) => {
       if (e.code !== 'Space') return;
-      const t = e.target as HTMLElement | null;
-      if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+      const el = e.target as HTMLElement | null;
+      if (el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.isContentEditable)) return;
       e.preventDefault();
       void onPlayToggle();
     };
@@ -260,12 +424,71 @@ export function Sound() {
       </header>
 
       <section className="bf-sound-sequencer">
+        <div className="bf-sound-patternbar">
+          <input
+            className="bf-sound-name"
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Pattern name"
+            aria-label="Pattern name"
+          />
+          <button
+            type="button"
+            className="bf-sound-saveBtn"
+            onClick={() => void onSave()}
+            title={savedId ? 'Update saved pattern' : 'Save to local'}
+          >
+            {savedId ? 'update' : 'save'}
+          </button>
+          <button
+            type="button"
+            className="bf-sound-newBtn"
+            onClick={onNewBlank}
+            title="New blank pattern"
+          >
+            new
+          </button>
+          <div className="bf-sound-savedlist" role="list">
+            {savedList.length === 0 && (
+              <span className="bf-sound-savedempty">no saved patterns yet</span>
+            )}
+            {savedList.map((p) => (
+              <span
+                key={p.id}
+                role="listitem"
+                className={`bf-sound-savedchip ${p.id === savedId ? 'on' : ''}`}
+              >
+                <button
+                  type="button"
+                  className="bf-sound-savedchip-load"
+                  onClick={() => loadSavedPattern(p)}
+                  title={`Load — ${p.bpm} BPM, ${p.grouping.join('+')}`}
+                >
+                  {p.name}
+                </button>
+                <button
+                  type="button"
+                  className="bf-sound-savedchip-del"
+                  onClick={() => void onDeleteSaved(p.id)}
+                  title="Delete"
+                  aria-label={`Delete ${p.name}`}
+                >
+                  ×
+                </button>
+              </span>
+            ))}
+          </div>
+          {toast && <span className="bf-sound-toast">{toast}</span>}
+        </div>
+
         <TransportBar
           isPlaying={isPlaying}
           bpm={bpm}
           onPlayToggle={() => void onPlayToggle()}
           onBpmChange={setBpm}
           onClear={onClear}
+          onTap={onTap}
           rightSlot={
             <div className="bf-meter-pills" aria-label="Meter">
               {SOUND_METERS.map((m) => (

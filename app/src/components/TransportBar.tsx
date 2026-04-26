@@ -8,6 +8,10 @@ interface Props {
   onPlayToggle: () => void;
   onBpmChange: (b: number) => void;
   onClear?: () => void;
+  /** When provided, renders a "tap" button between BPM and clear. The
+   *  parent owns the tap-time array + averaging — this is just the
+   *  trigger surface. */
+  onTap?: () => void;
   /** Optional extra controls slotted to the right (e.g. accent levels,
    *  swing, count-in). Keeps the shared component lean. */
   rightSlot?: React.ReactNode;
@@ -22,6 +26,7 @@ export function TransportBar({
   onPlayToggle,
   onBpmChange,
   onClear,
+  onTap,
   rightSlot,
 }: Props) {
   return (
@@ -53,6 +58,17 @@ export function TransportBar({
           }}
         />
       </div>
+
+      {onTap && (
+        <button
+          type="button"
+          className="bf-transport-tap"
+          onClick={onTap}
+          title="Tap tempo (T)"
+        >
+          tap
+        </button>
+      )}
 
       {onClear && (
         <button
