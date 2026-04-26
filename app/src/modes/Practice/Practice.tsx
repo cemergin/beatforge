@@ -280,7 +280,17 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
       />
     ),
     linear: <LinearGrid pattern={{ ...pattern, grouping }} cursors={cursors} onToggle={toggleStep} />,
-    pill: <PillGrid pattern={{ ...pattern, grouping }} cursors={cursors} onToggle={toggleStep} />,
+    pill: (
+      <PillGrid
+        stepsPerBar={pattern.steps}
+        grouping={grouping}
+        rows={circRows}
+        onToggle={(rowIdx, stepIdx) => {
+          const tr = trackList[rowIdx];
+          if (tr) toggleStep(tr, stepIdx);
+        }}
+      />
+    ),
   }[view];
 
   const starred = isHighlighted(patternId);

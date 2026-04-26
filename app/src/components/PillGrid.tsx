@@ -1,48 +1,66 @@
-import { trackMeta, type Pattern, type VoiceId } from '../patterns/types';
+// Generic pill-grid sequencer. Each row's cells are clustered into
+// pills along the additive grouping (e.g. 7/8 [2,2,3] → three pill
+// clusters of 2, 2, 3 cells), so the rhythmic structure reads as
+// punctuated phrases instead of an undifferentiated row. Polyrhythm
+// rows render as one uniform pill (the grouping doesn't apply at
+// their rate).
+//
+// Engine-agnostic: takes positional rows + grouping, mirrors the
+// shape of CircularGrid + StepGrid so all three views drive off the
+// same state.
+
 import { GROUP_COLORS } from './visual-helpers';
 
-interface Props {
-  pattern: Pattern;
-  cursors: Record<string, number>;
-  onToggle?: (track: VoiceId, step: number) => void;
+export interface PillGridRow {
+  label: string;
+  /** Velocities per step. Length defines this row's subdivisions. */
+  cells: number[];
+  /** Audible step on this row, or -1 if none. */
+  cursor: number;
 }
 
-export function PillGrid({ pattern, cursors, onToggle }: Props) {
-  const tracks = Object.keys(pattern.tracks) as VoiceId[];
-  const groups = pattern.grouping;
-  const mainSteps = pattern.steps;
+interface Props {
+  /** Main-grid step count (== sum(grouping)). */
+  stepsPerBar: number;
+  /** Additive grouping for non-poly rows. */
+  grouping: number[];
+  /** One row per track. Polyrhythm rows are detected by row.cells.length
+   *  ≠ stepsPerBar. */
+  rows: PillGridRow[];
+  onToggle?: (rowIdx: number, stepIdx: number) => void;
+}
 
+export function PillGrid({ stepsPerBar, grouping, rows, onToggle }: Props) {
   const groupStarts: number[] = [];
   let acc = 0;
-  groups.forEach((g) => { groupStarts.push(acc); acc += g; });
+  grouping.forEach((g) => { groupStarts.push(acc); acc += g; });
 
   return (
     <div className="bf-pill">
-      {tracks.map((tr) => {
-        const td = pattern.tracks[tr]!;
-        const meta = trackMeta(td, mainSteps);
-        const isPoly = meta.subdivisions !== mainSteps;
-        const cursor = cursors[tr] ?? -1;
+      {rows.map((row, ri) => {
+        const ringSteps = row.cells.length;
+        const isPoly = ringSteps !== stepsPerBar;
 
-        // Polyrhythm tracks get a single uniform pill — the grouping doesn't apply.
+        // Polyrhythm rows: one uniform pill — the canonical grouping
+        // doesn't apply at their rate. Cycling group hues per cell so
+        // they visually contrast the main-grid rows below.
         if (isPoly) {
           return (
-            <div key={tr} className="bf-pill-row poly">
+            <div key={ri} className="bf-pill-row poly">
               <div className="bf-pill-label">
-                {tr}
-                <span className="bf-poly-tag">{meta.subdivisions}</span>
+                {row.label}
+                <span className="bf-poly-tag">{ringSteps}</span>
               </div>
               <div className="bf-pill-groups">
                 <div
                   className="bf-pill-group"
                   style={{ borderColor: GROUP_COLORS[2] }}
                 >
-                  {Array.from({ length: meta.subdivisions }).map((_, s) => {
-                    const localIdx = s % meta.cycle;
-                    const vel = meta.pattern[localIdx];
+                  {Array.from({ length: ringSteps }).map((_, s) => {
+                    const vel = row.cells[s] ?? 0;
                     const color = GROUP_COLORS[s % GROUP_COLORS.length];
                     const active = vel > 0;
-                    const isCur = s === cursor;
+                    const isCur = s === row.cursor;
                     return (
                       <button
                         key={s}
@@ -53,8 +71,8 @@ export function PillGrid({ pattern, cursors, onToggle }: Props) {
                           borderColor: color,
                           opacity: active ? (vel === 2 ? 1 : 0.5) : 0.9,
                         }}
-                        onClick={() => onToggle?.(tr, localIdx)}
-                        aria-label={`${tr} step ${s + 1} velocity ${vel}`}
+                        onClick={() => onToggle?.(ri, s)}
+                        aria-label={`${row.label} step ${s + 1} velocity ${vel}`}
                         aria-pressed={active}
                       />
                     );
@@ -66,10 +84,10 @@ export function PillGrid({ pattern, cursors, onToggle }: Props) {
         }
 
         return (
-          <div key={tr} className="bf-pill-row">
-            <div className="bf-pill-label">{tr}</div>
+          <div key={ri} className="bf-pill-row">
+            <div className="bf-pill-label">{row.label}</div>
             <div className="bf-pill-groups">
-              {groups.map((glen, gi) => (
+              {grouping.map((glen, gi) => (
                 <div
                   key={gi}
                   className="bf-pill-group"
@@ -77,11 +95,10 @@ export function PillGrid({ pattern, cursors, onToggle }: Props) {
                 >
                   {Array.from({ length: glen }).map((_, i) => {
                     const s = groupStarts[gi] + i;
-                    const localIdx = s % meta.cycle;
-                    const vel = meta.pattern[localIdx];
+                    const vel = row.cells[s] ?? 0;
                     const color = GROUP_COLORS[gi % GROUP_COLORS.length];
                     const active = vel > 0;
-                    const isCur = s === cursor;
+                    const isCur = s === row.cursor;
                     return (
                       <button
                         key={i}
@@ -92,8 +109,8 @@ export function PillGrid({ pattern, cursors, onToggle }: Props) {
                           borderColor: color,
                           opacity: active ? (vel === 2 ? 1 : 0.5) : 0.9,
                         }}
-                        onClick={() => onToggle?.(tr, localIdx)}
-                        aria-label={`${tr} step ${s + 1} velocity ${vel}`}
+                        onClick={() => onToggle?.(ri, s)}
+                        aria-label={`${row.label} step ${s + 1} velocity ${vel}`}
                         aria-pressed={active}
                       />
                     );

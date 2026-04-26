@@ -2,7 +2,7 @@
 // knobs for synth + per-channel mixer (level / pan / sends),
 // audition triggers, ASDFG/QWERT keyboard.
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { SoundEngine, type SoundSequence, type SoundStep } from '../../audio/runtime/sound-engine';
 import { VOICE_MACHINES, type VoiceArchetypeId } from '../../audio/machines/registry';
 import type { MachineConfig } from '../../audio/machines/types';
@@ -24,6 +24,7 @@ import { TransportBar } from '../../components/TransportBar';
 import { Disclosure } from '../../components/Disclosure';
 import { BeatDots } from '../../components/BeatDots';
 import { CircularGrid } from '../../components/CircularGrid';
+import { PillGrid } from '../../components/PillGrid';
 
 const COLOR_FX_TYPES: ColorFx['type'][] = ['none', 'overdrive', 'bitcrush', 'filter'];
 
@@ -180,8 +181,13 @@ export function Sound() {
   // channels are at main rate every entry equals currentStep.
   const [rowCursors, setRowCursors] = useState<number[]>([]);
   const [meter, setMeter] = useState<MeterPreset>(DEFAULT_METER);
-  const stepsPerBar = sumGroup(meter.grouping);
-  const [viewMode, setViewMode] = useState<'grid' | 'circular'>('grid');
+  // grouping is mutable per-permutation while meter stays the canonical
+  // preset. Picking a different permutation reorders the additive
+  // groups but keeps stepsPerBar (and thus the sequence column count)
+  // unchanged. Switching meter resets grouping to that preset's canonical.
+  const [grouping, setGrouping] = useState<number[]>(DEFAULT_METER.grouping);
+  const stepsPerBar = sumGroup(grouping);
+  const [viewMode, setViewMode] = useState<'linear' | 'pill' | 'circular'>('linear');
 
   // Pattern persistence — name + last-saved id (`null` until first save).
   // savedId is preserved across edits so a re-Save updates in place
@@ -259,7 +265,7 @@ export function Sound() {
   useEffect(() => { engine.setBpm(bpm); }, [engine, bpm]);
   useEffect(() => { engine.setStepUnit(meter.stepUnit); }, [engine, meter.stepUnit]);
   useEffect(() => { engine.setStepsPerBar(stepsPerBar); }, [engine, stepsPerBar]);
-  useEffect(() => { engine.setGrouping(meter.grouping); }, [engine, meter.grouping]);
+  useEffect(() => { engine.setGrouping(grouping); }, [engine, grouping]);
   useEffect(() => { engine.setSwing(swing); }, [engine, swing]);
   useEffect(() => { engine.setAccents(strongAmp, weakAmp); }, [engine, strongAmp, weakAmp]);
   useEffect(() => { engine.setMasterVolume(masterVolume); }, [engine, masterVolume]);
@@ -316,11 +322,17 @@ export function Sound() {
     }
   }, [engine, isPlaying, countInBars]);
 
-  // Cycle a cell: 0 → 1 → 2 → 0. Click toggles, the third click resets.
+  // Cycle a cell: 0 → 2 (strong) → 1 (weak/ghost) → 0. First click puts
+  // an audible accent down — that's the "useful" gesture. Second click
+  // demotes to a ghost; third click clears. Mirrors Studio's order so
+  // muscle memory carries.
   const onToggleCell = useCallback((rowIdx: number, stepIdx: number) => {
     setSequence((prev) => prev.map((row, r) => {
       if (r !== rowIdx) return row;
-      return row.map((v, s) => (s === stepIdx ? (((v + 1) % 3) as SoundStep) : v));
+      return row.map((v, s) => {
+        if (s !== stepIdx) return v;
+        return (v === 0 ? 2 : v === 2 ? 1 : 0) as SoundStep;
+      });
     }));
   }, []);
 
@@ -330,11 +342,42 @@ export function Sound() {
 
   // Switch meter — resize each row to the new bar length so existing
   // beats survive when possible (truncate excess on shrink, pad with
-  // 0s on grow). The engine re-anchors automatically on setStepUnit.
+  // 0s on grow). Also reset grouping to the new preset's canonical
+  // (a different meter has its own native grouping). Engine re-anchors
+  // automatically on setStepUnit.
   const onMeterChange = useCallback((m: MeterPreset) => {
     setMeter(m);
+    setGrouping([...m.grouping]);
     setSequence((prev) => resizeSequence(prev, sumGroup(m.grouping)));
   }, []);
+
+  // Permutation picker — keep stepsPerBar but reorder the additive
+  // groups. The sequence cells stay where they are (positionally); the
+  // visual coloring + downbeats shift to the new boundaries.
+  const onGroupingChange = useCallback((g: number[]) => {
+    setGrouping([...g]);
+  }, []);
+
+  // Enumerate up to 6 permutations of the canonical grouping. Same
+  // bounded-search pattern as Practice — full permutation enumeration
+  // for length-8 groupings is 40k+ entries, which would freeze the tab.
+  const groupingOptions = useMemo(() => {
+    const canon = meter.grouping;
+    const MAX_RESULTS = 6;
+    const out = new Set<string>();
+    const permute = (a: number[], m: number[] = []): boolean => {
+      if (out.size >= MAX_RESULTS) return true;
+      if (a.length === 0) { out.add(m.join(',')); return out.size >= MAX_RESULTS; }
+      for (let i = 0; i < a.length; i++) {
+        const cur = [...a];
+        const nx = cur.splice(i, 1);
+        if (permute(cur, m.concat(nx))) return true;
+      }
+      return false;
+    };
+    permute(canon);
+    return [...out].map((s) => s.split(',').map(Number));
+  }, [meter.grouping]);
 
   // Tap-tempo state. Sliding 2-second window of taps; BPM is the
   // average over the most recent 2..N intervals. Lives in a ref so it
@@ -367,7 +410,7 @@ export function Sound() {
       id,
       name: trimmed,
       bpm,
-      grouping: [...meter.grouping],
+      grouping: [...grouping],
       stepUnit: meter.stepUnit,
       sequence: sequence.map((row) => [...row]),
       channels: channels.map((c) => ({
@@ -399,7 +442,7 @@ export function Sound() {
       setToast('Save failed');
     }
   }, [
-    name, savedId, savedList, bpm, meter, sequence, channels,
+    name, savedId, savedList, bpm, meter, grouping, sequence, channels,
     countInBars, swing, strongAmp, weakAmp,
     reverbWet, reverbSize, reverbDecay,
     delayWet, delayTime, delayFeedback,
@@ -429,6 +472,10 @@ export function Sound() {
       grouping: [...p.grouping],
       stepUnit: p.stepUnit,
     });
+    // Restore the SAVED grouping (which may be a permutation of the
+    // canonical) — meter holds the canonical so permutations regenerate;
+    // this keeps the user's chosen ordering.
+    setGrouping([...p.grouping]);
     setChannels(p.channels.map((c) => ({
       label: c.label,
       short: c.short,
@@ -697,6 +744,26 @@ export function Sound() {
             </div>
           }
         />
+        {groupingOptions.length > 1 && (
+          <div className="bf-sound-grouping-picker" role="toolbar" aria-label="Grouping permutations">
+            <span className="bf-sound-grouping-label">grouping</span>
+            {groupingOptions.map((g, i) => {
+              const isCurrent = g.join('+') === grouping.join('+');
+              return (
+                <button
+                  key={i}
+                  type="button"
+                  className={`bf-sound-grouping-btn ${isCurrent ? 'on' : ''}`}
+                  onClick={() => onGroupingChange(g)}
+                  title={`Apply ${g.join('+')} grouping`}
+                >
+                  {g.join('+')}
+                </button>
+              );
+            })}
+          </div>
+        )}
+
         <div className="bf-sound-feelbar">
           <div className="bf-feel-control">
             <span className="bf-feel-label">count-in</span>
@@ -869,20 +936,30 @@ export function Sound() {
 
         <div className="bf-sound-beatdots-wrap">
           <BeatDots
-            grouping={meter.grouping}
+            grouping={grouping}
             currentStep={currentStep}
             size={12}
           />
           <div className="bf-sound-view-toggle" role="tablist" aria-label="Grid view">
             <button
               type="button"
-              className={`bf-sound-view-btn ${viewMode === 'grid' ? 'on' : ''}`}
-              onClick={() => setViewMode('grid')}
+              className={`bf-sound-view-btn ${viewMode === 'linear' ? 'on' : ''}`}
+              onClick={() => setViewMode('linear')}
               role="tab"
-              aria-selected={viewMode === 'grid'}
+              aria-selected={viewMode === 'linear'}
               title="Linear grid"
             >
               ▦
+            </button>
+            <button
+              type="button"
+              className={`bf-sound-view-btn ${viewMode === 'pill' ? 'on' : ''}`}
+              onClick={() => setViewMode('pill')}
+              role="tab"
+              aria-selected={viewMode === 'pill'}
+              title="Pill grid"
+            >
+              ⬭
             </button>
             <button
               type="button"
@@ -897,7 +974,7 @@ export function Sound() {
           </div>
         </div>
 
-        {viewMode === 'grid' ? (
+        {viewMode === 'linear' && (
           <StepGrid
             rows={channels.map((c, i) => ({
               label: c.label,
@@ -907,14 +984,29 @@ export function Sound() {
             }))}
             headCursor={currentStep}
             stepsPerBar={stepsPerBar}
-            grouping={meter.grouping}
+            grouping={grouping}
             onToggleCell={onToggleCell}
           />
-        ) : (
+        )}
+
+        {viewMode === 'pill' && (
+          <PillGrid
+            stepsPerBar={stepsPerBar}
+            grouping={grouping}
+            rows={channels.map((c, i) => ({
+              label: c.short,
+              cells: sequence[i] ?? [],
+              cursor: rowCursors[i] ?? -1,
+            }))}
+            onToggle={onToggleCell}
+          />
+        )}
+
+        {viewMode === 'circular' && (
           <div className="bf-sound-circular-wrap">
             <CircularGrid
               stepsPerBar={stepsPerBar}
-              grouping={meter.grouping}
+              grouping={grouping}
               rows={channels.map((c, i) => ({
                 label: c.short,
                 cells: sequence[i] ?? [],
@@ -976,7 +1068,7 @@ export function Sound() {
                 <BeatDots
                   grouping={
                     (sequence[i]?.length ?? stepsPerBar) === stepsPerBar
-                      ? meter.grouping
+                      ? grouping
                       : [sequence[i]?.length ?? stepsPerBar]
                   }
                   currentStep={rowCursors[i] ?? -1}

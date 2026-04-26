@@ -2674,6 +2674,40 @@ input[type="number"] { font: inherit; color: inherit; }
 .bf-sound-view-btn:hover { color: var(--fg); }
 .bf-sound-view-btn.on { background: var(--accent); color: #fff; }
 
+/* Grouping permutation picker — sits under the transport, only
+   appears when the canonical grouping has multiple permutations. */
+.bf-sound-grouping-picker {
+  display: flex; flex-wrap: wrap; align-items: center;
+  gap: var(--sp-1) var(--sp-2);
+  padding: var(--sp-2) 0;
+  border-bottom: var(--bw-1) dashed var(--line);
+}
+.bf-sound-grouping-label {
+  font-family: var(--mono); font-size: var(--fs-micro);
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--muted);
+  margin-right: var(--sp-1);
+}
+.bf-sound-grouping-btn {
+  font-family: var(--mono); font-size: var(--fs-micro);
+  padding: 4px 10px;
+  border: var(--bw-1) solid var(--line);
+  border-radius: 999px;
+  background: var(--bg);
+  color: var(--muted);
+  cursor: pointer;
+  transition: background var(--t-fast), color var(--t-fast), border-color var(--t-fast);
+}
+.bf-sound-grouping-btn:hover {
+  color: var(--fg);
+  border-color: var(--accent);
+}
+.bf-sound-grouping-btn.on {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
 /* Circular view wrapper — center the SVG and give it some breathing
    room so it doesn't slam into the FX bar above or the channels grid
    below. */
