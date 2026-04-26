@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import type { Pattern } from '../../patterns/types';
 import { BeatDots } from '../../components/BeatDots';
 import { naturalTempo } from '../../audio/tempo';
@@ -10,7 +11,12 @@ interface Props {
   onToggleStar?: (id: string) => void;
 }
 
-export function PatternCard({ pattern, starred, onClick, onToggleStar }: Props) {
+// Memoized — Library re-renders on every keystroke in search /
+// filter chip click / page change. Without React.memo + stable
+// callback identities, all 36 cards re-render every time even
+// though only one or two might actually need to. Library passes
+// stable useCallback'd onClick + onToggleStar.
+function PatternCardImpl({ pattern, starred, onClick, onToggleStar }: Props) {
   const region = REGION_BY_ID[pattern.region];
   const tempo = naturalTempo(pattern.bpm.default, pattern.stepUnit, pattern.timeSig);
   return (
@@ -72,3 +78,5 @@ export function PatternCard({ pattern, starred, onClick, onToggleStar }: Props) 
     </button>
   );
 }
+
+export const PatternCard = memo(PatternCardImpl);

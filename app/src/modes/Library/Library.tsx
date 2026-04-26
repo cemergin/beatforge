@@ -191,6 +191,12 @@ export function Library({ engine, onLoadInPractice, onOpenInStudio }: Props) {
     setHighlights(toggleHighlight(id));
   }, []);
 
+  // Stabilized click handler — passing this to PatternCard (memoized)
+  // means typing in search no longer re-renders all 36 cards. Was a
+  // perf cliff on web devices: each keystroke rebuilt the inline
+  // arrow function, breaking shallow-equal prop check.
+  const openDetail = useCallback((id: string) => setDetailId(id), []);
+
   const detailPattern = detailId ? patternById(detailId) ?? null : null;
 
   return (
@@ -336,7 +342,7 @@ export function Library({ engine, onLoadInPractice, onOpenInStudio }: Props) {
                     <PatternCard
                       pattern={p}
                       starred={highlights.includes(p.id)}
-                      onClick={(id) => setDetailId(id)}
+                      onClick={openDetail}
                       onToggleStar={onToggleStar}
                     />
                   </div>
@@ -427,7 +433,7 @@ export function Library({ engine, onLoadInPractice, onOpenInStudio }: Props) {
                             key={p.id}
                             pattern={p}
                             starred={highlights.includes(p.id)}
-                            onClick={(id) => setDetailId(id)}
+                            onClick={openDetail}
                             onToggleStar={onToggleStar}
                           />
                         ))}

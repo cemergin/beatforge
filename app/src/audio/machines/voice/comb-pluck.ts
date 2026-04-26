@@ -9,10 +9,15 @@ import type { KnobSpec, ModValues, VoiceCtx, VoiceMachine } from '../types';
 import { knobValue } from '../types';
 import { createBiquad, createGain, createNoise, createOsc } from '../_shared/audio';
 
+// `damping` is the LP cutoff INSIDE the feedback loop — higher cutoff
+// = less actual damping = more sustain. Capped at 5500 Hz because
+// above that the loop can self-oscillate at high-feedback values
+// (the user reported infinite ringing). Feedback also capped at 0.96
+// (was 0.99) to give a built-in safety margin against runaway.
 const KNOBS = [
   { id: 'pitch',      label: 'Pitch',      min: 80,  max: 1500, default: 220, curve: 'exp', unit: 'Hz' },
-  { id: 'feedback',   label: 'Feedback',   min: 0.5, max: 0.99, default: 0.92, curve: 'lin', unit: '%' },
-  { id: 'damping',    label: 'Damping',    min: 500, max: 12000, default: 4000, curve: 'exp', unit: 'Hz' },
+  { id: 'feedback',   label: 'Feedback',   min: 0.5, max: 0.96, default: 0.9,  curve: 'lin', unit: '%' },
+  { id: 'damping',    label: 'Damping',    min: 500, max: 5500, default: 3500, curve: 'exp', unit: 'Hz' },
   { id: 'excitation', label: 'Excitation', min: 0,   max: 1,    default: 0.3, curve: 'lin', unit: '%' },
   { id: 'decay',      label: 'Decay',      min: 100, max: 4000, default: 1200, curve: 'exp', unit: 'ms' },
 ] as const satisfies readonly KnobSpec[];
@@ -37,16 +42,20 @@ export type CombPluckConfig = z.infer<typeof CombPluckConfigSchema>;
 
 const DEFAULTS: CombPluckConfig = {
   archetype: 'comb-pluck',
-  pitch: 220, feedback: 0.92, damping: 4000, excitation: 0.3, decay: 1200,
+  pitch: 220, feedback: 0.9, damping: 3500, excitation: 0.3, decay: 1200,
 };
 
+// All `feedback` values clamped to ≤0.96 (the new max). All `damping`
+// values clamped to ≤5500 (the new max). These re-tune the presets
+// to stay within safe bounds while preserving each preset's
+// recognizable character.
 export const COMB_PLUCK_PRESETS: Record<string, Partial<CombPluckConfig>> = {
-  string:   { pitch: 220, feedback: 0.94, damping: 4500, excitation: 0.0, decay: 1500 },
-  kalimba:  { pitch: 440, feedback: 0.88, damping: 6000, excitation: 0.5, decay: 800 },
-  tubular:  { pitch: 330, feedback: 0.97, damping: 3000, excitation: 0.85, decay: 3000 },
+  string:   { pitch: 220, feedback: 0.94, damping: 4500, excitation: 0.0,  decay: 1500 },
+  kalimba:  { pitch: 440, feedback: 0.88, damping: 5500, excitation: 0.5,  decay: 800 },
+  tubular:  { pitch: 330, feedback: 0.95, damping: 3000, excitation: 0.85, decay: 3000 },
   scrape:   { pitch: 600, feedback: 0.85, damping: 1800, excitation: 0.05, decay: 600 },
   mbira:    { pitch: 580, feedback: 0.86, damping: 5000, excitation: 0.55, decay: 700 },
-  tank:     { pitch: 280, feedback: 0.93, damping: 2400, excitation: 0.7, decay: 2000 },
+  tank:     { pitch: 280, feedback: 0.93, damping: 2400, excitation: 0.7,  decay: 2000 },
 };
 
 export const CombPluck: VoiceMachine<CombPluckConfig> = {

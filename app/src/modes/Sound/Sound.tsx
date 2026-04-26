@@ -158,7 +158,8 @@ export function Sound() {
                   className="bf-sound-strip-select"
                   value={archetypeId}
                   onChange={(e) => swapArchetype(i, e.target.value as VoiceArchetypeId)}
-                  aria-label="Archetype"
+                  aria-label="Machine"
+                  title="Machine"
                 >
                   {(Object.keys(VOICE_MACHINES) as VoiceArchetypeId[]).map((id) => (
                     <option key={id} value={id}>{VOICE_MACHINES[id].label}</option>
@@ -169,7 +170,8 @@ export function Sound() {
                     className="bf-sound-strip-select"
                     value=""
                     onChange={(e) => { if (e.target.value) applyPreset(i, e.target.value); }}
-                    aria-label="Preset"
+                    aria-label="Machine preset"
+                    title="Preset"
                   >
                     <option value="">preset…</option>
                     {Object.keys(machine.presets).map((p) => (
