@@ -14,6 +14,7 @@
 // type, we dispose the current FxInstance and build a new one.
 
 import type { ColorFx } from '../../patterns/types-sound';
+import type { ColorFxInstance } from './colorFx';
 
 export interface ChannelStripParams {
   level: number;        // 0-1
@@ -22,13 +23,10 @@ export interface ChannelStripParams {
   delaySend: number;    // 0-1
 }
 
-interface FxInstance {
-  input: AudioNode;
-  output: AudioNode;
-  dispose(): void;
-}
-
-type FxBuilder = (cfg: ColorFx, ctx: AudioContext) => FxInstance;
+// The builder may return null to signal "passthrough" (e.g. for
+// `type: 'none'` configs). applyColorFx treats null exactly like
+// type='none' — colorIn → colorOut directly.
+type FxBuilder = (cfg: ColorFx, ctx: AudioContext) => ColorFxInstance | null;
 
 export class ChannelStrip {
   /** Voice machines connect their tail nodes into this. */
@@ -41,7 +39,7 @@ export class ChannelStrip {
   private colorOut: GainNode;
   private revTap: GainNode;
   private dlyTap: GainNode;
-  private currentColor: FxInstance | null = null;
+  private currentColor: ColorFxInstance | null = null;
   private fxBuilder: FxBuilder | null = null;
 
   constructor(
@@ -87,9 +85,9 @@ export class ChannelStrip {
   }
 
   /** Swap the channel's color FX. Disposes the previous instance,
-   *  reconnects passthrough, then connects the new one. */
+   *  reconnects passthrough, then connects the new one. The builder
+   *  may return null to mean "no FX needed" (treated like type='none'). */
   applyColorFx(cfg: ColorFx): void {
-    // Disconnect current routing first to avoid duplicate edges.
     this.colorIn.disconnect();
 
     if (this.currentColor) {
@@ -103,6 +101,10 @@ export class ChannelStrip {
     }
 
     const fx = this.fxBuilder(cfg, this.ctx);
+    if (!fx) {
+      this.colorIn.connect(this.colorOut);
+      return;
+    }
     this.colorIn.connect(fx.input);
     fx.output.connect(this.colorOut);
     this.currentColor = fx;

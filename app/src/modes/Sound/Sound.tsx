@@ -8,6 +8,7 @@ import { VOICE_MACHINES, type VoiceArchetypeId } from '../../audio/machines/regi
 import type { MachineConfig } from '../../audio/machines/types';
 import {
   type Channel,
+  type ColorFx,
   type SoundPattern,
   defaultChannelEffects,
 } from '../../patterns/types-sound';
@@ -20,6 +21,18 @@ import { SpectrumAnalyzer } from './SpectrumAnalyzer';
 import { Knob } from './Knob';
 import { StepGrid } from '../../components/StepGrid';
 import { TransportBar } from '../../components/TransportBar';
+import { Disclosure } from '../../components/Disclosure';
+
+const COLOR_FX_TYPES: ColorFx['type'][] = ['none', 'overdrive', 'bitcrush', 'filter'];
+
+function defaultColorFx(type: ColorFx['type']): ColorFx {
+  switch (type) {
+    case 'none':      return { type: 'none' };
+    case 'overdrive': return { type: 'overdrive', drive: 0.5, tone: 2000, mix: 0.5 };
+    case 'bitcrush':  return { type: 'bitcrush', bits: 8, rate: 8000, mix: 0.5 };
+    case 'filter':    return { type: 'filter', mode: 'lp', cutoff: 2000, q: 1, mix: 1 };
+  }
+}
 
 function kebabId(name: string): string {
   const base = name
@@ -461,6 +474,39 @@ export function Sound() {
     )));
   }, []);
 
+  const setChannelLabel = useCallback((channelIdx: number, label: string) => {
+    setChannels((cs) => cs.map((c, i) => (i === channelIdx ? { ...c, label } : c)));
+  }, []);
+
+  const setChannelShort = useCallback((channelIdx: number, short: string) => {
+    setChannels((cs) => cs.map((c, i) => (i === channelIdx ? { ...c, short } : c)));
+  }, []);
+
+  // Color-FX type swap — rebuilds the colorFx object with this type's
+  // defaults so the user always lands on a sensible starting point.
+  const setColorFxType = useCallback((channelIdx: number, type: ColorFx['type']) => {
+    setChannels((cs) => cs.map((c, i) => (
+      i === channelIdx
+        ? { ...c, effects: { ...c.effects, colorFx: defaultColorFx(type) } }
+        : c
+    )));
+  }, []);
+
+  // Update one parameter of the current colorFx. The cast is safe at
+  // runtime because the caller knows the active type — we only ever
+  // call this from JSX that's already gated on type. Keeping the
+  // signature broad (string + value) avoids verbose generic noise here.
+  const setColorFxParam = useCallback(
+    (channelIdx: number, field: string, value: number | string) => {
+      setChannels((cs) => cs.map((c, i) => {
+        if (i !== channelIdx) return c;
+        const next = { ...c.effects.colorFx, [field]: value } as ColorFx;
+        return { ...c, effects: { ...c.effects, colorFx: next } };
+      }));
+    },
+    [],
+  );
+
   const applyPreset = useCallback((channelIdx: number, presetId: string) => {
     setChannels((cs) => cs.map((c, i) => {
       if (i !== channelIdx) return c;
@@ -759,7 +805,26 @@ export function Sound() {
             <div key={i} className="bf-sound-strip">
               <div className="bf-sound-strip-head">
                 <div className="bf-sound-strip-num">ch {i + 1}</div>
-                <div className="bf-sound-strip-name">{c.label}</div>
+                <div className="bf-sound-strip-name-col">
+                  <input
+                    type="text"
+                    className="bf-sound-strip-name-edit"
+                    value={c.label}
+                    onChange={(e) => setChannelLabel(i, e.target.value)}
+                    placeholder="Channel name"
+                    aria-label={`Channel ${i + 1} name`}
+                    maxLength={24}
+                  />
+                  <input
+                    type="text"
+                    className="bf-sound-strip-short-edit"
+                    value={c.short}
+                    onChange={(e) => setChannelShort(i, e.target.value.slice(0, 4))}
+                    title="Short label (used by step grid)"
+                    aria-label={`Channel ${i + 1} short label`}
+                    maxLength={4}
+                  />
+                </div>
                 <button
                   className="bf-sound-strip-trigger"
                   onClick={() => void trigger(i)}
@@ -847,30 +912,142 @@ export function Sound() {
                 </div>
               )}
 
-              <div className="bf-sound-strip-section-label">mix</div>
-              <div className="bf-sound-strip-knobs">
-                <Knob
-                  label="Level" value={c.effects.level} min={0} max={1} defaultValue={0.85}
-                  curve="lin" unit="%" format={(v) => `${Math.round(v * 100)}`}
-                  onChange={(nv) => setMixer(i, 'level', nv)} size={48}
-                />
-                <Knob
-                  label="Pan" value={c.effects.pan} min={-1} max={1} defaultValue={0}
-                  curve="lin" unit=""
-                  format={(v) => v === 0 ? 'C' : v < 0 ? `L${Math.round(-v * 100)}` : `R${Math.round(v * 100)}`}
-                  onChange={(nv) => setMixer(i, 'pan', nv)} size={48}
-                />
-                <Knob
-                  label="Rev" value={c.effects.reverbSend} min={0} max={1} defaultValue={0}
-                  curve="lin" unit="%" format={(v) => `${Math.round(v * 100)}`}
-                  onChange={(nv) => setMixer(i, 'reverbSend', nv)} size={48}
-                />
-                <Knob
-                  label="Dly" value={c.effects.delaySend} min={0} max={1} defaultValue={0}
-                  curve="lin" unit="%" format={(v) => `${Math.round(v * 100)}`}
-                  onChange={(nv) => setMixer(i, 'delaySend', nv)} size={48}
-                />
-              </div>
+              <Disclosure
+                className="bf-sound-strip-disclosure"
+                summaryClassName="bf-sound-strip-section-label"
+                summary={
+                  <span>
+                    color
+                    {c.effects.colorFx.type !== 'none' && (
+                      <span className="bf-sound-fx-badge">{c.effects.colorFx.type}</span>
+                    )}
+                  </span>
+                }
+              >
+                <div className="bf-sound-fx-types">
+                  {COLOR_FX_TYPES.map((t) => (
+                    <button
+                      key={t}
+                      type="button"
+                      className={`bf-sound-fx-type ${c.effects.colorFx.type === t ? 'on' : ''}`}
+                      onClick={() => setColorFxType(i, t)}
+                      title={t}
+                    >
+                      {t === 'none' ? 'off'
+                        : t === 'overdrive' ? 'odv'
+                        : t === 'bitcrush' ? 'btc'
+                        : 'flt'}
+                    </button>
+                  ))}
+                </div>
+
+                {c.effects.colorFx.type === 'overdrive' && (
+                  <div className="bf-sound-strip-knobs">
+                    <Knob
+                      label="Drive" value={c.effects.colorFx.drive} min={0} max={1} defaultValue={0.5}
+                      curve="lin" unit="%" format={(v) => `${Math.round(v * 100)}`}
+                      onChange={(nv) => setColorFxParam(i, 'drive', nv)} size={42}
+                    />
+                    <Knob
+                      label="Tone" value={c.effects.colorFx.tone} min={200} max={6000} defaultValue={2000}
+                      curve="exp" unit="Hz"
+                      onChange={(nv) => setColorFxParam(i, 'tone', nv)} size={42}
+                    />
+                    <Knob
+                      label="Mix" value={c.effects.colorFx.mix} min={0} max={1} defaultValue={0.5}
+                      curve="lin" unit="%" format={(v) => `${Math.round(v * 100)}`}
+                      onChange={(nv) => setColorFxParam(i, 'mix', nv)} size={42}
+                    />
+                  </div>
+                )}
+
+                {c.effects.colorFx.type === 'bitcrush' && (
+                  <div className="bf-sound-strip-knobs">
+                    <Knob
+                      label="Bits" value={c.effects.colorFx.bits} min={2} max={16} defaultValue={8}
+                      curve="lin" unit="b" format={(v) => `${Math.round(v)}`}
+                      onChange={(nv) => setColorFxParam(i, 'bits', Math.round(nv))} size={42}
+                    />
+                    <Knob
+                      label="Rate" value={c.effects.colorFx.rate} min={400} max={16000} defaultValue={8000}
+                      curve="exp" unit="Hz"
+                      onChange={(nv) => setColorFxParam(i, 'rate', nv)} size={42}
+                    />
+                    <Knob
+                      label="Mix" value={c.effects.colorFx.mix} min={0} max={1} defaultValue={0.5}
+                      curve="lin" unit="%" format={(v) => `${Math.round(v * 100)}`}
+                      onChange={(nv) => setColorFxParam(i, 'mix', nv)} size={42}
+                    />
+                  </div>
+                )}
+
+                {c.effects.colorFx.type === 'filter' && (
+                  <>
+                    <div className="bf-sound-discrete">
+                      <div className="bf-sound-discrete-label">mode</div>
+                      <div className="bf-sound-discrete-opts">
+                        {(['lp', 'hp', 'bp'] as const).map((m) => (
+                          <button
+                            key={m}
+                            type="button"
+                            className={c.effects.colorFx.type === 'filter' && c.effects.colorFx.mode === m ? 'on' : ''}
+                            onClick={() => setColorFxParam(i, 'mode', m)}
+                          >
+                            {m}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="bf-sound-strip-knobs">
+                      <Knob
+                        label="Cut" value={c.effects.colorFx.cutoff} min={80} max={8000} defaultValue={2000}
+                        curve="exp" unit="Hz"
+                        onChange={(nv) => setColorFxParam(i, 'cutoff', nv)} size={42}
+                      />
+                      <Knob
+                        label="Q" value={c.effects.colorFx.q} min={0.5} max={15} defaultValue={1}
+                        curve="exp" unit="" format={(v) => v.toFixed(1)}
+                        onChange={(nv) => setColorFxParam(i, 'q', nv)} size={42}
+                      />
+                      <Knob
+                        label="Mix" value={c.effects.colorFx.mix} min={0} max={1} defaultValue={1}
+                        curve="lin" unit="%" format={(v) => `${Math.round(v * 100)}`}
+                        onChange={(nv) => setColorFxParam(i, 'mix', nv)} size={42}
+                      />
+                    </div>
+                  </>
+                )}
+              </Disclosure>
+
+              <Disclosure
+                className="bf-sound-strip-disclosure"
+                summaryClassName="bf-sound-strip-section-label"
+                summary="mix"
+              >
+                <div className="bf-sound-strip-knobs">
+                  <Knob
+                    label="Level" value={c.effects.level} min={0} max={1} defaultValue={0.85}
+                    curve="lin" unit="%" format={(v) => `${Math.round(v * 100)}`}
+                    onChange={(nv) => setMixer(i, 'level', nv)} size={48}
+                  />
+                  <Knob
+                    label="Pan" value={c.effects.pan} min={-1} max={1} defaultValue={0}
+                    curve="lin" unit=""
+                    format={(v) => v === 0 ? 'C' : v < 0 ? `L${Math.round(-v * 100)}` : `R${Math.round(v * 100)}`}
+                    onChange={(nv) => setMixer(i, 'pan', nv)} size={48}
+                  />
+                  <Knob
+                    label="Rev" value={c.effects.reverbSend} min={0} max={1} defaultValue={0}
+                    curve="lin" unit="%" format={(v) => `${Math.round(v * 100)}`}
+                    onChange={(nv) => setMixer(i, 'reverbSend', nv)} size={48}
+                  />
+                  <Knob
+                    label="Dly" value={c.effects.delaySend} min={0} max={1} defaultValue={0}
+                    curve="lin" unit="%" format={(v) => `${Math.round(v * 100)}`}
+                    onChange={(nv) => setMixer(i, 'delaySend', nv)} size={48}
+                  />
+                </div>
+              </Disclosure>
             </div>
           );
         })}

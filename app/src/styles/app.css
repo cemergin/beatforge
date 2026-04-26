@@ -2080,6 +2080,46 @@ input[type="number"] { font: inherit; color: inherit; }
   font-family: var(--serif); font-size: var(--fs-md); font-weight: 700;
   flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis;
 }
+.bf-sound-strip-name-col {
+  display: flex; flex-direction: column; gap: 2px;
+  flex: 1; min-width: 0;
+}
+/* Inputs masquerade as labels until focus — keeps the strip head
+   visually calm while still being editable on click. */
+.bf-sound-strip-name-edit {
+  font: 700 var(--fs-md) var(--serif);
+  color: var(--fg);
+  background: transparent;
+  border: none;
+  border-bottom: var(--bw-1) dashed transparent;
+  padding: 1px 2px;
+  width: 100%;
+  min-width: 0;
+}
+.bf-sound-strip-name-edit:hover { border-bottom-color: var(--line); }
+.bf-sound-strip-name-edit:focus {
+  outline: none;
+  border-bottom-color: var(--accent);
+  background: var(--bg);
+}
+.bf-sound-strip-short-edit {
+  font-family: var(--mono); font-size: var(--fs-micro);
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--muted);
+  background: transparent;
+  border: none;
+  border-bottom: var(--bw-1) dashed transparent;
+  padding: 0 2px;
+  width: 4em;
+  min-width: 0;
+}
+.bf-sound-strip-short-edit:hover { border-bottom-color: var(--line); color: var(--fg); }
+.bf-sound-strip-short-edit:focus {
+  outline: none;
+  border-bottom-color: var(--accent);
+  background: var(--bg);
+  color: var(--fg);
+}
 .bf-sound-strip-trigger {
   width: 30px; height: 30px; border-radius: var(--r-circle);
   border: var(--bw-1) solid var(--line); background: var(--bg-sunk);
@@ -2107,6 +2147,61 @@ input[type="number"] { font: inherit; color: inherit; }
   margin-top: var(--sp-2);
   padding-bottom: 2px;
   border-bottom: var(--bw-1) dashed var(--line);
+}
+/* When a section-label is also a Disclosure summary, kill the default
+   disclosure caret styling that would conflict, and add our own
+   ‹ caret right after the text. */
+.bf-sound-strip-disclosure {
+  display: block;
+}
+.bf-sound-strip-disclosure > .bf-disclosure-summary {
+  cursor: pointer;
+  list-style: none;
+  display: flex; align-items: center; gap: var(--sp-1);
+}
+.bf-sound-strip-disclosure > .bf-disclosure-summary::-webkit-details-marker {
+  display: none;
+}
+.bf-sound-strip-disclosure > .bf-disclosure-summary::after {
+  content: '›';
+  margin-left: auto;
+  color: var(--muted);
+  font-size: var(--fs-mini);
+  transition: transform var(--t-fast);
+}
+.bf-sound-strip-disclosure[open] > .bf-disclosure-summary::after {
+  transform: rotate(90deg);
+}
+
+/* Color FX */
+.bf-sound-fx-types {
+  display: inline-flex; gap: 2px;
+  background: var(--bg-sunk);
+  border-radius: var(--r-xs);
+  padding: 2px;
+  margin-top: var(--sp-2);
+}
+.bf-sound-fx-type {
+  font-family: var(--mono); font-size: var(--fs-micro);
+  padding: 3px 8px;
+  border: none;
+  border-radius: var(--r-xs);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  text-transform: uppercase; letter-spacing: 0.08em;
+}
+.bf-sound-fx-type:hover { color: var(--fg); }
+.bf-sound-fx-type.on { background: var(--accent); color: #fff; }
+.bf-sound-fx-badge {
+  font-family: var(--mono); font-size: var(--fs-micro);
+  letter-spacing: 0.08em;
+  padding: 1px 6px;
+  margin-left: 4px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #fff;
+  text-transform: lowercase;
 }
 .bf-sound-strip-knobs {
   display: grid;

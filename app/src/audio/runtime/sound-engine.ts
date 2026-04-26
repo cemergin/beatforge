@@ -11,6 +11,7 @@ import type { MachineConfig, VoiceCtx } from '../machines/types';
 import { createAudioContext, resumeIfSuspended } from '../audio-context';
 import type { ChannelEffects } from '../../patterns/types-sound';
 import { ChannelStrip, type ChannelStripParams } from './ChannelStrip';
+import { buildColorFx } from './colorFx';
 // Vite explicit-worker import — see engine.ts for the MIME-fallback
 // reasoning. Must use the `?worker` query, not `new URL(...)`.
 import SchedulerWorker from '../scheduler-worker.ts?worker';
@@ -147,7 +148,7 @@ export class SoundEngine {
 
     const strips: ChannelStrip[] = [];
     for (let i = 0; i < NUM_CHANNELS; i++) {
-      strips.push(new ChannelStrip(ctx, master, revBus, dlyBus, null));
+      strips.push(new ChannelStrip(ctx, master, revBus, dlyBus, buildColorFx));
     }
 
     this.ctx = ctx;
