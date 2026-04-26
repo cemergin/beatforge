@@ -250,8 +250,35 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
     });
   }, [seedPattern]);
 
+  // CircularGrid expects positional rows now (refactored to be
+  // engine-agnostic so Sound + Practice + Studio can all drive it).
+  // Construct rows from the voice-keyed Pattern at this seam; the
+  // ordering is whatever Object.keys returns, which matches what the
+  // original component iterated.
+  const trackList = Object.keys(pattern.tracks) as Array<keyof typeof pattern.tracks>;
+  const circRows = trackList.map((tr) => {
+    const td = pattern.tracks[tr]!;
+    const meta = trackMeta(td, pattern.steps);
+    return {
+      label: String(tr),
+      cells: meta.pattern.slice() as number[],
+      cursor: cursors[tr] ?? -1,
+    };
+  });
+
   const grid = {
-    circular: <CircularGrid pattern={{ ...pattern, grouping }} cursors={cursors} size={440} onToggle={toggleStep} />,
+    circular: (
+      <CircularGrid
+        stepsPerBar={pattern.steps}
+        grouping={grouping}
+        rows={circRows}
+        size={440}
+        onToggle={(rowIdx, stepIdx) => {
+          const tr = trackList[rowIdx];
+          if (tr) toggleStep(tr, stepIdx);
+        }}
+      />
+    ),
     linear: <LinearGrid pattern={{ ...pattern, grouping }} cursors={cursors} onToggle={toggleStep} />,
     pill: <PillGrid pattern={{ ...pattern, grouping }} cursors={cursors} onToggle={toggleStep} />,
   }[view];

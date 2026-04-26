@@ -23,6 +23,7 @@ import { StepGrid } from '../../components/StepGrid';
 import { TransportBar } from '../../components/TransportBar';
 import { Disclosure } from '../../components/Disclosure';
 import { BeatDots } from '../../components/BeatDots';
+import { CircularGrid } from '../../components/CircularGrid';
 
 const COLOR_FX_TYPES: ColorFx['type'][] = ['none', 'overdrive', 'bitcrush', 'filter'];
 
@@ -125,6 +126,7 @@ export function Sound() {
   const [currentBar, setCurrentBar] = useState(0);
   const [meter, setMeter] = useState<MeterPreset>(DEFAULT_METER);
   const stepsPerBar = sumGroup(meter.grouping);
+  const [viewMode, setViewMode] = useState<'grid' | 'circular'>('grid');
 
   // Pattern persistence — name + last-saved id (`null` until first save).
   // savedId is preserved across edits so a re-Save updates in place
@@ -819,19 +821,57 @@ export function Sound() {
             currentStep={currentStep}
             size={12}
           />
+          <div className="bf-sound-view-toggle" role="tablist" aria-label="Grid view">
+            <button
+              type="button"
+              className={`bf-sound-view-btn ${viewMode === 'grid' ? 'on' : ''}`}
+              onClick={() => setViewMode('grid')}
+              role="tab"
+              aria-selected={viewMode === 'grid'}
+              title="Linear grid"
+            >
+              ▦
+            </button>
+            <button
+              type="button"
+              className={`bf-sound-view-btn ${viewMode === 'circular' ? 'on' : ''}`}
+              onClick={() => setViewMode('circular')}
+              role="tab"
+              aria-selected={viewMode === 'circular'}
+              title="Circular grid"
+            >
+              ◯
+            </button>
+          </div>
         </div>
 
-        <StepGrid
-          rows={channels.map((c, i) => ({
-            label: c.label,
-            short: c.short,
-            steps: sequence[i] ?? [],
-          }))}
-          currentStep={currentStep}
-          stepsPerBar={stepsPerBar}
-          grouping={meter.grouping}
-          onToggleCell={onToggleCell}
-        />
+        {viewMode === 'grid' ? (
+          <StepGrid
+            rows={channels.map((c, i) => ({
+              label: c.label,
+              short: c.short,
+              steps: sequence[i] ?? [],
+            }))}
+            currentStep={currentStep}
+            stepsPerBar={stepsPerBar}
+            grouping={meter.grouping}
+            onToggleCell={onToggleCell}
+          />
+        ) : (
+          <div className="bf-sound-circular-wrap">
+            <CircularGrid
+              stepsPerBar={stepsPerBar}
+              grouping={meter.grouping}
+              rows={channels.map((c, i) => ({
+                label: c.short,
+                cells: sequence[i] ?? [],
+                cursor: currentStep,
+              }))}
+              size={Math.min(480, stepsPerBar * 26 + 80)}
+              onToggle={onToggleCell}
+            />
+          </div>
+        )}
       </section>
 
       <section className="bf-sound-grid">

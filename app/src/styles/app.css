@@ -2613,11 +2613,41 @@ input[type="number"] { font: inherit; color: inherit; }
    glow + scale transition; we just give the wrapper a gentle inset so
    the dots don't crowd the FX bar above or the grid below. */
 .bf-sound-beatdots-wrap {
-  display: flex; justify-content: center;
+  position: relative;
+  display: flex; justify-content: center; align-items: center;
   padding: var(--sp-2) 0 var(--sp-1);
 }
 .bf-sound-beatdots-wrap .bf-dots {
   margin-top: 0;
+}
+
+/* View toggle — pinned to the right of the BeatDots strip. */
+.bf-sound-view-toggle {
+  position: absolute; right: 0; top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex; gap: 2px;
+  background: var(--bg-sunk);
+  border-radius: var(--r-xs);
+  padding: 2px;
+}
+.bf-sound-view-btn {
+  width: 26px; height: 26px;
+  border: none;
+  border-radius: var(--r-xs);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: var(--fs-md); line-height: 1;
+}
+.bf-sound-view-btn:hover { color: var(--fg); }
+.bf-sound-view-btn.on { background: var(--accent); color: #fff; }
+
+/* Circular view wrapper — center the SVG and give it some breathing
+   room so it doesn't slam into the FX bar above or the channels grid
+   below. */
+.bf-sound-circular-wrap {
+  display: flex; justify-content: center;
+  padding: var(--sp-3) 0;
 }
 
 /* Step grid */
