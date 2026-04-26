@@ -2056,7 +2056,10 @@ input[type="number"] { font: inherit; color: inherit; }
 /* ── Channel grid: 5 strips visible at once ─────────────────── */
 .bf-sound-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  /* auto-fit so channels reflow as they're added/removed. min 200px
+     keeps strip contents readable; max 1fr lets a small channel count
+     spread to fill the row. */
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: var(--sp-3);
 }
 .bf-sound-strip {
@@ -2130,6 +2133,60 @@ input[type="number"] { font: inherit; color: inherit; }
 }
 .bf-sound-strip-trigger:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
 .bf-sound-strip-trigger:active { transform: scale(0.92); }
+
+.bf-sound-strip-remove {
+  width: 22px; height: 22px;
+  border-radius: var(--r-circle);
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: var(--fs-md); line-height: 1;
+  flex-shrink: 0;
+  transition: background var(--t-fast), color var(--t-fast);
+}
+.bf-sound-strip-remove:hover {
+  background: var(--grp-1);
+  color: #fff;
+}
+
+/* Mini per-channel rhythm dots — sit just below the strip head, show
+   the channel's hit pattern + playhead at a glance. Constrained to one
+   row + tiny gaps so they don't dominate. */
+.bf-sound-strip-rhythm-mini {
+  padding: 0 var(--sp-1) var(--sp-1);
+  border-bottom: var(--bw-1) dashed var(--line);
+  margin-bottom: var(--sp-1);
+}
+.bf-sound-strip-rhythm-mini .bf-dots {
+  flex-wrap: nowrap;
+  margin-top: 0;
+  gap: 1.5px;
+  justify-content: flex-start;
+}
+.bf-sound-strip-rhythm-mini .bf-dot-sep {
+  width: 2px;
+}
+
+/* Add-channel CTA — lives in the channels grid after the last strip. */
+.bf-sound-strip-add {
+  display: flex; align-items: center; justify-content: center;
+  min-height: 80px;
+  padding: var(--sp-3);
+  border: var(--bw-1) dashed var(--line);
+  border-radius: var(--r-md);
+  background: transparent;
+  color: var(--muted);
+  font-family: var(--mono); font-size: var(--fs-mini);
+  letter-spacing: 0.08em; text-transform: uppercase;
+  cursor: pointer;
+  transition: color var(--t-fast), border-color var(--t-fast), background var(--t-fast);
+}
+.bf-sound-strip-add:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 6%, transparent);
+}
 
 .bf-sound-strip-pickers {
   display: flex; flex-direction: column; gap: var(--sp-1);
@@ -2426,6 +2483,16 @@ input[type="number"] { font: inherit; color: inherit; }
   cursor: pointer;
 }
 .bf-transport-clear:hover { color: var(--fg); border-color: var(--accent); }
+.bf-transport-bar-counter {
+  font-family: var(--mono); font-size: var(--fs-mini);
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--accent);
+  padding: 4px 10px;
+  border: var(--bw-1) solid var(--accent);
+  border-radius: var(--r-xs);
+  background: color-mix(in srgb, var(--accent) 8%, var(--bg));
+  min-width: 56px; text-align: center;
+}
 .bf-transport-tap {
   font-family: var(--mono); font-size: var(--fs-micro);
   letter-spacing: 0.12em; text-transform: uppercase;

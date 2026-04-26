@@ -12,6 +12,9 @@ interface Props {
    *  parent owns the tap-time array + averaging — this is just the
    *  trigger surface. */
   onTap?: () => void;
+  /** 1-indexed bar counter shown next to the play button. 0 hides
+   *  the counter (i.e., not playing or pre-count-in). */
+  barCounter?: number;
   /** Optional extra controls slotted to the right (e.g. accent levels,
    *  swing, count-in). Keeps the shared component lean. */
   rightSlot?: React.ReactNode;
@@ -27,6 +30,7 @@ export function TransportBar({
   onBpmChange,
   onClear,
   onTap,
+  barCounter,
   rightSlot,
 }: Props) {
   return (
@@ -40,6 +44,12 @@ export function TransportBar({
       >
         {isPlaying ? '■' : '▶'}
       </button>
+
+      {barCounter !== undefined && barCounter > 0 && (
+        <span className="bf-transport-bar-counter" aria-label="Current bar">
+          bar {barCounter}
+        </span>
+      )}
 
       <div className="bf-transport-bpm">
         <label className="bf-transport-bpm-label" htmlFor="bf-transport-bpm-input">BPM</label>

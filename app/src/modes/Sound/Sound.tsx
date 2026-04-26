@@ -122,6 +122,7 @@ export function Sound() {
   const [bpm, setBpm] = useState(110);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentStep, setCurrentStep] = useState(-1);
+  const [currentBar, setCurrentBar] = useState(0);
   const [meter, setMeter] = useState<MeterPreset>(DEFAULT_METER);
   const stepsPerBar = sumGroup(meter.grouping);
 
@@ -211,15 +212,16 @@ export function Sound() {
   useEffect(() => { engine.setDelayTime(delayTime); }, [engine, delayTime]);
   useEffect(() => { engine.setDelayFeedback(delayFeedback); }, [engine, delayFeedback]);
 
-  // Drive the visual playhead from audibleStep() — what's playing NOW,
-  // not what's queued 300ms ahead. Frame loop only runs while playing;
-  // the -1 reset on stop happens in onPlayToggle (avoids the React-19
-  // setState-in-effect-body lint).
+  // Drive the visual playhead + bar counter from audible* getters —
+  // what's playing NOW, not what's queued 300ms ahead. Frame loop
+  // only runs while playing; the resets on stop happen in onPlayToggle
+  // (avoids the React-19 setState-in-effect-body lint).
   useEffect(() => {
     if (!isPlaying) return;
     let raf = 0;
     const loop = () => {
       setCurrentStep(engine.audibleStep());
+      setCurrentBar(engine.audibleBar());
       raf = requestAnimationFrame(loop);
     };
     raf = requestAnimationFrame(loop);
@@ -242,6 +244,7 @@ export function Sound() {
       engine.stop();
       setIsPlaying(false);
       setCurrentStep(-1);
+      setCurrentBar(0);
     } else {
       await engine.play({ countInBars });
       setIsPlaying(true);
@@ -479,6 +482,31 @@ export function Sound() {
     setChannels((cs) => cs.map((c, i) => (i === channelIdx ? { ...c, label } : c)));
   }, []);
 
+  // Add a fresh channel to the end. Defaults to a kick — user swaps
+  // to whatever they want via the machine picker. The sequence grows
+  // a matching empty row so positional bind (channels[i] ↔ sequence[i])
+  // stays intact.
+  const addChannel = useCallback(() => {
+    setChannels((cs) => [
+      ...cs,
+      {
+        label: `Ch ${cs.length + 1}`,
+        short: `c${cs.length + 1}`.slice(0, 4),
+        machine: { ...VOICE_MACHINES.kick.defaults },
+        effects: defaultChannelEffects(),
+      },
+    ]);
+    setSequence((seq) => [...seq, Array<SoundStep>(stepsPerBar).fill(0)]);
+  }, [stepsPerBar]);
+
+  // Remove channel `idx` from BOTH channels[] and sequence[] so the
+  // positional bind stays consistent. Engine.setMachines reflows the
+  // strip count automatically on the next push.
+  const removeChannel = useCallback((idx: number) => {
+    setChannels((cs) => cs.filter((_, i) => i !== idx));
+    setSequence((seq) => seq.filter((_, i) => i !== idx));
+  }, []);
+
   const setChannelShort = useCallback((channelIdx: number, short: string) => {
     setChannels((cs) => cs.map((c, i) => (i === channelIdx ? { ...c, short } : c)));
   }, []);
@@ -598,6 +626,7 @@ export function Sound() {
           onBpmChange={setBpm}
           onClear={onClear}
           onTap={onTap}
+          barCounter={currentBar}
           rightSlot={
             <div className="bf-meter-pills" aria-label="Meter">
               {SOUND_METERS.map((m) => (
@@ -842,6 +871,23 @@ export function Sound() {
                 >
                   ▶
                 </button>
+                <button
+                  className="bf-sound-strip-remove"
+                  onClick={() => removeChannel(i)}
+                  aria-label={`Remove channel ${c.label}`}
+                  title="Remove channel"
+                  type="button"
+                >
+                  ×
+                </button>
+              </div>
+              <div className="bf-sound-strip-rhythm-mini" aria-hidden>
+                <BeatDots
+                  grouping={meter.grouping}
+                  currentStep={currentStep}
+                  velocities={sequence[i] ?? []}
+                  size={6}
+                />
               </div>
 
               <div className="bf-sound-strip-pickers">
@@ -1060,6 +1106,15 @@ export function Sound() {
             </div>
           );
         })}
+
+        <button
+          type="button"
+          className="bf-sound-strip-add"
+          onClick={addChannel}
+          title="Add a new channel"
+        >
+          + add channel
+        </button>
       </section>
     </main>
   );

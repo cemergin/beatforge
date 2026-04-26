@@ -28,11 +28,12 @@ export class SoundEngine {
   private ctx: AudioContext | null = null;
   private master: GainNode | null = null;
   private analyser: AnalyserNode | null = null;
-  // Master FX buses. ChannelStrips own the per-channel sends into the
-  // bus inputs; we retain the convolver + wet/feedback/delay-line
-  // because those are the nodes the user-facing setters mutate.
-  // reverbConvolver is needed so size/decay setters can swap its
-  // buffer. dlyLine for delayTime, dlyFeedback for feedback gain.
+  // Master FX buses. revBus/dlyBus are retained so ensureStripCount()
+  // can pass them when allocating new ChannelStrips at runtime
+  // (add-channel UX). reverbConvolver, revWet, dlyLine, dlyFeedback,
+  // dlyWet are the nodes the user-facing setters mutate.
+  private revBus: GainNode | null = null;
+  private dlyBus: GainNode | null = null;
   private reverbConvolver: ConvolverNode | null = null;
   private revWet: GainNode | null = null;
   private dlyWet: GainNode | null = null;
@@ -154,12 +155,32 @@ export class SoundEngine {
     this.ctx = ctx;
     this.master = master;
     this.analyser = analyser;
+    this.revBus = revBus;
+    this.dlyBus = dlyBus;
     this.reverbConvolver = reverb;
     this.revWet = revWet;
     this.dlyLine = dlyLine;
     this.dlyFeedback = dlyFeedback;
     this.dlyWet = dlyWet;
     this.strips = strips;
+  }
+
+  /** Grow or shrink the strips array to match `n`. Strips dispose
+   *  cleanly when removed — colour FX, panner, level, taps all
+   *  disconnect, no orphaned nodes. New strips inherit the same
+   *  master/revBus/dlyBus + the colour-FX builder. */
+  private ensureStripCount(n: number): void {
+    if (!this.ctx || !this.master) return;
+    const target = Math.max(0, Math.floor(n));
+    while (this.strips.length < target) {
+      this.strips.push(new ChannelStrip(
+        this.ctx, this.master, this.revBus, this.dlyBus, buildColorFx,
+      ));
+    }
+    while (this.strips.length > target) {
+      const s = this.strips.pop();
+      try { s?.dispose(); } catch { /* idempotent */ }
+    }
   }
 
   /** One-shot trigger (not sequenced — for audition + ASDFG keys). */
@@ -212,11 +233,13 @@ export class SoundEngine {
   }
 
   /** Push the latest machine configs. Sound.tsx calls this on every
-   *  channel state change — knob tweak, preset apply, archetype swap.
-   *  Triggers in flight aren't affected (Web Audio nodes already
-   *  scheduled keep their pre-tweak params); subsequent triggers pick
-   *  up the new config. */
+   *  channel state change — knob tweak, preset apply, archetype swap,
+   *  add/remove channel. Length defines the active strip count, so
+   *  this also drives ensureStripCount. Triggers already in flight
+   *  aren't affected (Web Audio nodes already scheduled keep their
+   *  pre-tweak params); subsequent triggers pick up the new config. */
   setMachines(machines: MachineConfig[]): void {
+    this.ensureStripCount(machines.length);
     this.machines = machines;
   }
 
@@ -301,6 +324,20 @@ export class SoundEngine {
   setAccents(strong: number, weak: number): void {
     this._strongAmp = Math.max(0, strong);
     this._weakAmp = Math.max(0, weak);
+  }
+
+  /** 1-indexed bar number that's audible RIGHT NOW. 0 when not playing
+   *  or during count-in. Counted from `startTime` (post-count-in), so
+   *  bar 1 starts on the first sequenced beat. Loops forever — the
+   *  number just keeps climbing. */
+  audibleBar(): number {
+    if (!this.ctx || !this._running) return 0;
+    const stepSec = this.stepSeconds();
+    if (stepSec <= 0) return 0;
+    const barSec = stepSec * this._stepsPerBar;
+    const elapsed = this.ctx.currentTime - this.startTime;
+    if (elapsed < 0) return 0;
+    return Math.floor(elapsed / barSec) + 1;
   }
 
   /** Step index that's audible RIGHT NOW (not last-scheduled). Inverts
@@ -476,6 +513,8 @@ export class SoundEngine {
     this.ctx = null;
     this.master = null;
     this.analyser = null;
+    this.revBus = null;
+    this.dlyBus = null;
     this.reverbConvolver = null;
     this.revWet = null;
     this.dlyLine = null;
