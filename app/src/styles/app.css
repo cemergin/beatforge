@@ -2101,6 +2101,13 @@ input[type="number"] { font: inherit; color: inherit; }
   color: var(--fg); width: 100%;
 }
 
+.bf-sound-strip-section-label {
+  font-family: var(--mono); font-size: var(--fs-micro);
+  letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);
+  margin-top: var(--sp-2);
+  padding-bottom: 2px;
+  border-bottom: var(--bw-1) dashed var(--line);
+}
 .bf-sound-strip-knobs {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));

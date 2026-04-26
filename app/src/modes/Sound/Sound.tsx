@@ -1,26 +1,30 @@
-// Sound page — phase 1 v1: 5 channels visible at once, circular
-// knobs per channel, audition triggers + ASDFG keyboard.
+// Sound page — phase 1 v2: 5 channels visible at once, circular
+// knobs for synth + per-channel mixer (level / pan / sends),
+// audition triggers, ASDFG/QWERT keyboard.
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { SoundEngine } from '../../audio/runtime/sound-engine';
 import { VOICE_MACHINES, type VoiceArchetypeId } from '../../audio/machines/registry';
 import type { MachineConfig } from '../../audio/machines/types';
+import {
+  type Channel,
+  defaultChannelEffects,
+} from '../../patterns/types-sound';
 import { SpectrumAnalyzer } from './SpectrumAnalyzer';
 import { Knob } from './Knob';
 
-interface Channel {
-  label: string;
-  short: string;
-  machine: MachineConfig;
-}
-
 function defaultChannels(): Channel[] {
+  const k = (archetype: VoiceArchetypeId, presetId?: string): MachineConfig => {
+    const m = VOICE_MACHINES[archetype];
+    const preset = presetId && m.presets ? m.presets[presetId] : undefined;
+    return { ...m.defaults, ...preset };
+  };
   return [
-    { label: 'Kick',    short: 'Kic', machine: { ...VOICE_MACHINES.kick.defaults } },
-    { label: 'Snare',   short: 'Sna', machine: { ...VOICE_MACHINES.snare.defaults } },
-    { label: 'Hat',     short: 'Hat', machine: { ...VOICE_MACHINES.hat.defaults } },
-    { label: 'Bell',    short: 'Bel', machine: { ...VOICE_MACHINES.modal.defaults, ...VOICE_MACHINES.modal.presets?.bell } },
-    { label: 'Kalimba', short: 'Kal', machine: { ...VOICE_MACHINES['comb-pluck'].defaults, ...VOICE_MACHINES['comb-pluck'].presets?.kalimba } },
+    { label: 'Kick',    short: 'Kic', machine: k('kick'),                effects: defaultChannelEffects() },
+    { label: 'Snare',   short: 'Sna', machine: k('snare'),               effects: defaultChannelEffects() },
+    { label: 'Hat',     short: 'Hat', machine: k('hat'),                 effects: defaultChannelEffects() },
+    { label: 'Bell',    short: 'Bel', machine: k('modal', 'bell'),       effects: defaultChannelEffects() },
+    { label: 'Kalimba', short: 'Kal', machine: k('comb-pluck', 'kalimba'), effects: defaultChannelEffects() },
   ];
 }
 
@@ -35,10 +39,22 @@ export function Sound() {
   const channelsRef = useRef(channels);
   useEffect(() => { channelsRef.current = channels; }, [channels]);
 
+  // Push channel mixer params to the engine whenever they change.
+  useEffect(() => {
+    void engine.ensureCtx().then(() => {
+      channels.forEach((c, i) => engine.applyChannelEffects(i, c.effects));
+    });
+  }, [engine, channels]);
+
   const trigger = useCallback(async (idx: number, amp = 1.0) => {
     await engine.ensureCtx();
     const ch = channelsRef.current[idx];
-    if (ch) engine.trigger(ch.machine, amp);
+    if (ch) {
+      // Re-apply effects right before trigger so any in-flight knob
+      // tweak is honored on the very next hit.
+      engine.applyChannelEffects(idx, ch.effects);
+      engine.trigger(idx, ch.machine, amp);
+    }
   }, [engine]);
 
   // ASDFG → channels 1-5 at amp 1.0; QWERT → same channels at amp 2.0
@@ -75,6 +91,17 @@ export function Sound() {
       i === channelIdx ? { ...c, machine: { ...c.machine, [fieldId]: value } } : c
     )));
   }, []);
+
+  const setMixer = useCallback(
+    (channelIdx: number, field: 'level' | 'pan' | 'reverbSend' | 'delaySend', value: number) => {
+      setChannels((cs) => cs.map((c, i) => (
+        i === channelIdx
+          ? { ...c, effects: { ...c.effects, [field]: value } }
+          : c
+      )));
+    },
+    [],
+  );
 
   const swapArchetype = useCallback((channelIdx: number, id: VoiceArchetypeId) => {
     setChannels((cs) => cs.map((c, i) => (
@@ -152,6 +179,7 @@ export function Sound() {
                 )}
               </div>
 
+              <div className="bf-sound-strip-section-label">synth</div>
               <div className="bf-sound-strip-knobs">
                 {machine.knobs.map((k) => {
                   const v = cfgValues[k.id];
@@ -198,6 +226,31 @@ export function Sound() {
                   })}
                 </div>
               )}
+
+              <div className="bf-sound-strip-section-label">mix</div>
+              <div className="bf-sound-strip-knobs">
+                <Knob
+                  label="Level" value={c.effects.level} min={0} max={1} defaultValue={0.85}
+                  curve="lin" unit="%" format={(v) => `${Math.round(v * 100)}`}
+                  onChange={(nv) => setMixer(i, 'level', nv)} size={48}
+                />
+                <Knob
+                  label="Pan" value={c.effects.pan} min={-1} max={1} defaultValue={0}
+                  curve="lin" unit=""
+                  format={(v) => v === 0 ? 'C' : v < 0 ? `L${Math.round(-v * 100)}` : `R${Math.round(v * 100)}`}
+                  onChange={(nv) => setMixer(i, 'pan', nv)} size={48}
+                />
+                <Knob
+                  label="Rev" value={c.effects.reverbSend} min={0} max={1} defaultValue={0}
+                  curve="lin" unit="%" format={(v) => `${Math.round(v * 100)}`}
+                  onChange={(nv) => setMixer(i, 'reverbSend', nv)} size={48}
+                />
+                <Knob
+                  label="Dly" value={c.effects.delaySend} min={0} max={1} defaultValue={0}
+                  curve="lin" unit="%" format={(v) => `${Math.round(v * 100)}`}
+                  onChange={(nv) => setMixer(i, 'delaySend', nv)} size={48}
+                />
+              </div>
             </div>
           );
         })}

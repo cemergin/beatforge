@@ -1,24 +1,24 @@
 // SoundEngine — lightweight audio runtime dedicated to the Sound page.
 //
 // Lives BESIDE the production AudioEngine in audio/engine.ts; doesn't
-// touch it. The Sound page tolerates a simpler scheduling model than
-// Practice's sample-accurate metronome — it's a synth lab, not a
-// click track. Triggers fire on demand from UI clicks / keyboard.
-//
-// Phase 2 will probably keep this as a separate engine (different
-// quality bar) and converge only the machine-registry dispatch.
+// touch it. Owns its own audio graph: master + analyser + 5 channel
+// strips. Voice triggers are routed through their channel's strip so
+// each channel's mixer (level/pan/sends/colorFx) and the upcoming
+// kit FX bus take effect.
 
 import { triggerVoice } from '../machines/registry';
 import type { MachineConfig, VoiceCtx } from '../machines/types';
 import { createAudioContext, resumeIfSuspended } from '../audio-context';
+import type { ChannelEffects } from '../../patterns/types-sound';
+import { ChannelStrip, type ChannelStripParams } from './ChannelStrip';
+
+const NUM_CHANNELS = 5;
 
 export class SoundEngine {
   private ctx: AudioContext | null = null;
   private master: GainNode | null = null;
   private analyser: AnalyserNode | null = null;
-  /** Race guard: two simultaneous `ensureCtx()` calls (e.g. two
-   *  rapid keypresses before the first context resolves) must not
-   *  build two parallel audio graphs. Mirrors AudioEngine's pattern. */
+  private strips: ChannelStrip[] = [];
   private ctxInitPromise: Promise<void> | null = null;
 
   /** Resume / construct the AudioContext on first user interaction.
@@ -31,7 +31,6 @@ export class SoundEngine {
     }
     if (!this.ctxInitPromise) {
       this.ctxInitPromise = this.initCtxOnce().finally(() => {
-        // Clear so a future re-init (after dispose, HMR) can run.
         this.ctxInitPromise = null;
       });
     }
@@ -40,7 +39,7 @@ export class SoundEngine {
 
   private async initCtxOnce(): Promise<void> {
     const ctx = createAudioContext();
-    if (!ctx) return;   // Web Audio not supported — silently no-op
+    if (!ctx) return;
     const master = ctx.createGain();
     master.gain.value = 0.85;
     const analyser = ctx.createAnalyser();
@@ -48,24 +47,48 @@ export class SoundEngine {
     analyser.smoothingTimeConstant = 0.78;
     master.connect(analyser);
     analyser.connect(ctx.destination);
-    // Atomic commit — either everything is set or nothing is.
+
+    // Build per-channel strips. revBus / dlyBus stay null until the
+    // kit FX bus lands — sends are routed through the strip but go
+    // nowhere yet (silently). Master receives every channel.
+    const strips: ChannelStrip[] = [];
+    for (let i = 0; i < NUM_CHANNELS; i++) {
+      strips.push(new ChannelStrip(ctx, master, null, null, null));
+    }
+
     this.ctx = ctx;
     this.master = master;
     this.analyser = analyser;
+    this.strips = strips;
   }
 
-  /** Schedule a one-shot trigger of `cfg`'s machine. Routes through
-   *  the master gain (and thus the analyser) so the spectrum view
-   *  reflects what the user hears. */
-  trigger(cfg: MachineConfig, amp = 1.0): void {
-    if (!this.ctx || !this.master) return;
-    const vc: VoiceCtx = { ctx: this.ctx, destination: this.master };
+  /** Trigger a voice on a specific channel. The voice's tail node
+   *  connects into the channel's strip so the mixer + FX are honored. */
+  trigger(channelIdx: number, cfg: MachineConfig, amp = 1.0): void {
+    if (!this.ctx) return;
+    const strip = this.strips[channelIdx];
+    if (!strip) return;
+    const vc: VoiceCtx = { ctx: this.ctx, destination: strip.input };
     const when = this.ctx.currentTime + 0.005;
     triggerVoice(cfg, vc, when, amp);
   }
 
-  /** Hand the AnalyserNode out for the spectrum component. Returns
-   *  null until ensureCtx() has run. */
+  /** Apply mixer params (level/pan/sends) to a specific channel. */
+  applyChannelParams(channelIdx: number, params: ChannelStripParams): void {
+    const strip = this.strips[channelIdx];
+    if (strip) strip.applyParams(params);
+  }
+
+  /** Apply (or clear) the channel's color FX. Currently no FX builder
+   *  is wired — passes through to the master. Phase 1 next-up: wire
+   *  the overdrive/bitcrush/filter FX machines. */
+  applyChannelEffects(channelIdx: number, effects: ChannelEffects): void {
+    const strip = this.strips[channelIdx];
+    if (!strip) return;
+    strip.applyParams(effects);
+    strip.applyColorFx(effects.colorFx);
+  }
+
   getAnalyser(): AnalyserNode | null {
     return this.analyser;
   }
@@ -76,6 +99,10 @@ export class SoundEngine {
   }
 
   dispose(): void {
+    for (const s of this.strips) {
+      try { s.dispose(); } catch { /* idempotent */ }
+    }
+    this.strips = [];
     if (this.ctx && this.ctx.state !== 'closed') void this.ctx.close();
     this.ctx = null;
     this.master = null;
