@@ -2798,14 +2798,14 @@ input[type="number"] { font: inherit; color: inherit; }
   grid-template-columns: repeat(var(--steps), 1fr);
   gap: 3px;
 }
+/* Cells share the visual treatment with .bf-mini-cell — same group-
+   color hierarchy at every zoom level, so a "cell" reads the same
+   whether it's a 28px sequencer cell or an 8px strip-head preview. */
 .bf-stepgrid-cell {
   height: 28px;
-  border: var(--bw-1) solid var(--line);
   border-radius: var(--r-xs);
-  /* Idle tint comes from the group color, very faintly mixed in so
-     the off-state still reads as "background". On / accent fill in
-     more strongly. --grp-color is set inline per cell. */
-  background: color-mix(in srgb, var(--grp-color, var(--accent)) 8%, var(--bg-sunk));
+  border: var(--bw-1) solid color-mix(in srgb, var(--grp-color, var(--accent)) 25%, var(--line));
+  background: color-mix(in srgb, var(--grp-color, var(--accent)) 12%, var(--bg-sunk));
   cursor: pointer;
   padding: 0;
   transition: background 0.06s, border-color 0.06s, box-shadow 0.06s;
@@ -2817,16 +2817,15 @@ input[type="number"] { font: inherit; color: inherit; }
   border-color: var(--grp-color, var(--accent));
 }
 .bf-stepgrid-cell.on {
-  background: color-mix(in srgb, var(--grp-color, var(--accent)) 55%, var(--bg));
+  background: color-mix(in srgb, var(--grp-color, var(--accent)) 60%, var(--bg));
   border-color: var(--grp-color, var(--accent));
 }
 .bf-stepgrid-cell.accent {
   background: var(--grp-color, var(--accent));
   border-color: var(--grp-color, var(--accent));
-  box-shadow: 0 0 0 1px var(--grp-color, var(--accent)) inset;
 }
 .bf-stepgrid-cell.cur {
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--fg) 70%, transparent);
+  box-shadow: 0 0 0 2px var(--fg) inset;
 }
 
 /* Responsive — stack to 1 strip per row when too narrow */
