@@ -47,7 +47,11 @@ export function defaultChannelEffects(): ChannelEffects {
  *  the sound design (channels' machine configs + effects) — that
  *  unification is the whole point of the Sound→Studio rewrite. The
  *  legacy Pattern type in patterns/types.ts uses voice-keyed tracks +
- *  global kit; this type uses positional channels + per-channel machine. */
+ *  global kit; this type uses positional channels + per-channel machine.
+ *
+ *  All "feel" fields are OPTIONAL so patterns saved before they were
+ *  added still load (defaults applied at load time). When in doubt,
+ *  add new fields as optional and migrate forward. */
 export interface SoundPattern {
   id: string;
   name: string;
@@ -63,6 +67,20 @@ export interface SoundPattern {
   /** Channels the user has configured. Order is positional — channels[i]
    *  binds to sequence[i]. */
   channels: Channel[];
+
+  // ── Feel (optional, defaults applied on load) ────────────────────
+  /** Bars of count-in clicks before playback. 0 = no count-in. */
+  countInBars?: number;
+  /** Swing depth: 0.5 = straight, 0.67 ≈ heavy. Only audible when
+   *  stepUnit ∈ {8, 16}. */
+  swing?: number;
+  /** Velocity amps for accent (2) and on (1) cells. */
+  strongAmp?: number;
+  weakAmp?: number;
+
+  // ── Master FX (optional) ─────────────────────────────────────────
+  reverbWet?: number;
+  delayWet?: number;
 
   createdAt: number;
   updatedAt: number;

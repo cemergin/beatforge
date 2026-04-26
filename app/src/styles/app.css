@@ -2366,6 +2366,72 @@ input[type="number"] { font: inherit; color: inherit; }
   border-color: var(--accent);
 }
 
+/* Feel + master bar — count-in / swing / accents / vol / rev / dly */
+.bf-sound-feelbar {
+  display: flex; flex-wrap: wrap; align-items: center;
+  gap: var(--sp-3) var(--sp-4);
+  padding: var(--sp-2) 0;
+  border-top: var(--bw-1) dashed var(--line);
+  border-bottom: var(--bw-1) dashed var(--line);
+}
+.bf-feel-control {
+  display: flex; flex-direction: column; gap: 3px;
+}
+.bf-feel-control.disabled { opacity: 0.45; }
+.bf-feel-label {
+  font-family: var(--mono); font-size: var(--fs-micro);
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.bf-feel-control input[type="range"] {
+  -webkit-appearance: none; appearance: none;
+  width: 88px; height: 4px;
+  background: var(--bg-sunk);
+  border: var(--bw-1) solid var(--line);
+  border-radius: 999px;
+  cursor: pointer;
+}
+.bf-feel-control input[type="range"]:disabled { cursor: not-allowed; }
+.bf-feel-control input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: var(--bw-1) solid var(--bg);
+  cursor: pointer;
+}
+.bf-feel-control input[type="range"]::-moz-range-thumb {
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: var(--bw-1) solid var(--bg);
+  cursor: pointer;
+}
+.bf-feel-pills {
+  display: inline-flex; gap: 2px;
+  background: var(--bg-sunk);
+  border: var(--bw-1) solid var(--line);
+  border-radius: var(--r-xs);
+  padding: 2px;
+}
+.bf-feel-pill {
+  font-family: var(--mono); font-size: var(--fs-micro);
+  padding: 3px 8px;
+  border: none;
+  border-radius: var(--r-xs);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+}
+.bf-feel-pill:hover { color: var(--fg); }
+.bf-feel-pill.on { background: var(--accent); color: #fff; }
+.bf-feel-divider {
+  width: 1px; height: 28px;
+  background: var(--line);
+  margin: 0 var(--sp-1);
+}
+
 /* Step grid */
 .bf-stepgrid {
   display: flex; flex-direction: column; gap: 3px;

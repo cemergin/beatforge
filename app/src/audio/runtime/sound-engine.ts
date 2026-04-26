@@ -1,7 +1,7 @@
 // SoundEngine — audio runtime for the Sound page. Owns its own audio
-// graph (master + analyser + 5 channel strips) AND a 16-step look-ahead
-// scheduler so the page can host a sequencer without depending on the
-// production AudioEngine in audio/engine.ts. Scheduler design mirrors
+// graph (master + analyser + reverb + delay + 5 channel strips) AND a
+// look-ahead scheduler so the page can host a sequencer without
+// depending on the production AudioEngine. Scheduler design mirrors
 // AudioEngine (worker-driven 15ms tick, 300ms scheduleAhead, anchor-
 // derive nextNoteTime, audibleStep() inverts the anchor formula for UI)
 // — kept in sync with that file so the unification path is short.
@@ -27,6 +27,13 @@ export class SoundEngine {
   private ctx: AudioContext | null = null;
   private master: GainNode | null = null;
   private analyser: AnalyserNode | null = null;
+  // Master FX buses. ChannelStrips own the per-channel sends into the
+  // bus inputs; we only retain the wet/feedback/delay-line gains
+  // because those are the nodes the user-facing setters mutate.
+  private revWet: GainNode | null = null;
+  private dlyWet: GainNode | null = null;
+  private dlyFeedback: GainNode | null = null;
+  private dlyLine: DelayNode | null = null;
   private strips: ChannelStrip[] = [];
   private ctxInitPromise: Promise<void> | null = null;
 
@@ -39,6 +46,11 @@ export class SoundEngine {
   // (stepUnit / 4). Switching meter from 4/4 (stepUnit=16) to 6/8
   // (stepUnit=8) doubles each step's duration without touching bpm.
   private _stepUnit: 4 | 8 | 16 = 16;
+  // Additive grouping (e.g. [2,2,3] for 7/8). Used for count-in to
+  // place clicks at downbeats — group boundaries — rather than evenly
+  // across the bar. Defaults to [stepsPerBar] (one big group, single
+  // downbeat per bar) when not explicitly set.
+  private _grouping: number[] = [16];
   private sequence: SoundSequence = [];
   // Live machine configs the scheduler reads at trigger time. Sound.tsx
   // pushes new copies on every channel change (knob tweak, preset apply,
@@ -46,6 +58,10 @@ export class SoundEngine {
   private machines: MachineConfig[] = [];
   private _strongAmp = 1.0;
   private _weakAmp = 0.55;
+  // Swing: 0.5 = straight, 0.67 = heavy (triplet feel). Applied only to
+  // odd-indexed steps when stepUnit ∈ {8, 16} — see tick(). Quarter-
+  // note swing is just a tempo change, so stepUnit=4 ignores swing.
+  private _swing = 0.5;
 
   // Scheduler infrastructure (mirrors AudioEngine's lookaheadMs /
   // scheduleAheadS / worker-vs-setTimeout fallback).
@@ -66,6 +82,7 @@ export class SoundEngine {
   get bpm(): number { return this._bpm; }
   get stepsPerBar(): number { return this._stepsPerBar; }
   get stepUnit(): 4 | 8 | 16 { return this._stepUnit; }
+  get swing(): number { return this._swing; }
 
   /** Resume / construct the AudioContext on first user interaction.
    *  Safe to call concurrently — second caller awaits the first's
@@ -94,14 +111,44 @@ export class SoundEngine {
     master.connect(analyser);
     analyser.connect(ctx.destination);
 
+    // Reverb bus: revBus (per-channel sends sum here) → convolver →
+    // revWet (master wet level) → master. Impulse synthesized once;
+    // replacing it later would mean reconstructing the convolver.
+    const revBus = ctx.createGain();
+    const reverb = ctx.createConvolver();
+    reverb.buffer = makeImpulse(ctx, 1.8, 2.2);
+    const revWet = ctx.createGain();
+    revWet.gain.value = 0.5;
+    revBus.connect(reverb).connect(revWet).connect(master);
+
+    // Delay bus: dlyBus → delayLine → feedback (loops back to delayLine
+    // input) AND → dlyWet → master. Feedback gain capped at 0.7 so the
+    // user can't dial in self-oscillation. Delay time is set on play()
+    // based on BPM (1/8-note default); leaving it static for now since
+    // changing it during playback creates audible chirps.
+    const dlyBus = ctx.createGain();
+    const dlyLine = ctx.createDelay(2.0);
+    dlyLine.delayTime.value = 0.25; // 1/8 at 120 BPM, retuned on play()
+    const dlyFeedback = ctx.createGain();
+    dlyFeedback.gain.value = 0.35;
+    const dlyWet = ctx.createGain();
+    dlyWet.gain.value = 0.5;
+    dlyBus.connect(dlyLine);
+    dlyLine.connect(dlyFeedback).connect(dlyLine);
+    dlyLine.connect(dlyWet).connect(master);
+
     const strips: ChannelStrip[] = [];
     for (let i = 0; i < NUM_CHANNELS; i++) {
-      strips.push(new ChannelStrip(ctx, master, null, null, null));
+      strips.push(new ChannelStrip(ctx, master, revBus, dlyBus, null));
     }
 
     this.ctx = ctx;
     this.master = master;
     this.analyser = analyser;
+    this.revWet = revWet;
+    this.dlyLine = dlyLine;
+    this.dlyFeedback = dlyFeedback;
+    this.dlyWet = dlyWet;
     this.strips = strips;
   }
 
@@ -183,6 +230,32 @@ export class SoundEngine {
     this._stepUnit = u;
   }
 
+  /** Grouping for count-in placement. Doesn't affect step rate. */
+  setGrouping(g: number[]): void {
+    this._grouping = g.length > 0 ? [...g] : [this._stepsPerBar];
+  }
+
+  /** Swing depth: 0.5 = straight, 0.67 ≈ heavy triplet feel. Clamped. */
+  setSwing(s: number): void {
+    this._swing = Math.max(0.5, Math.min(0.75, s));
+  }
+
+  /** Master wet level for the reverb send bus (0..1). */
+  setReverbWet(v: number): void {
+    if (this.revWet) this.revWet.gain.value = Math.max(0, Math.min(1, v));
+  }
+
+  /** Master wet level for the delay send bus (0..1). */
+  setDelayWet(v: number): void {
+    if (this.dlyWet) this.dlyWet.gain.value = Math.max(0, Math.min(1, v));
+  }
+
+  /** Delay feedback (0..0.7 hard-capped). Above ~0.7 the line builds
+   *  toward self-oscillation across automated parameter changes. */
+  setDelayFeedback(v: number): void {
+    if (this.dlyFeedback) this.dlyFeedback.gain.value = Math.max(0, Math.min(0.7, v));
+  }
+
   setAccents(strong: number, weak: number): void {
     this._strongAmp = Math.max(0, strong);
     this._weakAmp = Math.max(0, weak);
@@ -211,11 +284,43 @@ export class SoundEngine {
     return 240 / (this._bpm * this._stepUnit);
   }
 
-  async play(): Promise<void> {
+  async play(opts: { countInBars?: number } = {}): Promise<void> {
     await this.ensureCtx();
     if (!this.ctx || this._running) return;
     this._running = true;
-    const start = this.ctx.currentTime + 0.06;
+    const ctx = this.ctx;
+    const stepSec = this.stepSeconds();
+    const barSec = stepSec * this._stepsPerBar;
+    const countInBars = Math.max(0, Math.floor(opts.countInBars ?? 0));
+    const headRoom = ctx.currentTime + 0.06;
+    const start = headRoom + countInBars * barSec;
+
+    // Retune the master delay line to 1/8-note at the current BPM. Done
+    // once per play() so the user can switch tempos mid-pattern without
+    // an audible delay-time chirp; if they REALLY want the delay to
+    // track BPM live we'll do that explicitly later.
+    if (this.dlyLine) {
+      this.dlyLine.delayTime.value = Math.min(2.0, 60 / this._bpm / 2);
+    }
+
+    // Schedule a wood-tick at the start of each grouping cell of every
+    // count-in bar. Step 0 = strong (start of bar); other group heads
+    // = medium. Mirrors AudioEngine's count-in click for consistency.
+    if (countInBars > 0) {
+      const downbeatSteps: number[] = [];
+      let acc = 0;
+      for (const g of this._grouping) {
+        downbeatSteps.push(acc);
+        acc += g;
+      }
+      for (let bar = 0; bar < countInBars; bar++) {
+        downbeatSteps.forEach((stepIdx, beatIdx) => {
+          const t = headRoom + bar * barSec + stepIdx * stepSec;
+          this.countInClick(t, beatIdx === 0 ? 1.0 : 0.6);
+        });
+      }
+    }
+
     this.startTime = start;
     this.nextNoteTime = start;
     this.nextIdx = 0;
@@ -227,6 +332,22 @@ export class SoundEngine {
     }
     // Pre-fill before the first worker tick arrives (~15ms latency).
     this.tick();
+  }
+
+  /** Kit-independent count-in click — wood-tick. Same shape as
+   *  AudioEngine.countInClick so the two engines feel identical. */
+  private countInClick(when: number, amp: number): void {
+    const ctx = this.ctx;
+    const master = this.master;
+    if (!ctx || !master) return;
+    const osc = ctx.createOscillator();
+    const g = ctx.createGain();
+    osc.frequency.value = amp > 0.8 ? 2200 : 1400;
+    g.gain.setValueAtTime(amp * 0.5, when);
+    g.gain.exponentialRampToValueAtTime(0.0001, when + 0.03);
+    osc.connect(g).connect(master);
+    osc.start(when);
+    osc.stop(when + 0.05);
   }
 
   stop(): void {
@@ -271,7 +392,14 @@ export class SoundEngine {
     }
 
     while (this.nextNoteTime < horizon) {
-      const tPlay = this.nextNoteTime;
+      // Swing: nudge odd-indexed steps later (toward the next downbeat)
+      // by (swing-0.5)*2 step lengths. swing=0.5 → no-op; swing=0.67 ≈
+      // triplet feel. Quarter-note steps (stepUnit=4) skip swing —
+      // there are no off-beats between quarters to swing.
+      let tPlay = this.nextNoteTime;
+      if (this._stepUnit !== 4 && this._swing !== 0.5 && (this.nextIdx % 2) === 1) {
+        tPlay += (this._swing - 0.5) * 2 * stepSec;
+      }
       const stepIdx = this.nextIdx % this._stepsPerBar;
 
       // Fire any active cells at this step. Read live machine configs
@@ -314,5 +442,26 @@ export class SoundEngine {
     this.ctx = null;
     this.master = null;
     this.analyser = null;
+    this.revWet = null;
+    this.dlyLine = null;
+    this.dlyFeedback = null;
+    this.dlyWet = null;
   }
+}
+
+/** Synthesize a noise-burst impulse response. Same shape as
+ *  AudioEngine.makeImpulseFor — quick + cheap, sounds like a small
+ *  room. duration = total tail seconds; decay = exponent on the
+ *  amplitude envelope (higher = faster fade). */
+function makeImpulse(ctx: AudioContext, duration: number, decay: number): AudioBuffer {
+  const rate = ctx.sampleRate;
+  const length = Math.floor(rate * duration);
+  const impulse = ctx.createBuffer(2, length, rate);
+  for (let ch = 0; ch < 2; ch++) {
+    const d = impulse.getChannelData(ch);
+    for (let i = 0; i < length; i++) {
+      d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / length, decay);
+    }
+  }
+  return impulse;
 }

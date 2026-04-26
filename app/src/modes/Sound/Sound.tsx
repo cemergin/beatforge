@@ -87,12 +87,20 @@ function defaultChannels(): Channel[] {
     const preset = presetId && m.presets ? m.presets[presetId] : undefined;
     return { ...m.defaults, ...preset };
   };
+  // Per-channel reverb defaults seed an audible mix on first load. The
+  // master rev wet alone can't help — the bus only sees signal that
+  // channels explicitly send. Kick stays dry (canonical drum-machine
+  // mix); snare/bell/kalimba get reverb because they sound right with it.
+  const fx = (reverbSend: number): ReturnType<typeof defaultChannelEffects> => ({
+    ...defaultChannelEffects(),
+    reverbSend,
+  });
   return [
-    { label: 'Kick',    short: 'Kic', machine: k('kick'),                effects: defaultChannelEffects() },
-    { label: 'Snare',   short: 'Sna', machine: k('snare'),               effects: defaultChannelEffects() },
-    { label: 'Hat',     short: 'Hat', machine: k('hat'),                 effects: defaultChannelEffects() },
-    { label: 'Bell',    short: 'Bel', machine: k('modal', 'bell'),       effects: defaultChannelEffects() },
-    { label: 'Kalimba', short: 'Kal', machine: k('fm', 'kalimba'),         effects: defaultChannelEffects() },
+    { label: 'Kick',    short: 'Kic', machine: k('kick'),                effects: fx(0)    },
+    { label: 'Snare',   short: 'Sna', machine: k('snare'),               effects: fx(0.30) },
+    { label: 'Hat',     short: 'Hat', machine: k('hat'),                 effects: fx(0.15) },
+    { label: 'Bell',    short: 'Bel', machine: k('modal', 'bell'),       effects: fx(0.40) },
+    { label: 'Kalimba', short: 'Kal', machine: k('fm', 'kalimba'),       effects: fx(0.30) },
   ];
 }
 
@@ -115,6 +123,20 @@ export function Sound() {
   const [savedId, setSavedId] = useState<string | null>(null);
   const [savedList, setSavedList] = useState<SoundPattern[]>([]);
   const [toast, setToast] = useState<string | null>(null);
+
+  // Feel + master state. countInBars / swing / accents persist with
+  // the pattern (saved-pattern shape captures all of them); master
+  // volume + FX wet levels are session-only for now (could move to
+  // localStorage later).
+  const [countInBars, setCountInBars] = useState(0);
+  const [swing, setSwing] = useState(0.5);
+  const [strongAmp, setStrongAmp] = useState(1.0);
+  const [weakAmp, setWeakAmp] = useState(0.55);
+  const [masterVolume, setMasterVolume] = useState(0.85);
+  // Master wet defaults audible so the per-channel sends in
+  // defaultChannels() actually produce sound. User can dial dry.
+  const [reverbWet, setReverbWet] = useState(0.5);
+  const [delayWet, setDelayWet] = useState(0.15);
 
   // Hydrate the saved list on mount + after every save/delete. The
   // mount effect uses promise-then form so setState lands in a
@@ -159,10 +181,18 @@ export function Sound() {
     });
   }, [engine, channels]);
 
-  // Push sequence + BPM + stepUnit to the engine.
+  // Push sequence + BPM + stepUnit + grouping + feel/master to the
+  // engine. Each useEffect tracks a single state slice so we don't
+  // resend everything on a single-knob tweak.
   useEffect(() => { engine.setSequence(sequence); }, [engine, sequence]);
   useEffect(() => { engine.setBpm(bpm); }, [engine, bpm]);
   useEffect(() => { engine.setStepUnit(meter.stepUnit); }, [engine, meter.stepUnit]);
+  useEffect(() => { engine.setGrouping(meter.grouping); }, [engine, meter.grouping]);
+  useEffect(() => { engine.setSwing(swing); }, [engine, swing]);
+  useEffect(() => { engine.setAccents(strongAmp, weakAmp); }, [engine, strongAmp, weakAmp]);
+  useEffect(() => { engine.setMasterVolume(masterVolume); }, [engine, masterVolume]);
+  useEffect(() => { engine.setReverbWet(reverbWet); }, [engine, reverbWet]);
+  useEffect(() => { engine.setDelayWet(delayWet); }, [engine, delayWet]);
 
   // Drive the visual playhead from audibleStep() — what's playing NOW,
   // not what's queued 300ms ahead. Frame loop only runs while playing;
@@ -196,10 +226,10 @@ export function Sound() {
       setIsPlaying(false);
       setCurrentStep(-1);
     } else {
-      await engine.play();
+      await engine.play({ countInBars });
       setIsPlaying(true);
     }
-  }, [engine, isPlaying]);
+  }, [engine, isPlaying, countInBars]);
 
   // Cycle a cell: 0 → 1 → 2 → 0. Click toggles, the third click resets.
   const onToggleCell = useCallback((rowIdx: number, stepIdx: number) => {
@@ -261,6 +291,12 @@ export function Sound() {
         machine: { ...c.machine },
         effects: { ...c.effects, colorFx: { ...c.effects.colorFx } },
       })),
+      countInBars,
+      swing,
+      strongAmp,
+      weakAmp,
+      reverbWet,
+      delayWet,
       createdAt: existing?.createdAt ?? now,
       updatedAt: now,
     };
@@ -273,7 +309,11 @@ export function Sound() {
     } catch {
       setToast('Save failed');
     }
-  }, [name, savedId, savedList, bpm, meter, sequence, channels, refreshSavedList]);
+  }, [
+    name, savedId, savedList, bpm, meter, sequence, channels,
+    countInBars, swing, strongAmp, weakAmp, reverbWet, delayWet,
+    refreshSavedList,
+  ]);
 
   const loadSavedPattern = useCallback((p: SoundPattern) => {
     if (isPlaying) {
@@ -307,6 +347,15 @@ export function Sound() {
     // Coerce stored numbers into SoundStep (saved as number[][] for
     // forward-compat — we may broaden velocity beyond 0/1/2 later).
     setSequence(p.sequence.map((row) => row.map((v) => (v === 2 ? 2 : v === 1 ? 1 : 0) as SoundStep)));
+    // Feel + master with defaults — patterns saved before these fields
+    // existed should load cleanly to the defaults (no surprise loud
+    // reverb because an old pattern lacked the field).
+    setCountInBars(p.countInBars ?? 0);
+    setSwing(p.swing ?? 0.5);
+    setStrongAmp(p.strongAmp ?? 1.0);
+    setWeakAmp(p.weakAmp ?? 0.55);
+    setReverbWet(p.reverbWet ?? 0);
+    setDelayWet(p.delayWet ?? 0);
     setToast(`Loaded ${p.name}`);
   }, [engine, isPlaying]);
 
@@ -505,6 +554,117 @@ export function Sound() {
             </div>
           }
         />
+        <div className="bf-sound-feelbar">
+          <div className="bf-feel-control">
+            <span className="bf-feel-label">count-in</span>
+            <div className="bf-feel-pills">
+              {[0, 1, 2, 4].map((n) => (
+                <button
+                  key={n}
+                  type="button"
+                  className={`bf-feel-pill ${countInBars === n ? 'on' : ''}`}
+                  onClick={() => setCountInBars(n)}
+                >
+                  {n === 0 ? 'off' : `${n}b`}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className={`bf-feel-control ${meter.stepUnit === 4 ? 'disabled' : ''}`}>
+            <span className="bf-feel-label">
+              swing {Math.round(swing * 100)}%
+            </span>
+            <input
+              type="range"
+              min={0.5}
+              max={0.67}
+              step={0.01}
+              value={swing}
+              disabled={meter.stepUnit === 4}
+              onChange={(e) => setSwing(Number(e.target.value))}
+              aria-label="Swing"
+            />
+          </div>
+
+          <div className="bf-feel-control">
+            <span className="bf-feel-label">
+              strong {Math.round(strongAmp * 100)}%
+            </span>
+            <input
+              type="range"
+              min={0}
+              max={1.5}
+              step={0.05}
+              value={strongAmp}
+              onChange={(e) => setStrongAmp(Number(e.target.value))}
+              aria-label="Strong accent amp"
+            />
+          </div>
+
+          <div className="bf-feel-control">
+            <span className="bf-feel-label">
+              weak {Math.round(weakAmp * 100)}%
+            </span>
+            <input
+              type="range"
+              min={0}
+              max={1.5}
+              step={0.05}
+              value={weakAmp}
+              onChange={(e) => setWeakAmp(Number(e.target.value))}
+              aria-label="Weak accent amp"
+            />
+          </div>
+
+          <span className="bf-feel-divider" />
+
+          <div className="bf-feel-control">
+            <span className="bf-feel-label">
+              vol {Math.round(masterVolume * 100)}%
+            </span>
+            <input
+              type="range"
+              min={0}
+              max={1}
+              step={0.01}
+              value={masterVolume}
+              onChange={(e) => setMasterVolume(Number(e.target.value))}
+              aria-label="Master volume"
+            />
+          </div>
+
+          <div className="bf-feel-control">
+            <span className="bf-feel-label">
+              rev {Math.round(reverbWet * 100)}%
+            </span>
+            <input
+              type="range"
+              min={0}
+              max={1}
+              step={0.01}
+              value={reverbWet}
+              onChange={(e) => setReverbWet(Number(e.target.value))}
+              aria-label="Master reverb wet"
+            />
+          </div>
+
+          <div className="bf-feel-control">
+            <span className="bf-feel-label">
+              dly {Math.round(delayWet * 100)}%
+            </span>
+            <input
+              type="range"
+              min={0}
+              max={1}
+              step={0.01}
+              value={delayWet}
+              onChange={(e) => setDelayWet(Number(e.target.value))}
+              aria-label="Master delay wet"
+            />
+          </div>
+        </div>
+
         <StepGrid
           rows={channels.map((c, i) => ({
             label: c.label,
