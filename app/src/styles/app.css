@@ -2134,20 +2134,71 @@ input[type="number"] { font: inherit; color: inherit; }
 .bf-sound-strip-trigger:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
 .bf-sound-strip-trigger:active { transform: scale(0.92); }
 
-.bf-sound-strip-remove {
-  width: 22px; height: 22px;
-  border-radius: var(--r-circle);
+/* Subdivisions badge — sits in each strip head, opens a small menu of
+   subdivision options. Poly state visually distinct so users can scan
+   which channels are off-grid at a glance. */
+.bf-sound-subdiv {
+  position: relative;
+  align-self: flex-start;
+  margin-bottom: 2px;
+}
+.bf-sound-subdiv-btn {
+  font-family: var(--mono); font-size: var(--fs-micro);
+  letter-spacing: 0.06em;
+  padding: 2px 7px;
+  border: var(--bw-1) solid var(--line);
+  border-radius: var(--r-xs);
+  background: var(--bg-sunk);
+  color: var(--muted);
+  cursor: pointer;
+}
+.bf-sound-subdiv-btn:hover { color: var(--fg); border-color: var(--accent); }
+.bf-sound-subdiv-btn.poly {
+  background: color-mix(in srgb, var(--accent) 15%, var(--bg));
+  color: var(--accent);
+  border-color: var(--accent);
+}
+.bf-sound-subdiv-ratio { opacity: 0.7; }
+.bf-sound-subdiv-menu {
+  position: absolute; left: 0; top: 100%;
+  margin-top: 3px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  padding: 4px;
+  background: var(--bg-2);
+  border: var(--bw-1) solid var(--line);
+  border-radius: var(--r-xs);
+  box-shadow: 0 6px 16px color-mix(in srgb, var(--fg) 12%, transparent);
+  z-index: 10;
+  min-width: 130px;
+}
+.bf-sound-subdiv-menu button {
+  font-family: var(--mono); font-size: var(--fs-micro);
+  padding: 4px 8px;
   border: none;
+  border-radius: var(--r-xs);
   background: transparent;
   color: var(--muted);
   cursor: pointer;
-  font-size: var(--fs-md); line-height: 1;
-  flex-shrink: 0;
-  transition: background var(--t-fast), color var(--t-fast);
+  text-align: left;
+  white-space: nowrap;
 }
-.bf-sound-strip-remove:hover {
-  background: var(--grp-1);
-  color: #fff;
+.bf-sound-subdiv-menu button:hover { background: var(--bg-sunk); color: var(--fg); }
+.bf-sound-subdiv-menu button.on { background: var(--accent); color: #fff; }
+
+/* Polyrhythm row visuals — tag on the row label + subtle accent on
+   the row container so the user can scan which rows are off-grid. */
+.bf-stepgrid-row.poly .bf-stepgrid-label {
+  color: var(--accent);
+}
+.bf-stepgrid-poly-tag {
+  font-family: var(--mono); font-size: var(--fs-micro);
+  margin-left: 3px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent) 18%, var(--bg));
+  color: var(--accent);
 }
 
 /* Mini per-channel rhythm dots — sit just below the strip head, show
@@ -2168,25 +2219,6 @@ input[type="number"] { font: inherit; color: inherit; }
   width: 2px;
 }
 
-/* Add-channel CTA — lives in the channels grid after the last strip. */
-.bf-sound-strip-add {
-  display: flex; align-items: center; justify-content: center;
-  min-height: 80px;
-  padding: var(--sp-3);
-  border: var(--bw-1) dashed var(--line);
-  border-radius: var(--r-md);
-  background: transparent;
-  color: var(--muted);
-  font-family: var(--mono); font-size: var(--fs-mini);
-  letter-spacing: 0.08em; text-transform: uppercase;
-  cursor: pointer;
-  transition: color var(--t-fast), border-color var(--t-fast), background var(--t-fast);
-}
-.bf-sound-strip-add:hover {
-  color: var(--accent);
-  border-color: var(--accent);
-  background: color-mix(in srgb, var(--accent) 6%, transparent);
-}
 
 .bf-sound-strip-pickers {
   display: flex; flex-direction: column; gap: var(--sp-1);

@@ -18,17 +18,22 @@ export interface StepGridRow {
   label: string;
   /** 3-char abbreviation shown when horizontal space is tight. */
   short?: string;
-  /** Steps for this row. Length = stepsPerBar. */
+  /** Steps for this row. Length defines the row's subdivision count
+   *  — when ≠ stepsPerBar, the row is polyrhythmic and renders with
+   *  a different column count than the main grid head row. */
   steps: SoundStep[];
+  /** Per-row playhead (-1 if not playing). For non-poly rows this
+   *  matches `headCursor`; for poly rows it's that row's own cursor. */
+  cursor: number;
 }
 
 interface Props {
   rows: StepGridRow[];
-  /** Audible step (-1 if not playing). Highlights the column. */
-  currentStep: number;
-  /** stepsPerBar — pulled from rows[0].steps.length but passed explicitly
-   *  so the column count is stable across renders even when `rows` is
-   *  briefly empty (e.g. during clear-all). */
+  /** Audible step on the MAIN grid — drives the head row's column
+   *  highlight. Per-row body cells highlight from row.cursor. */
+  headCursor: number;
+  /** stepsPerBar — explicit so the head row's column count stays
+   *  stable across renders. Per-row step count comes from row.steps.length. */
   stepsPerBar: number;
   /** Additive grouping (e.g. [2,2,3] for 7/8). Sum should equal
    *  stepsPerBar; when it doesn't, trailing steps fall into the last
@@ -41,7 +46,7 @@ interface Props {
 
 export function StepGrid({
   rows,
-  currentStep,
+  headCursor,
   stepsPerBar,
   grouping,
   onToggleCell,
@@ -52,16 +57,17 @@ export function StepGrid({
       className="bf-stepgrid"
       style={{ '--steps': stepsPerBar } as React.CSSProperties}
     >
-      {/* Head row: beat-number labels above each column. Downbeats
-          show their beat number (group index + 1); off-beats show a
-          dot. Color-coded so users can scan the bar at a glance. */}
+      {/* Head row: beat-number labels above each MAIN-grid column.
+          Downbeats show their beat number (group index + 1); off-beats
+          show a dot. Color-coded so users can scan the bar at a glance.
+          Polyrhythm rows render their own column count below. */}
       <div className="bf-stepgrid-row bf-stepgrid-headrow">
         <div className="bf-stepgrid-label" />
         <div className="bf-stepgrid-cells">
           {Array.from({ length: stepsPerBar }, (_, si) => {
             const gi = groupIndexForStep(si, groups);
             const isHead = isGroupDownbeat(si, groups);
-            const isCurrent = si === currentStep;
+            const isCurrent = si === headCursor;
             const groupColor = GROUP_COLORS[gi % GROUP_COLORS.length];
             return (
               <div
@@ -76,41 +82,53 @@ export function StepGrid({
         </div>
       </div>
 
-      {rows.map((row, ri) => (
-        <div key={ri} className="bf-stepgrid-row">
-          <div className="bf-stepgrid-label" title={row.label}>
-            {row.short ?? row.label.slice(0, 3)}
+      {rows.map((row, ri) => {
+        const ringSteps = row.steps.length;
+        const isPoly = ringSteps !== stepsPerBar;
+        return (
+          <div
+            key={ri}
+            className={`bf-stepgrid-row ${isPoly ? 'poly' : ''}`}
+            // Override --steps for the row's grid so poly rows render
+            // their own column count, evenly spread across the same
+            // visual width as the main grid.
+            style={{ '--steps': ringSteps } as React.CSSProperties}
+          >
+            <div className="bf-stepgrid-label" title={row.label}>
+              {row.short ?? row.label.slice(0, 3)}
+              {isPoly && <span className="bf-stepgrid-poly-tag">·{ringSteps}</span>}
+            </div>
+            <div className="bf-stepgrid-cells">
+              {Array.from({ length: ringSteps }, (_, si) => {
+                const v = row.steps[si] ?? 0;
+                // For poly rows the head/group concept is moot — they
+                // tick at their own rate. Color them with cycling
+                // group hues so they visually contrast the main grid.
+                const gi = isPoly ? si % GROUP_COLORS.length : groupIndexForStep(si, groups);
+                const isHead = isPoly ? si === 0 : isGroupDownbeat(si, groups);
+                const isCurrent = si === row.cursor;
+                const cls = [
+                  'bf-stepgrid-cell',
+                  isHead ? 'head' : '',
+                  v === 1 ? 'on' : v === 2 ? 'accent' : '',
+                  isCurrent ? 'cur' : '',
+                ].filter(Boolean).join(' ');
+                const groupColor = GROUP_COLORS[gi % GROUP_COLORS.length];
+                return (
+                  <button
+                    key={si}
+                    type="button"
+                    className={cls}
+                    style={{ '--grp-color': groupColor } as React.CSSProperties}
+                    aria-label={`${row.label} step ${si + 1}: ${v === 0 ? 'off' : v === 1 ? 'on' : 'accent'}`}
+                    onClick={() => onToggleCell(ri, si)}
+                  />
+                );
+              })}
+            </div>
           </div>
-          <div className="bf-stepgrid-cells">
-            {Array.from({ length: stepsPerBar }, (_, si) => {
-              const v = row.steps[si] ?? 0;
-              const gi = groupIndexForStep(si, groups);
-              const isHead = isGroupDownbeat(si, groups);
-              const isCurrent = si === currentStep;
-              const cls = [
-                'bf-stepgrid-cell',
-                isHead ? 'head' : '',
-                v === 1 ? 'on' : v === 2 ? 'accent' : '',
-                isCurrent ? 'cur' : '',
-              ].filter(Boolean).join(' ');
-              const groupColor = GROUP_COLORS[gi % GROUP_COLORS.length];
-              return (
-                <button
-                  key={si}
-                  type="button"
-                  className={cls}
-                  // --grp-color drives both the idle tint and the active
-                  // fill — see app.css. Inline so the same component
-                  // works against any --grp-N palette without per-N CSS.
-                  style={{ '--grp-color': groupColor } as React.CSSProperties}
-                  aria-label={`${row.label} step ${si + 1}: ${v === 0 ? 'off' : v === 1 ? 'on' : 'accent'}`}
-                  onClick={() => onToggleCell(ri, si)}
-                />
-              );
-            })}
-          </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }

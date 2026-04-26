@@ -36,6 +36,57 @@ function defaultColorFx(type: ColorFx['type']): ColorFx {
   }
 }
 
+const SUBDIVISION_OPTIONS = [3, 4, 5, 6, 7, 8, 9, 12, 16];
+
+// Inline subcomponent — picks a channel's subdivision count.
+// "main" means "use the global stepsPerBar"; any other value puts the
+// channel in polyrhythm mode (its row resizes to that length).
+function SubdivisionsBadge({
+  value,
+  mainSteps,
+  onChange,
+}: {
+  value: number;
+  mainSteps: number;
+  onChange: (n: number) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const isPoly = value !== mainSteps;
+  return (
+    <div className="bf-sound-subdiv">
+      <button
+        type="button"
+        className={`bf-sound-subdiv-btn ${isPoly ? 'poly' : ''}`}
+        onClick={() => setOpen((o) => !o)}
+        title="Subdivisions (polyrhythm)"
+      >
+        ÷{value}{isPoly && <span className="bf-sound-subdiv-ratio"> :{mainSteps}</span>}
+      </button>
+      {open && (
+        <div className="bf-sound-subdiv-menu">
+          <button
+            type="button"
+            className={!isPoly ? 'on' : ''}
+            onClick={() => { onChange(mainSteps); setOpen(false); }}
+          >
+            main (÷{mainSteps})
+          </button>
+          {SUBDIVISION_OPTIONS.filter((n) => n !== mainSteps).map((n) => (
+            <button
+              key={n}
+              type="button"
+              className={value === n ? 'on' : ''}
+              onClick={() => { onChange(n); setOpen(false); }}
+            >
+              ÷{n}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function kebabId(name: string): string {
   const base = name
     .normalize('NFD')
@@ -124,6 +175,10 @@ export function Sound() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentStep, setCurrentStep] = useState(-1);
   const [currentBar, setCurrentBar] = useState(0);
+  // Per-row cursors — each polyrhythm channel can be on a different
+  // step. Refilled every frame from engine.audibleStepFor(i). When all
+  // channels are at main rate every entry equals currentStep.
+  const [rowCursors, setRowCursors] = useState<number[]>([]);
   const [meter, setMeter] = useState<MeterPreset>(DEFAULT_METER);
   const stepsPerBar = sumGroup(meter.grouping);
   const [viewMode, setViewMode] = useState<'grid' | 'circular'>('grid');
@@ -203,6 +258,7 @@ export function Sound() {
   useEffect(() => { engine.setSequence(sequence); }, [engine, sequence]);
   useEffect(() => { engine.setBpm(bpm); }, [engine, bpm]);
   useEffect(() => { engine.setStepUnit(meter.stepUnit); }, [engine, meter.stepUnit]);
+  useEffect(() => { engine.setStepsPerBar(stepsPerBar); }, [engine, stepsPerBar]);
   useEffect(() => { engine.setGrouping(meter.grouping); }, [engine, meter.grouping]);
   useEffect(() => { engine.setSwing(swing); }, [engine, swing]);
   useEffect(() => { engine.setAccents(strongAmp, weakAmp); }, [engine, strongAmp, weakAmp]);
@@ -218,17 +274,23 @@ export function Sound() {
   // what's playing NOW, not what's queued 300ms ahead. Frame loop
   // only runs while playing; the resets on stop happen in onPlayToggle
   // (avoids the React-19 setState-in-effect-body lint).
+  // channels.length is in deps so when channels add/remove the loop
+  // re-binds with the right rowCursors length.
   useEffect(() => {
     if (!isPlaying) return;
     let raf = 0;
+    const channelCount = channels.length;
     const loop = () => {
       setCurrentStep(engine.audibleStep());
       setCurrentBar(engine.audibleBar());
+      const cursors: number[] = new Array(channelCount);
+      for (let i = 0; i < channelCount; i++) cursors[i] = engine.audibleStepFor(i);
+      setRowCursors(cursors);
       raf = requestAnimationFrame(loop);
     };
     raf = requestAnimationFrame(loop);
     return () => cancelAnimationFrame(raf);
-  }, [engine, isPlaying]);
+  }, [engine, isPlaying, channels.length]);
 
   const trigger = useCallback(async (idx: number, amp = 1.0) => {
     await engine.ensureCtx();
@@ -247,6 +309,7 @@ export function Sound() {
       setIsPlaying(false);
       setCurrentStep(-1);
       setCurrentBar(0);
+      setRowCursors([]);
     } else {
       await engine.play({ countInBars });
       setIsPlaying(true);
@@ -484,29 +547,18 @@ export function Sound() {
     setChannels((cs) => cs.map((c, i) => (i === channelIdx ? { ...c, label } : c)));
   }, []);
 
-  // Add a fresh channel to the end. Defaults to a kick — user swaps
-  // to whatever they want via the machine picker. The sequence grows
-  // a matching empty row so positional bind (channels[i] ↔ sequence[i])
-  // stays intact.
-  const addChannel = useCallback(() => {
-    setChannels((cs) => [
-      ...cs,
-      {
-        label: `Ch ${cs.length + 1}`,
-        short: `c${cs.length + 1}`.slice(0, 4),
-        machine: { ...VOICE_MACHINES.kick.defaults },
-        effects: defaultChannelEffects(),
-      },
-    ]);
-    setSequence((seq) => [...seq, Array<SoundStep>(stepsPerBar).fill(0)]);
-  }, [stepsPerBar]);
-
-  // Remove channel `idx` from BOTH channels[] and sequence[] so the
-  // positional bind stays consistent. Engine.setMachines reflows the
-  // strip count automatically on the next push.
-  const removeChannel = useCallback((idx: number) => {
-    setChannels((cs) => cs.filter((_, i) => i !== idx));
-    setSequence((seq) => seq.filter((_, i) => i !== idx));
+  // Per-channel polyrhythm: cycle that row's length through a fixed
+  // ladder. n === stepsPerBar means "main rate" (no polyrhythm).
+  // Sequence row resizes (truncate or pad with zeros). Engine
+  // re-anchors that channel at the next bar boundary.
+  const setSubdivisions = useCallback((channelIdx: number, n: number) => {
+    const target = Math.max(2, Math.floor(n));
+    setSequence((seq) => seq.map((row, i) => {
+      if (i !== channelIdx) return row;
+      if (row.length === target) return row;
+      if (row.length > target) return row.slice(0, target);
+      return [...row, ...Array<SoundStep>(target - row.length).fill(0)];
+    }));
   }, []);
 
   const setChannelShort = useCallback((channelIdx: number, short: string) => {
@@ -851,8 +903,9 @@ export function Sound() {
               label: c.label,
               short: c.short,
               steps: sequence[i] ?? [],
+              cursor: rowCursors[i] ?? -1,
             }))}
-            currentStep={currentStep}
+            headCursor={currentStep}
             stepsPerBar={stepsPerBar}
             grouping={meter.grouping}
             onToggleCell={onToggleCell}
@@ -865,7 +918,7 @@ export function Sound() {
               rows={channels.map((c, i) => ({
                 label: c.short,
                 cells: sequence[i] ?? [],
-                cursor: currentStep,
+                cursor: rowCursors[i] ?? -1,
               }))}
               size={Math.min(480, stepsPerBar * 26 + 80)}
               onToggle={onToggleCell}
@@ -911,20 +964,22 @@ export function Sound() {
                 >
                   ▶
                 </button>
-                <button
-                  className="bf-sound-strip-remove"
-                  onClick={() => removeChannel(i)}
-                  aria-label={`Remove channel ${c.label}`}
-                  title="Remove channel"
-                  type="button"
-                >
-                  ×
-                </button>
               </div>
+
+              <SubdivisionsBadge
+                value={(sequence[i]?.length) ?? stepsPerBar}
+                mainSteps={stepsPerBar}
+                onChange={(n) => setSubdivisions(i, n)}
+              />
+
               <div className="bf-sound-strip-rhythm-mini" aria-hidden>
                 <BeatDots
-                  grouping={meter.grouping}
-                  currentStep={currentStep}
+                  grouping={
+                    (sequence[i]?.length ?? stepsPerBar) === stepsPerBar
+                      ? meter.grouping
+                      : [sequence[i]?.length ?? stepsPerBar]
+                  }
+                  currentStep={rowCursors[i] ?? -1}
                   velocities={sequence[i] ?? []}
                   size={6}
                 />
@@ -1147,14 +1202,6 @@ export function Sound() {
           );
         })}
 
-        <button
-          type="button"
-          className="bf-sound-strip-add"
-          onClick={addChannel}
-          title="Add a new channel"
-        >
-          + add channel
-        </button>
       </section>
     </main>
   );
