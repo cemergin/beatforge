@@ -2541,6 +2541,18 @@ input[type="number"] { font: inherit; color: inherit; }
   font-weight: 600;
 }
 
+/* BeatDots hero strip — sits above the step grid as the at-a-glance
+   rhythm visualization. The bf-dot styles already define the playhead
+   glow + scale transition; we just give the wrapper a gentle inset so
+   the dots don't crowd the FX bar above or the grid below. */
+.bf-sound-beatdots-wrap {
+  display: flex; justify-content: center;
+  padding: var(--sp-2) 0 var(--sp-1);
+}
+.bf-sound-beatdots-wrap .bf-dots {
+  margin-top: 0;
+}
+
 /* Step grid */
 .bf-stepgrid {
   display: flex; flex-direction: column; gap: 3px;
@@ -2550,6 +2562,28 @@ input[type="number"] { font: inherit; color: inherit; }
   grid-template-columns: 44px 1fr;
   align-items: center;
   gap: var(--sp-2);
+}
+.bf-stepgrid-headrow {
+  margin-bottom: 2px;
+  padding-bottom: 4px;
+  border-bottom: var(--bw-1) dashed var(--line);
+}
+.bf-stepgrid-headcell {
+  font-family: var(--mono); font-size: var(--fs-micro);
+  letter-spacing: 0.04em;
+  text-align: center;
+  color: var(--muted);
+  /* Per-cell --grp-color comes inline; the down-beat numerals use it,
+     the off-beat dots stay muted so the bar reads as "down beats first,
+     ornaments second". */
+}
+.bf-stepgrid-headcell.down {
+  color: var(--grp-color, var(--accent));
+  font-weight: 600;
+  font-size: var(--fs-mini);
+}
+.bf-stepgrid-headcell.cur {
+  text-shadow: 0 0 6px var(--grp-color, var(--accent));
 }
 .bf-stepgrid-label {
   font-family: var(--mono); font-size: var(--fs-micro);

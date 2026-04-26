@@ -22,6 +22,7 @@ import { Knob } from './Knob';
 import { StepGrid } from '../../components/StepGrid';
 import { TransportBar } from '../../components/TransportBar';
 import { Disclosure } from '../../components/Disclosure';
+import { BeatDots } from '../../components/BeatDots';
 
 const COLOR_FX_TYPES: ColorFx['type'][] = ['none', 'overdrive', 'bitcrush', 'filter'];
 
@@ -781,6 +782,14 @@ export function Sound() {
               aria-label="Delay feedback"
             />
           </div>
+        </div>
+
+        <div className="bf-sound-beatdots-wrap">
+          <BeatDots
+            grouping={meter.grouping}
+            currentStep={currentStep}
+            size={12}
+          />
         </div>
 
         <StepGrid

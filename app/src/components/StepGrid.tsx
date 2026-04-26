@@ -52,6 +52,30 @@ export function StepGrid({
       className="bf-stepgrid"
       style={{ '--steps': stepsPerBar } as React.CSSProperties}
     >
+      {/* Head row: beat-number labels above each column. Downbeats
+          show their beat number (group index + 1); off-beats show a
+          dot. Color-coded so users can scan the bar at a glance. */}
+      <div className="bf-stepgrid-row bf-stepgrid-headrow">
+        <div className="bf-stepgrid-label" />
+        <div className="bf-stepgrid-cells">
+          {Array.from({ length: stepsPerBar }, (_, si) => {
+            const gi = groupIndexForStep(si, groups);
+            const isHead = isGroupDownbeat(si, groups);
+            const isCurrent = si === currentStep;
+            const groupColor = GROUP_COLORS[gi % GROUP_COLORS.length];
+            return (
+              <div
+                key={si}
+                className={`bf-stepgrid-headcell ${isHead ? 'down' : ''} ${isCurrent ? 'cur' : ''}`}
+                style={{ '--grp-color': groupColor } as React.CSSProperties}
+              >
+                {isHead ? gi + 1 : '·'}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
       {rows.map((row, ri) => (
         <div key={ri} className="bf-stepgrid-row">
           <div className="bf-stepgrid-label" title={row.label}>
