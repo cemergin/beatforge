@@ -15,23 +15,55 @@ import { Knob } from './Knob';
 import { StepGrid } from '../../components/StepGrid';
 import { TransportBar } from '../../components/TransportBar';
 
-const STEPS_PER_BAR = 16;
 const NUM_CHANNELS = 5;
 
-function emptySequence(): SoundSequence {
+// Local meter list — duplicated from modes/Studio/presets.ts so the
+// Sound page doesn't depend on Studio's module. Will consolidate into
+// patterns/meter-presets.ts when we unify the two pages.
+interface MeterPreset {
+  label: string;
+  grouping: number[];
+  stepUnit: 4 | 8 | 16;
+}
+const SOUND_METERS: MeterPreset[] = [
+  { label: '4/4',  grouping: [4, 4, 4, 4],    stepUnit: 16 },
+  { label: '3/4',  grouping: [4, 4, 4],       stepUnit: 16 },
+  { label: '6/8',  grouping: [3, 3],          stepUnit: 8 },
+  { label: '5/8',  grouping: [2, 3],          stepUnit: 8 },
+  { label: '7/8',  grouping: [2, 2, 3],       stepUnit: 8 },
+  { label: '9/8',  grouping: [2, 2, 2, 3],    stepUnit: 8 },
+  { label: '11/8', grouping: [2, 2, 3, 2, 2], stepUnit: 8 },
+  { label: '12/8', grouping: [3, 3, 3, 3],    stepUnit: 8 },
+];
+const DEFAULT_METER = SOUND_METERS[0];
+
+const sumGroup = (g: number[]): number => g.reduce((a, b) => a + b, 0);
+
+function emptySequence(stepsPerBar: number): SoundSequence {
   return Array.from({ length: NUM_CHANNELS }, () =>
-    Array<SoundStep>(STEPS_PER_BAR).fill(0),
+    Array<SoundStep>(stepsPerBar).fill(0),
   );
 }
 
 // Friendly default — four-on-the-floor with backbeat snare and 8th-note
 // hats. Gives the page an alive sound on first load; clear button wipes it.
 function defaultSequence(): SoundSequence {
-  const seq = emptySequence();
+  const seq = emptySequence(sumGroup(DEFAULT_METER.grouping));
   for (const s of [0, 4, 8, 12]) seq[0][s] = 1;        // kick on the quarters
   seq[1][4] = 2; seq[1][12] = 2;                        // snare backbeat (accented)
   for (const s of [0, 2, 4, 6, 8, 10, 12, 14]) seq[2][s] = 1; // hat 8ths
   return seq;
+}
+
+/** Resize each row to `newSteps` — truncate if shorter, pad with 0s
+ *  if longer. Used when the user swaps meter and the sequence needs
+ *  to fit the new bar length. */
+function resizeSequence(seq: SoundSequence, newSteps: number): SoundSequence {
+  return seq.map((row) => {
+    if (row.length === newSteps) return row;
+    if (row.length > newSteps) return row.slice(0, newSteps);
+    return [...row, ...Array<SoundStep>(newSteps - row.length).fill(0)];
+  });
 }
 
 function defaultChannels(): Channel[] {
@@ -58,6 +90,8 @@ export function Sound() {
   const [bpm, setBpm] = useState(110);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentStep, setCurrentStep] = useState(-1);
+  const [meter, setMeter] = useState<MeterPreset>(DEFAULT_METER);
+  const stepsPerBar = sumGroup(meter.grouping);
 
   // Refs so the keyboard handler reads the latest channels without
   // re-binding the listener on every channel change.
@@ -74,9 +108,10 @@ export function Sound() {
     });
   }, [engine, channels]);
 
-  // Push sequence + BPM to the engine.
+  // Push sequence + BPM + stepUnit to the engine.
   useEffect(() => { engine.setSequence(sequence); }, [engine, sequence]);
   useEffect(() => { engine.setBpm(bpm); }, [engine, bpm]);
+  useEffect(() => { engine.setStepUnit(meter.stepUnit); }, [engine, meter.stepUnit]);
 
   // Drive the visual playhead from audibleStep() — what's playing NOW,
   // not what's queued 300ms ahead. Frame loop only runs while playing;
@@ -124,7 +159,15 @@ export function Sound() {
   }, []);
 
   const onClear = useCallback(() => {
-    setSequence(emptySequence());
+    setSequence(emptySequence(stepsPerBar));
+  }, [stepsPerBar]);
+
+  // Switch meter — resize each row to the new bar length so existing
+  // beats survive when possible (truncate excess on shrink, pad with
+  // 0s on grow). The engine re-anchors automatically on setStepUnit.
+  const onMeterChange = useCallback((m: MeterPreset) => {
+    setMeter(m);
+    setSequence((prev) => resizeSequence(prev, sumGroup(m.grouping)));
   }, []);
 
   // ASDFG → channels 1-5 at amp 1.0; QWERT → same channels at amp 2.0
@@ -223,6 +266,21 @@ export function Sound() {
           onPlayToggle={() => void onPlayToggle()}
           onBpmChange={setBpm}
           onClear={onClear}
+          rightSlot={
+            <div className="bf-meter-pills" aria-label="Meter">
+              {SOUND_METERS.map((m) => (
+                <button
+                  key={m.label}
+                  type="button"
+                  className={`bf-meter-pill ${m.label === meter.label ? 'on' : ''}`}
+                  onClick={() => onMeterChange(m)}
+                  title={`${m.label} — grouping ${m.grouping.join('+')}`}
+                >
+                  {m.label}
+                </button>
+              ))}
+            </div>
+          }
         />
         <StepGrid
           rows={channels.map((c, i) => ({
@@ -231,7 +289,8 @@ export function Sound() {
             steps: sequence[i] ?? [],
           }))}
           currentStep={currentStep}
-          stepsPerBar={STEPS_PER_BAR}
+          stepsPerBar={stepsPerBar}
+          grouping={meter.grouping}
           onToggleCell={onToggleCell}
         />
       </section>

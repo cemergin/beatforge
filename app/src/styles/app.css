@@ -2253,6 +2253,27 @@ input[type="number"] { font: inherit; color: inherit; }
 .bf-transport-clear:hover { color: var(--fg); border-color: var(--accent); }
 .bf-transport-right { margin-left: auto; }
 
+.bf-meter-pills {
+  display: flex; flex-wrap: wrap; gap: 3px;
+}
+.bf-meter-pill {
+  font-family: var(--mono); font-size: var(--fs-micro);
+  letter-spacing: 0.06em;
+  padding: 4px 8px;
+  border-radius: 999px;
+  border: var(--bw-1) solid var(--line);
+  background: var(--bg-sunk);
+  color: var(--muted);
+  cursor: pointer;
+  transition: background 0.1s, color 0.1s, border-color 0.1s;
+}
+.bf-meter-pill:hover { color: var(--fg); border-color: var(--accent); }
+.bf-meter-pill.on {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
 /* Step grid */
 .bf-stepgrid {
   display: flex; flex-direction: column; gap: 3px;
@@ -2279,22 +2300,28 @@ input[type="number"] { font: inherit; color: inherit; }
   height: 28px;
   border: var(--bw-1) solid var(--line);
   border-radius: var(--r-xs);
-  background: var(--bg-sunk);
+  /* Idle tint comes from the group color, very faintly mixed in so
+     the off-state still reads as "background". On / accent fill in
+     more strongly. --grp-color is set inline per cell. */
+  background: color-mix(in srgb, var(--grp-color, var(--accent)) 8%, var(--bg-sunk));
   cursor: pointer;
   padding: 0;
   transition: background 0.06s, border-color 0.06s, box-shadow 0.06s;
 }
-.bf-stepgrid-cell.g-b { background: color-mix(in srgb, var(--bg-sunk) 80%, var(--fg) 4%); }
-.bf-stepgrid-cell.head { border-left: 2px solid color-mix(in srgb, var(--accent) 50%, transparent); }
-.bf-stepgrid-cell:hover { border-color: var(--accent); }
+.bf-stepgrid-cell.head {
+  border-left: 2px solid color-mix(in srgb, var(--grp-color, var(--accent)) 70%, transparent);
+}
+.bf-stepgrid-cell:hover {
+  border-color: var(--grp-color, var(--accent));
+}
 .bf-stepgrid-cell.on {
-  background: color-mix(in srgb, var(--accent) 55%, var(--bg));
-  border-color: var(--accent);
+  background: color-mix(in srgb, var(--grp-color, var(--accent)) 55%, var(--bg));
+  border-color: var(--grp-color, var(--accent));
 }
 .bf-stepgrid-cell.accent {
-  background: var(--accent);
-  border-color: var(--accent);
-  box-shadow: 0 0 0 1px var(--accent) inset;
+  background: var(--grp-color, var(--accent));
+  border-color: var(--grp-color, var(--accent));
+  box-shadow: 0 0 0 1px var(--grp-color, var(--accent)) inset;
 }
 .bf-stepgrid-cell.cur {
   box-shadow: 0 0 0 2px color-mix(in srgb, var(--fg) 70%, transparent);

@@ -34,6 +34,11 @@ export class SoundEngine {
   private _running = false;
   private _bpm = 110;
   private _stepsPerBar = 16;
+  // Step note value: 4 = quarter, 8 = eighth, 16 = sixteenth. BPM is
+  // always quarter-note BPM (familiar to users), so stepSec scales by
+  // (stepUnit / 4). Switching meter from 4/4 (stepUnit=16) to 6/8
+  // (stepUnit=8) doubles each step's duration without touching bpm.
+  private _stepUnit: 4 | 8 | 16 = 16;
   private sequence: SoundSequence = [];
   // Live machine configs the scheduler reads at trigger time. Sound.tsx
   // pushes new copies on every channel change (knob tweak, preset apply,
@@ -60,6 +65,7 @@ export class SoundEngine {
   get running(): boolean { return this._running; }
   get bpm(): number { return this._bpm; }
   get stepsPerBar(): number { return this._stepsPerBar; }
+  get stepUnit(): 4 | 8 | 16 { return this._stepUnit; }
 
   /** Resume / construct the AudioContext on first user interaction.
    *  Safe to call concurrently — second caller awaits the first's
@@ -167,6 +173,16 @@ export class SoundEngine {
     this._bpm = b;
   }
 
+  /** Step duration changes when stepUnit changes (16th → 8th doubles
+   *  stepSec). Re-anchor so phase stays continuous. */
+  setStepUnit(u: 4 | 8 | 16): void {
+    if (this._running) {
+      this.anchorTime = this.nextNoteTime;
+      this.anchorIdx = this.nextIdx;
+    }
+    this._stepUnit = u;
+  }
+
   setAccents(strong: number, weak: number): void {
     this._strongAmp = Math.max(0, strong);
     this._weakAmp = Math.max(0, weak);
@@ -187,10 +203,12 @@ export class SoundEngine {
     return ((globalIdx % cycle) + cycle) % cycle;
   }
 
-  /** Quarter-note BPM mapped to step rate. 16 steps/bar of 4/4 → step =
-   *  1/16 note = (60/bpm)/4 sec. Generic: stepSec = 4·(60/bpm) / stepsPerBar. */
+  /** stepSec = noteValue / quarter = (4 / stepUnit) quarters per step,
+   *  × (60 / bpm) seconds per quarter = 240 / (bpm × stepUnit). Note:
+   *  stepsPerBar is NOT in this formula — it only defines bar boundaries,
+   *  not step duration. 16th @ 120 BPM = 0.125s; 8th @ 120 BPM = 0.25s. */
   private stepSeconds(): number {
-    return (4 * 60) / (this._bpm * this._stepsPerBar);
+    return 240 / (this._bpm * this._stepUnit);
   }
 
   async play(): Promise<void> {
