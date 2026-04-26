@@ -1,15 +1,18 @@
-// Generic step-grid sequencer view. Decoupled from Pattern/VoiceId so
-// Studio AND Sound can share it once the engines unify. Each row is a
-// channel; each cell cycles 0 (off) → 1 (on) → 2 (accent) → 0.
+// Generic step-grid sequencer view, visually identical to LinearGrid.
+// Decoupled from Pattern/VoiceId so Studio AND Sound can share it once
+// the engines unify. Each row is a channel; each cell cycles
+// 0 → 2 (strong) → 1 (weak/ghost) → 0 (set in the parent's handler).
 //
-// Visual coloring follows `grouping`: each additive group (e.g. 2+2+3
-// for 7/8) gets one of the --grp-N hues, and the first cell of each
-// group is marked as a downbeat. Grouping is the project's signature
-// rhythmic feature — same beat grouping helpers Studio uses.
+// Cells render with the shared .bf-cell + inline color styles (same as
+// LinearGrid + PillGrid): hollow group-colored outline when off,
+// filled when on, opacity 0.5 for ghost vs 1.0 for accent. The visual
+// language is consistent at every zoom level — the strip-head
+// mini-cells use the same idle/on/accent treatment in miniature.
 //
-// The visual cursor (`currentStep`) should come from the engine's
-// audibleStep() — last-scheduled cells are 300ms in Web Audio's future,
-// reading them would put the highlight ahead of what the user hears.
+// The visual cursor (`headCursor` / per-row `cursor`) should come from
+// the engine's audibleStep — last-scheduled cells are 300ms in Web
+// Audio's future, reading them would put the highlight ahead of what
+// the user hears.
 
 import type { SoundStep } from '../audio/runtime/sound-engine';
 import { GROUP_COLORS, groupIndexForStep, isGroupDownbeat } from './visual-helpers';
@@ -40,7 +43,7 @@ interface Props {
    *  group via groupIndexForStep's fall-through. Defaults to [stepsPerBar]
    *  (one big group, no internal coloring) when omitted. */
   grouping?: number[];
-  /** Cycles the cell value 0 → 1 → 2 → 0. */
+  /** Cycles the cell value 0 → 2 → 1 → 0 (strong first). */
   onToggleCell: (rowIdx: number, stepIdx: number) => void;
 }
 
@@ -53,33 +56,27 @@ export function StepGrid({
 }: Props) {
   const groups = grouping && grouping.length > 0 ? grouping : [stepsPerBar];
   return (
-    <div
-      className="bf-stepgrid"
-      style={{ '--steps': stepsPerBar } as React.CSSProperties}
-    >
-      {/* Head row: beat-number labels above each MAIN-grid column.
-          Downbeats show their beat number (group index + 1); off-beats
-          show a dot. Color-coded so users can scan the bar at a glance.
-          Polyrhythm rows render their own column count below. */}
-      <div className="bf-stepgrid-row bf-stepgrid-headrow">
-        <div className="bf-stepgrid-label" />
-        <div className="bf-stepgrid-cells">
-          {Array.from({ length: stepsPerBar }, (_, si) => {
-            const gi = groupIndexForStep(si, groups);
-            const isHead = isGroupDownbeat(si, groups);
-            const isCurrent = si === headCursor;
-            const groupColor = GROUP_COLORS[gi % GROUP_COLORS.length];
-            return (
-              <div
-                key={si}
-                className={`bf-stepgrid-headcell ${isHead ? 'down' : ''} ${isCurrent ? 'cur' : ''}`}
-                style={{ '--grp-color': groupColor } as React.CSSProperties}
-              >
-                {isHead ? gi + 1 : '·'}
-              </div>
-            );
-          })}
-        </div>
+    <div className="bf-linear bf-stepgrid">
+      <div
+        className="bf-linear-head"
+        style={{ '--steps': stepsPerBar } as React.CSSProperties}
+      >
+        <div className="bf-linear-label" />
+        {Array.from({ length: stepsPerBar }, (_, s) => {
+          const gi = groupIndexForStep(s, groups);
+          const isDown = isGroupDownbeat(s, groups);
+          const isCur = s === headCursor;
+          const color = GROUP_COLORS[gi % GROUP_COLORS.length];
+          return (
+            <div
+              key={s}
+              className={`bf-linear-head-cell ${isDown ? 'down' : ''} ${isCur ? 'cur' : ''}`}
+              style={{ color }}
+            >
+              <span>{isDown ? gi + 1 : '·'}</span>
+            </div>
+          );
+        })}
       </div>
 
       {rows.map((row, ri) => {
@@ -88,44 +85,40 @@ export function StepGrid({
         return (
           <div
             key={ri}
-            className={`bf-stepgrid-row ${isPoly ? 'poly' : ''}`}
-            // Override --steps for the row's grid so poly rows render
-            // their own column count, evenly spread across the same
-            // visual width as the main grid.
+            className={`bf-linear-row ${isPoly ? 'poly' : ''}`}
             style={{ '--steps': ringSteps } as React.CSSProperties}
           >
-            <div className="bf-stepgrid-label" title={row.label}>
+            <div className="bf-linear-label" title={row.label}>
               {row.short ?? row.label.slice(0, 3)}
-              {isPoly && <span className="bf-stepgrid-poly-tag">·{ringSteps}</span>}
+              {isPoly && <span className="bf-poly-tag">{ringSteps}</span>}
             </div>
-            <div className="bf-stepgrid-cells">
-              {Array.from({ length: ringSteps }, (_, si) => {
-                const v = row.steps[si] ?? 0;
-                // For poly rows the head/group concept is moot — they
-                // tick at their own rate. Color them with cycling
-                // group hues so they visually contrast the main grid.
-                const gi = isPoly ? si % GROUP_COLORS.length : groupIndexForStep(si, groups);
-                const isHead = isPoly ? si === 0 : isGroupDownbeat(si, groups);
-                const isCurrent = si === row.cursor;
-                const cls = [
-                  'bf-stepgrid-cell',
-                  isHead ? 'head' : '',
-                  v === 1 ? 'on' : v === 2 ? 'accent' : '',
-                  isCurrent ? 'cur' : '',
-                ].filter(Boolean).join(' ');
-                const groupColor = GROUP_COLORS[gi % GROUP_COLORS.length];
-                return (
-                  <button
-                    key={si}
-                    type="button"
-                    className={cls}
-                    style={{ '--grp-color': groupColor } as React.CSSProperties}
-                    aria-label={`${row.label} step ${si + 1}: ${v === 0 ? 'off' : v === 1 ? 'on' : 'accent'}`}
-                    onClick={() => onToggleCell(ri, si)}
-                  />
-                );
-              })}
-            </div>
+            {Array.from({ length: ringSteps }, (_, s) => {
+              const v = row.steps[s] ?? 0;
+              // Polyrhythm rows get rotating group hues so they
+              // visually contrast main-rate rows; non-poly rows track
+              // the canonical grouping.
+              const gi = isPoly
+                ? s % GROUP_COLORS.length
+                : groupIndexForStep(s, groups);
+              const color = GROUP_COLORS[gi % GROUP_COLORS.length];
+              const active = v > 0;
+              const isCur = s === row.cursor;
+              return (
+                <button
+                  key={s}
+                  type="button"
+                  className={`bf-cell ${active ? 'on' : ''} ${isCur ? 'cur' : ''}`}
+                  style={{
+                    background: active ? color : 'transparent',
+                    borderColor: color,
+                    opacity: active ? (v === 2 ? 1 : 0.5) : 0.9,
+                  }}
+                  aria-label={`${row.label} step ${s + 1}: ${v === 0 ? 'off' : v === 1 ? 'on' : 'accent'}`}
+                  aria-pressed={active}
+                  onClick={() => onToggleCell(ri, s)}
+                />
+              );
+            })}
           </div>
         );
       })}

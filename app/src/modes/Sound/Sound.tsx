@@ -40,6 +40,64 @@ function defaultColorFx(type: ColorFx['type']): ColorFx {
 
 const SUBDIVISION_OPTIONS = [3, 4, 5, 6, 7, 8, 9, 12, 16];
 
+// Free-form grouping editor — comma/+/space separated integers. Lives
+// in its own subcomponent so we can use a `key` on its mount to reset
+// its internal text state when external grouping changes (parent's
+// permutation pill click, meter switch, pattern load). Side-steps the
+// React-19 setState-in-effect rule that prohibits the alternative
+// pattern (effect-driven sync of derived state).
+function GroupingTextEditor({
+  initialText,
+  stepsPerBar,
+  onApply,
+}: {
+  initialText: string;
+  stepsPerBar: number;
+  onApply: (parts: number[]) => void;
+}) {
+  const [text, setText] = useState(initialText);
+  const parsed = useMemo(
+    () => text
+      .split(/[,+\s]+/)
+      .filter(Boolean)
+      .map(Number)
+      .filter((n) => Number.isFinite(n) && n > 0),
+    [text],
+  );
+  const sum = parsed.reduce((a, b) => a + b, 0);
+  const commit = useCallback(() => {
+    if (parsed.length === 0) return;
+    onApply(parsed);
+  }, [parsed, onApply]);
+  return (
+    <>
+      <input
+        type="text"
+        className="bf-sound-grouping-input"
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+        onBlur={commit}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            commit();
+            (e.target as HTMLInputElement).blur();
+          }
+        }}
+        placeholder="e.g. 2,2,3"
+        aria-label="Custom grouping"
+        title={`Type a custom grouping (currently sums to ${sum})`}
+      />
+      <span
+        className={`bf-sound-grouping-sum ${sum === stepsPerBar ? 'ok' : 'pending'}`}
+        title={`Sum of ${parsed.join('+') || '0'} = ${sum}`}
+      >
+        = {sum}
+      </span>
+    </>
+  );
+}
+
 // Inline subcomponent — picks a channel's subdivision count.
 // "main" means "use the global stepsPerBar"; any other value puts the
 // channel in polyrhythm mode (its row resizes to that length).
@@ -155,15 +213,15 @@ function defaultChannels(): Channel[] {
     const preset = presetId && m.presets ? m.presets[presetId] : undefined;
     return { ...m.defaults, ...preset };
   };
-  // All channels start with 0 sends — user dials in per-channel reverb
-  // and delay deliberately. Master wets default to non-zero so the
-  // moment a send goes up the user hears the master FX in action.
+  // Classic 5-piece drum kit lineup — fastest path to laying a groove
+  // down on first load. Users still swap any channel to bell/kalimba/
+  // FM/etc via the machine picker.
   return [
-    { label: 'Kick',    short: 'Kic', machine: k('kick'),                effects: defaultChannelEffects() },
-    { label: 'Snare',   short: 'Sna', machine: k('snare'),               effects: defaultChannelEffects() },
-    { label: 'Hat',     short: 'Hat', machine: k('hat'),                 effects: defaultChannelEffects() },
-    { label: 'Bell',    short: 'Bel', machine: k('modal', 'bell'),       effects: defaultChannelEffects() },
-    { label: 'Kalimba', short: 'Kal', machine: k('fm', 'kalimba'),       effects: defaultChannelEffects() },
+    { label: 'Kick',    short: 'Kic', machine: k('kick'),     effects: defaultChannelEffects() },
+    { label: 'Snare',   short: 'Sna', machine: k('snare'),    effects: defaultChannelEffects() },
+    { label: 'Hat',     short: 'Hat', machine: k('hat'),      effects: defaultChannelEffects() },
+    { label: 'Tom',     short: 'Tom', machine: k('tom'),      effects: defaultChannelEffects() },
+    { label: 'Cowbell', short: 'Cow', machine: k('cowbell'),  effects: defaultChannelEffects() },
   ];
 }
 
@@ -358,6 +416,18 @@ export function Sound() {
   const onGroupingChange = useCallback((g: number[]) => {
     setGrouping([...g]);
   }, []);
+
+  // Free-form grouping editor commit handler — re-sizes sequence rows
+  // when the sum changes so engine + grid stay in sync. Same parsing
+  // semantics as Studio.
+  const onGroupingTextApply = useCallback((parts: number[]) => {
+    if (parts.length === 0) return;
+    setGrouping([...parts]);
+    const newSum = parts.reduce((a, b) => a + b, 0);
+    if (newSum !== stepsPerBar) {
+      setSequence((prev) => resizeSequence(prev, newSum));
+    }
+  }, [stepsPerBar]);
 
   // Enumerate up to 6 permutations of the canonical grouping. Same
   // bounded-search pattern as Practice — full permutation enumeration
@@ -745,25 +815,29 @@ export function Sound() {
             </div>
           }
         />
-        {groupingOptions.length > 1 && (
-          <div className="bf-sound-grouping-picker" role="toolbar" aria-label="Grouping permutations">
-            <span className="bf-sound-grouping-label">grouping</span>
-            {groupingOptions.map((g, i) => {
-              const isCurrent = g.join('+') === grouping.join('+');
-              return (
-                <button
-                  key={i}
-                  type="button"
-                  className={`bf-sound-grouping-btn ${isCurrent ? 'on' : ''}`}
-                  onClick={() => onGroupingChange(g)}
-                  title={`Apply ${g.join('+')} grouping`}
-                >
-                  {g.join('+')}
-                </button>
-              );
-            })}
-          </div>
-        )}
+        <div className="bf-sound-grouping-picker" role="toolbar" aria-label="Grouping">
+          <span className="bf-sound-grouping-label">grouping</span>
+          {groupingOptions.length > 1 && groupingOptions.map((g, i) => {
+            const isCurrent = g.join('+') === grouping.join('+');
+            return (
+              <button
+                key={i}
+                type="button"
+                className={`bf-sound-grouping-btn ${isCurrent ? 'on' : ''}`}
+                onClick={() => onGroupingChange(g)}
+                title={`Apply ${g.join('+')} grouping`}
+              >
+                {g.join('+')}
+              </button>
+            );
+          })}
+          <GroupingTextEditor
+            key={grouping.join(',')}
+            initialText={grouping.join(',')}
+            stepsPerBar={stepsPerBar}
+            onApply={onGroupingTextApply}
+          />
+        </div>
 
         <div className="bf-sound-feelbar">
           <div className="bf-feel-control">

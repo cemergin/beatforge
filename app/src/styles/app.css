@@ -2187,17 +2187,10 @@ input[type="number"] { font: inherit; color: inherit; }
 .bf-sound-subdiv-menu button:hover { background: var(--bg-sunk); color: var(--fg); }
 .bf-sound-subdiv-menu button.on { background: var(--accent); color: #fff; }
 
-/* Polyrhythm row visuals — tag on the row label + subtle accent on
-   the row container so the user can scan which rows are off-grid. */
-.bf-stepgrid-row.poly .bf-stepgrid-label {
-  color: var(--accent);
-}
-.bf-stepgrid-poly-tag {
-  font-family: var(--mono); font-size: var(--fs-micro);
-  margin-left: 3px;
-  padding: 0 4px;
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--accent) 18%, var(--bg));
+/* Polyrhythm row visuals — tag on the row label so the user can scan
+   which rows are off-grid. .bf-poly-tag is shared with Practice's
+   LinearGrid; styled in app.css's main grid section. */
+.bf-stepgrid .bf-linear-row.poly .bf-linear-label {
   color: var(--accent);
 }
 
@@ -2214,22 +2207,29 @@ input[type="number"] { font: inherit; color: inherit; }
   border-bottom: var(--bw-1) dashed var(--line);
   margin-bottom: var(--sp-1);
 }
+/* Same hollow/filled idiom as the main .bf-cell — transparent off
+   with group-colored border, filled on, opacity 0.5 ghost / 1.0
+   accent. The aspect-ratio is dropped (rectangles, not squares) so
+   the strip stays slim, but everything else matches. */
 .bf-mini-cell {
   display: block;
   height: 8px;
   border-radius: 2px;
-  background: color-mix(in srgb, var(--grp-color, var(--accent)) 12%, var(--bg-sunk));
-  border: var(--bw-1) solid color-mix(in srgb, var(--grp-color, var(--accent)) 25%, var(--line));
-  transition: background var(--t-fast), box-shadow var(--t-fast);
+  background: transparent;
+  border: var(--bw-1) solid var(--grp-color, var(--accent));
+  opacity: 0.9;
+  transition: background var(--t-fast), opacity var(--t-fast), box-shadow var(--t-fast);
 }
 .bf-mini-cell.on {
-  background: color-mix(in srgb, var(--grp-color, var(--accent)) 60%, var(--bg));
+  background: var(--grp-color, var(--accent));
+  opacity: 0.5;
 }
 .bf-mini-cell.accent {
   background: var(--grp-color, var(--accent));
+  opacity: 1;
 }
 .bf-mini-cell.cur {
-  box-shadow: 0 0 0 1.5px var(--fg) inset;
+  box-shadow: 0 0 0 1.5px var(--fg);
 }
 .bf-sound-strip-mini.poly {
   border-color: var(--accent);
@@ -2745,6 +2745,26 @@ input[type="number"] { font: inherit; color: inherit; }
   color: #fff;
   border-color: var(--accent);
 }
+.bf-sound-grouping-input {
+  font-family: var(--mono); font-size: var(--fs-micro);
+  width: 100px;
+  padding: 4px 8px;
+  border: var(--bw-1) solid var(--line);
+  border-radius: var(--r-xs);
+  background: var(--bg);
+  color: var(--fg);
+}
+.bf-sound-grouping-input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+.bf-sound-grouping-sum {
+  font-family: var(--mono); font-size: var(--fs-micro);
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+.bf-sound-grouping-sum.ok { color: var(--accent); }
+.bf-sound-grouping-sum.pending { color: var(--grp-1); }
 
 /* Circular view wrapper — center the SVG and give it some breathing
    room so it doesn't slam into the FX bar above or the channels grid
@@ -2755,77 +2775,19 @@ input[type="number"] { font: inherit; color: inherit; }
 }
 
 /* Step grid */
-.bf-stepgrid {
-  display: flex; flex-direction: column; gap: 3px;
+/* StepGrid is now a thin variant of .bf-linear — same square .bf-cell
+   look as Practice's LinearGrid, just driven from generic positional
+   rows instead of a Pattern. The only Sound-specific tweaks: a tighter
+   max-width override to fill the sequencer card, and a soft separator
+   under the head row to anchor the beat-number ruler. */
+.bf-stepgrid.bf-linear {
+  max-width: none;
+  width: 100%;
 }
-.bf-stepgrid-row {
-  display: grid;
-  grid-template-columns: 44px 1fr;
-  align-items: center;
-  gap: var(--sp-2);
-}
-.bf-stepgrid-headrow {
+.bf-stepgrid .bf-linear-head {
   margin-bottom: 2px;
   padding-bottom: 4px;
   border-bottom: var(--bw-1) dashed var(--line);
-}
-.bf-stepgrid-headcell {
-  font-family: var(--mono); font-size: var(--fs-micro);
-  letter-spacing: 0.04em;
-  text-align: center;
-  color: var(--muted);
-  /* Per-cell --grp-color comes inline; the down-beat numerals use it,
-     the off-beat dots stay muted so the bar reads as "down beats first,
-     ornaments second". */
-}
-.bf-stepgrid-headcell.down {
-  color: var(--grp-color, var(--accent));
-  font-weight: 600;
-  font-size: var(--fs-mini);
-}
-.bf-stepgrid-headcell.cur {
-  text-shadow: 0 0 6px var(--grp-color, var(--accent));
-}
-.bf-stepgrid-label {
-  font-family: var(--mono); font-size: var(--fs-micro);
-  letter-spacing: 0.1em; text-transform: uppercase;
-  color: var(--muted);
-  text-align: right;
-  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-}
-.bf-stepgrid-cells {
-  display: grid;
-  grid-template-columns: repeat(var(--steps), 1fr);
-  gap: 3px;
-}
-/* Cells share the visual treatment with .bf-mini-cell — same group-
-   color hierarchy at every zoom level, so a "cell" reads the same
-   whether it's a 28px sequencer cell or an 8px strip-head preview. */
-.bf-stepgrid-cell {
-  height: 28px;
-  border-radius: var(--r-xs);
-  border: var(--bw-1) solid color-mix(in srgb, var(--grp-color, var(--accent)) 25%, var(--line));
-  background: color-mix(in srgb, var(--grp-color, var(--accent)) 12%, var(--bg-sunk));
-  cursor: pointer;
-  padding: 0;
-  transition: background 0.06s, border-color 0.06s, box-shadow 0.06s;
-}
-.bf-stepgrid-cell.head {
-  border-left: 2px solid color-mix(in srgb, var(--grp-color, var(--accent)) 70%, transparent);
-}
-.bf-stepgrid-cell:hover {
-  border-color: var(--grp-color, var(--accent));
-}
-.bf-stepgrid-cell.on {
-  background: color-mix(in srgb, var(--grp-color, var(--accent)) 60%, var(--bg));
-  border-color: var(--grp-color, var(--accent));
-}
-.bf-stepgrid-cell.accent {
-  background: var(--grp-color, var(--accent));
-  border-color: var(--grp-color, var(--accent));
-}
-.bf-stepgrid-cell.cur {
-  box-shadow: 0 0 0 2px var(--fg) inset;
 }
 
 /* Responsive — stack to 1 strip per row when too narrow */
@@ -2834,6 +2796,4 @@ input[type="number"] { font: inherit; color: inherit; }
 }
 @media (max-width: 720px) {
   .bf-sound-grid { grid-template-columns: 1fr; }
-  .bf-stepgrid-row { grid-template-columns: 32px 1fr; }
-  .bf-stepgrid-cell { height: 22px; }
 }
