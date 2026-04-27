@@ -1432,6 +1432,27 @@ input[type="number"] { font: inherit; color: inherit; }
   flex-shrink: 0;
 }
 
+/* Practice focus toggle (groove / click only). Sits under PlayVolume.
+   Mirrors the .bf-sound-preset-pill aesthetic but bigger so it's a
+   first-class control, not a chip. */
+.bf-focus-toggle {
+  display: inline-flex; gap: var(--sp-1);
+  padding: 4px; margin: var(--sp-3) auto 0;
+  border-radius: 999px; background: var(--bg-sunk);
+  align-self: center;
+}
+.bf-focus-pill {
+  appearance: none; border: 0; background: transparent;
+  padding: 6px var(--sp-4); border-radius: 999px;
+  font-family: var(--mono); font-size: var(--fs-mini);
+  color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase;
+  cursor: pointer; transition: background var(--t-fast), color var(--t-fast);
+}
+.bf-focus-pill:hover { color: var(--fg); }
+.bf-focus-pill.on {
+  background: var(--accent); color: #fff;
+}
+
 /* ── Shared Disclosure widget (see src/components/Disclosure.tsx) ──
    Single source of truth for the collapsible section caret. All
    <details>-based sections in the app go through <Disclosure/>.   */

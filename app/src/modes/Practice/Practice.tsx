@@ -37,6 +37,27 @@ function swingDefaultToSlider(s: number | undefined): number {
   return Math.round(50 + ((s - 0.5) / 0.34) * 100);
 }
 
+type FocusMode = 'groove' | 'click';
+
+/** Reduce a full pattern to its meter-skeleton: a single kick track that
+ *  hits every group downbeat. Bar one strong (velocity 2), every other
+ *  group downbeat weak (velocity 1). Keeps stepUnit / steps / grouping /
+ *  bpm intact so the visualizers and trainer keep working unchanged.
+ *
+ *  Why: practitioners often want to play their own instrument over a
+ *  bare click — the groove voices become a distraction. This is the
+ *  "click only" mode. The reverse ("groove only", no click) just
+ *  feeds the original pattern. */
+function buildClickSkeleton(pattern: Pattern): Pattern {
+  const skeleton: Velocity[] = Array.from({ length: pattern.steps }, () => 0);
+  let cursor = 0;
+  pattern.grouping.forEach((g, i) => {
+    if (cursor < pattern.steps) skeleton[cursor] = (i === 0 ? 2 : 1) as Velocity;
+    cursor += g;
+  });
+  return { ...pattern, tracks: { KK: skeleton } };
+}
+
 interface Props {
   engine: AudioEngine;
   patternId: string;
@@ -93,6 +114,10 @@ export function Practice({ engine, patternId, onPatternChange, onOpenSoundPatter
     () => (localStorage.getItem('bf_view') as View) || 'circular',
   );
   const [grouping, setGrouping] = useState<number[]>(pattern.grouping);
+  const [focus, setFocus] = useState<FocusMode>(
+    () => ((localStorage.getItem('bf_focus') as FocusMode) || 'groove'),
+  );
+  useEffect(() => { localStorage.setItem('bf_focus', focus); }, [focus]);
 
   const [highlights, setHighlights] = useState<string[]>(() => getHighlights());
   const [recent, setRecent] = useState<string[]>(() => getRecent());
@@ -161,8 +186,9 @@ export function Practice({ engine, patternId, onPatternChange, onOpenSoundPatter
   /* eslint-enable react-hooks/set-state-in-effect */
 
   useEffect(() => {
-    engine.loadPattern({ ...pattern, grouping });
-  }, [engine, pattern, grouping]);
+    const base = focus === 'click' ? buildClickSkeleton(pattern) : pattern;
+    engine.loadPattern({ ...base, grouping });
+  }, [engine, pattern, grouping, focus]);
 
   useEffect(() => { engine.setKit(activeKit); }, [engine, activeKit]);
   useEffect(() => { localStorage.setItem('bf_view', view); }, [view]);
@@ -437,6 +463,33 @@ export function Practice({ engine, patternId, onPatternChange, onOpenSoundPatter
           volume={masterVolume}
           onVolumeChange={setMasterVolume}
         />
+
+        <div
+          className="bf-focus-toggle"
+          role="radiogroup"
+          aria-label="Practice focus"
+        >
+          <button
+            type="button"
+            role="radio"
+            aria-checked={focus === 'groove'}
+            className={`bf-focus-pill ${focus === 'groove' ? 'on' : ''}`}
+            onClick={() => setFocus('groove')}
+            title="Play the full pattern voices"
+          >
+            groove
+          </button>
+          <button
+            type="button"
+            role="radio"
+            aria-checked={focus === 'click'}
+            className={`bf-focus-pill ${focus === 'click' ? 'on' : ''}`}
+            onClick={() => setFocus('click')}
+            title="Bare meter — kick on group downbeats"
+          >
+            click only
+          </button>
+        </div>
 
         {pattern.story && (
           <Disclosure className="bf-story" summary="about this rhythm">
