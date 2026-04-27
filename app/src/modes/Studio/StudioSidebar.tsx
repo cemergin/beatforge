@@ -102,7 +102,7 @@ export function StudioSidebar({
           </select>
         </label>
         <label className="bf-studio-field">
-          <span className="bf-mini-label">default kit</span>
+          <span className="bf-mini-label">default ensemble</span>
           <select
             className="bf-studio-input"
             value={draft.defaultKit}

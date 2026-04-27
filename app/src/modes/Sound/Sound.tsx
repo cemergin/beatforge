@@ -285,7 +285,7 @@ export function Sound({ initialSoundPatternId, onConsumedInitial }: SoundProps =
   // Kit persistence — separate from pattern; "kit" = the channel
   // palette only (machine configs + per-channel mixer + colour FX).
   // One kit can power many patterns; loading a kit only swaps channels.
-  const [kitName, setKitName] = useState('My Kit');
+  const [kitName, setKitName] = useState('My Ensemble');
   const [savedKitId, setSavedKitId] = useState<string | null>(null);
   const [savedKitList, setSavedKitList] = useState<SoundKit[]>([]);
 
@@ -645,7 +645,7 @@ export function Sound({ initialSoundPatternId, onConsumedInitial }: SoundProps =
   // active channels but leaves sequence + meter + feel + master FX
   // alone, so users can A/B kits against the same rhythm.
   const onSaveKit = useCallback(async () => {
-    const trimmed = kitName.trim() || 'My Kit';
+    const trimmed = kitName.trim() || 'My Ensemble';
     const now = Date.now();
     const id = savedKitId ?? kebabId(trimmed);
     const existing = savedKitId ? savedKitList.find((k) => k.id === savedKitId) : undefined;
@@ -840,26 +840,26 @@ export function Sound({ initialSoundPatternId, onConsumedInitial }: SoundProps =
 
       <section className="bf-sound-sequencer">
         <div className="bf-sound-patternbar bf-sound-kitbar">
-          <span className="bf-sound-bar-tag">kit</span>
+          <span className="bf-sound-bar-tag">ensemble</span>
           <input
             className="bf-sound-name"
             type="text"
             value={kitName}
             onChange={(e) => setKitName(e.target.value)}
-            placeholder="Kit name"
-            aria-label="Kit name"
+            placeholder="Ensemble name"
+            aria-label="Ensemble name"
           />
           <button
             type="button"
             className="bf-sound-saveBtn"
             onClick={() => void onSaveKit()}
-            title={savedKitId ? 'Update saved kit' : 'Save the current channel palette'}
+            title={savedKitId ? 'Update saved ensemble' : 'Save the current channel palette'}
           >
-            {savedKitId ? 'update' : 'save kit'}
+            {savedKitId ? 'update' : 'save ensemble'}
           </button>
           <div className="bf-sound-savedlist" role="list">
             {savedKitList.length === 0 && (
-              <span className="bf-sound-savedempty">no saved kits yet</span>
+              <span className="bf-sound-savedempty">no saved ensembles yet</span>
             )}
             {savedKitList.map((k) => (
               <span
@@ -871,7 +871,7 @@ export function Sound({ initialSoundPatternId, onConsumedInitial }: SoundProps =
                   type="button"
                   className="bf-sound-savedchip-load"
                   onClick={() => loadSavedKit(k)}
-                  title={`Load kit — ${k.channels.map((c) => c.label).join(', ')}`}
+                  title={`Load ensemble — ${k.channels.map((c) => c.label).join(', ')}`}
                 >
                   {k.name}
                 </button>
@@ -880,7 +880,7 @@ export function Sound({ initialSoundPatternId, onConsumedInitial }: SoundProps =
                   className="bf-sound-savedchip-del"
                   onClick={() => void onDeleteSavedKit(k.id)}
                   title="Delete"
-                  aria-label={`Delete kit ${k.name}`}
+                  aria-label={`Delete ensemble ${k.name}`}
                 >
                   ×
                 </button>

@@ -56,7 +56,7 @@ export function SaveDialog({ draft, onCancel, onConfirm }: Props) {
               const maxN = stepToNaturalBpm(draft.bpm.max, draft.stepUnit, denom);
               return <div><dt>Tempo</dt><dd>{t.glyph}={t.value} (min {minN}, max {maxN})</dd></div>;
             })()}
-            <div><dt>Default kit</dt><dd>{draft.defaultKit}</dd></div>
+            <div><dt>Default ensemble</dt><dd>{draft.defaultKit}</dd></div>
             <div><dt>Region</dt><dd>{draft.region}</dd></div>
             <div><dt>Tracks</dt><dd>{Object.keys(draft.tracks).join(', ') || <em>none</em>}</dd></div>
           </dl>

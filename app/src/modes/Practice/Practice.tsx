@@ -471,18 +471,18 @@ export function Practice({ engine, patternId, onPatternChange, onOpenSoundPatter
                 </button>
               ))}
               {savedSoundKits.length > 0 && (
-                <div className="bf-mini-label" style={{ padding: '6px 8px 2px' }}>kits</div>
+                <div className="bf-mini-label" style={{ padding: '6px 8px 2px' }}>ensembles</div>
               )}
               {savedSoundKits.map((kit) => (
                 <button
                   key={kit.id}
                   className="bf-pattern-row"
                   onClick={() => onOpenSoundPattern?.(kit.id)}
-                  title={`${kit.channels.map((c) => c.label).join(', ')} — open Sound to apply this kit`}
+                  title={`${kit.channels.map((c) => c.label).join(', ')} — open Sound to apply this ensemble`}
                   disabled
                 >
                   <span className="bf-pattern-row-name">{kit.name}</span>
-                  <span className="bf-pattern-row-sig">kit</span>
+                  <span className="bf-pattern-row-sig">ensemble</span>
                 </button>
               ))}
             </div>

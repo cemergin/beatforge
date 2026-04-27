@@ -42,7 +42,7 @@ export function Filters({
         onClear={() => setFilters({ ...filters, genres: [] })}
       />
       <FilterRow
-        label="kit"
+        label="ensemble"
         values={allKits}
         selected={filters.kits}
         renderLabel={(v) => (v === 'frameDrum' ? 'frame' : v)}
