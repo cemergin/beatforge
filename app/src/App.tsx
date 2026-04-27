@@ -9,6 +9,7 @@ const Library = lazy(() => import('./modes/Library/Library').then((m) => ({ defa
 const Studio = lazy(() => import('./modes/Studio/Studio').then((m) => ({ default: m.Studio })));
 const Sound = lazy(() => import('./modes/Sound/Sound').then((m) => ({ default: m.Sound })));
 const PatternsSandbox = lazy(() => import('./modes/_Patterns/PatternsSandbox').then((m) => ({ default: m.PatternsSandbox })));
+const Lab = lazy(() => import('./modes/_Lab/Lab').then((m) => ({ default: m.Lab })));
 import { patternById, registerPatternSource } from './patterns/seed';
 import { deserializePattern } from './patterns/serialize';
 import { loadAllSafe } from './lib/db';
@@ -57,6 +58,7 @@ export default function App() {
     if (t === 'library' || t === 'studio' || t === 'practice' || t === 'sound') return t;
     // _patterns is dev-only — never restore it in production builds.
     if (t === '_patterns' && DEV_MODE) return '_patterns';
+    if (t === '_lab' && DEV_MODE) return '_lab';
     return 'practice';
   });
 
@@ -296,6 +298,16 @@ export default function App() {
               _patterns
             </button>
           )}
+          {DEV_MODE && (
+            <button
+              className={`bf-chip ${tab === '_lab' ? 'on' : 'ghost'}`}
+              onClick={() => switchTab('_lab')}
+              type="button"
+              title="Dev-only: modular platform sandbox"
+            >
+              _lab
+            </button>
+          )}
         </nav>
         <div className="bf-topright">
           <div className="bf-theme-seg" role="group" aria-label="theme">
@@ -357,6 +369,11 @@ export default function App() {
       {DEV_MODE && tab === '_patterns' && (
         <Suspense fallback={<div className="bf-mode-loading">loading…</div>}>
           <PatternsSandbox engine={engine} />
+        </Suspense>
+      )}
+      {DEV_MODE && tab === '_lab' && (
+        <Suspense fallback={<div className="bf-mode-loading">loading lab…</div>}>
+          <Lab />
         </Suspense>
       )}
       <UpdateBanner />
