@@ -1,20 +1,23 @@
 # BeatForge Design Synthesis — Six Reviews → One Action Plan
 
-**Date**: 2026-04-27 (updated to integrate all six lenses)
+**Date**: 2026-04-27 (updated to integrate all seven lenses + founder's redirect on the cultural framing)
 **Inputs**:
 - `docs/2026-04-27-claude-design-review.md` — implementation-aware "close to the code" lens
 - `docs/2026-04-27-senior-designer-review.md` — independent senior product designer (10+ yrs music tech)
 - `docs/2026-04-27-toy-maker-review.md` — instrument-maker / learning-toy designer (Loog, Pocket Operator, Tenori-On)
 - `docs/2026-04-27-drum-machine-designer-review.md` — electronic-instrument designer (Roland TR, Elektron, Volca, Sonicware, Polyend)
-- `docs/2026-04-27-ethnomusicology-curator-review.md` — ethnomusicologist + museum curator (Folkways, MIM, Steven Feld, Mickey Hart)
+- `docs/2026-04-27-ethnomusicology-curator-review.md` — ethnomusicologist + museum curator (Folkways, MIM, Steven Feld). **Note**: the founder explicitly rejected this lens's *museum-piece-reverence* framing as "99% dead already" — the ensemble-naming + plain-language sourcing recommendations are kept; the tier-deferral / studied-mode / preservation-discipline framings are dropped in favor of the recombinator lens below.
 - `docs/2026-04-27-percussion-player-review.md` — multi-tradition percussionist + acoustic-instrument practitioner
+- `docs/2026-04-27-living-archive-manifesto.md` — **the corrective lens, anchoring the cultural-identity workstream**. Brian Eno's scenius / Talking Heads / Madlib / J Dilla / Damon Albarn / Vampire Weekend / Os Mutantes / Khaled / Rachid Taha / Anthony Bourdain / Atlas Obscura / Angine de Poitrine tradition. Connection as generation, not preservation.
 **Audience**: Founder. The next-30-days plan to commit to.
 
 ---
 
 ## The headline
 
-Six lenses. Six independent paths. Deep convergence on the **diagnosis**. Sharp, productive disagreement on the **prescription** — but the disagreements line up neatly with **persona × surface**, which means there isn't actually a contradiction; there's a need to *route different surfaces to different prescriptions*.
+Seven lenses (six independent agents + the founder's redirect). Deep convergence on the **diagnosis**. Sharp, productive disagreement on the **prescription** — but the disagreements line up neatly with **persona × surface**, so they're not contradictions, they're a routing problem.
+
+**The big late shift in this synthesis**: the ethnomusicologist's lens — provenance discipline, tier-deferral, museum reverence — was anchoring the cultural-identity workstream until the founder pushed back: *"if we put something in a museum it means it's 99% dead already. We want to keep the fire alive by connecting so that new music and energy is created from the most unexpected corners."* The cultural anchor swaps to **the Living Archive / Recombinator / Cousin-Finder lens** (see `docs/2026-04-27-living-archive-manifesto.md`). The product is no longer "a museum that lets you play"; it's **a cousin-finder for the world's rhythms** — Brian Eno's scenius applied to a 536-pattern corpus, with the spirit of the producers/musicians who generate new music by connecting old music: J Dilla, Madlib, Talking Heads, Vampire Weekend, Damon Albarn, Os Mutantes, Khaled, Rachid Taha, Arooj Aftab, Anthony Bourdain, Atlas Obscura, Dick Dale's *Misirlou*. The Quebec math-rock duo Angine de Poitrine (microtonal-but-danceable, viral, eye-catching) is the **positioning energy** — not a literal visual aesthetic to copy. *No polka dots in the UI.*
 
 **Convergent diagnosis (extremely high confidence):**
 - The Sound page is overloaded; the *kind* of density on it is wrong for everyone.
@@ -116,33 +119,47 @@ All six lenses agree:
 
 ---
 
-## NEW: Provenance as the highest-priority workstream (ethnomusicologist's wedge)
+## NEW: The Living-Archive Reframe + Cousin-Finder Mechanic
 
-The ethnomusicologist is the only reviewer who pointed out: BeatForge has **536 patterns with no attribution**. That silence is the largest cultural-respect risk in the product. It's also the **engineering-cheapest** intervention available — three schema fields and a Sources page.
+The ethnomusicologist's framing — provenance discipline, tier-deferral, museum reverence — was anchoring this section until the founder pushed back: *"if we put something in a museum it means it's 99% dead already."* The recombinator lens (`docs/2026-04-27-living-archive-manifesto.md`, `docs/2026-04-27-living-archive-agent-review.md`) replaces it.
 
-This single workstream should land **before any feature work** because it changes the product's character irreversibly (in the right direction) and because every other cultural-identity move (tier system, defer-or-collaborate decisions, the studied mode) depends on it being in place.
+**Core principle**: a tradition is alive because it travels and recombines, not because it's preserved. The product's primary verb is *circulate*, not *preserve*. **Connection is generation.**
 
-**Per-pattern minimum (MUST):**
-- `source_type`: `transcribed-from-recording` | `transcribed-from-published-source` | `transcribed-from-tradition-bearer` | `composer-original` | `derived-from-published-transcription` | `community-contributed` | `unknown`
-- `source_attribution`: a citation. *"after Ahmet Tüzün, Trakya, 1968 — transcription verified by [name]."* When unknown: explicitly so.
-- `verification_status`: `verified-by-tradition-bearer` | `verified-by-academic-source` | `unverified` | `community-flagged`
-- `function`: `ritual` | `wedding` | `dance` | `labor` | `court` | `popular` | `pedagogical` | `unknown`
+### What changes
 
-**Per-corpus (MUST):**
-- A public `/sources` page modeled on Folkways liner notes — every text, every recording, every consultant credited.
-- A `/methodology` page — how was the corpus compiled, by whom, with what known gaps.
-- A per-pattern "contribute a correction" affordance.
+- **Drop** the corpus tier system that retreats 100-200 patterns to "Wider Library" or excludes them. Instead: ship all 536 with **visible humility**.
+- **Drop** the heavy provenance schema as a *gating* requirement. Keep a *plain-language source field* — when known, said warmly ("we learned this from a 1968 wedding recording made in Edirne; the dumbek player is Ahmet Tüzün"); when unknown, said honestly ("source unknown — if you know, write us"). Attribution as a love letter, not a bibliography.
+- **Drop** the "studied mode" as a separate reverent reading view. Replace with **inline connection-stories** in Bourdain voice — 60-100 words, ending with a punch. The story is the play, not a separate ritual.
+- **Add** the **humility-badge system** — replaces tier-deferral. Three glanceable marks per card:
+  - **·** = *we know this one well* (founder, named collaborator, or documented source)
+  - **·?** = *we believe but haven't verified* (story explains what we know)
+  - **··?** = *this one's still finding its sources — help us*
+  Tap → small modal: "Here's where we got this. Here's what we don't know. Here's how to help." A *Suggest a correction* button + an *I know this tradition* contributor flow. The "··?" patterns get an **invited** lane in the Library called *"Open questions"* or *"Looking for elders"* — not demoted, *invited*.
+- **Add** the **cousins mechanic** — every pattern card carries 3-7 cousin-cards horizontally beneath the BeatDots strip. Cousins-by: rhythm structure, migration, function, instrument family, feel. Tap → audition inline (replaces current pattern smoothly, keeps BPM). Tap-and-hold → navigate. **The cousins panel is where the user accidentally spends 90 minutes.**
+- **Add** the **trail breadcrumb** — top-of-screen breadcrumb that builds as the user follows cousins (*karşılama → rǔchenitsa → kalamatianos → kopanitsa*). After 5 hops a "Save this trail" button appears. Wikipedia rabbit-hole, but for rhythm.
+- **Add** **Journey mode** — hand-curated 5-7 stop walks, each ending somewhere unexpected ("From a Senegalese gourd to a Detroit beat tape"; "The 9/8 walks home"; "The vertical spit"; "From Mali to the Mississippi delta"). **Each Journey is a piece of music writing that exists nowhere else.** Ship a new one monthly — Journey mode is BeatForge's killer publishing format, not just a feature.
+- **Add** **"Lift me"** export per pattern (MIDI/WAV) — love letter to the producer / crate-digger audience. *A pattern that can leave is a pattern that lives.* Phasing: WAV first (Phase 1.5), MIDI with grouping markers second (Phase 2), MusicXML eventually.
+- **Add** **Surprise-me as curated cousin-reveals**, not random. Every press lands on a pattern + shows the connection-card explaining why ("you played karşılama yesterday — meet its Bulgarian cousin"). The button is a teacher, not a dice roll.
 
-**The tier system for what ships:**
+### The aesthetic translation of "Angine de Poitrine energy"
 
-| Tier | Definition | Approx pattern count from current 536 |
-|---|---|---|
-| 1 | Founder authority (Turkish/Anatolian/Balkan/SWANA — lived tradition) | 80-120 |
-| 2 | Researched + named secondary source (Persian, Indian, Brazilian, Cuban, Andalusian, etc.) | 200-250 |
-| 3 | Defer until partnered — collaborator-credited (Yoruba bata performance, West African ensembles, Korean/Vietnamese, etc.) | 100-150 |
-| 4 | Restricted/sacred — exclude (Indigenous Australian songlines, Sufi zikr, Native American powwow, consecrated bata, Mongolian shamanic) | 30-50 |
+AdP's masks/polka-dots are *theirs*. **No polka dots in the BeatForge UI.** The lesson is the principle — *complex underneath, magnetic on top, accessible despite/because of weirdness* — translated into BeatForge's existing visual language (warm cream, colored beat-dots, monospace, friendly playground).
 
-**Honest recommendation: probably 100-200 of the 536 patterns retreat to Tier 3 (deferred) or Tier 4 (excluded) until proper sourcing/collaboration is in place.** "Coming, with care" is a curatorial statement — empty cases are part of the museum.
+Three concrete moves:
+1. **BeatDots strip becomes the hero of every page.** 2x bigger on Library cards. Animate on hover — one full cycle preview at the pattern's actual BPM. The colored-dot rhythm-grammar is *the thing nobody else has*; show it loud.
+2. **Library hover-preview as living polyrhythmic mosaic** — pattern cards in the Library preview-on-hover with a 2-second muted-but-animated BeatDots cycle at the pattern's BPM, grouping numbers (2+2+2+3) appearing as the cycle resolves. Twenty rhythms moving differently. Viral-by-screenshot.
+3. **Native-script as display element**, not afterthought. *Karşılama* with diacritics, *दादरा*, *داف*, set large. A multilingual masthead is one of the most magnetic things a music product can have. Spotify won't do it. BeatForge can.
+
+### Provenance still matters — just not as gatekeeping
+
+Three lightweight schema fields stay, in service of the love-letter voice and the contribution flow:
+- `source` (free text, plain-language, optional)
+- `confidence` (one of: known / believed / open-question — drives the humility badge)
+- `function` (ritual / wedding / dance / labor / court / popular / pedagogical / unknown — drives the *Where/When/Who-How* line on each card)
+
+A `/sources` page exists, modeled on Folkways liner notes — but it's a *credit roll*, not a permission slip. Plain prose, not academic citation format.
+
+The only patterns we don't ship at all are the ones explicitly restricted by their living tradition (Indigenous Australian songlines, consecrated bata, Native American powwow songs owned by specific families). We **name the absence** publicly — "we deliberately don't include these traditions, here's why" — rather than silently omit. Empty cases are honest curation; empty cases without explanation are erasure.
 
 ---
 
@@ -179,15 +196,20 @@ This single workstream should land **before any feature work** because it change
 
 **Resolution**: data-driven. Pattern's tradition tag determines default visualizer (cyclic → circular, additive → linear). Toggle stays always-visible. Pill view: deprecate from Practice, keep optionally in Studio for phrasing-aware editing.
 
-### D4 — "Passport" framing
+### D4 — Brand line
 
-**Toy-maker**: love it. *"BeatForge — a passport for the rhythms of the world."*
-**Ethnomusicologist**: tourism-frame trap. Replace.
+**Toy-maker**: *"BeatForge — a passport for the rhythms of the world."* (Loved it.)
+**Ethnomusicologist**: tourism-frame trap. Their replacement: *"a library of the world's rhythms — heard, played, and credited."*
+**Living-archive (founder-aligned)**: *"credited"* is academic; the museum word leaks through. Lead with motion + connection.
 
-**Resolution**: ethnomusicologist wins. Brand line becomes:
-- **"BeatForge — a library of the world's rhythms. Heard, played, and credited."**
+**Resolution**: living-archive wins on the founder-direction grounds. Brand-line candidates, ordered by my (and the recombinator agent's) preference:
 
-The word *credited* commits the product to provenance. It's hard to live up to — *which is the point*.
+1. **"Every rhythm came from somewhere. Find out where it's going next."** — two sentences, both load-bearing. The first nods to provenance without making it homework. The second is the J Dilla / Vampire Weekend / Os Mutantes promise.
+2. **"BeatForge — a living archive of the world's rhythms."** — plain, true, the word *living* does the entire job *credited* was trying to do.
+3. **"Rhythms of the world, and the trails between them."** — captures the cousin-finder + movement.
+4. **"Every rhythm has a cousin. Find them."** — six words; the discovery loop in one sentence.
+
+Founder picks one. The toy-maker's *"playground for the rhythms of the world"* is an acceptable secondary line for the `/play` route specifically — *playground* is a place where children visit but don't claim ownership, which dodges the tourism trap.
 
 ### D5 — Trainer feedback at tempo bumps
 
@@ -217,29 +239,32 @@ The word *credited* commits the product to provenance. It's hard to live up to �
 
 ### Phase 0 (Week 1, days 1–5): "Stop and re-anchor"
 
-**Goal**: don't ship new features. Land the cultural-identity foundation so everything downstream is cleaner.
+**Goal**: don't ship new features. Land the cultural-identity foundation aligned with the **living-archive** lens.
 
 | Day | Task | Reviewer |
 |---|---|---|
-| 1 | **Style guide doc** — voice, tone, length, forbidden words. 1-page. | Ethnomusicologist · Toy-maker |
-| 1 | **"Stop using 'kit'" rename** — wherever copy says "kit" for an ensemble, rename. `Save kit` → `Save ensemble`. Single PR, 8 chars of UI copy + a few naming sweeps. | Ethnomusicologist |
-| 2-4 | **Provenance schema** — add `source_type`, `source_attribution`, `verification_status`, `function` to SoundPattern + Library Pattern types. Migrate existing data. Render on every pattern card (small, beneath BPM). | Ethnomusicologist |
-| 5 | **`/sources` + `/methodology` public pages** — even if mostly placeholder content; at minimum, list every reference book and recording the corpus draws from. | Ethnomusicologist |
+| 1 | **Style guide doc** — voice (Bourdain meets the founder), tone (kitchen-table), forbidden words (extended list — see manifesto), words-to-use (cousin, lineage, walked, traveled, after [name]). 1-page. | Living-archive · Toy-maker |
+| 1 | **"Stop using 'kit'" rename** — wherever copy says "kit" for a culturally-rooted ensemble, rename to *ensemble* (or the tradition's own term: bateria, takım, batá). | Ethnomusicologist · Living-archive |
+| 2 | **Lightweight schema** — add three plain-language fields to pattern data: `source` (free text, optional), `confidence` (`known` / `believed` / `open-question`), `function` (one of the seven). No verification gating; no tier deferral. | Living-archive |
+| 3 | **Humility-badge UI** — render the confidence mark on every pattern card. Tap → small "where we got this / what we don't know / how to help" modal with *Suggest a correction* + *I know this tradition* contributor affordances. | Living-archive |
+| 4 | **`/sources` page** — credit-roll, not bibliography. Plain prose. "Sources, friends, kin who shared." Lists references, recordings, contributors with permission. | Living-archive (softened from ethnomusicologist) |
+| 5 | **Plain-language source line** rendered per card where known: *"we learned this from a 1968 wedding recording made in Edirne. The dumbek player is Ahmet Tüzün."* When unknown: *"source unknown — if you know, write us."* No homework-feel. | Living-archive |
 
-End-of-phase deliverables: nothing is renamed yet that the user can break, but the *language* and *data layer* are aligned with the museum-not-marketplace direction.
+End-of-phase deliverables: cultural-identity foundation laid as a *living archive*, not a museum. Nothing tier-deferred. All 536 patterns still ship. Voice + naming + humility-marking + contribution flow are in place.
 
-### Phase 1 (Week 2, days 6–12): Corpus audit
+### Phase 1 (Week 2, days 6–12): Cousin connections + Journey mode foundation
 
-**Goal**: tier the 536 patterns. Tier 1 stays. Tier 2 needs source citation. Tier 3 retreats to "Wider Library" or hides. Tier 4 is excluded.
+**Goal**: build the **cousin-finder mechanic** that turns every pattern into a doorway. Not a corpus audit — a corpus *animation*.
 
 | Day | Task |
 |---|---|
-| 6-8 | Pattern-by-pattern triage. Likely 30-40% of patterns retreat to "Wider Library" (visible but tagged "limited curation"). 5-10% may exclude entirely (Tier 4). |
-| 9-10 | "Coming, with care" page — names deferred traditions, invites collaboration. |
-| 11 | Library UI: visible split between "Featured" (deeply curated, ~50 patterns) and "Wider Library" (the rest, with curation-status badges). |
-| 12 | Polish, ship. |
+| 6 | **Cousin schema** — add a `cousins` field per pattern: 3-7 related-pattern ids tagged by relation type (rhythm-structure, migration, function, instrument-family, feel). Backfill the cornerstone 50 patterns with hand-curated cousin links. Auto-suggest the rest by structural similarity for later refinement. |
+| 7-8 | **Cousins-strip UI** — horizontal ribbon of cousin-cards beneath the BeatDots strip on every pattern. Each cousin card: tiny BeatDots preview animating at the cousin's BPM + tradition tag (🇹🇷 / 🇧🇬 / 🇬🇷 / etc.). Tap → audition inline (replaces current pattern smoothly, keeps BPM). Tap-and-hold → navigate. |
+| 9 | **Trail breadcrumb** — top-of-screen breadcrumb of recent cousin hops. After 5 hops, *"Save this trail"* button appears → saves the path as a numbered Journey. |
+| 10 | **Surprise-me as curated cousin-reveal** — replaces random with editor's-pick of unexpected bridges. Every press lands on a pattern + shows a connection-card ("you played karşılama yesterday — meet its Bulgarian cousin"). |
+| 11-12 | **First three Journeys** — hand-write three cornerstone Journey arcs in Bourdain voice (5-7 stops each, ~150-250 words of connecting prose per Journey): *"The 9/8 walks home"* (Ottoman aksak family), *"From a Senegalese gourd to a Detroit beat tape"* (banjo's circle home), *"The vertical spit"* (Lebanese-Mexican migration / al pastor / cumbia sonidera). Ship Journey mode UI — index page + per-Journey reading view with patterns auditioning inline. |
 
-End-of-phase: corpus is honest. Visible curation. Wider Library is generous; Featured is reverent.
+End-of-phase: BeatForge has its **killer differentiating mechanic**. The cousin-finder turns the database into a story you can walk through. Journey mode becomes the monthly publishing format that makes BeatForge the "Atlas Obscura for rhythms."
 
 ### Phase 2 (Week 3, days 13–19): Practice-mode tightening (percussion player territory)
 
