@@ -127,10 +127,15 @@ export function useMetronome(engine: AudioEngine, opts: MetronomeOptions): UseMe
   // ── Speed trainer — cycles mode ──────────────────────────────────
   // BPM ramp triggered by bar-count boundaries — the bar count IS the
   // trigger we react to, so set-state-in-effect is the right pattern.
+  // `from > to` ⇒ descending ramp (slow-down practice). The clamp is
+  // toward `to` regardless of direction.
   useEffect(() => {
     if (!trainerOn || !playing) return;
     if (trainerCfg.mode === 'cycles' && trainerBar > 0 && trainerBar % trainerCfg.bars === 0) {
-      setBpm((b) => Math.min(trainerCfg.to, b + trainerCfg.step));
+      const ascending = trainerCfg.from <= trainerCfg.to;
+      setBpm((b) => ascending
+        ? Math.min(trainerCfg.to, b + trainerCfg.step)
+        : Math.max(trainerCfg.to, b - trainerCfg.step));
     }
   }, [trainerBar, trainerOn, playing, trainerCfg]);
 
@@ -143,8 +148,11 @@ export function useMetronome(engine: AudioEngine, opts: MetronomeOptions): UseMe
       return;
     }
     setTrainerCycleStartMs(performance.now());
+    const ascending = trainerCfg.from <= trainerCfg.to;
     const iv = setInterval(() => {
-      setBpm((b) => Math.min(trainerCfg.to, b + trainerCfg.step));
+      setBpm((b) => ascending
+        ? Math.min(trainerCfg.to, b + trainerCfg.step)
+        : Math.max(trainerCfg.to, b - trainerCfg.step));
       setTrainerCycleStartMs(performance.now());
     }, trainerCfg.bars * 1000);
     return () => clearInterval(iv);

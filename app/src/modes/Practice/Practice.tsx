@@ -241,6 +241,19 @@ export function Practice({ engine, patternId, onPatternChange, onOpenSoundPatter
         handleTap();
         return;
       }
+      // Trainer recovery: [ steps BPM down, ] steps BPM up — both by
+      // the trainer's current step. Lets a stuck player drop back a
+      // notch without disabling the trainer or hunting for the slider.
+      if (e.key === '[' && !e.metaKey && !e.ctrlKey && !e.altKey) {
+        e.preventDefault();
+        setBpm((b) => Math.max(30, b - trainerCfg.step));
+        return;
+      }
+      if (e.key === ']' && !e.metaKey && !e.ctrlKey && !e.altKey) {
+        e.preventDefault();
+        setBpm((b) => Math.min(400, b + trainerCfg.step));
+        return;
+      }
       if (e.key >= '1' && e.key <= '9') {
         const idx = Number(e.key) - 1;
         const hl = getHighlights();
@@ -252,7 +265,7 @@ export function Practice({ engine, patternId, onPatternChange, onOpenSoundPatter
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [toggle, patternId, handleTap, setPatternId]);
+  }, [toggle, patternId, handleTap, setPatternId, setBpm, trainerCfg.step]);
 
   const curStep = useMemo(() => {
     const firstTrack = Object.keys(pattern.tracks)[0];
