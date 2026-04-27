@@ -6,7 +6,7 @@
 // Phase 1 starts empty and fills in archetype-by-archetype. Phase 2
 // migrates the existing kits to use these.
 
-import type { FxMachine, MachineConfig, ModValues, VoiceCtx, VoiceMachine } from './types';
+import type { MachineConfig, ModValues, VoiceCtx, VoiceMachine } from './types';
 import { Kick } from './voice/kick';
 import { Snare } from './voice/snare';
 import { Hat } from './voice/hat';
@@ -79,24 +79,10 @@ export const MACHINE_CATEGORY_ORDER: readonly MachineCategory[] = [
   'drum', 'pitched', 'synth',
 ] as const;
 
-// ── Channel FX (per-channel color slot) ──────────────────────────
-// `none` is a sentinel passthrough, always present. Other types are
-// added as their machines land.
-
-export const CHANNEL_FX = {
-  // 'none' is plumbed by ChannelStrip directly (no FxInstance needed)
-  // Real FX populated by phase-1 commits
-} as const satisfies Record<string, FxMachine>;
-
-export type ColorFxId = keyof typeof CHANNEL_FX | 'none';
-
-// ── Kit FX (shared bus processors) ───────────────────────────────
-
-export const KIT_FX = {
-  // populated by phase-1 commits
-} as const satisfies Record<string, FxMachine>;
-
-export type KitFxId = keyof typeof KIT_FX;
+// FX live in machines/fx as ControllableModule factories. The legacy
+// FxMachine/FxInstance surface in machines/types.ts was never
+// populated and was removed alongside this comment — see
+// machines/fx/{overdrive,bitcrush,filter,reverb,delay}.ts.
 
 /** Look up a voice machine by archetype id. The intersection of all
  *  per-machine config types is `never` (their discriminators conflict),

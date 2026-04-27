@@ -1,11 +1,13 @@
-// Machine type system — the polymorphic foundation for the Sound page.
+// Voice machine type system — the polymorphic foundation for the
+// drum / pitched / synth voices. Each one is a one-shot trigger
+// (kick, snare, fm …). The metadata shape (knobs, defaults, presets,
+// schema) is the single source of truth for the UI form, the engine
+// dispatch, the automation editor, and the serializer.
 //
-// Every tunable thing (synth voices, channel FX, kit FX) implements
-// MachineSpec. Voice machines are one-shot triggered (kick, snare, fm
-// …); FX machines are continuous audio in → audio out (overdrive,
-// reverb, …). Both share the same metadata shape (knobs, defaults,
-// presets, schema) so the UI, the engine dispatch, the automation
-// editor, and the serializer all read from one source.
+// FX live in a separate module (machines/fx) under the
+// ControllableModule shape — they're continuous audio in → audio
+// out, addressable by the router, and don't need the voice machine's
+// trigger/render contract. See machines/fx/index.ts.
 //
 // See docs/SOUND_PAGE_PLAN.md for the design rationale.
 
@@ -61,12 +63,14 @@ export type ModValues = Record<string, number>;
 
 // ── Machine specs ────────────────────────────────────────────────
 
-/** Common metadata + validation contract shared by voices and FX. */
+/** Common metadata + validation contract for voice machines.
+ *  The UI form, the engine dispatch, automation, and serialization
+ *  all read from this. */
 export interface MachineSpec<TConfig extends MachineConfig = MachineConfig> {
   /** Stable id used in registry lookups + config discriminator. */
   readonly id: string;
   readonly label: string;
-  readonly category: 'voice' | 'channel-fx' | 'kit-fx';
+  readonly category: 'voice';
   readonly knobs: readonly KnobSpec[];
   readonly discrete?: readonly DiscreteSpec[];
   /** Factory blank — what a fresh instance looks like. */
@@ -98,33 +102,6 @@ export interface VoiceMachine<TConfig extends MachineConfig = MachineConfig>
    *  - `amp`: 0..1 velocity-derived amplitude
    *  - `mod`: optional per-step automation overrides for any knob id */
   render(cfg: TConfig, vc: VoiceCtx, when: number, amp: number, mod?: ModValues): void;
-}
-
-// ── FxMachine: continuous audio in → audio out ───────────────────
-
-/** Result of an FxMachine.connect() call. The runtime keeps this
- *  alive for the lifetime of the kit (or until the user swaps the
- *  FX type), then disposes. */
-export interface FxInstance {
-  /** Audio in. Upstream node connects HERE. */
-  input: AudioNode;
-  /** Audio out. Connect to downstream from THIS. */
-  output: AudioNode;
-  /** Hot-path: re-apply mod values to the live graph. Called per-step
-   *  for automation. Should NOT rebuild nodes — just adjust their
-   *  parameters. */
-  apply(mod: ModValues): void;
-  /** Tear down (oscillators stopped, nodes disconnected, gains zeroed). */
-  dispose(): void;
-}
-
-export interface FxMachine<TConfig extends MachineConfig = MachineConfig>
-  extends MachineSpec<TConfig> {
-  readonly category: 'channel-fx' | 'kit-fx';
-  /** Build an FX subgraph for the given config. The audio context is
-   *  needed because some FX want oscillators / impulse responses that
-   *  outlive a single trigger. */
-  connect(cfg: TConfig, ctx: AudioContext): FxInstance;
 }
 
 // ── Helpers for downstream consumers ─────────────────────────────

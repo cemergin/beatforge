@@ -11,7 +11,8 @@ import type { MachineConfig, VoiceCtx } from '../machines/types';
 import { createAudioContext, resumeIfSuspended } from '../audio-context';
 import type { ChannelEffects, ColorFx } from '../../patterns/types-sound';
 import { ChannelStrip, type ChannelStripParams } from './ChannelStrip';
-import { buildColorFx } from './colorFx';
+import { buildColorFxModule, createDelayFx, createReverb } from '../machines/fx';
+import type { ControllableModule } from '../../modules/audio-graph';
 import { makeEventBus, type EventBus } from '../../modules/events';
 // Vite explicit-worker import — see engine.ts for the MIME-fallback
 // reasoning. Must use the `?worker` query, not `new URL(...)`.
@@ -29,22 +30,16 @@ export class SoundEngine {
   private ctx: AudioContext | null = null;
   private master: GainNode | null = null;
   private analyser: AnalyserNode | null = null;
-  // Master FX buses. revBus/dlyBus are retained so ensureStripCount()
-  // can pass them when allocating new ChannelStrips at runtime
-  // (add-channel UX). reverbConvolver, revWet, dlyLine, dlyFeedback,
-  // dlyWet are the nodes the user-facing setters mutate.
+  // Master FX. revBus/dlyBus are the per-channel send sums that feed
+  // into the FX modules. The modules themselves are ControllableModules
+  // (machines/fx) — wet/size/decay/time/feedback all flow through
+  // .set(name, value), which the Router can drive directly. The
+  // engine's setReverb*/setDelay* setters are kept for backwards
+  // compat (Sound.tsx + bus-bridged adapters) but delegate to .set().
   private revBus: GainNode | null = null;
   private dlyBus: GainNode | null = null;
-  private reverbConvolver: ConvolverNode | null = null;
-  private revWet: GainNode | null = null;
-  private dlyWet: GainNode | null = null;
-  private dlyFeedback: GainNode | null = null;
-  private dlyLine: DelayNode | null = null;
-  // Cache the reverb shape so size/decay setters can pull the OTHER
-  // value when one changes (size sets without specifying decay re-uses
-  // the cached decay). Defaults match initCtxOnce.
-  private _reverbSize = 1.8;
-  private _reverbDecay = 2.2;
+  private reverbFx: ControllableModule | null = null;
+  private delayFx: ControllableModule | null = null;
   private strips: ChannelStrip[] = [];
   private ctxInitPromise: Promise<void> | null = null;
 
@@ -149,35 +144,25 @@ export class SoundEngine {
     master.connect(analyser);
     analyser.connect(ctx.destination);
 
-    // Reverb bus: revBus (per-channel sends sum here) → convolver →
-    // revWet (master wet level) → master. The convolver's buffer can
-    // be swapped live to retune size/decay (see setReverbSize/Decay).
+    // Master FX modules. Each one is a ControllableModule from
+    // machines/fx — input is the bus that channel sends sum into,
+    // output is summed back to the master gain. wet/size/decay
+    // (reverb) and wet/time/feedback (delay) all flow through
+    // module.set(name, value).
     const revBus = ctx.createGain();
-    const reverb = ctx.createConvolver();
-    reverb.buffer = makeImpulse(ctx, this._reverbSize, this._reverbDecay);
-    const revWet = ctx.createGain();
-    revWet.gain.value = 0.5;
-    revBus.connect(reverb).connect(revWet).connect(master);
-
-    // Delay bus: dlyBus → delayLine → feedback (loops back to delayLine
-    // input) AND → dlyWet → master. Feedback gain capped at 0.7 so the
-    // user can't dial in self-oscillation. Delay time is set on play()
-    // based on BPM (1/8-note default); leaving it static for now since
-    // changing it during playback creates audible chirps.
     const dlyBus = ctx.createGain();
-    const dlyLine = ctx.createDelay(2.0);
-    dlyLine.delayTime.value = 0.25; // 1/8 at 120 BPM, retuned on play()
-    const dlyFeedback = ctx.createGain();
-    dlyFeedback.gain.value = 0.35;
-    const dlyWet = ctx.createGain();
-    dlyWet.gain.value = 0.5;
-    dlyBus.connect(dlyLine);
-    dlyLine.connect(dlyFeedback).connect(dlyLine);
-    dlyLine.connect(dlyWet).connect(master);
+
+    const reverbFx = createReverb(ctx, { wet: 0.5, size: 1.8, decay: 2.2 });
+    const delayFx  = createDelayFx(ctx, { wet: 0.5, time: 0.25, feedback: 0.35 });
+
+    if (reverbFx.input)  revBus.connect(reverbFx.input);
+    if (reverbFx.output) reverbFx.output.connect(master);
+    if (delayFx.input)   dlyBus.connect(delayFx.input);
+    if (delayFx.output)  delayFx.output.connect(master);
 
     const strips: ChannelStrip[] = [];
     for (let i = 0; i < NUM_CHANNELS; i++) {
-      strips.push(new ChannelStrip(ctx, master, revBus, dlyBus, buildColorFx));
+      strips.push(new ChannelStrip(ctx, master, revBus, dlyBus, buildColorFxModule));
     }
 
     this.ctx = ctx;
@@ -185,11 +170,8 @@ export class SoundEngine {
     this.analyser = analyser;
     this.revBus = revBus;
     this.dlyBus = dlyBus;
-    this.reverbConvolver = reverb;
-    this.revWet = revWet;
-    this.dlyLine = dlyLine;
-    this.dlyFeedback = dlyFeedback;
-    this.dlyWet = dlyWet;
+    this.reverbFx = reverbFx;
+    this.delayFx = delayFx;
     this.strips = strips;
   }
 
@@ -204,7 +186,7 @@ export class SoundEngine {
     const t0 = this._running ? (this.ctx.currentTime + 0.01) : this.startTime;
     while (this.strips.length < target) {
       this.strips.push(new ChannelStrip(
-        this.ctx, this.master, this.revBus, this.dlyBus, buildColorFx,
+        this.ctx, this.master, this.revBus, this.dlyBus, buildColorFxModule,
       ));
       this.nextNoteTimes.push(t0);
       this.nextIdxs.push(0);
@@ -362,53 +344,24 @@ export class SoundEngine {
     this._swing = Math.max(0.5, Math.min(0.75, s));
   }
 
-  /** Master wet level for the reverb send bus (0..1). */
-  setReverbWet(v: number): void {
-    if (this.revWet) this.revWet.gain.value = Math.max(0, Math.min(1, v));
-  }
+  // Master FX setters delegate to the ControllableModule machines.
+  // Same call surface as before so engine-adapters + Sound.tsx stay
+  // identical; the actual ramp / rebuild lives inside the FX module.
 
-  /** Reverb tail length in seconds (0.3..4.0). Rebuilds the impulse
-   *  buffer; cheap. Tails currently in flight finish under the old
-   *  buffer, so the swap doesn't click. */
-  setReverbSize(seconds: number): void {
-    this._reverbSize = Math.max(0.3, Math.min(4.0, seconds));
-    if (this.ctx && this.reverbConvolver) {
-      this.reverbConvolver.buffer = makeImpulse(this.ctx, this._reverbSize, this._reverbDecay);
-    }
-  }
+  setReverbWet(v: number): void   { this.reverbFx?.set('wet',   v); }
+  setReverbSize(s: number): void  { this.reverbFx?.set('size',  s); }
+  setReverbDecay(d: number): void { this.reverbFx?.set('decay', d); }
+  setDelayTime(t: number): void   { this.delayFx?.set('time',     t); }
+  setDelayWet(v: number): void    { this.delayFx?.set('wet',      v); }
+  setDelayFeedback(v: number): void { this.delayFx?.set('feedback', v); }
 
-  /** Reverb decay shape exponent (1..6). Higher = faster fade
-   *  (steeper envelope on the noise burst). */
-  setReverbDecay(exp: number): void {
-    this._reverbDecay = Math.max(1, Math.min(6, exp));
-    if (this.ctx && this.reverbConvolver) {
-      this.reverbConvolver.buffer = makeImpulse(this.ctx, this._reverbSize, this._reverbDecay);
-    }
-  }
-
-  /** Delay time in seconds (0.02..2.0). Ramped over 30ms to avoid
-   *  the click that would result from an instant pointer jump on
-   *  the delay line read head. */
-  setDelayTime(seconds: number): void {
-    if (!this.dlyLine || !this.ctx) return;
-    const v = Math.max(0.02, Math.min(2.0, seconds));
-    const t = this.ctx.currentTime;
-    const p = this.dlyLine.delayTime;
-    p.cancelScheduledValues(t);
-    p.setValueAtTime(p.value, t);
-    p.linearRampToValueAtTime(v, t + 0.03);
-  }
-
-  /** Master wet level for the delay send bus (0..1). */
-  setDelayWet(v: number): void {
-    if (this.dlyWet) this.dlyWet.gain.value = Math.max(0, Math.min(1, v));
-  }
-
-  /** Delay feedback (0..0.7 hard-capped). Above ~0.7 the line builds
-   *  toward self-oscillation across automated parameter changes. */
-  setDelayFeedback(v: number): void {
-    if (this.dlyFeedback) this.dlyFeedback.gain.value = Math.max(0, Math.min(0.7, v));
-  }
+  /** Direct access to the master FX modules. Lets a future router
+   *  registration target reverb / delay through the SAME .set()
+   *  interface every other audio unit uses, instead of going through
+   *  the engine-side adapter shims. Returns null if the AudioContext
+   *  hasn't been initialized yet. */
+  getReverbFx(): ControllableModule | null { return this.reverbFx; }
+  getDelayFx(): ControllableModule | null  { return this.delayFx; }
 
   setAccents(strong: number, weak: number): void {
     this._strongAmp = Math.max(0, strong);
@@ -693,33 +646,15 @@ export class SoundEngine {
       try { s.dispose(); } catch { /* idempotent */ }
     }
     this.strips = [];
+    try { this.reverbFx?.dispose(); } catch { /* idempotent */ }
+    try { this.delayFx?.dispose();  } catch { /* idempotent */ }
     if (this.ctx && this.ctx.state !== 'closed') void this.ctx.close();
     this.ctx = null;
     this.master = null;
     this.analyser = null;
     this.revBus = null;
     this.dlyBus = null;
-    this.reverbConvolver = null;
-    this.revWet = null;
-    this.dlyLine = null;
-    this.dlyFeedback = null;
-    this.dlyWet = null;
+    this.reverbFx = null;
+    this.delayFx = null;
   }
-}
-
-/** Synthesize a noise-burst impulse response. Same shape as
- *  AudioEngine.makeImpulseFor — quick + cheap, sounds like a small
- *  room. duration = total tail seconds; decay = exponent on the
- *  amplitude envelope (higher = faster fade). */
-function makeImpulse(ctx: AudioContext, duration: number, decay: number): AudioBuffer {
-  const rate = ctx.sampleRate;
-  const length = Math.floor(rate * duration);
-  const impulse = ctx.createBuffer(2, length, rate);
-  for (let ch = 0; ch < 2; ch++) {
-    const d = impulse.getChannelData(ch);
-    for (let i = 0; i < length; i++) {
-      d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / length, decay);
-    }
-  }
-  return impulse;
 }

@@ -6,15 +6,13 @@
 //                                         ├─→ × revSend ─→ reverb
 //                                         └─→ × dlySend ─→ delay
 //
-// The voice machine writes its output into the strip's `input` node.
-// We construct one ChannelStrip per kit channel at SoundEngine init
-// and tear them down on kit change.
-//
-// Color FX is a swappable subgraph — when the user picks a different
-// type, we dispose the current FxInstance and build a new one.
+// Color FX is a swappable subgraph — when the user picks a
+// different type, we dispose the current ControllableModule and
+// build a new one. While a type stays put, knob changes go through
+// the module's .set() — live ramps, no rebuilds, no clicks.
 
 import type { ColorFx } from '../../patterns/types-sound';
-import type { ColorFxInstance } from './colorFx';
+import type { ControllableModule } from '../../modules/audio-graph';
 
 export interface ChannelStripParams {
   level: number;        // 0-1
@@ -23,10 +21,10 @@ export interface ChannelStripParams {
   delaySend: number;    // 0-1
 }
 
-// The builder may return null to signal "passthrough" (e.g. for
-// `type: 'none'` configs). applyColorFx treats null exactly like
-// type='none' — colorIn → colorOut directly.
-type FxBuilder = (cfg: ColorFx, ctx: AudioContext) => ColorFxInstance | null;
+/** Build the active color FX as a ControllableModule. Returns null
+ *  to signal "passthrough" (e.g. for `type: 'none'`); the strip
+ *  reconnects colorIn → colorOut directly when that happens. */
+type ColorFxBuilder = (cfg: ColorFx, ctx: AudioContext) => ControllableModule | null;
 
 export class ChannelStrip {
   /** Voice machines connect their tail nodes into this. */
@@ -39,15 +37,19 @@ export class ChannelStrip {
   private colorOut: GainNode;
   private revTap: GainNode;
   private dlyTap: GainNode;
-  private currentColor: ColorFxInstance | null = null;
-  private fxBuilder: FxBuilder | null = null;
+  /** Currently mounted color FX module + the type that built it.
+   *  Re-using the module across knob changes (instead of rebuilding
+   *  on every .applyColorFx) means continuous ramps stay glitch-free. */
+  private currentColor: ControllableModule | null = null;
+  private currentColorType: ColorFx['type'] = 'none';
+  private fxBuilder: ColorFxBuilder | null = null;
 
   constructor(
     ctx: AudioContext,
     masterIn: AudioNode,
     revBus: AudioNode | null,
     dlyBus: AudioNode | null,
-    fxBuilder: FxBuilder | null,
+    fxBuilder: ColorFxBuilder | null,
   ) {
     this.ctx = ctx;
     this.fxBuilder = fxBuilder;
@@ -84,12 +86,23 @@ export class ChannelStrip {
     this.dlyTap.gain.value = Math.max(0, Math.min(1, p.delaySend));
   }
 
-  /** Swap the channel's color FX. Disposes the previous instance,
-   *  reconnects passthrough, then connects the new one. The builder
-   *  may return null to mean "no FX needed" (treated like type='none'). */
+  /** Swap or update the channel's color FX.
+   *
+   *  - Type unchanged: forward each knob to the live module's set()
+   *    — continuous ramps, no rebuild, no clicks.
+   *  - Type changed (or first install): dispose the prior module,
+   *    build a new one for the new type, reconnect the strip's
+   *    color path through it.
+   *  - type='none': dispose, leave passthrough connected. */
   applyColorFx(cfg: ColorFx): void {
-    this.colorIn.disconnect();
+    // Same type → push knob updates into the live module.
+    if (this.currentColorType === cfg.type && this.currentColor) {
+      pushKnobs(this.currentColor, cfg);
+      return;
+    }
 
+    // Different type → tear down + rebuild.
+    this.colorIn.disconnect();
     if (this.currentColor) {
       try { this.currentColor.dispose(); } catch { /* idempotent */ }
       this.currentColor = null;
@@ -97,17 +110,27 @@ export class ChannelStrip {
 
     if (cfg.type === 'none' || !this.fxBuilder) {
       this.colorIn.connect(this.colorOut);
+      this.currentColorType = 'none';
       return;
     }
 
     const fx = this.fxBuilder(cfg, this.ctx);
-    if (!fx) {
+    if (!fx || !fx.input || !fx.output) {
       this.colorIn.connect(this.colorOut);
+      this.currentColorType = 'none';
       return;
     }
     this.colorIn.connect(fx.input);
     fx.output.connect(this.colorOut);
     this.currentColor = fx;
+    this.currentColorType = cfg.type;
+  }
+
+  /** Direct access to the color FX module for the router — it can
+   *  call .set() to ramp params without going through applyColorFx
+   *  + a full cfg rebuild. Returns null when no FX is mounted. */
+  getColorFxModule(): ControllableModule | null {
+    return this.currentColor;
   }
 
   dispose(): void {
@@ -121,5 +144,25 @@ export class ChannelStrip {
     this.colorOut.disconnect();
     this.revTap.disconnect();
     this.dlyTap.disconnect();
+  }
+}
+
+/** Forward each tunable field of a ColorFx config into the live
+ *  ControllableModule's .set(). The cfg is the discriminated union
+ *  per type — we narrow per branch so the assignments are typed. */
+function pushKnobs(mod: ControllableModule, cfg: ColorFx): void {
+  if (cfg.type === 'overdrive') {
+    mod.set('drive', cfg.drive);
+    mod.set('tone',  cfg.tone);
+    mod.set('mix',   cfg.mix);
+  } else if (cfg.type === 'bitcrush') {
+    mod.set('bits', cfg.bits);
+    mod.set('rate', cfg.rate);
+    mod.set('mix',  cfg.mix);
+  } else if (cfg.type === 'filter') {
+    mod.set('mode',   cfg.mode);
+    mod.set('cutoff', cfg.cutoff);
+    mod.set('q',      cfg.q);
+    mod.set('mix',    cfg.mix);
   }
 }
