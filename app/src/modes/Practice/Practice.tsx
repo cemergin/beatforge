@@ -608,11 +608,17 @@ export function Practice({ engine, patternId, onPatternChange, onOpenSoundPatter
           setCfg={setTrainerCfg}
           on={trainerOn}
           setOn={(next) => {
-            // Turning ON: snap BPM to the trainer's starting tempo so the
-            // user doesn't have to hunt for it — "begin at the bottom,
-            // climb." Turning OFF: leave current BPM alone.
+            // Turning ON: snap BPM to the trainer's starting tempo and
+            // start playback so the climb begins immediately. Turning
+            // OFF: stop playback so the player can review without the
+            // ramp running silently in the background.
             setTrainerOn(next);
-            if (next) setBpm(trainerCfg.from);
+            if (next) {
+              setBpm(trainerCfg.from);
+              if (!playing) void toggle();
+            } else if (playing) {
+              void toggle();
+            }
           }}
           bar={trainerBar}
           bpm={bpm}
