@@ -122,6 +122,19 @@ export function Practice({ engine, patternId, onPatternChange, onOpenSoundPatter
   const [highlights, setHighlights] = useState<string[]>(() => getHighlights());
   const [recent, setRecent] = useState<string[]>(() => getRecent());
   const [shareToast, setShareToast] = useState<string | null>(null);
+  const [patternQuery, setPatternQuery] = useState('');
+  const filteredPatterns = useMemo(() => {
+    const q = patternQuery.trim().toLowerCase();
+    if (!q) return PATTERNS;
+    return PATTERNS.filter((p) =>
+      p.name.toLowerCase().includes(q)
+      || p.tradition.toLowerCase().includes(q)
+      || p.region.toLowerCase().includes(q)
+      || p.timeSig.toLowerCase().includes(q)
+      || (p.country?.toLowerCase().includes(q) ?? false)
+      || p.tags.some((t) => t.toLowerCase().includes(q)),
+    );
+  }, [patternQuery]);
 
   // User's saved soundPatterns + soundKits from the new Sound system.
   // Loaded once on mount via promise-then so the React-19
@@ -561,12 +574,25 @@ export function Practice({ engine, patternId, onPatternChange, onOpenSoundPatter
           summary={
             <>
               <span>patterns</span>
-              <span className="bf-pattern-list-count">{PATTERNS.length}</span>
+              <span className="bf-pattern-list-count">
+                {patternQuery ? `${filteredPatterns.length}/${PATTERNS.length}` : PATTERNS.length}
+              </span>
             </>
           }
         >
+          <input
+            className="bf-pattern-search"
+            type="search"
+            value={patternQuery}
+            onChange={(e) => setPatternQuery(e.target.value)}
+            placeholder="search by name, tradition, region…"
+            aria-label="Search patterns"
+          />
           <div className="bf-pattern-list">
-            {PATTERNS.map((p) => (
+            {filteredPatterns.length === 0 && (
+              <div className="bf-pattern-empty">no matches — try a region or tradition</div>
+            )}
+            {filteredPatterns.map((p) => (
               <button
                 key={p.id}
                 className={`bf-pattern-row ${p.id === patternId ? 'on' : ''}`}
