@@ -9,7 +9,7 @@
 import { triggerVoice } from '../machines/registry';
 import type { MachineConfig, VoiceCtx } from '../machines/types';
 import { createAudioContext, resumeIfSuspended } from '../audio-context';
-import type { ChannelEffects } from '../../patterns/types-sound';
+import type { ChannelEffects, ColorFx } from '../../patterns/types-sound';
 import { ChannelStrip, type ChannelStripParams } from './ChannelStrip';
 import { buildColorFx } from './colorFx';
 import { makeEventBus, type EventBus } from '../../modules/events';
@@ -243,6 +243,25 @@ export class SoundEngine {
     if (!strip) return;
     strip.applyParams(effects);
     strip.applyColorFx(effects.colorFx);
+  }
+
+  /** Apply just the color FX without touching mixer params. Used by
+   *  the channel-color adapter so it doesn't have to know the channel's
+   *  current mixer state to perform a color-only update. */
+  applyChannelColorFx(channelIdx: number, colorFx: ColorFx): void {
+    const strip = this.strips[channelIdx];
+    if (strip) strip.applyColorFx(colorFx);
+  }
+
+  /** Update one channel's machine config in place. The scheduler reads
+   *  this.machines[ch] every step — so the next trigger sees the new
+   *  cfg. Used by the channel-machine adapter to swap archetypes or
+   *  tweak knobs through ParamEvents. */
+  applyChannelMachine(channelIdx: number, cfg: MachineConfig): void {
+    if (channelIdx < 0 || channelIdx >= this.machines.length) return;
+    const next = this.machines.slice();
+    next[channelIdx] = cfg;
+    this.machines = next;
   }
 
   getAnalyser(): AnalyserNode | null {
