@@ -1,28 +1,33 @@
-// Engine adapters — wrap SoundEngine's master / reverb / delay
-// setters as ControllableModules so the Router can dispatch
-// ParamEvents to them. The adapters don't own audio nodes
-// themselves; they just translate set(name, value) into the
-// engine's existing setter calls.
+// Engine adapters — translate addressable router targets into
+// per-channel state pushes on SoundEngine.
 //
-// Address conventions:
-//   master.gain.value           → engine.setMasterVolume
-//   master.reverb.wet           → engine.setReverbWet
-//   master.reverb.size          → engine.setReverbSize
-//   master.reverb.decay         → engine.setReverbDecay
-//   master.delay.wet            → engine.setDelayWet
-//   master.delay.time           → engine.setDelayTime
-//   master.delay.feedback       → engine.setDelayFeedback
+// Master FX (reverb / delay) are registered DIRECTLY by their
+// ControllableModule from machines/fx — see registerEngineMaster
+// below. The shims that wrapped engine.setReverb*/setDelay* used
+// to live here; now that the FX modules expose .set() in the same
+// shape, the router targets them without an intermediary.
 //
-// Adapters look like ControllableModules (params + set + dispose)
-// but their input/output are null — they're not audio nodes, just
-// dispatch shims. The Router only cares about params + set, so this
-// is a clean fit.
+// Channel-level adapters DO live here because they wrap multiple
+// engine-state slots (level + pan + sends; or color cfg; or
+// machine cfg) that no single ControllableModule owns. They
+// maintain their own state cache and call the engine's bulk
+// setters when a param changes.
+//
+// Address tree (registered by Sound.tsx):
+//   master.gain.value            → engine.setMasterVolume (still
+//                                  via thin shim — master gain
+//                                  isn't yet a ControllableModule)
+//   master.reverb.{wet,size,decay}        → engine.getReverbFx().set
+//   master.delay.{wet,time,feedback}      → engine.getDelayFx().set
+//   channel.<n>.{level,pan,reverbSend,delaySend}  → cached + applyChannelParams
+//   channel.<n>.color.{type, …}           → cached + applyChannelColorFx
+//   channel.<n>.machine.{archetype, …}    → cached + applyChannelMachine
 
 import type { ControllableModule, ParamSpec } from '../../modules/audio-graph';
 import type { SoundEngine } from './sound-engine';
 import type { ChannelEffects, ColorFx } from '../../patterns/types-sound';
 import type { MachineConfig } from '../machines/types';
-import { VOICE_MACHINES, type VoiceArchetypeId } from '../machines/registry';
+import { makeVoiceController } from '../machines/voice-controller';
 
 /** Build a no-op AudioModule shape — input/output null, dispose
  *  no-op. The dispatch shape lives in the params + set wired by
@@ -45,48 +50,28 @@ export function engineMasterGain(engine: SoundEngine): ControllableModule {
   );
 }
 
-export function engineReverb(engine: SoundEngine): ControllableModule {
-  return adapter(
-    [
-      { name: 'wet',   kind: 'continuous', min: 0,   max: 1,   default: 0.5, unit: '' },
-      { name: 'size',  kind: 'continuous', min: 0.3, max: 4,   default: 1.8, unit: 's' },
-      { name: 'decay', kind: 'continuous', min: 1,   max: 6,   default: 2.2, unit: '' },
-    ],
-    (name, value) => {
-      if (typeof value !== 'number') return;
-      if (name === 'wet') engine.setReverbWet(value);
-      else if (name === 'size') engine.setReverbSize(value);
-      else if (name === 'decay') engine.setReverbDecay(value);
-    },
-  );
-}
-
-export function engineDelay(engine: SoundEngine): ControllableModule {
-  return adapter(
-    [
-      { name: 'wet',      kind: 'continuous', min: 0,    max: 1,   default: 0.5,  unit: '' },
-      { name: 'time',     kind: 'continuous', min: 0.02, max: 2.0, default: 0.25, unit: 's' },
-      { name: 'feedback', kind: 'continuous', min: 0,    max: 0.7, default: 0.35, unit: '' },
-    ],
-    (name, value) => {
-      if (typeof value !== 'number') return;
-      if (name === 'wet') engine.setDelayWet(value);
-      else if (name === 'time') engine.setDelayTime(value);
-      else if (name === 'feedback') engine.setDelayFeedback(value);
-    },
-  );
-}
-
-/** All-in-one helper: register every engine-side master adapter on a
- *  router. Returns an unsubscribe that tears down all registrations. */
+/** Register the three master modules on a router. Returns one
+ *  unsubscribe that tears all of them down.
+ *
+ *  Master gain still goes through a thin shim because the engine
+ *  owns the master GainNode privately. Reverb and delay are the
+ *  actual ControllableModules from machines/fx — the router calls
+ *  their .set() directly with no extra translation.
+ *
+ *  Caller MUST await engine.ensureCtx() before calling this; the
+ *  reverb / delay modules don't exist until the AudioContext is
+ *  initialized. */
 export function registerEngineMaster(
   router: import('../../modules/router').Router,
   engine: SoundEngine,
 ): () => void {
-  const offGain = router.registerModule('master.gain', engineMasterGain(engine));
-  const offRev  = router.registerModule('master.reverb', engineReverb(engine));
-  const offDly  = router.registerModule('master.delay', engineDelay(engine));
-  return () => { offGain(); offRev(); offDly(); };
+  const offs: Array<() => void> = [];
+  offs.push(router.registerModule('master.gain', engineMasterGain(engine)));
+  const reverb = engine.getReverbFx();
+  if (reverb) offs.push(router.registerModule('master.reverb', reverb));
+  const delay = engine.getDelayFx();
+  if (delay) offs.push(router.registerModule('master.delay', delay));
+  return () => { for (const off of offs) off(); };
 }
 
 // ── Per-channel mixer ────────────────────────────────────────────
@@ -209,90 +194,20 @@ export function engineChannelColor(
 //   - any DiscreteSpec the machine declares (e.g. filter type for
 //     the noise voice) as a discrete param
 //
-// Because the param surface depends on the active archetype, the
-// adapter rebuilds its params list whenever archetype changes. The
-// router cares about (address, paramName); rebuilding params doesn't
-// affect dispatch — set(name, value) handles whatever the current
-// machine knows.
-
-function machineParams(cfg: MachineConfig): readonly ParamSpec[] {
-  const machine = VOICE_MACHINES[cfg.archetype as VoiceArchetypeId];
-  if (!machine) {
-    return [{ name: 'archetype', kind: 'discrete',
-              options: Object.keys(VOICE_MACHINES), default: cfg.archetype }];
-  }
-  const params: ParamSpec[] = [
-    { name: 'archetype', kind: 'discrete',
-      options: Object.keys(VOICE_MACHINES), default: cfg.archetype },
-  ];
-  for (const k of machine.knobs) {
-    params.push({
-      name: k.id,
-      kind: 'continuous',
-      min: k.min,
-      max: k.max,
-      default: k.default,
-      unit: k.unit,
-    });
-  }
-  if (machine.discrete) {
-    for (const d of machine.discrete) {
-      params.push({
-        name: d.id,
-        kind: 'discrete',
-        options: d.options,
-        default: d.default,
-      });
-    }
-  }
-  return params;
-}
+// The whole knob-validation + archetype-swap surface lives in
+// makeVoiceController (machines/voice-controller.ts). The engine
+// adapter is a thin wrapper that hooks the controller's onChange
+// callback to engine.applyChannelMachine(idx, cfg) — every accepted
+// .set() pushes the new config to the running scheduler.
 
 export function engineChannelMachine(
   engine: SoundEngine,
   channelIdx: number,
   initial: MachineConfig,
 ): ControllableModule {
-  let cache: MachineConfig = { ...initial };
-  let params: readonly ParamSpec[] = machineParams(cache);
-  // Mutable params — the router holds a reference, so we mutate the
-  // exposed `params` array in place on archetype swaps to keep any
-  // UI generator that read once still in sync. Adapters using this
-  // pattern should treat params as a snapshot and re-read after a
-  // structural change.
-  const mod: ControllableModule = {
-    input: null, output: null,
-    params,
-    set(name, value) {
-      if (name === 'archetype' && typeof value === 'string') {
-        const machine = VOICE_MACHINES[value as VoiceArchetypeId];
-        if (!machine) return;
-        cache = { ...machine.defaults };
-        params = machineParams(cache);
-        // Replace the params reference in place where possible.
-        Object.assign(mod, { params });
-        engine.applyChannelMachine(channelIdx, cache);
-        return;
-      }
-      // Knob updates: validate against the current machine's knobs.
-      const machine = VOICE_MACHINES[cache.archetype as VoiceArchetypeId];
-      if (!machine) return;
-      const knob = machine.knobs.find((k) => k.id === name);
-      if (knob && typeof value === 'number') {
-        cache = { ...cache, [name]: value };
-        engine.applyChannelMachine(channelIdx, cache);
-        return;
-      }
-      const disc = machine.discrete?.find((d) => d.id === name);
-      if (disc && typeof value === 'string'
-          && (disc.options as readonly string[]).includes(value)) {
-        cache = { ...cache, [name]: value };
-        engine.applyChannelMachine(channelIdx, cache);
-      }
-    },
-    dispose: () => {},
-  };
-  return mod;
+  return makeVoiceController(initial, (cfg) => {
+    engine.applyChannelMachine(channelIdx, cfg);
+  });
 }
 
 // ── Whole-channel registration helper ────────────────────────────

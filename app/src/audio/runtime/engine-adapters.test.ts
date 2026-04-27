@@ -5,33 +5,75 @@ import {
   engineChannelColor,
   engineChannelMachine,
   engineChannelMixer,
-  engineDelay,
   engineMasterGain,
-  engineReverb,
   registerEngineChannel,
   registerEngineMaster,
 } from './engine-adapters';
+import {
+  createDelayFx,
+  createReverb,
+} from '../machines/fx';
 import type { SoundEngine } from './sound-engine';
 import type { ChannelEffects, ColorFx } from '../../patterns/types-sound';
 import type { MachineConfig } from '../machines/types';
 import { VOICE_MACHINES } from '../machines/registry';
 
-// Stub SoundEngine — only the setters the adapters touch. Anything
+// Minimal AudioContext stub — only what createReverb / createDelayFx
+// touch. Same shape used by machines/fx/fx.test.ts.
+interface NodeStub { connect: ReturnType<typeof vi.fn>; disconnect: ReturnType<typeof vi.fn>; }
+function audioCtx(): AudioContext {
+  const node = (): NodeStub => ({
+    connect: vi.fn((d: unknown) => d),
+    disconnect: vi.fn(),
+  });
+  const param = () => ({
+    value: 0,
+    cancelScheduledValues: vi.fn(),
+    setValueAtTime: vi.fn(),
+    linearRampToValueAtTime: vi.fn(),
+  });
+  return {
+    sampleRate: 48000,
+    currentTime: 0,
+    createGain: () => ({ ...node(), gain: param() }),
+    createBiquadFilter: () => ({ ...node(), type: 'lowpass', frequency: param(), Q: param() }),
+    createDelay: () => ({ ...node(), delayTime: param() }),
+    createConvolver: () => ({ ...node(), buffer: null }),
+    createWaveShaper: () => ({ ...node(), curve: null, oversample: 'none' }),
+    createBuffer: (channels: number, length: number, rate: number) => ({
+      numberOfChannels: channels, length, sampleRate: rate,
+      getChannelData: () => new Float32Array(length),
+    }),
+  } as unknown as AudioContext;
+}
+
+// Stub SoundEngine — only the methods the adapters touch. Anything
 // else throws if accessed (forces tests to declare what they need).
+// getReverbFx / getDelayFx return real ControllableModules from
+// machines/fx so the registerEngineMaster round-trip really lands
+// on a module's set().
 function fakeEngine() {
+  const reverbFx = createReverb(audioCtx());
+  const delayFx = createDelayFx(audioCtx());
+  const reverbSet = vi.spyOn(reverbFx, 'set');
+  const delaySet = vi.spyOn(delayFx, 'set');
   const calls = {
     setMasterVolume: vi.fn(),
-    setReverbWet: vi.fn(),
-    setReverbSize: vi.fn(),
-    setReverbDecay: vi.fn(),
-    setDelayWet: vi.fn(),
-    setDelayTime: vi.fn(),
-    setDelayFeedback: vi.fn(),
+    reverbSet,
+    delaySet,
     applyChannelParams: vi.fn(),
     applyChannelColorFx: vi.fn(),
     applyChannelMachine: vi.fn(),
   };
-  return { engine: calls as unknown as SoundEngine, calls };
+  const engine = {
+    setMasterVolume: calls.setMasterVolume,
+    getReverbFx: () => reverbFx,
+    getDelayFx: () => delayFx,
+    applyChannelParams: calls.applyChannelParams,
+    applyChannelColorFx: calls.applyChannelColorFx,
+    applyChannelMachine: calls.applyChannelMachine,
+  };
+  return { engine: engine as unknown as SoundEngine, calls };
 }
 
 function defaultEffects(): ChannelEffects {
@@ -58,40 +100,8 @@ describe('engineMasterGain adapter', () => {
   });
 });
 
-describe('engineReverb adapter', () => {
-  it('routes wet / size / decay to the right setters', () => {
-    const { engine, calls } = fakeEngine();
-    const rev = engineReverb(engine);
-    rev.set('wet', 0.6);
-    rev.set('size', 2.4);
-    rev.set('decay', 3.1);
-    expect(calls.setReverbWet).toHaveBeenCalledWith(0.6);
-    expect(calls.setReverbSize).toHaveBeenCalledWith(2.4);
-    expect(calls.setReverbDecay).toHaveBeenCalledWith(3.1);
-  });
-
-  it('exposes its three params on the spec', () => {
-    const { engine } = fakeEngine();
-    const rev = engineReverb(engine);
-    expect(rev.params.map((p) => p.name).sort()).toEqual(['decay', 'size', 'wet']);
-  });
-});
-
-describe('engineDelay adapter', () => {
-  it('routes wet / time / feedback to the right setters', () => {
-    const { engine, calls } = fakeEngine();
-    const dly = engineDelay(engine);
-    dly.set('wet', 0.4);
-    dly.set('time', 0.18);
-    dly.set('feedback', 0.55);
-    expect(calls.setDelayWet).toHaveBeenCalledWith(0.4);
-    expect(calls.setDelayTime).toHaveBeenCalledWith(0.18);
-    expect(calls.setDelayFeedback).toHaveBeenCalledWith(0.55);
-  });
-});
-
-describe('registerEngineMaster + Router round-trip', () => {
-  it('a ParamEvent on the bus reaches the right engine setter', () => {
+describe('registerEngineMaster — direct FX module wiring', () => {
+  it('reverb + delay register the actual FX modules from machines/fx', () => {
     const { engine, calls } = fakeEngine();
     const router = makeRouter();
     const bus = makeEventBus();
@@ -103,8 +113,8 @@ describe('registerEngineMaster + Router round-trip', () => {
     bus.emit({ type: 'param', target: 'master.delay.time', value: 0.5 });
 
     expect(calls.setMasterVolume).toHaveBeenCalledWith(0.7);
-    expect(calls.setReverbWet).toHaveBeenCalledWith(0.3);
-    expect(calls.setDelayTime).toHaveBeenCalledWith(0.5);
+    expect(calls.reverbSet).toHaveBeenCalledWith('wet', 0.3, expect.any(Object));
+    expect(calls.delaySet).toHaveBeenCalledWith('time', 0.5, expect.any(Object));
   });
 
   it('teardown unregisters every adapter', () => {
@@ -122,9 +132,31 @@ describe('registerEngineMaster + Router round-trip', () => {
     bus.emit({ type: 'param', target: 'master.reverb.wet', value: 0.1 });
     bus.emit({ type: 'param', target: 'master.delay.feedback', value: 0.4 });
 
-    expect(calls.setMasterVolume).toHaveBeenCalledOnce();      // still 1
-    expect(calls.setReverbWet).not.toHaveBeenCalled();
-    expect(calls.setDelayFeedback).not.toHaveBeenCalled();
+    expect(calls.setMasterVolume).toHaveBeenCalledOnce();
+    expect(calls.reverbSet).not.toHaveBeenCalled();
+    expect(calls.delaySet).not.toHaveBeenCalled();
+  });
+
+  it('skips reverb / delay registration when getReverbFx returns null (ctx not ready)', () => {
+    const calls = {
+      setMasterVolume: vi.fn(),
+      applyChannelParams: vi.fn(),
+      applyChannelColorFx: vi.fn(),
+      applyChannelMachine: vi.fn(),
+    };
+    const engine = {
+      setMasterVolume: calls.setMasterVolume,
+      getReverbFx: () => null,
+      getDelayFx: () => null,
+    } as unknown as SoundEngine;
+    const router = makeRouter();
+    const bus = makeEventBus();
+    expect(() => registerEngineMaster(router, engine)).not.toThrow();
+    router.bindBus(bus);
+    bus.emit({ type: 'param', target: 'master.gain.value', value: 0.6 });
+    bus.emit({ type: 'param', target: 'master.reverb.wet', value: 0.3 });
+    expect(calls.setMasterVolume).toHaveBeenCalledWith(0.6);
+    // No throw on the unknown reverb target — router silently drops.
   });
 });
 

@@ -259,15 +259,30 @@ export function Sound({ initialSoundPatternId, onConsumedInitial }: SoundProps =
 
   // Modular control plane: router dispatches ParamEvents arriving on
   // the engine's bus into ControllableModules. Master/reverb/delay
-  // adapters register at canonical addresses (master.gain.value,
-  // master.reverb.{wet,size,decay}, master.delay.{wet,time,feedback})
-  // so any future producer (MIDI, automation, recall) can drive them
-  // through the same path the sliders use.
+  // are registered at master.gain / master.reverb / master.delay so
+  // any future producer (MIDI, automation, recall) can drive them
+  // through the same path the sliders use. Reverb + delay register
+  // the FX modules from machines/fx DIRECTLY — the router calls
+  // their .set() with no engine-side shim.
+  //
+  // Bus binding fires immediately (the bus is lazily owned by the
+  // engine and works without an AudioContext). Master FX
+  // registration waits for ensureCtx() because the FX modules
+  // don't exist until the context is initialized.
   const [router] = useState(() => makeRouter());
   useEffect(() => {
-    const unregister = registerEngineMaster(router, engine);
+    let active = true;
+    let unregister: (() => void) | null = null;
     const unbind = router.bindBus(engine.getEventBus());
-    return () => { unbind(); unregister(); };
+    void engine.ensureCtx().then(() => {
+      if (!active) return;
+      unregister = registerEngineMaster(router, engine);
+    });
+    return () => {
+      active = false;
+      unbind();
+      unregister?.();
+    };
   }, [engine, router]);
 
   const [channels, setChannels] = useState<Channel[]>(() => defaultChannels());
