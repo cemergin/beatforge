@@ -58,7 +58,7 @@ function makeFoldCurve(fold: number, asymmetry: number): Float32Array<ArrayBuffe
 
 export const Wavefolder: VoiceMachine<WavefolderConfig> = {
   id: 'wavefolder',
-  label: 'Wavefolder',
+  label: 'Growl',
   category: 'voice',
   knobs: KNOBS,
   defaults: DEFAULTS,

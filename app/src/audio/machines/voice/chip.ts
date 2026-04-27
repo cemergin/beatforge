@@ -43,7 +43,7 @@ export const CHIP_PRESETS: Record<string, Partial<ChipConfig>> = {
  *  hardware-accurate emulators use. */
 export const Chip: VoiceMachine<ChipConfig> = {
   id: 'chip',
-  label: 'Chip',
+  label: 'Arcade',
   category: 'voice',
   knobs: KNOBS,
   defaults: DEFAULTS,

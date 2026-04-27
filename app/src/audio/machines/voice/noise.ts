@@ -44,7 +44,7 @@ export const NOISE_PRESETS: Record<string, Partial<NoiseConfig>> = {
 
 export const Noise: VoiceMachine<NoiseConfig> = {
   id: 'noise',
-  label: 'Noise',
+  label: 'Shaker',
   category: 'voice',
   knobs: KNOBS,
   discrete: DISCRETE,

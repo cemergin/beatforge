@@ -103,7 +103,7 @@ function makePhaseCurve(wave: WaveMode, distortion: number): Float32Array<ArrayB
 
 export const PhaseDistort: VoiceMachine<PhaseDistortConfig> = {
   id: 'phase-distort',
-  label: 'Phase distort',
+  label: 'Buzz',
   category: 'voice',
   knobs: KNOBS,
   discrete: DISCRETE,

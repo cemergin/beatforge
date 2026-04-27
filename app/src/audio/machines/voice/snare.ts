@@ -50,11 +50,16 @@ const DEFAULTS: SnareConfig = {
 };
 
 export const SNARE_PRESETS: Record<string, Partial<SnareConfig>> = {
-  '808': { pitch: 185, snap: 1800, decay: 120, tone: 0.45, noiseDecay: 150 },
-  '909': { pitch: 220, snap: 2400, decay: 130, tone: 0.55, noiseDecay: 130 },
-  '707': { pitch: 195, snap: 1900, decay: 100, tone: 0.5,  noiseDecay: 90 },
-  rim:   { pitch: 320, snap: 5000, decay: 60,  tone: 0.85, noiseDecay: 40 },
-  brush: { pitch: 180, snap: 1200, decay: 200, tone: 0.2,  noiseDecay: 250 },
+  '808':  { pitch: 185, snap: 1800, decay: 120, tone: 0.45, noiseDecay: 150 },
+  '909':  { pitch: 220, snap: 2400, decay: 130, tone: 0.55, noiseDecay: 130 },
+  '707':  { pitch: 195, snap: 1900, decay: 100, tone: 0.5,  noiseDecay: 90 },
+  rim:    { pitch: 320, snap: 5000, decay: 60,  tone: 0.85, noiseDecay: 40 },
+  brush:  { pitch: 180, snap: 1200, decay: 200, tone: 0.2,  noiseDecay: 250 },
+  // World — slap/edge tones from frame & barrel drums.
+  tek:    { pitch: 360, snap: 3800, decay: 80,  tone: 0.7,  noiseDecay: 60 },
+  dayan:  { pitch: 280, snap: 2200, decay: 150, tone: 0.4,  noiseDecay: 100 },
+  caixa:  { pitch: 210, snap: 2600, decay: 90,  tone: 0.5,  noiseDecay: 110 },
+  frame:  { pitch: 250, snap: 1500, decay: 130, tone: 0.3,  noiseDecay: 180 },
 };
 
 export const Snare: VoiceMachine<SnareConfig> = {

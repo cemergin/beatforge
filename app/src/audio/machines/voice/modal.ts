@@ -36,13 +36,19 @@ const DEFAULTS: ModalConfig = {
 };
 
 export const MODAL_PRESETS: Record<string, Partial<ModalConfig>> = {
-  bell:      { pitch: 440, partials: 5, damping: 0.3, decay: 2200, inharmonic: 0.4 },
-  frame:     { pitch: 180, partials: 3, damping: 0.6, decay: 700,  inharmonic: 0.15 },
-  bayan:     { pitch: 110, partials: 4, damping: 0.7, decay: 800,  inharmonic: 0.0 },
-  gong:      { pitch: 90,  partials: 6, damping: 0.4, decay: 3000, inharmonic: 0.6 },
-  tank:      { pitch: 280, partials: 4, damping: 0.4, decay: 1600, inharmonic: 0.25 },
-  pot:       { pitch: 360, partials: 3, damping: 0.55, decay: 600, inharmonic: 0.35 },
-  log:       { pitch: 130, partials: 2, damping: 0.75, decay: 350, inharmonic: 0.1 },
+  bell:      { pitch: 440, partials: 5, damping: 0.3,  decay: 2200, inharmonic: 0.4 },
+  frame:     { pitch: 180, partials: 3, damping: 0.6,  decay: 700,  inharmonic: 0.15 },
+  bayan:     { pitch: 110, partials: 4, damping: 0.7,  decay: 800,  inharmonic: 0.0 },
+  gong:      { pitch: 90,  partials: 6, damping: 0.4,  decay: 3000, inharmonic: 0.6 },
+  tank:      { pitch: 280, partials: 4, damping: 0.4,  decay: 1600, inharmonic: 0.25 },
+  pot:       { pitch: 360, partials: 3, damping: 0.55, decay: 600,  inharmonic: 0.35 },
+  log:       { pitch: 130, partials: 2, damping: 0.75, decay: 350,  inharmonic: 0.1 },
+  // World — pitched & bell-class instruments rendered through partials.
+  bowl:      { pitch: 340, partials: 4, damping: 0.25, decay: 2800, inharmonic: 0.3 },
+  tabla:     { pitch: 260, partials: 5, damping: 0.55, decay: 900,  inharmonic: 0.05 },
+  kalimba:   { pitch: 520, partials: 3, damping: 0.5,  decay: 800,  inharmonic: 0.1 },
+  hangdrum:  { pitch: 300, partials: 4, damping: 0.35, decay: 1400, inharmonic: 0.2 },
+  daf:       { pitch: 160, partials: 3, damping: 0.6,  decay: 600,  inharmonic: 0.18 },
 };
 
 /** Pseudo-random but deterministic offset for partial N at
@@ -57,7 +63,7 @@ function inharmonicOffset(n: number, k: number): number {
 
 export const Modal: VoiceMachine<ModalConfig> = {
   id: 'modal',
-  label: 'Modal',
+  label: 'Bell',
   category: 'voice',
   knobs: KNOBS,
   defaults: DEFAULTS,

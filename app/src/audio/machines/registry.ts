@@ -45,6 +45,40 @@ export const VOICE_MACHINES = {
 
 export type VoiceArchetypeId = keyof typeof VOICE_MACHINES;
 
+// ── Picker categories ────────────────────────────────────────────
+// Buckets for the channel-strip machine picker. Drum-class voices on
+// top because that's the everyday workflow; pitched / world textures
+// next; raw synth shapes last for sound-design dives.
+
+export type MachineCategory = 'drum' | 'pitched' | 'synth';
+
+export const MACHINE_CATEGORY: Record<VoiceArchetypeId, MachineCategory> = {
+  kick:    'drum',
+  snare:   'drum',
+  hat:     'drum',
+  tom:     'drum',
+  clap:    'drum',
+  cowbell: 'drum',
+  modal:   'pitched',
+  fm:      'pitched',
+  noise:   'synth',
+  wavefolder: 'synth',
+  crackle: 'synth',
+  chip:    'synth',
+  formant: 'synth',
+  'phase-distort': 'synth',
+};
+
+export const MACHINE_CATEGORY_LABEL: Record<MachineCategory, string> = {
+  drum:    'Drums',
+  pitched: 'Pitched & World',
+  synth:   'Synth shapes',
+};
+
+export const MACHINE_CATEGORY_ORDER: readonly MachineCategory[] = [
+  'drum', 'pitched', 'synth',
+] as const;
+
 // ── Channel FX (per-channel color slot) ──────────────────────────
 // `none` is a sentinel passthrough, always present. Other types are
 // added as their machines land.

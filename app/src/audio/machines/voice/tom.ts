@@ -33,11 +33,15 @@ const DEFAULTS: TomConfig = {
 };
 
 export const TOM_PRESETS: Record<string, Partial<TomConfig>> = {
-  low:    { pitch: 130, pitchEnd: 70,  decay: 900, tone: 0.15, wave: 'sine' },
-  mid:    { pitch: 200, pitchEnd: 110, decay: 700, tone: 0.2,  wave: 'sine' },
-  high:   { pitch: 290, pitchEnd: 170, decay: 500, tone: 0.25, wave: 'sine' },
-  bongo:  { pitch: 400, pitchEnd: 220, decay: 300, tone: 0.5,  wave: 'triangle' },
-  octban: { pitch: 220, pitchEnd: 200, decay: 350, tone: 0.4,  wave: 'triangle' },
+  low:     { pitch: 130, pitchEnd: 70,  decay: 900, tone: 0.15, wave: 'sine' },
+  mid:     { pitch: 200, pitchEnd: 110, decay: 700, tone: 0.2,  wave: 'sine' },
+  high:    { pitch: 290, pitchEnd: 170, decay: 500, tone: 0.25, wave: 'sine' },
+  bongo:   { pitch: 400, pitchEnd: 220, decay: 300, tone: 0.5,  wave: 'triangle' },
+  octban:  { pitch: 220, pitchEnd: 200, decay: 350, tone: 0.4,  wave: 'triangle' },
+  // World — hand drums via the tom model. Pitched membrane voices.
+  conga:   { pitch: 320, pitchEnd: 230, decay: 380, tone: 0.45, wave: 'sine' },
+  djembe:  { pitch: 260, pitchEnd: 150, decay: 420, tone: 0.3,  wave: 'sine' },
+  talking: { pitch: 240, pitchEnd: 360, decay: 500, tone: 0.5,  wave: 'sine' },
 };
 
 export const Tom: VoiceMachine<TomConfig> = {

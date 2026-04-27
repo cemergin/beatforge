@@ -46,6 +46,10 @@ export const HAT_PRESETS: Record<string, Partial<HatConfig>> = {
   ride:   { cutoff: 9000, q: 0.5,  decay: 600, pitch: 0.85, character: 'bp' },
   shaker: { cutoff: 4500, q: 0.4,  decay: 120, pitch: 0.2,  character: 'hp' },
   sizzle: { cutoff: 8500, q: 0.6,  decay: 240, pitch: 0.9,  character: 'bp' },
+  // World — frame & gourd shakers / jingles.
+  riq:    { cutoff: 6500, q: 1.2,  decay: 220, pitch: 0.8,  character: 'bp' },
+  caxixi: { cutoff: 3800, q: 0.6,  decay: 90,  pitch: 0.15, character: 'hp' },
+  maraca: { cutoff: 5200, q: 0.5,  decay: 130, pitch: 0.25, character: 'hp' },
 };
 
 export const Hat: VoiceMachine<HatConfig> = {

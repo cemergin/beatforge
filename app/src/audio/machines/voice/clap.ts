@@ -36,6 +36,9 @@ export const CLAP_PRESETS: Record<string, Partial<ClapConfig>> = {
   finger: { density: 1, spread: 0,  decay: 80,  cutoff: 2400, pitch: 0.7 },
   slap:   { density: 2, spread: 8,  decay: 180, cutoff: 800,  pitch: 0.4 },
   hands:  { density: 6, spread: 20, decay: 500, cutoff: 1100, pitch: 0.3 },
+  // World — handclaps from across the diaspora.
+  palmas: { density: 3, spread: 10, decay: 220, cutoff: 1800, pitch: 0.6 },
+  body:   { density: 2, spread: 6,  decay: 140, cutoff: 600,  pitch: 0.3 },
 };
 
 export const Clap: VoiceMachine<ClapConfig> = {

@@ -66,7 +66,7 @@ function vowelFormants(t: number): [number, number, number] {
 
 export const Formant: VoiceMachine<FormantConfig> = {
   id: 'formant',
-  label: 'Formant',
+  label: 'Vowel',
   category: 'voice',
   knobs: KNOBS,
   defaults: DEFAULTS,

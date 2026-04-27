@@ -41,11 +41,17 @@ export const FM_PRESETS: Record<string, Partial<FmConfig>> = {
   ep:         { pitch: 220, ratio: 7,    index: 90,  decay: 800,  feedback: 0 },
   metal:      { pitch: 350, ratio: 2.83, index: 700, decay: 600,  feedback: 0.5 },
   blip:       { pitch: 880, ratio: 1,    index: 100, decay: 80,   feedback: 0 },
+  // World — plucked / struck pitched percussion.
+  mbira:      { pitch: 440, ratio: 2,    index: 280, decay: 600,  feedback: 0 },
+  saz:        { pitch: 300, ratio: 1,    index: 110, decay: 700,  feedback: 0.15 },
+  oud:        { pitch: 200, ratio: 1,    index: 90,  decay: 600,  feedback: 0.1 },
+  music_box:  { pitch: 660, ratio: 6,    index: 280, decay: 900,  feedback: 0 },
+  sitar:      { pitch: 280, ratio: 2.41, index: 380, decay: 1200, feedback: 0.3 },
 };
 
 export const Fm: VoiceMachine<FmConfig> = {
   id: 'fm',
-  label: 'FM',
+  label: 'Pluck',
   category: 'voice',
   knobs: KNOBS,
   defaults: DEFAULTS,

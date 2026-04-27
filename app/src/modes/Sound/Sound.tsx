@@ -4,7 +4,13 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { SoundEngine, type SoundSequence, type SoundStep } from '../../audio/runtime/sound-engine';
-import { VOICE_MACHINES, type VoiceArchetypeId } from '../../audio/machines/registry';
+import {
+  VOICE_MACHINES,
+  type VoiceArchetypeId,
+  MACHINE_CATEGORY,
+  MACHINE_CATEGORY_LABEL,
+  MACHINE_CATEGORY_ORDER,
+} from '../../audio/machines/registry';
 import type { MachineConfig } from '../../audio/machines/types';
 import {
   type Channel,
@@ -1325,9 +1331,19 @@ export function Sound({ initialSoundPatternId, onConsumedInitial }: SoundProps =
                   aria-label="Machine"
                   title="Machine"
                 >
-                  {(Object.keys(VOICE_MACHINES) as VoiceArchetypeId[]).map((id) => (
-                    <option key={id} value={id}>{VOICE_MACHINES[id].label}</option>
-                  ))}
+                  {MACHINE_CATEGORY_ORDER.map((cat) => {
+                    const ids = (Object.keys(VOICE_MACHINES) as VoiceArchetypeId[]).filter(
+                      (id) => MACHINE_CATEGORY[id] === cat,
+                    );
+                    if (ids.length === 0) return null;
+                    return (
+                      <optgroup key={cat} label={MACHINE_CATEGORY_LABEL[cat]}>
+                        {ids.map((id) => (
+                          <option key={id} value={id}>{VOICE_MACHINES[id].label}</option>
+                        ))}
+                      </optgroup>
+                    );
+                  })}
                 </select>
                 {machine.presets && Object.keys(machine.presets).length > 0 && (
                   <div className="bf-sound-preset-pills" aria-label="Machine presets">

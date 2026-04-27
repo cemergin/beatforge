@@ -46,11 +46,16 @@ const DEFAULTS: KickConfig = {
 // `amp * 0.2` for 909/707). Legacy click → `click: 0.4` here because
 // the renderer maps 0..1 → `amp * 0..0.5` for headroom.
 export const KICK_PRESETS: Record<string, Partial<KickConfig>> = {
-  '808': { pitch: 150, pitchEnd: 40, pitchDecay: 80, decay: 600, click: 0 },
-  '909': { pitch: 180, pitchEnd: 42, pitchDecay: 80, decay: 350, click: 0.4 },
-  '707': { pitch: 140, pitchEnd: 55, pitchDecay: 80, decay: 280, click: 0.4 },
-  sub:   { pitch: 90,  pitchEnd: 30, pitchDecay: 120, decay: 900, click: 0 },
-  punch: { pitch: 200, pitchEnd: 60, pitchDecay: 40, decay: 250, click: 0.7 },
+  '808':   { pitch: 150, pitchEnd: 40, pitchDecay: 80,  decay: 600, click: 0 },
+  '909':   { pitch: 180, pitchEnd: 42, pitchDecay: 80,  decay: 350, click: 0.4 },
+  '707':   { pitch: 140, pitchEnd: 55, pitchDecay: 80,  decay: 280, click: 0.4 },
+  sub:     { pitch: 90,  pitchEnd: 30, pitchDecay: 120, decay: 900, click: 0 },
+  punch:   { pitch: 200, pitchEnd: 60, pitchDecay: 40,  decay: 250, click: 0.7 },
+  // World — handheld + folk drums voiced through the kick model.
+  doum:    { pitch: 110, pitchEnd: 60, pitchDecay: 60,  decay: 380, click: 0.1 },
+  surdo:   { pitch: 80,  pitchEnd: 50, pitchDecay: 100, decay: 700, click: 0 },
+  bayan:   { pitch: 95,  pitchEnd: 70, pitchDecay: 90,  decay: 500, click: 0 },
+  acoustic:{ pitch: 130, pitchEnd: 55, pitchDecay: 50,  decay: 450, click: 0.25 },
 };
 
 export const Kick: VoiceMachine<KickConfig> = {
