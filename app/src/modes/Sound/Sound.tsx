@@ -4,6 +4,8 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { SoundEngine, type SoundSequence, type SoundStep } from '../../audio/runtime/sound-engine';
+import { registerEngineMaster } from '../../audio/runtime/engine-adapters';
+import { makeRouter } from '../../modules/router';
 import {
   VOICE_MACHINES,
   type VoiceArchetypeId,
@@ -255,6 +257,19 @@ export function Sound({ initialSoundPatternId, onConsumedInitial }: SoundProps =
   const [engine] = useState(() => new SoundEngine());
   useEffect(() => () => { engine.dispose(); }, [engine]);
 
+  // Modular control plane: router dispatches ParamEvents arriving on
+  // the engine's bus into ControllableModules. Master/reverb/delay
+  // adapters register at canonical addresses (master.gain.value,
+  // master.reverb.{wet,size,decay}, master.delay.{wet,time,feedback})
+  // so any future producer (MIDI, automation, recall) can drive them
+  // through the same path the sliders use.
+  const [router] = useState(() => makeRouter());
+  useEffect(() => {
+    const unregister = registerEngineMaster(router, engine);
+    const unbind = router.bindBus(engine.getEventBus());
+    return () => { unbind(); unregister(); };
+  }, [engine, router]);
+
   const [channels, setChannels] = useState<Channel[]>(() => defaultChannels());
   const [sequence, setSequence] = useState<SoundSequence>(() => defaultSequence());
   const [bpm, setBpm] = useState(110);
@@ -377,13 +392,33 @@ export function Sound({ initialSoundPatternId, onConsumedInitial }: SoundProps =
   useEffect(() => { engine.setGrouping(grouping); }, [engine, grouping]);
   useEffect(() => { engine.setSwing(swing); }, [engine, swing]);
   useEffect(() => { engine.setAccents(strongAmp, weakAmp); }, [engine, strongAmp, weakAmp]);
-  useEffect(() => { engine.setMasterVolume(masterVolume); }, [engine, masterVolume]);
-  useEffect(() => { engine.setReverbWet(reverbWet); }, [engine, reverbWet]);
-  useEffect(() => { engine.setReverbSize(reverbSize); }, [engine, reverbSize]);
-  useEffect(() => { engine.setReverbDecay(reverbDecay); }, [engine, reverbDecay]);
-  useEffect(() => { engine.setDelayWet(delayWet); }, [engine, delayWet]);
-  useEffect(() => { engine.setDelayTime(delayTime); }, [engine, delayTime]);
-  useEffect(() => { engine.setDelayFeedback(delayFeedback); }, [engine, delayFeedback]);
+  // Master / reverb / delay knobs now flow through the bus + router:
+  // the slider's React state is the canonical UI value; an effect
+  // emits a ParamEvent; the router resolves master.gain.value et al
+  // to the engineMasterGain / engineReverb / engineDelay adapters,
+  // which call the existing engine setters. Same audio path, but the
+  // event stream is observable for MIDI-out, recording, automation.
+  useEffect(() => {
+    engine.getEventBus().emit({ type: 'param', target: 'master.gain.value', value: masterVolume });
+  }, [engine, masterVolume]);
+  useEffect(() => {
+    engine.getEventBus().emit({ type: 'param', target: 'master.reverb.wet', value: reverbWet });
+  }, [engine, reverbWet]);
+  useEffect(() => {
+    engine.getEventBus().emit({ type: 'param', target: 'master.reverb.size', value: reverbSize });
+  }, [engine, reverbSize]);
+  useEffect(() => {
+    engine.getEventBus().emit({ type: 'param', target: 'master.reverb.decay', value: reverbDecay });
+  }, [engine, reverbDecay]);
+  useEffect(() => {
+    engine.getEventBus().emit({ type: 'param', target: 'master.delay.wet', value: delayWet });
+  }, [engine, delayWet]);
+  useEffect(() => {
+    engine.getEventBus().emit({ type: 'param', target: 'master.delay.time', value: delayTime });
+  }, [engine, delayTime]);
+  useEffect(() => {
+    engine.getEventBus().emit({ type: 'param', target: 'master.delay.feedback', value: delayFeedback });
+  }, [engine, delayFeedback]);
 
   // Drive the visual playhead + bar counter from audible* getters —
   // what's playing NOW, not what's queued 300ms ahead. Frame loop
