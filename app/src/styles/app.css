@@ -1453,6 +1453,21 @@ input[type="number"] { font: inherit; color: inherit; }
   background: var(--accent); color: #fff;
 }
 
+/* Reset-edits chip in the grid foot. Only shown when the user has
+   tweaked the seed pattern. Friendly verb because reverting work
+   should feel like a small act of mercy, not a destructive command. */
+.bf-reset-edits {
+  appearance: none; border: 1px solid var(--border);
+  background: var(--bg-card); color: var(--fg);
+  font-family: var(--mono); font-size: var(--fs-mini);
+  letter-spacing: 0.04em;
+  padding: 4px 12px; border-radius: 999px;
+  cursor: pointer; transition: background var(--t-fast), color var(--t-fast);
+}
+.bf-reset-edits:hover {
+  background: var(--accent); color: #fff; border-color: var(--accent);
+}
+
 /* ── Shared Disclosure widget (see src/components/Disclosure.tsx) ──
    Single source of truth for the collapsible section caret. All
    <details>-based sections in the app go through <Disclosure/>.   */

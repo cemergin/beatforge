@@ -599,6 +599,16 @@ export function Practice({ engine, patternId, onPatternChange, onOpenSoundPatter
             {pattern.steps} steps · {pattern.stepUnit === 8 ? 'eighths' : pattern.stepUnit === 16 ? 'sixteenths' : 'quarters'}
             {pattern.poly && ' · polyrhythm'}
           </div>
+          {Object.keys(editedTracks).length > 0 && (
+            <button
+              type="button"
+              className="bf-reset-edits"
+              onClick={() => setEditedTracks({})}
+              title="Revert your tweaks and restore the original rhythm"
+            >
+              ↺ reset to original
+            </button>
+          )}
         </div>
       </section>
 
