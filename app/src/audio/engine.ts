@@ -456,6 +456,32 @@ export class AudioEngine {
     const beatSec = 60 / this.bpm;
     const caches = this.trackCaches;
 
+    // Catch-up: if a main-thread stall pushed any track past nowCatchUp,
+    // snap the whole grid forward together. Per-track snapping was
+    // letting non-stalled tracks keep their old schedule while stalled
+    // tracks advanced to (now + 5ms), which broke phase between voices
+    // that should have been in lock-step. Pick one common recovery
+    // time and apply it to every track that's behind, so all tracks
+    // stay aligned on the same grid.
+    let stalled = false;
+    for (let ci = 0; ci < caches.length; ci++) {
+      const tr = caches[ci].voiceId;
+      if (!caches[ci].hasAccents) continue;
+      if (this.nextNoteTimes[tr] < nowCatchUp) { stalled = true; break; }
+    }
+    if (stalled) {
+      const recoverT = nowCatchUp + 0.005;
+      for (let ci = 0; ci < caches.length; ci++) {
+        const tr = caches[ci].voiceId;
+        if (!caches[ci].hasAccents) continue;
+        if (this.nextNoteTimes[tr] < recoverT) {
+          this.nextNoteTimes[tr] = recoverT;
+          this.anchorTime[tr] = recoverT;
+          this.anchorIdx[tr] = this.nextIdx[tr];
+        }
+      }
+    }
+
     // Per-track scheduling — iterate pre-computed caches (no per-tick
     // Object.keys or trackMeta allocations).
     for (let ci = 0; ci < caches.length; ci++) {
@@ -463,16 +489,6 @@ export class AudioEngine {
       const tr = c.voiceId;
       if (!c.hasAccents) continue; // skip silent tracks entirely
       const stepSec = c.stepsPerBar * beatSec; // (steps/subdiv) * (60/bpm)
-
-      // Catch-up: if a main-thread stall pushed us past nextNoteTimes
-      // (tick fired late), snap up to the audio clock so Web Audio
-      // doesn't silently drop notes scheduled in the past. Also re-anchor
-      // so subsequent derive-from-anchor math stays consistent.
-      if (this.nextNoteTimes[tr] < nowCatchUp) {
-        this.nextNoteTimes[tr] = nowCatchUp + 0.005;
-        this.anchorTime[tr] = this.nextNoteTimes[tr];
-        this.anchorIdx[tr] = this.nextIdx[tr];
-      }
 
       while (this.nextNoteTimes[tr] < horizon) {
         let tPlay = this.nextNoteTimes[tr];

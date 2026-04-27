@@ -527,6 +527,34 @@ export class SoundEngine {
     const nowCatchUp = ctx.currentTime;
     const mainStepSec = this.stepSeconds();
 
+    // Catch-up (cooperative). If any one channel has slipped past
+    // nowCatchUp, snap every channel that's behind to the same
+    // recovery time. Per-channel independent snapping was letting
+    // non-stalled channels keep their old schedule while stalled
+    // ones jumped to (now + 5ms), which broke phase across voices
+    // that should have been in lock-step. Polyrhythm channels have
+    // their own step rate but they all share a bar boundary; lining
+    // them up at recoverT loses < 5ms of relative phase, which is
+    // a small price to pay to never have audible drift after a stall.
+    let stalled = false;
+    for (let ch = 0; ch < this.strips.length; ch++) {
+      const row = this.sequence[ch];
+      if (!row || row.length === 0) continue;
+      if (this.nextNoteTimes[ch] < nowCatchUp) { stalled = true; break; }
+    }
+    if (stalled) {
+      const recoverT = nowCatchUp + 0.005;
+      for (let ch = 0; ch < this.strips.length; ch++) {
+        const row = this.sequence[ch];
+        if (!row || row.length === 0) continue;
+        if (this.nextNoteTimes[ch] < recoverT) {
+          this.nextNoteTimes[ch] = recoverT;
+          this.anchorTimes[ch] = recoverT;
+          this.anchorIdxs[ch] = this.nextIdxs[ch];
+        }
+      }
+    }
+
     // Per-channel scheduling — each row ticks at its own rate. Empty
     // rows still advance their playhead but trigger nothing, so the
     // cursor stays correct if the user dials hits in mid-bar.
@@ -536,13 +564,6 @@ export class SoundEngine {
       const ringSteps = row.length;
       const channelStepSec = this.channelStepSec(ch);
       if (channelStepSec <= 0) continue;
-
-      // Catch-up: stall recovery — same shape as AudioEngine.tick().
-      if (this.nextNoteTimes[ch] < nowCatchUp) {
-        this.nextNoteTimes[ch] = nowCatchUp + 0.005;
-        this.anchorTimes[ch] = this.nextNoteTimes[ch];
-        this.anchorIdxs[ch] = this.nextIdxs[ch];
-      }
 
       const cfg = this.machines[ch];
       const strip = this.strips[ch];
