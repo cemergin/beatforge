@@ -286,6 +286,15 @@ export function Sound({ initialSoundPatternId, onConsumedInitial }: SoundProps =
   // palette only (machine configs + per-channel mixer + colour FX).
   // One kit can power many patterns; loading a kit only swaps channels.
   const [kitName, setKitName] = useState('My Ensemble');
+  // Spectrum analyser is power-user kit. Off by default — keeps the
+  // hero clean for the curious explorer; one click to bring it back
+  // when sound-design needs the visual feedback. Persisted per user.
+  const [showSpectrum, setShowSpectrum] = useState<boolean>(
+    () => localStorage.getItem('bf_sound_spectrum') === '1',
+  );
+  useEffect(() => {
+    localStorage.setItem('bf_sound_spectrum', showSpectrum ? '1' : '0');
+  }, [showSpectrum]);
   const [savedKitId, setSavedKitId] = useState<string | null>(null);
   const [savedKitList, setSavedKitList] = useState<SoundKit[]>([]);
 
@@ -826,15 +835,25 @@ export function Sound({ initialSoundPatternId, onConsumedInitial }: SoundProps =
 
   return (
     <main className="bf-sound-page">
-      <SpectrumAnalyzer engine={engine} />
+      {showSpectrum && <SpectrumAnalyzer engine={engine} />}
 
       <header className="bf-sound-hero">
-        <h1 className="bf-sound-title">Sound</h1>
+        <div className="bf-sound-title-row">
+          <h1 className="bf-sound-title">Studio</h1>
+          <button
+            type="button"
+            className={`bf-spectrum-toggle ${showSpectrum ? 'on' : ''}`}
+            onClick={() => setShowSpectrum((v) => !v)}
+            title="Show / hide the spectrum readout"
+            aria-pressed={showSpectrum}
+          >
+            {showSpectrum ? 'hide spectrum' : 'show spectrum'}
+          </button>
+        </div>
         <p className="bf-sound-sub">
-          Sequence steps below; design the sound in each channel.
-          <kbd>Space</kbd> plays. <kbd>A</kbd>–<kbd>G</kbd> auditions
-          (<kbd>Q</kbd>–<kbd>T</kbd> accent). Click a cell to cycle
-          off → on → accent.
+          Lay it down: sequence the steps, shape each voice. <kbd>Space</kbd>
+          plays. <kbd>A</kbd>–<kbd>G</kbd> auditions (<kbd>Q</kbd>–<kbd>T</kbd>
+          accent). Click any cell to cycle off → on → accent.
         </p>
       </header>
 

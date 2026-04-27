@@ -1485,6 +1485,22 @@ input[type="number"] { font: inherit; color: inherit; }
   color: var(--muted); padding: var(--sp-3); text-align: center;
 }
 
+.bf-sound-title-row {
+  display: flex; align-items: baseline; gap: var(--sp-3);
+}
+.bf-spectrum-toggle {
+  appearance: none; border: 1px solid var(--border);
+  background: transparent; color: var(--muted);
+  font-family: var(--mono); font-size: var(--fs-mini);
+  letter-spacing: 0.06em; text-transform: uppercase;
+  padding: 4px 12px; border-radius: 999px; cursor: pointer;
+  transition: background var(--t-fast), color var(--t-fast);
+}
+.bf-spectrum-toggle:hover { color: var(--fg); }
+.bf-spectrum-toggle.on {
+  background: var(--accent); color: #fff; border-color: var(--accent);
+}
+
 /* ── Shared Disclosure widget (see src/components/Disclosure.tsx) ──
    Single source of truth for the collapsible section caret. All
    <details>-based sections in the app go through <Disclosure/>.   */
