@@ -4,7 +4,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { SoundEngine, type SoundSequence, type SoundStep } from '../../audio/runtime/sound-engine';
-import { registerEngineMaster } from '../../audio/runtime/engine-adapters';
+import { registerEngineChannel, registerEngineMaster } from '../../audio/runtime/engine-adapters';
 import { makeRouter } from '../../modules/router';
 import {
   VOICE_MACHINES,
@@ -381,6 +381,34 @@ export function Sound({ initialSoundPatternId, onConsumedInitial }: SoundProps =
       engine.setMachines(channels.map((c) => c.machine));
     });
   }, [engine, channels]);
+
+  // Per-channel adapter registrations. Every time the channel count
+  // changes, tear down old adapter registrations and register fresh
+  // ones at channel.<n>, channel.<n>.color, channel.<n>.machine
+  // with the channel's CURRENT state as the adapter's initial cache.
+  // After this effect runs, ParamEvents like channel.0.machine.pitch
+  // route directly to engine.applyChannelMachine.
+  //
+  // Why count, not full channels[]: re-registering on every knob
+  // tweak would discard the adapter's state cache mid-edit. The
+  // count-only dependency means the registration is stable across
+  // knob changes; the adapter caches stay correct because every
+  // knob change ALSO emits a ParamEvent that updates the cache.
+  const channelsRefForRegister = useRef(channels);
+  useEffect(() => { channelsRefForRegister.current = channels; }, [channels]);
+  const channelCount = channels.length;
+  useEffect(() => {
+    const offs: Array<() => void> = [];
+    const cur = channelsRefForRegister.current;
+    for (let i = 0; i < channelCount; i++) {
+      const ch = cur[i];
+      if (!ch) continue;
+      offs.push(registerEngineChannel(router, engine, i, {
+        effects: ch.effects, machine: ch.machine,
+      }));
+    }
+    return () => { for (const off of offs) off(); };
+  }, [router, engine, channelCount]);
 
   // Push sequence + BPM + stepUnit + grouping + feel/master to the
   // engine. Each useEffect tracks a single state slice so we don't
@@ -786,17 +814,32 @@ export function Sound({ initialSoundPatternId, onConsumedInitial }: SoundProps =
     return () => window.removeEventListener('keydown', onSpace);
   }, [onPlayToggle]);
 
+  // Every per-knob handler now does two things:
+  //   1. setChannels — keeps React state in sync for UI display
+  //   2. emit ParamEvent — drives the engine through the bus + router
+  //                        + adapters, the same path MIDI / automation
+  //                        will use later
+  //
+  // The bulk applyChannelEffects + setMachines effect above still runs
+  // on channels[] change — it's idempotent and acts as a safety net
+  // for paths that bypass the bus (initial state, pattern load).
   const setKnob = useCallback((channelIdx: number, knobId: string, value: number) => {
     setChannels((cs) => cs.map((c, i) => (
       i === channelIdx ? { ...c, machine: { ...c.machine, [knobId]: value } } : c
     )));
-  }, []);
+    engine.getEventBus().emit({
+      type: 'param', target: `channel.${channelIdx}.machine.${knobId}`, value,
+    });
+  }, [engine]);
 
   const setDiscrete = useCallback((channelIdx: number, fieldId: string, value: string) => {
     setChannels((cs) => cs.map((c, i) => (
       i === channelIdx ? { ...c, machine: { ...c.machine, [fieldId]: value } } : c
     )));
-  }, []);
+    engine.getEventBus().emit({
+      type: 'param', target: `channel.${channelIdx}.machine.${fieldId}`, value,
+    });
+  }, [engine]);
 
   const setMixer = useCallback(
     (channelIdx: number, field: 'level' | 'pan' | 'reverbSend' | 'delaySend', value: number) => {
@@ -805,15 +848,21 @@ export function Sound({ initialSoundPatternId, onConsumedInitial }: SoundProps =
           ? { ...c, effects: { ...c.effects, [field]: value } }
           : c
       )));
+      engine.getEventBus().emit({
+        type: 'param', target: `channel.${channelIdx}.${field}`, value,
+      });
     },
-    [],
+    [engine],
   );
 
   const swapArchetype = useCallback((channelIdx: number, id: VoiceArchetypeId) => {
     setChannels((cs) => cs.map((c, i) => (
       i === channelIdx ? { ...c, machine: { ...VOICE_MACHINES[id].defaults } } : c
     )));
-  }, []);
+    engine.getEventBus().emit({
+      type: 'param', target: `channel.${channelIdx}.machine.archetype`, value: id,
+    });
+  }, [engine]);
 
   const setChannelLabel = useCallback((channelIdx: number, label: string) => {
     setChannels((cs) => cs.map((c, i) => (i === channelIdx ? { ...c, label } : c)));
@@ -841,7 +890,10 @@ export function Sound({ initialSoundPatternId, onConsumedInitial }: SoundProps =
         ? { ...c, effects: { ...c.effects, colorFx: defaultColorFx(type) } }
         : c
     )));
-  }, []);
+    engine.getEventBus().emit({
+      type: 'param', target: `channel.${channelIdx}.color.type`, value: type,
+    });
+  }, [engine]);
 
   // Update one parameter of the current colorFx. The cast is safe at
   // runtime because the caller knows the active type — we only ever
@@ -854,8 +906,11 @@ export function Sound({ initialSoundPatternId, onConsumedInitial }: SoundProps =
         const next = { ...c.effects.colorFx, [field]: value } as ColorFx;
         return { ...c, effects: { ...c.effects, colorFx: next } };
       }));
+      engine.getEventBus().emit({
+        type: 'param', target: `channel.${channelIdx}.color.${field}`, value,
+      });
     },
-    [],
+    [engine],
   );
 
   const applyPreset = useCallback((channelIdx: number, presetId: string) => {
@@ -864,9 +919,21 @@ export function Sound({ initialSoundPatternId, onConsumedInitial }: SoundProps =
       const m = VOICE_MACHINES[c.machine.archetype as VoiceArchetypeId];
       const presets = m.presets;
       if (!presets || !presets[presetId]) return c;
-      return { ...c, machine: { ...c.machine, ...presets[presetId] } };
+      const merged = { ...c.machine, ...presets[presetId] };
+      // Emit a ParamEvent for every knob the preset touched so the
+      // adapter cache + engine see the new values through the bus.
+      const bus = engine.getEventBus();
+      for (const [knob, v] of Object.entries(presets[presetId])) {
+        if (knob === 'archetype') continue;
+        bus.emit({
+          type: 'param',
+          target: `channel.${channelIdx}.machine.${knob}`,
+          value: v as number | string,
+        });
+      }
+      return { ...c, machine: merged };
     }));
-  }, []);
+  }, [engine]);
 
   return (
     <main className="bf-sound-page">
