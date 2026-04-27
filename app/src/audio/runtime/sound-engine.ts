@@ -12,6 +12,7 @@ import { createAudioContext, resumeIfSuspended } from '../audio-context';
 import type { ChannelEffects } from '../../patterns/types-sound';
 import { ChannelStrip, type ChannelStripParams } from './ChannelStrip';
 import { buildColorFx } from './colorFx';
+import { makeEventBus, type EventBus } from '../../modules/events';
 // Vite explicit-worker import — see engine.ts for the MIME-fallback
 // reasoning. Must use the `?worker` query, not `new URL(...)`.
 import SchedulerWorker from '../scheduler-worker.ts?worker';
@@ -95,11 +96,31 @@ export class SoundEngine {
   private rowLengths: number[] = [];
   private startTime = 0;
 
+  // ── Event bus (control plane) ───────────────────────────────────
+  // Lazily created on first access. The engine emits BarEvents,
+  // StepEvents, TriggerEvents, and TransportEvents alongside its
+  // direct dispatch — UI / router / recorder / MIDI-out subscribe
+  // through the same channel. No subscribers ⇒ cost is one Map
+  // lookup per emit, near zero. The direct path (triggerVoice +
+  // ChannelStrip) remains the source of truth for audio output —
+  // events are read-only signals about what already happened.
+  private bus: EventBus | null = null;
+  // Last bar number we emitted a BarEvent for. Bar 0 is "not yet
+  // started"; the first emit fires when audibleBar() reaches 1.
+  private lastEmittedBar = 0;
+
   get running(): boolean { return this._running; }
   get bpm(): number { return this._bpm; }
   get stepsPerBar(): number { return this._stepsPerBar; }
   get stepUnit(): 4 | 8 | 16 { return this._stepUnit; }
   get swing(): number { return this._swing; }
+
+  /** Lazily-constructed event bus. UI / router / MIDI subscribe here.
+   *  Same instance returned on every call so subscriptions stick. */
+  getEventBus(): EventBus {
+    if (!this.bus) this.bus = makeEventBus();
+    return this.bus;
+  }
 
   /** Resume / construct the AudioContext on first user interaction.
    *  Safe to call concurrently — second caller awaits the first's
@@ -465,6 +486,7 @@ export class SoundEngine {
     }
 
     this.startTime = start;
+    this.lastEmittedBar = 0;
     // Initialize each channel's playhead at startTime, idx 0. Per-row
     // tick rate falls out of channelStepSec at scheduling time.
     for (let i = 0; i < this.strips.length; i++) {
@@ -472,6 +494,9 @@ export class SoundEngine {
       this.nextIdxs[i] = 0;
       this.anchorTimes[i] = start;
       this.anchorIdxs[i] = 0;
+    }
+    if (this.bus) {
+      this.bus.emit({ type: 'transport', action: 'play', when: start });
     }
     this.ensureWorker();
     if (this.worker) {
@@ -506,6 +531,9 @@ export class SoundEngine {
     if (this.worker) {
       this.worker.postMessage({ type: 'stop' });
     }
+    if (this.bus && this.ctx) {
+      this.bus.emit({ type: 'transport', action: 'stop', when: this.ctx.currentTime });
+    }
   }
 
   private ensureWorker(): void {
@@ -526,6 +554,25 @@ export class SoundEngine {
     const horizon = ctx.currentTime + this.scheduleAheadS;
     const nowCatchUp = ctx.currentTime;
     const mainStepSec = this.stepSeconds();
+
+    // Bar boundary detection — emit BarEvent each time the audible
+    // bar number ticks up. Lightweight: one comparison per tick. The
+    // `when` we pass is the audio-clock time of the audible bar's
+    // start (startTime + (bar-1) * barSec).
+    if (this.bus) {
+      const currentBar = this.audibleBar();
+      if (currentBar > this.lastEmittedBar) {
+        const barSec = this.barSeconds();
+        for (let b = this.lastEmittedBar + 1; b <= currentBar; b++) {
+          this.bus.emit({
+            type: 'bar',
+            bar: b,
+            when: this.startTime + (b - 1) * barSec,
+          });
+        }
+        this.lastEmittedBar = currentBar;
+      }
+    }
 
     // Catch-up (cooperative). If any one channel has slipped past
     // nowCatchUp, snap every channel that's behind to the same
@@ -584,6 +631,26 @@ export class SoundEngine {
           const amp = v === 2 ? this._strongAmp : this._weakAmp;
           const vc: VoiceCtx = { ctx, destination: strip.input };
           triggerVoice(cfg, vc, tPlay, amp);
+          // Emit a TriggerEvent alongside the direct dispatch so any
+          // bus subscriber (router, recorder, MIDI-out) sees the same
+          // hit. The direct triggerVoice call above is still the
+          // source of truth for audio output.
+          if (this.bus) {
+            this.bus.emit({
+              type: 'trigger',
+              target: `channel.${ch}`,
+              velocity: amp,
+              when: tPlay,
+            });
+          }
+        }
+        if (this.bus) {
+          this.bus.emit({
+            type: 'step',
+            channel: ch,
+            step: stepIdx,
+            when: tPlay,
+          });
         }
 
         this.nextIdxs[ch] += 1;
