@@ -1175,6 +1175,9 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
           >
             {isPlaying ? '■' : '▶'}
           </button>
+          {currentBar > 0 && (
+            <span className="bf-transport-bar-counter" aria-label="Current bar">bar {currentBar}</span>
+          )}
           <div className="bf-sound-volume" title="Master volume — post-everything output level">
             <span className="bf-sound-volume-ico" aria-hidden="true">
               {masterVolume === 0 ? '🔇' : masterVolume < 0.35 ? '🔈' : masterVolume < 0.7 ? '🔉' : '🔊'}
@@ -1226,9 +1229,6 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
               <button type="button" className="bf-transport-tap" onClick={onTap} title="Tap tempo (T)">tap</button>
             </div>
           </div>
-          {currentBar > 0 && (
-            <span className="bf-transport-bar-counter" aria-label="Current bar">bar {currentBar}</span>
-          )}
           <div className="bf-feel-control">
             <span className="bf-feel-label">meter</span>
             <div className="bf-sound-meter-row">

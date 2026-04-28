@@ -2935,11 +2935,34 @@ textarea.bf-sound-meta-input {
 /* Studio top control bar — most-touched controls (BPM, meter,
    grouping, count-in, swing, clear) live in one wrapping flex row
    right under the subtitle. Keeps the daily-driver controls reachable
-   without scrolling past ensemble/pattern/save chrome. */
+   without scrolling past ensemble/pattern/save chrome.
+
+   Every interactive child is normalized to 28px tall (box-sizing
+   border-box) so the row reads as a single horizontal band instead
+   of a ragged staircase. Native <input>/<select> defaults vary by
+   browser; the explicit height + padding overrides them. */
 .bf-sound-topbar {
-  display: flex; flex-wrap: wrap; align-items: center;
+  display: flex; flex-wrap: wrap; align-items: flex-end;
   gap: var(--sp-2) var(--sp-3);
   padding: var(--sp-2) 0;
+}
+.bf-sound-topbar input,
+.bf-sound-topbar select,
+.bf-sound-topbar button:not(.bf-feel-pill),
+.bf-sound-topbar .bf-feel-pills {
+  box-sizing: border-box;
+  height: 28px;
+  line-height: 18px;
+}
+.bf-sound-topbar .bf-feel-pills .bf-feel-pill {
+  /* Pills inside the sunken parent already size correctly; just
+     keep them centered vertically. */
+  display: inline-flex; align-items: center;
+}
+.bf-sound-topbar input[type="range"] {
+  /* Range sliders look weird at 28px tall — let the existing thumb
+     centering rule (.bf-feel-control input[type=range]: 4px) win. */
+  height: auto;
 }
 .bf-transport-play-hero {
   /* Slightly bigger than the in-row play button — it's the primary
@@ -2970,6 +2993,42 @@ textarea.bf-sound-meta-input {
   background: var(--bg);
   color: var(--fg);
 }
+
+/* Custom time-sig A / B controls in the meter feel-control. The
+   numerator + denominator share the .bf-meter-select look so they
+   blend with the preset dropdown sitting next to them. */
+.bf-sound-meter-row {
+  display: flex; align-items: center; gap: 6px;
+  flex-wrap: wrap;
+}
+.bf-sound-meter-num {
+  font-family: var(--mono); font-size: var(--fs-micro);
+  width: 44px;
+  padding: 4px 6px;
+  border: var(--bw-1) solid var(--line);
+  border-radius: var(--r-xs);
+  background: var(--bg);
+  color: var(--fg);
+  text-align: center;
+}
+.bf-sound-meter-num:focus { outline: none; border-color: var(--accent); }
+.bf-sound-meter-slash {
+  font-family: var(--mono); font-size: var(--fs-mini);
+  color: var(--muted);
+  user-select: none;
+}
+.bf-sound-meter-denom {
+  appearance: none;
+  font-family: var(--mono); font-size: var(--fs-micro);
+  letter-spacing: 0.06em;
+  padding: 4px 22px 4px 8px;
+  border: var(--bw-1) solid var(--line);
+  border-radius: var(--r-xs);
+  background: var(--bg) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path d='M0 0h10L5 6z' fill='%23888'/></svg>") no-repeat right 6px center;
+  color: var(--fg);
+  cursor: pointer;
+}
+.bf-sound-meter-denom:focus { outline: none; border-color: var(--accent); }
 .bf-sound-topbar .bf-sound-grouping-picker {
   border: none; padding: 0;
   /* Drop the wrapping border + padding when the picker lives inside
