@@ -1,0 +1,139 @@
+# INDEX.yaml — src/modules
+# The modular control plane. Pure TypeScript, framework-free.
+
+path: app/src/modules
+purpose: >
+  Six small modules that compose into the app's signal flow:
+    events (typed bus) → router (address-keyed dispatch) →
+    audio-graph (ControllableModule contract) ← machines/voice/fx
+    sequencer (engine-agnostic clock + scheduler)
+    session (cross-mode shared React state)
+    midi (Web MIDI bridge + sink + clock)
+  Each module has its own types.ts + impl + tests. Nothing here
+  imports React except modules/session (which is React-by-design).
+
+last_indexed: 2026-04-28
+
+contents:
+  - name: events
+    kind: folder
+    path: events
+    summary: >
+      The typed pub/sub bus the engine, UI, MIDI, recorder, and
+      automation all subscribe to. Single source of truth for
+      'things that happened' — TriggerEvent / ParamEvent / BarEvent /
+      StepEvent / TransportEvent / ClockEvent / PatternEvent /
+      ReleaseEvent.
+    contents:
+      - bus.ts (makeEventBus, on, onAny, emit)
+      - types.ts (Event union + per-type interfaces)
+      - bus.test.ts
+    exports:
+      - makeEventBus
+      - type EventBus
+      - type Event
+      - type Unsubscribe
+
+  - name: router
+    kind: folder
+    path: router
+    summary: >
+      Address-keyed dispatch layer. Subscribes to ParamEvent +
+      TriggerEvent on a bus and routes them to ControllableModules
+      registered at addresses like 'master.gain', 'channel.0.color'.
+      Address resolution is greedy longest-prefix — so registering at
+      'channel.0.color' with param 'cutoff' matches a target of
+      'channel.0.color.cutoff'. registerVoice() routes triggers to
+      voice handlers (engine's TriggerHandler).
+    contents:
+      - router.ts (~80 lines)
+      - types.ts
+      - router.test.ts
+    exports:
+      - makeRouter
+      - type Router
+      - type VoiceHandler
+
+  - name: audio-graph
+    kind: folder
+    path: audio-graph
+    summary: >
+      The ControllableModule contract — input AudioNode / output
+      AudioNode / params (ParamSpec[]) / set(name, value, opts) /
+      dispose. Every voice + every FX in audio/machines/ implements
+      this. compose.ts has chain() + tap() helpers for stitching
+      modules together. primitives.ts is the lower-level building
+      blocks (osc / filter / noise factories).
+    contents:
+      - compose.ts + compose.test.ts
+      - primitives.ts + primitives.test.ts
+      - types.ts
+      - index.ts
+    exports:
+      - type ControllableModule
+      - type ParamSpec
+      - chain, tap
+
+  - name: sequencer
+    kind: folder
+    path: sequencer
+    summary: >
+      Engine-agnostic step scheduler. Takes a clock + bus + sequence
+      and emits BarEvent + StepEvent + TriggerEvent at the right
+      times. Per-track subdivisions support polyrhythm (each row can
+      have its own stepsPerBar). Used by SoundEngine to drive playback
+      — the engine no longer schedules anything itself.
+    contents:
+      - sequencer.ts (~310 lines)
+      - types.ts
+      - sequencer.test.ts
+    exports:
+      - makeSequencer
+      - type Sequencer
+
+  - name: session
+    kind: folder
+    path: session
+    summary: >
+      Cross-mode shared React state. SessionProvider wraps the route
+      tree and exposes useSession() — pattern, kit, channels, bpm,
+      swing, playing, origin, dirty. Sticky edits flow through
+      session.setPattern; loadPattern is the explicit reset that
+      replaces origin too. Tab switches stop playback but DO NOT
+      reset session — pattern + kit + channels + bpm carry across.
+    contents:
+      - session.tsx (Provider + hook)
+      - context.ts
+      - types.ts
+      - session.test.tsx
+    exports:
+      - SessionProvider
+      - useSession
+      - type SessionState
+
+  - name: midi
+    kind: folder
+    path: midi
+    summary: >
+      Pure (framework-free) MIDI bridge. Web MIDI input → bus events
+      via the mapping table; bus 'trigger' events → MIDI output via
+      the sink; clock listen / send via clock.ts. All three pieces
+      are stateless functions / factories the React-side
+      lib/useMidiBridge.ts composes.
+    related: [midi/INDEX.yaml]
+
+invariants:
+  - "Modules don't import each other except through types. Concrete
+    glue (bus.bindBus, router.bindBus, midi.attach) is wired at the
+    edge — App.tsx ModeShell + lib/useMidiBridge."
+  - "Every module is testable without a real AudioContext — fakes /
+    stubs cover the audio surface. See modules/midi/midi.test.ts
+    for the structural-mock pattern."
+
+related_indexes:
+  - path: ../INDEX.yaml
+    why: Parent src/ map.
+  - path: ../audio/INDEX.yaml
+    why: machines/ is the consumer of the audio-graph contract.
+  - path: midi/INDEX.yaml
+    why: Detailed MIDI module breakdown.

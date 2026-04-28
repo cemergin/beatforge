@@ -1,0 +1,120 @@
+# INDEX.yaml — src/modules/midi
+# Framework-free MIDI bridge. The React side is lib/useMidiBridge.ts.
+
+path: app/src/modules/midi
+purpose: >
+  Three pieces:
+    1. midi.ts — Web MIDI input → bus events. Mapping table is data
+       (TriggerMap / ParamMap), persisted by lib/midiMappings.ts.
+    2. sink.ts — bus 'trigger' events → MIDI note-on/off bytes via
+       per-channel routing. Note duration locks to one step at the
+       current BPM/stepUnit.
+    3. clock.ts — incoming 0xF8/0xFA/0xFB/0xFC parsing + outgoing
+       24 PPQN ticks. Soft sync only (BPM tracks within tens of ms).
+
+last_indexed: 2026-04-28
+
+contents:
+  - name: midi.ts
+    kind: file
+    path: midi.ts
+    lines: 138
+    summary: >
+      makeMidiModule(bus) — returns a MidiModule with enable() /
+      attach() / inputs() / outputs() / bindInput(input, mappings).
+      bindInput attaches a 'midimessage' listener that translates
+      incoming MIDI to TriggerEvent / ParamEvent / ReleaseEvent based
+      on the mapping table. Mappings are first-match-wins per kind.
+    exports:
+      - makeMidiModule
+      - type MidiModule
+
+  - name: sink.ts
+    kind: file
+    path: sink.ts
+    lines: 121
+    summary: >
+      attachMidiSink(bus, spec) — subscribes to bus 'trigger' events
+      at addresses like 'channel.0' and emits MIDI note-on/off to a
+      user-chosen output device + MIDI channel + note. spec.getConfigs
+      / spec.resolveOutput / spec.getStepDurationMs are read at
+      trigger time so live UI changes don't require re-attach. The
+      sink only fires for top-level channel triggers — sub-addresses
+      (channel.0.color.cutoff) are param events, not triggers.
+    exports:
+      - attachMidiSink
+      - type ChannelOutConfig
+      - DEFAULT_CHANNEL_OUT
+      - type SinkSpec
+
+  - name: clock.ts
+    kind: file
+    path: clock.ts
+    lines: 143
+    summary: >
+      attachClockListener(input, callbacks) — parses 0xF8 ticks and
+      smooths BPM over a 24-tick window (rounded to 2 decimals to
+      avoid display flap). 0xFA / 0xFB / 0xFC fire start / continue
+      / stop callbacks. makeClockSender(output, bpm, onSent) — drives
+      24 PPQN via setInterval; 0xFA on start, 0xFC on stop, 0xFC on
+      dispose-while-running. Soft sync only — setInterval drifts at
+      ~1ms scale.
+    exports:
+      - attachClockListener
+      - makeClockSender
+      - CLOCK_TICK / START / CONTINUE / STOP
+
+  - name: types.ts
+    kind: file
+    path: types.ts
+    summary: >
+      MidiInputMap discriminated union (TriggerMap | ParamMap),
+      MidiInputLike / MidiOutputLike / MidiAccessLike structural
+      shapes (avoid coupling to @types/webmidi), MidiModule contract,
+      BindInputOptions.
+
+  - name: index.ts
+    kind: file
+    path: index.ts
+    summary: Barrel re-export of every type + factory.
+
+  - name: tests
+    kind: files
+    path: "*.test.ts"
+    contents:
+      - midi.test.ts (input mapping bridge)
+      - sink.test.ts (per-channel routing + note-off scheduling)
+      - clock.test.ts (BPM derivation + sender start/stop/dispose)
+
+invariants:
+  - "All three modules are pure — no React, no AudioContext, no
+    browser globals beyond what the structural Web MIDI shapes
+    expose. lib/useMidiBridge.ts is the React lifecycle owner."
+  - "Sink only fires for top-level 'channel.<n>' addresses. Param
+    events at sub-addresses (channel.0.color.cutoff) flow through
+    the router, not the sink."
+  - "Persistence keys all live under bf_midi_* in localStorage so
+    the secret tab's 'reset settings' button can wipe them as a
+    set."
+
+design_notes:
+  - "Address strings are typed as plain `string` today. The
+    2026-04-28 audit recommends a branded BusAddress type
+    (template-literal) to catch typos like 'master.gain.gain' at
+    compile time. See engineering review notes."
+  - "Hot-unplug error handling: out.send() throws synchronously on
+    a closed output. sink.ts and clock.ts currently propagate. A
+    try/catch + logError + sender.stop() on InvalidStateError is
+    the recommended fix."
+
+related_indexes:
+  - path: ../INDEX.yaml
+    why: Parent modules/ map.
+  - path: ../events/INDEX.yaml (none — see modules/INDEX.yaml)
+    why: The bus the bridge subscribes to.
+  - path: ../../lib/INDEX.yaml
+    why: useMidiBridge — the React lifecycle owner.
+  - path: ../../modes/Midi/Midi.tsx
+    why: The UI surface the bridge powers.
+  - path: ../../../docs/2026-04-28-engineering-review-notes.md
+    why: Open MIDI concerns (auto-enable error, hot-unplug, branded addresses).

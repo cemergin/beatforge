@@ -1,0 +1,133 @@
+# INDEX.yaml — app/src
+# The TypeScript entry-point map. Read this first if you're trying to
+# answer "where does X live?" in the BeatForge app.
+
+path: app/src
+purpose: >
+  Single-engine, multi-route React app. App.tsx wires a SoundEngine + a
+  modular Router + a Session provider, and routes between four modes.
+  Audio is a one-way data flow (UI → ParamEvent on the bus → Router →
+  ControllableModule → AudioParam) that's identically driven by both
+  UI knobs and MIDI input mappings.
+
+last_indexed: 2026-04-28
+
+orientation:
+  if_youre_looking_for: >
+    - Audio behavior / DSP / scheduler  → audio/
+    - UI / per-mode pages               → modes/
+    - Reusable React components         → components/
+    - The control plane (events/router) → modules/
+    - Storage / persistence / utils     → lib/
+    - Pattern schema + seed catalog     → patterns/
+    - Global styles                     → styles/app.css
+    - URL parsing / PWA / logging       → lib/
+    - The MIDI bridge                   → lib/useMidiBridge.ts + modules/midi/
+
+  signal_flow:
+    - "App.tsx — SoundEngine, Router, SessionProvider, ModeShell, dirty guard"
+    - "modes/<Mode>.tsx — UI sliders emit ParamEvents on engine.getEventBus()"
+    - "modules/router — resolves addresses (master.gain.value, channel.0.color.cutoff)"
+    - "audio/runtime/engine-adapters.ts — registers ControllableModules at addresses"
+    - "audio/runtime/sound-engine.ts — owns the Web Audio graph + sequencer"
+    - "modules/midi/sink.ts — subscribes to bus 'trigger' events for MIDI-out"
+
+contents:
+  - name: App.tsx
+    kind: file
+    path: App.tsx
+    summary: >
+      Root component. Owns engine + router + session + MIDI bridge.
+      Routes ?tab=practice|studio|library|_midi via lib/urlState.
+      Cross-tab dirty guard: when patternId changes externally and
+      session.dirty is true, prompts before discarding sticky edits.
+      The MIDI tab nav chip is intentionally hidden — accessible via
+      URL only.
+
+  - name: main.tsx
+    kind: file
+    path: main.tsx
+    summary: >
+      Vite entry point. Mounts <App /> + the PWA registration.
+
+  - name: vite-env.d.ts
+    kind: file
+    path: vite-env.d.ts
+    summary: Vite type augmentation for import.meta.env.
+
+  - name: audio
+    kind: folder
+    path: audio
+    summary: >
+      Audio runtime. Engine owns the Web Audio graph + sequencer; the
+      machines/ subdir is the modular voice + FX library (each voice
+      and each FX is a ControllableModule).
+    related: [audio/INDEX.yaml]
+
+  - name: components
+    kind: folder
+    path: components
+    summary: >
+      Presentational components shared across modes — beat dots,
+      step-grid visualizations, transport, disclosures.
+    related: [components/INDEX.yaml]
+
+  - name: lib
+    kind: folder
+    path: lib
+    summary: >
+      Framework-adjacent utilities — db (IDB), storage (localStorage),
+      urlState (URL parser), log, pwa, and the MIDI bridge hook.
+    related: [lib/INDEX.yaml]
+
+  - name: modes
+    kind: folder
+    path: modes
+    summary: >
+      One folder per route — Practice, Sound (the renamed Studio),
+      Library, and the hidden Midi tab. Each consumes the shared
+      SoundEngine.
+    related: [modes/INDEX.yaml]
+
+  - name: modules
+    kind: folder
+    path: modules
+    summary: >
+      The modular control plane — events (typed bus), router (address-
+      keyed dispatch), audio-graph (ControllableModule contract),
+      sequencer (engine-agnostic scheduler), session (cross-mode
+      shared state), midi (Web MIDI bridge + sink + clock).
+    related: [modules/INDEX.yaml]
+
+  - name: patterns
+    kind: folder
+    path: patterns
+    summary: >
+      Pattern schema + 536-pattern seed library under seed/.
+    related: [patterns/INDEX.yaml]
+
+  - name: styles
+    kind: folder
+    path: styles
+    summary: >
+      Single global CSS file (app.css). Themes via CSS variables —
+      warm (default), noir, paper.
+
+invariants:
+  - "Tab switches stop the engine but leave session state alive — the
+    user's pattern + sticky edits + kit + bpm carry across modes."
+  - "Every UI knob should emit a ParamEvent on the bus, NOT call
+    engine.setX() directly. The bus path is the single observable
+    seam (recording, MIDI-out, automation)."
+  - "ControllableModule.set() must ramp via AudioParam.linearRampTo
+    (or equivalent) so subscribers see consistent ramp shape."
+  - "All persisted MIDI state lives under bf_midi_* localStorage
+    keys and is wiped by the secret tab's 'reset settings' button."
+
+related_indexes:
+  - path: ../INDEX.yaml
+    why: Parent app/ map.
+  - path: ../../INDEX.yaml
+    why: Repo-root.
+  - path: ../../docs/2026-04-28-engineering-review-notes.md
+    why: Known issues + design follow-ups from the most recent review.

@@ -8,14 +8,15 @@ purpose: >
   deep musicology/pattern research corpus. Pick a subtree below and follow its
   own INDEX.yaml for detail.
 
-last_indexed: 2026-04-23
+last_indexed: 2026-04-28
 
 state:
-  version: v1 (metronome)
-  status: "v1 shipped, 294 patterns, user-testing phase"
+  version: v1 (metronome) + Studio sequencer + secret MIDI tab
+  status: "v1 shipped, 536 patterns, user-testing phase; MIDI I/O + Studio audio bus added 2026-04-28"
   deploy_url: https://cemergin.github.io/beatforge/
   authoritative_spec: docs/superpowers/specs/2026-04-22-beatforge-metronome-design.md
   legacy_spec: docs/2026-03-12-beatforge-product-design.md
+  recent_review: docs/2026-04-28-engineering-review-notes.md
   tech_stack:
     - React 19
     - Vite 8
@@ -24,15 +25,16 @@ state:
     - Dexie (IndexedDB)
     - Fuse.js (fuzzy search)
     - vite-plugin-pwa + workbox-window
+    - Web MIDI API (secret tab, ?tab=_midi)
 
 contents:
   - name: app
     kind: folder
     path: app
     summary: >
-      The shipping React application — Practice, Studio, and Library modes
-      backed by a shared AudioEngine and a 294-pattern seed corpus. All code
-      destined for production lives here.
+      The shipping React application — Practice, Studio, Library, and a
+      hidden MIDI tab, all backed by a single SoundEngine and a 536-pattern
+      seed corpus. All code destined for production lives here.
     related: [app/INDEX.yaml]
 
   - name: design

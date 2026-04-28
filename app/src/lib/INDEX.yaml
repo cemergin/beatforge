@@ -1,0 +1,151 @@
+# INDEX.yaml — src/lib
+# Framework-adjacent utilities. Anything that's not a React component
+# and not domain audio code lives here.
+
+path: app/src/lib
+purpose: >
+  Persistence (db / storage / midi*), URL parsing, logging,
+  PWA registration, error boundaries, and the React-side MIDI bridge
+  hook. Most of these are tiny and self-contained; the MIDI bridge
+  is the heaviest (lifecycle owner for Web MIDI access + sink + clock
+  + persistence across all tabs).
+
+last_indexed: 2026-04-28
+
+contents:
+  - name: db.ts
+    kind: file
+    path: db.ts
+    lines: ~210
+    summary: >
+      Dexie schema + IDB CRUD. Three tables — userPatterns,
+      soundPatterns, soundKits. Plus loadAllSafe (defensive hydration
+      called on App mount + after Studio saves). Validation is
+      structural (typeof checks, enum membership for stepUnit).
+    exports:
+      - saveUserPattern
+      - listUserPatterns
+      - saveSoundPattern
+      - listSoundPatterns
+      - deleteSoundPattern
+      - saveSoundKit
+      - listSoundKits
+      - deleteSoundKit
+      - loadAllSafe
+      - type UserPattern
+      - type SoundPattern
+      - type SoundKit
+
+  - name: storage.ts
+    kind: file
+    path: storage.ts
+    lines: ~140
+    summary: >
+      localStorage helpers — highlights (starred patterns), recents,
+      master volume (persists across Practice + Studio), kit override.
+      All fail-soft: storage exceptions return defaults.
+    exports:
+      - getHighlights / toggleHighlight
+      - getRecent / pushRecent
+      - getMasterVolume / setMasterVolume
+
+  - name: urlState.ts
+    kind: file
+    path: urlState.ts
+    summary: >
+      Pure URL parser — parses ?tab + ?pattern + ?detail from a search
+      string. _midi tab is intentionally accessible from any build (no
+      devMode gate) — the secret tab is hidden in the UI but reachable
+      by URL.
+    exports:
+      - readUrlState
+      - type UrlState
+      - type Tab
+
+  - name: log.ts
+    kind: file
+    path: log.ts
+    summary: >
+      Centralized logger — logError / logWarn / logInfo. Currently a
+      thin console wrapper but the seam is in place for future remote
+      logging or in-app error display. Several swallowed errors
+      identified in the 2026-04-28 audit should call through here.
+
+  - name: errors.tsx
+    kind: file
+    path: errors.tsx
+    summary: >
+      ErrorBoundary component for catching render-time crashes. Wraps
+      the modes via Suspense boundaries in App.tsx.
+
+  - name: pwa.tsx
+    kind: file
+    path: pwa.tsx
+    summary: >
+      Service-worker registration + the UpdateBanner component
+      glue. Uses workbox-window's RegistrationOptions.
+
+  - name: useMidiBridge.ts
+    kind: file
+    path: useMidiBridge.ts
+    lines: ~310
+    summary: >
+      The React-side single owner for everything Web MIDI in the
+      running app. Lives at ModeShell so the bridge survives tab
+      switches: a controller's CC mapping keeps driving audio while
+      the user is in Practice; the sequencer's MIDI-out keeps flowing
+      while they're editing in Studio. Owns:
+        - Web MIDI access (auto-enables on subsequent loads via
+          bf_midi_auto_enable flag)
+        - inputs / outputs lists
+        - input mappings (persisted)
+        - per-channel MIDI-out config (persisted)
+        - active input ids (persisted)
+        - clock listen / send toggles (persisted)
+        - the sink subscription (modules/midi/sink) bound to the
+          engine's bus
+        - the clock listener / sender lifecycle
+        - resetSettings() that wipes every persisted bf_midi_* key
+    exports:
+      - useMidiBridge
+      - type MidiBridge
+      - type SentLogEntry
+      - type SentListener
+
+  - name: midiMappings.ts
+    kind: file
+    path: midiMappings.ts
+    summary: >
+      localStorage round-trip for input mappings (CC/note → bus
+      address). Defensive parse — drops malformed entries instead of
+      throwing.
+
+  - name: midiChannelOut.ts
+    kind: file
+    path: midiChannelOut.ts
+    summary: >
+      localStorage round-trip for per-channel MIDI-out routing.
+      Always returns exactly `count` rows (pads with defaults) so
+      the UI renders a stable 5-row table from day one.
+
+tests:
+  - db.test.ts
+  - storage.test.ts
+  - urlState.test.ts
+  - midiMappings.test.ts
+  - midiChannelOut.test.ts
+
+invariants:
+  - "All bf_midi_* localStorage keys are wiped by Midi.tsx's
+    'reset settings' button. New MIDI state must follow the
+    bf_midi_* prefix to be reset-aware."
+  - "log.ts is the single seam for future remote logging — don't
+    add console.log calls outside it."
+
+related_indexes:
+  - path: ../INDEX.yaml
+    why: Parent src/ map.
+  - path: ../modules/midi/INDEX.yaml
+    why: The pure MIDI module the bridge consumes.
+  - path: ../../docs/2026-04-28-engineering-review-notes.md
+    why: Open silent-failure concerns around MIDI auto-enable + bare catches.

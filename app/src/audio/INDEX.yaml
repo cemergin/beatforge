@@ -1,121 +1,170 @@
 # INDEX.yaml — src/audio
-# AudioEngine + kit synthesis. Engine owns the scheduler + master bus;
-# per-kit synthesis recipes live under kits/.
+# Audio runtime. SoundEngine owns the Web Audio graph + sequencer
+# bridge; machines/ is the modular voice + FX library. Both feed the
+# router-driven control plane in modules/.
 
 path: app/src/audio
 purpose: >
-  engine.ts owns the Web Audio graph (master bus, reverb send, compressor)
-  and the lookahead scheduler with per-track independent subdivisions for
-  polyrhythm. Synthesis moved out to kits/ — one KitRecipe per kit,
-  looked up by KitId at trigger time. React code touches an AudioEngine
-  instance held in App.tsx.
+  All Web Audio code. runtime/sound-engine.ts is the single audio
+  runtime — Web Audio graph, sequencer driver (delegated to
+  modules/sequencer), master + dry buses, FX returns. machines/ is the
+  declarative library of ControllableModules (one per voice archetype,
+  one per master FX). engine-adapters.ts wraps the engine state into
+  ControllableModules registered at well-known addresses.
 
-last_indexed: 2026-04-23
+last_indexed: 2026-04-28
 
 contents:
-  - name: engine.ts
-    kind: file
-    path: engine.ts
-    lines: 358
+  - name: runtime
+    kind: folder
+    path: runtime
     summary: >
-      AudioEngine class. Lookahead scheduler (25 ms timer, 120 ms
-      scheduleAhead). Per-track nextNoteTimes and nextIdx so each
-      track's subdivisions and cycle advance independently — this is
-      how polyrhythm is realised. Bar duration is pattern.steps ×
-      (60 / BPM); BPM ties to the main division.
-
-      Master bus: master gain → DynamicsCompressor → destination, with
-      a parallel ConvolverNode reverb bus whose send is set per-kit from
-      kitRecipes[id].reverbSend. trigger() resolves kitRecipes[this.kit]
-      .voices[voice](vc, when, amp) — no synthesis code lives here.
-      Public state (cursors, bar) is read by the UI each animation frame.
-    exports:
-      - AudioEngine
-    depends_on:
-      - ../patterns/types
-      - ./kits
-
-  - name: engine.test.ts
-    kind: file
-    path: engine.test.ts
-    lines: 176
-    summary: Pure timing/guards tests for AudioEngine — no real AudioContext.
-
-  - name: kits/
-    kind: dir
-    path: kits
-    summary: >
-      Per-kit synthesis recipes. Each kit exports a KitRecipe with 5
-      VoiceRenderer functions (KK/SN/HH/OH/CP) and a per-kit reverb send
-      level. index.ts aggregates them into the `kitRecipes` registry.
-      Drum Synth (v2) will reuse these recipes directly.
+      The instantiated audio runtime — engine class, channel strips,
+      kit presets, engine adapters that register modules with the
+      router.
     contents:
+      - name: sound-engine.ts
+        kind: file
+        path: runtime/sound-engine.ts
+        lines: ~720
+        summary: >
+          SoundEngine class — the single audio runtime. Owns: master
+          GainNode (post-everything output), dry GainNode (channels
+          feed it; wet returns are added separately in master),
+          analyser node, reverb + delay FX modules with HF/LF damping
+          shelves on the wet returns, per-channel ChannelStrips, and
+          the sequencer driver (delegated to modules/sequencer).
+          Exposes a typed EventBus via getEventBus() that everything
+          downstream subscribes to.
+        exports:
+          - SoundEngine
+          - SoundSequence
+          - SoundStep
+        depends_on:
+          - ../machines/registry
+          - ../machines/voice-controller
+          - ../machines/fx
+          - ../../modules/events
+          - ../../modules/sequencer
+          - ../../modules/audio-graph
+          - ../../patterns/types
+
+      - name: engine-adapters.ts
+        kind: file
+        path: runtime/engine-adapters.ts
+        lines: 220
+        summary: >
+          Translates engine state slots (master.gain, master.dry,
+          master.reverb, master.delay, channel.<n>.{level/pan/sends/
+          color/machine}) into ControllableModules registered with
+          the router. After registration, ParamEvents at those
+          addresses dispatch directly into the engine without
+          requiring callsite knowledge of which engine setter to call.
+        exports:
+          - registerEngineMaster
+          - registerEngineChannel
+          - engineChannelMixer
+          - engineChannelColor
+          - engineChannelMachine
+
+      - name: ChannelStrip.ts
+        kind: file
+        path: runtime/ChannelStrip.ts
+        lines: 204
+        summary: >
+          Per-channel mixer + color FX slot. Routes a voice's output
+          into level/pan, then into the dry bus (master mix) and
+          parallel reverbSend / delaySend taps. The color FX slot is
+          rebuilt structurally when ColorFx.type flips.
+
+      - name: kit-presets.ts
+        kind: file
+        path: runtime/kit-presets.ts
+        lines: 136
+        summary: >
+          The 9 kit presets — 808 / 909 / 707 / 727 / frame / tabla /
+          gamelan / congas / latin. Each kit is a 5-channel mapping
+          of (label, machine archetype, machine config). Used by
+          Practice and Studio when loading a kit by id.
+
+      - name: engine-adapters.test.ts
+      - name: sound-engine-bus.test.ts
+
+  - name: machines
+    kind: folder
+    path: machines
+    summary: >
+      Declarative voice + FX library. Each machine is a tiny module
+      that exposes a ControllableModule via an init function — input
+      / output AudioNodes, a list of ParamSpecs, and a .set(name,
+      value, opts) method that ramps the underlying AudioParams.
+      voice/ is the per-voice archetypes; fx/ is the master + color
+      FX. registry.ts is the catalog Sound's UI consumes.
+    contents:
+      - name: registry.ts
+        kind: file
+        path: machines/registry.ts
+        summary: >
+          VOICE_MACHINES catalog — id → (label, init function, default
+          config). Source of truth for the Studio UI's machine
+          selector. Machine categories (kick/snare/perc/melodic/etc)
+          drive grouping in the dropdown.
+
       - name: types.ts
         kind: file
-        path: kits/types.ts
-        lines: 43
+        path: machines/types.ts
         summary: >
-          KitRecipe / VoiceRenderer / VoiceCtx interfaces + connectVoice()
-          helper that wires a tail node to the master bus and taps the
-          reverb send.
-      - name: _util.ts
+          MachineConfig union, VoiceCtx, VoiceController interface.
+          The shape every voice/<arch>.ts implements.
+
+      - name: voice-controller.ts
         kind: file
-        path: kits/_util.ts
-        lines: 29
+        path: machines/voice-controller.ts
         summary: >
-          Shared node-creation helpers (createOsc / createGain /
-          createBiquad / createNoise) — each takes an AudioContext so kits
-          don't need an engine backref.
-      - name: index.ts
-        kind: file
-        path: kits/index.ts
-        lines: 34
+          triggerVoice(cfg, vc, when, amplitude) — dispatches to the
+          right voice/<arch> handler based on cfg.archetype. Called
+          from SoundEngine.handleTrigger.
+
+      - name: voice/
+        kind: folder
+        path: machines/voice
         summary: >
-          kitRecipes registry keyed by KitId + buildVoiceCtx() factory.
-          Re-exports the public kit types.
-      - name: drum-machine.ts
-        kind: file
-        path: kits/drum-machine.ts
-        lines: 140
+          One file per voice archetype — kick, snare, hat, clap, tom,
+          cowbell, modal (bell/tank/etc), pluck, formant (vowel),
+          fm (chip), noise (shaker), crackle, phase-distort,
+          wavefolder. Each exports a tiny per-trigger renderer.
+
+      - name: fx/
+        kind: folder
+        path: machines/fx
         summary: >
-          808 / 909 / 707 recipes. Shared branching structure with per-kit
-          parameter tables for kick / snare / hat. One file because the
-          three kits share the same voice shape and differ only in params.
-      - name: tr-727.ts
-        kind: file
-        path: kits/tr-727.ts
-        lines: 91
+          Master + per-channel FX modules — reverb (convolver +
+          impulse), delay, overdrive, bitcrush, filter, plus a
+          shared _shared.ts with rampParam helpers and impulse
+          synthesis.
+
+      - name: _shared/
+        kind: folder
+        path: machines/_shared
         summary: >
-          727 recipe — Latin percussion remap (low/high conga, cowbell,
-          agogo, claves). Separate from drum-machine.ts because the voice
-          mapping is structurally different.
-      - name: frame-drum.ts
-        kind: file
-        path: kits/frame-drum.ts
-        lines: 132
-        summary: >
-          Turkish / Arabic / Persian / Balkan frame-drum recipe
-          (doum / tek / finger-snap / zils / slap).
-      - name: tabla.ts
-        kind: file
-        path: kits/tabla.ts
-        lines: 106
-        summary: >
-          Indian Hindustani tabla recipe (ge / na / tin / tun / dha).
-          Dha (CP) is a composite — ge + na fired together.
-      - name: gamelan.ts
-        kind: file
-        path: kits/gamelan.ts
-        lines: 79
-        summary: >
-          Indonesian gamelan recipe — all voices share one inharmonic
-          modal-resonator tone generator, differing only in fundamental /
-          partials / decay.
+          Shared low-level helpers (audio.ts) — context-agnostic
+          oscillator / noise / filter constructors.
+
+invariants:
+  - "Every voice + FX init function returns a ControllableModule
+    whose .set(name, value, opts) ramps via setValueAtTime +
+    linearRampToValueAtTime — never bare AudioParam.value writes."
+  - "SoundEngine never calls voice handlers directly — it dispatches
+    via voice-controller.ts so machine swaps don't ripple through
+    the engine."
+  - "Master FX wet returns flow through HF (16 kHz, -8 dB) and LF
+    (30 Hz, -12 dB) shelves before joining the master bus. Dry path
+    stays full-band."
 
 related_indexes:
   - path: ../INDEX.yaml
-    why: Parent src structure.
+    why: Parent src/ map.
+  - path: ../modules/INDEX.yaml
+    why: Bus / router / sequencer modules the engine consumes.
   - path: ../patterns/INDEX.yaml
-    why: Pattern schema this engine consumes.
-  - path: ../../../research/technical/INDEX.yaml
-    why: Web Audio / DSP / scheduler references behind the design.
+    why: Pattern schema this engine renders.

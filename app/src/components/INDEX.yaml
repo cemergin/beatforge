@@ -1,0 +1,114 @@
+# INDEX.yaml — src/components
+# Shared presentational components.
+
+path: app/src/components
+purpose: >
+  React components reused across modes. Pure presentational — no
+  audio engine access, no IDB. Inputs come in via props, events go
+  out via callbacks. The metronome/ subset are higher-level pieces
+  that compose multiple primitives for Practice's main layout.
+
+last_indexed: 2026-04-28
+
+contents:
+  - name: BeatDots.tsx
+    kind: file
+    path: BeatDots.tsx
+    summary: >
+      The signature group-colored dot row. Takes grouping (e.g.
+      [2,2,2,3]) + currentStep + size; renders one dot per step,
+      colored by which group it belongs to. Used in Practice + Sound
+      headers and PatternCard previews.
+
+  - name: LinearGrid.tsx
+    kind: file
+    path: LinearGrid.tsx
+    summary: >
+      Horizontal step grid with one row per voice. Used in Practice
+      and Sound's 'linear' view. Click cycles off → on → accent;
+      drag-paints are not supported (intentional — discrete edits).
+
+  - name: PillGrid.tsx
+    kind: file
+    path: PillGrid.tsx
+    summary: >
+      Pill-shape variant of LinearGrid — same data, rounded cells
+      grouped by additive partition.
+
+  - name: CircularGrid.tsx
+    kind: file
+    path: CircularGrid.tsx
+    summary: >
+      SVG ring step view. Position around the circle = step index;
+      groups are colored arcs. Best for showing cyclical structure
+      (9/8, gamelan, tabla).
+
+  - name: StepGrid.tsx
+    kind: file
+    path: StepGrid.tsx
+    summary: >
+      A thin variant of LinearGrid driven by generic positional rows
+      instead of a Pattern. Used in Sound (the renamed Studio) where
+      the 5-channel sequence isn't a Pattern.
+
+  - name: TransportBar.tsx
+    kind: file
+    path: TransportBar.tsx
+    summary: >
+      Reusable Play/Stop + BPM + tap + clear control bar. Kept around
+      for components that still want the prefab shape — Sound's top
+      bar now inlines its own (post-2026-04-28 layout).
+
+  - name: Disclosure.tsx
+    kind: file
+    path: Disclosure.tsx
+    summary: >
+      Thin wrapper around <details><summary> with a consistent caret
+      glyph. Used everywhere a section collapses (FX details,
+      metadata, COLOR / MIX disclosures, library zones).
+
+  - name: UpdateBanner.tsx
+    kind: file
+    path: UpdateBanner.tsx
+    summary: >
+      PWA update banner. Appears when the service worker has new
+      content waiting to activate. Click to reload + apply.
+
+  - name: visual-helpers.ts
+    kind: file
+    path: visual-helpers.ts
+    summary: >
+      GROUP_COLORS array + groupIndexForStep helper. Maps step
+      index → group → CSS color variable. Used by every
+      visualization for consistent group coloring.
+
+  - name: metronome
+    kind: folder
+    path: metronome
+    summary: >
+      Practice-specific composite components — BpmHero (large BPM
+      display + arrows), KitPanel (kit picker + ensemble loader),
+      PlayVolume (combined play button + volume slider), SwingPanel,
+      AccentsPanel, CountInPanel.
+    contents:
+      - BpmHero.tsx
+      - KitPanel.tsx
+      - PlayVolume.tsx
+      - SwingPanel.tsx
+      - AccentsPanel.tsx
+      - CountInPanel.tsx
+
+invariants:
+  - "Every component in this folder must be pure — no engine access,
+    no IDB, no localStorage. State + side effects belong in modes/
+    or lib/."
+  - "Group colors come from the GROUP_COLORS variable list in
+    visual-helpers.ts. Don't hard-code accent colors per visualizer."
+
+related_indexes:
+  - path: ../INDEX.yaml
+    why: Parent src/ map.
+  - path: ../modes/INDEX.yaml
+    why: The pages that compose these components.
+  - path: ../styles/app.css
+    why: Where every component's CSS lives.

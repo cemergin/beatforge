@@ -3,23 +3,26 @@
 
 path: app/src/patterns
 purpose: >
-  Defines the Pattern type (types.ts) and aggregates the per-region seed
-  files into a single PATTERNS array plus a patternById lookup. User
-  patterns from Dexie are layered on top at runtime via
-  registerPatternSource.
+  Defines the Pattern type (types.ts) and aggregates the per-region
+  seed files into a single PATTERNS array plus a patternById lookup.
+  User patterns from Dexie + transient ?p= shared patterns are layered
+  on top at runtime via registerPatternSource (App.tsx).
 
-last_indexed: 2026-04-23
+last_indexed: 2026-04-28
 
 contents:
   - name: types.ts
     kind: file
     path: types.ts
     summary: >
-      Pattern schema. Closed voice set (KK/SN/HH/OH/CP), seven KitIds,
-      sixteen RegionIds, Genre + Difficulty unions. Track is either a
-      Velocity[] shorthand (uses pattern.steps as subdivisions) or a
-      full { pattern, subdivisions?, cycle? } object that unlocks
-      per-track polyrhythm. trackMeta() normalizes either form.
+      Pattern schema. Closed voice set (KK / SN / HH / OH / CP), nine
+      KitIds (808/909/707/727/frameDrum/tabla/gamelan/congas/latin),
+      RegionId union (23 regions), Genre + Difficulty unions. Track
+      is either a Velocity[] shorthand or a full {pattern,
+      subdivisions?, cycle?} object that unlocks per-track polyrhythm.
+      stepUnit was widened from 4 | 8 | 16 to 2 | 4 | 8 | 16 on
+      2026-04-28 to support custom A/B time signatures in Studio.
+      trackMeta() normalizes either form.
     exports:
       - VoiceId
       - Velocity
@@ -32,46 +35,69 @@ contents:
       - TrackMeta
       - trackMeta
 
+  - name: types-sound.ts
+    kind: file
+    path: types-sound.ts
+    summary: >
+      Sound mode's authoring shape — SoundPattern (full sound design
+      with 5 channels) + SoundKit (saved 5-voice ensemble) + Channel
+      + ColorFx. Distinct from Pattern because Studio editing carries
+      machine configs that Pattern's voice-keyed shape can't encode.
+      Saving in Studio writes BOTH a SoundPattern (full fidelity) AND
+      a UserPattern (Library-visible record).
+
+  - name: schema.ts
+    kind: file
+    path: schema.ts
+    summary: >
+      Runtime validation for Pattern JSON. Zod-style structural
+      check used in tests + when decoding ?p= shared URLs. Currently
+      validates timeSig is a non-empty string but does NOT enforce
+      timeSig ↔ grouping ↔ stepUnit consistency — see audit findings.
+
+  - name: serialize.ts
+    kind: file
+    path: serialize.ts
+    summary: >
+      Compact base64-encoded JSON serializer for share URLs (?p=).
+      Pattern → hash → URL-safe string. Lazy-imported in App.tsx so
+      it doesn't bloat the main bundle.
+
   - name: seed
     kind: folder
     path: seed
     summary: >
-      Sixteen per-region TypeScript files, one barrel (index.ts), and
-      the optional runtime extension hook. Seed patterns are tree-shaken
-      and ship inside the JS bundle — no fetch, no JSON.
+      23 per-region TypeScript files (some still .json, imported as
+      modules), one barrel (index.ts), and the runtime extension
+      hook. Seeds are tree-shaken into the JS bundle — no fetch.
     related: [seed/INDEX.yaml]
 
   - name: seed/index.ts
     kind: file
     path: seed/index.ts
     summary: >
-      Barrel file. Concatenates the sixteen region arrays in first-seen
+      Barrel file. Concatenates all region arrays in first-seen
       order, exports the flat PATTERNS array, registerPatternSource
-      (for Dexie-backed user patterns), and patternById lookup.
+      (for Dexie-backed user patterns + ?p= shared patterns), and
+      patternById lookup.
     exports:
       - PATTERNS
       - registerPatternSource
       - patternById
 
 aggregate:
-  total_patterns: 294
-  regions_covered:
-    - turkey-ottoman
-    - balkans
-    - cuba-afrocaribbean
-    - arabic-swana
-    - persia
-    - india
-    - west-africa
-    - brazil
-    - caribbean
-    - iberia-flamenco
-    - gamelan-southeast-asia
-    - east-asia
-    - celtic-europe
-    - electronic-western
-    - exercise
-    - andean-south-america
+  total_patterns: 536
+  region_files: 23
+  audit_status: >
+    Spot-checked 2026-04-28. 0 critical errors. 34 high (timeSig /
+    stepUnit / grouping inconsistencies — concentrated in india,
+    gamelan-southeast-asia, north-east-african). 5 medium (region
+    miscategorizations: afrobeat / amapiano / gqom labeled
+    electronic-western should be modern-african). See
+    docs/2026-04-28-engineering-review-notes.md for the full
+    list and a recommended CI invariant
+    (numerator(timeSig) === sum(grouping) × (stepUnit / denom))
+    that would prevent future drift.
   kits_used:
     - "808"
     - "909"
@@ -80,6 +106,8 @@ aggregate:
     - frameDrum
     - tabla
     - gamelan
+    - congas
+    - latin
 
 related_indexes:
   - path: ../INDEX.yaml
@@ -88,5 +116,5 @@ related_indexes:
     why: Per-region pattern counts, default kits, representative names.
   - path: ../audio/INDEX.yaml
     why: The engine that consumes these patterns.
-  - path: ../../../research/patterns/INDEX.yaml
-    why: The markdown corpus these seeds were transcribed from.
+  - path: ../../docs/2026-04-28-engineering-review-notes.md
+    why: Audit findings that haven't been fixed yet.

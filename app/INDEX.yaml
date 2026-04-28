@@ -1,20 +1,23 @@
 # INDEX.yaml — /app (shipping React application)
-# Structure map of the BeatForge v1 codebase.
+# Structure map of the BeatForge codebase. Refreshed 2026-04-28 after
+# the audio-engine + MIDI tab work landed.
 
 path: app
 purpose: >
   The React 19 + Vite 8 + TypeScript app that ships to GitHub Pages. One
-  AudioEngine drives three modes (Practice, Studio, Library) plus a dev-only
-  _Patterns sandbox. Data lives in Dexie/IndexedDB; seed patterns are
-  compiled-in under src/patterns/seed/.
+  SoundEngine drives four routes (Practice, Studio, Library, hidden MIDI).
+  Data lives in Dexie/IndexedDB; seed patterns are compiled-in under
+  src/patterns/seed/.
 
-last_indexed: 2026-04-23
+last_indexed: 2026-04-28
+recent_review: ../docs/2026-04-28-engineering-review-notes.md
 
 tech_stack:
-  runtime: React 19, TypeScript 6 (beta)
+  runtime: React 19, TypeScript 6
   build: Vite 8, Bun 1.3.x
   data: Dexie 4 (IndexedDB), Fuse.js 7 (search)
   pwa: vite-plugin-pwa 1.2, workbox-window 7.4
+  midi: Web MIDI API (modules/midi/ + lib/useMidiBridge.ts)
   lint: eslint 9 flat config, typescript-eslint 8
   deploy: GitHub Pages via .github/workflows/deploy.yml
 
@@ -28,27 +31,33 @@ contents:
     kind: file
     path: src/App.tsx
     summary: >
-      Root component. Owns the AudioEngine singleton, tab routing
-      (practice/studio/library/_patterns), theme (warm/noir/paper),
-      persisted patternId, and the user-pattern cache that bridges Dexie
-      back into the seed pattern registry.
+      Root component. Owns the SoundEngine singleton, tab routing
+      (practice / studio / library / _midi), theme (warm/noir/paper),
+      persisted patternId, the user-pattern cache that bridges Dexie back
+      into the seed registry, the modular Router (lifted out of Studio so
+      MIDI input mappings work across all tabs), and the cross-tab dirty
+      guard (window.confirm before clobbering session-sticky edits).
     depends_on:
-      - ./audio/engine
+      - ./audio/runtime/sound-engine
+      - ./modules/router
+      - ./modules/session
       - ./modes/Practice/Practice
-      - ./modes/Studio/Studio
+      - ./modes/Sound/Sound
       - ./modes/Library/Library
-      - ./modes/_Patterns/PatternsSandbox
+      - ./modes/Midi/Midi
       - ./patterns/seed
       - ./lib/db
       - ./lib/storage
+      - ./lib/useMidiBridge
 
   - name: src/audio
     kind: folder
     path: src/audio
     summary: >
-      Single-file audio engine (engine.ts) — lookahead scheduler,
-      per-track subdivisions for polyrhythm, synthesis recipes for the
-      seven kits, master bus with compressor + convolution reverb.
+      The audio runtime — sound-engine.ts (Web Audio graph, sequencer
+      bridge, master + dry buses, FX returns with HF/LF damping, kit /
+      machine state) plus the modular machines/ directory (voice + fx
+      ControllableModules registered with the router).
     related: [src/audio/INDEX.yaml]
 
   - name: src/components
@@ -56,41 +65,57 @@ contents:
     path: src/components
     summary: >
       Shared presentational components — BeatDots (group-colored dots),
-      CircularGrid, LinearGrid, PillGrid (three step-sequencer
-      visualizations), plus visual-helpers (color + opacity math).
+      LinearGrid / CircularGrid / PillGrid / StepGrid (four step-grid
+      visualizations), TransportBar, Disclosure, UpdateBanner, plus the
+      metronome/ subset (BpmHero, KitPanel, PlayVolume, etc).
+    related: [src/components/INDEX.yaml]
 
   - name: src/lib
     kind: folder
     path: src/lib
     summary: >
-      Framework-adjacent utilities — db.ts (Dexie schema + user pattern
-      CRUD + validation), storage.ts (localStorage: highlights, recents,
-      kit overrides, master volume), pwa.tsx (service-worker registration
-      + update UI).
+      Framework-adjacent utilities — db.ts (Dexie schema + IDB CRUD),
+      storage.ts (localStorage), urlState.ts (?tab + ?pattern + ?detail
+      URL parser), pwa.tsx (service-worker registration), log.ts
+      (centralized logger), useMidiBridge.ts (the React-side single owner
+      for Web MIDI access + sink + clock + persistence), midiMappings.ts
+      and midiChannelOut.ts (MIDI persistence helpers).
+    related: [src/lib/INDEX.yaml]
 
   - name: src/modes
     kind: folder
     path: src/modes
     summary: >
-      One folder per mode. Each consumes the shared AudioEngine and
+      One folder per route. Each consumes the shared SoundEngine and
       renders a full-page experience.
     related: [src/modes/INDEX.yaml]
+
+  - name: src/modules
+    kind: folder
+    path: src/modules
+    summary: >
+      The modular control plane — events (typed bus), router (address-
+      keyed dispatch into ControllableModules), audio-graph (the
+      ControllableModule contract + compose helpers), sequencer (engine-
+      free scheduler), session (cross-mode shared React state), midi
+      (Web MIDI bridge + sink + clock).
+    related: [src/modules/INDEX.yaml]
 
   - name: src/patterns
     kind: folder
     path: src/patterns
     summary: >
       Pattern schema (types.ts) plus the per-region seed library under
-      seed/. All 294 shipping patterns are imported through
+      seed/. All 536 shipping patterns are imported through
       seed/index.ts.
     related: [src/patterns/INDEX.yaml]
 
   - name: src/styles/app.css
     kind: file
     path: src/styles/app.css
-    lines: 1500
+    lines: 3000
     summary: >
-      Single stylesheet (~54 KB). CSS variables for the three themes,
+      Single stylesheet (~95 KB). CSS variables for the three themes,
       layout, every mode's chrome, and all component styling. No CSS
       modules, no framework.
 
@@ -128,17 +153,44 @@ contents:
     kind: file
     path: package.json
     summary: >
-      Scripts: dev, build (tsc -b && vite build), lint, preview.
-      Bun lockfile committed at bun.lock.
+      Scripts: dev, build (tsc -b && vite build), test (vitest),
+      check:lint (typecheck + eslint), preview. Bun lockfile committed
+      at bun.lock.
+
+big_picture_signal_path:
+  description: >
+    For a new investigator: this is what happens when the user moves
+    a knob. Reading this top-to-bottom is the fastest tour of the
+    codebase.
+  flow:
+    - "User moves a slider in modes/Sound/Sound.tsx"
+    - "Slider's onChange dispatches setState; an effect emits a
+       ParamEvent on engine.getEventBus()"
+    - "modules/router (registered in App.tsx ModeShell) resolves the
+       event's target (e.g. master.dry.value) to a ControllableModule
+       registered by audio/runtime/engine-adapters.ts"
+    - "Module.set() ramps the underlying AudioParam"
+    - "Audio renders through the dry → master → analyser →
+       destination chain in audio/runtime/sound-engine.ts"
+    - "The same ParamEvent stream is observable for MIDI-out (the
+       sink in modules/midi/sink.ts subscribes), recording, automation"
 
 related_indexes:
   - path: ../INDEX.yaml
     why: Repo-root context.
+  - path: src/INDEX.yaml
+    why: src/ entry-point map (Practice/Studio/Library/MIDI signal flow).
   - path: src/patterns/INDEX.yaml
     why: Pattern schema + full pattern catalog.
   - path: src/audio/INDEX.yaml
-    why: Engine internals and kit reference.
+    why: Engine internals + machines/ reference.
+  - path: src/modules/INDEX.yaml
+    why: The modular control plane (events / router / sequencer / midi).
   - path: src/modes/INDEX.yaml
-    why: Per-mode breakdown (Practice/Studio/Library).
-  - path: ../design/INDEX.yaml
-    why: Pre-port prototype — compare when behavior seems off.
+    why: Per-mode breakdown.
+  - path: src/lib/INDEX.yaml
+    why: Framework-adjacent utilities.
+  - path: src/components/INDEX.yaml
+    why: Shared presentational pieces.
+  - path: ../docs/2026-04-28-engineering-review-notes.md
+    why: Known-but-unfixed concerns from the most recent review.

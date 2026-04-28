@@ -1,0 +1,158 @@
+# Engineering review notes — 2026-04-28
+
+Captured from three analysis agents run on the MIDI + Studio audio
+work shipped this session (and adjacent code they pulled in). Use this
+as a forward-looking concerns log: items here are **not blockers for
+the current build**, but each is something a future investigator
+should know about before touching the relevant module.
+
+The high-confidence trivial fixes from the reviews were already
+landed in commit `5167b8e` ("Review-fix pass"). Everything below is
+follow-up.
+
+## 1. Silent failures
+
+### CRITICAL
+- **`useMidiBridge.ts` auto-enable swallows access denial.** When the
+  sticky `bf_midi_auto_enable` flag fires `void enable()` on mount
+  and access is denied (browser revoked permission, hardware policy
+  block), the error lands in `enableError` state inside the bridge
+  but the user only sees it if the MIDI tab is open. Sink + input
+  bindings silently never wire up. Should log via `lib/log.ts` so the
+  failure surfaces regardless of which tab is active.
+- **`sound-engine.ts` worker `onerror` swallows real failures.** The
+  scheduler worker's `onerror` handler is empty, justified by the
+  setTimeout fallback. But `onerror` fires for syntax errors, CSP
+  violations, and unhandled exceptions inside the worker — not just
+  transient hiccups. Production regressions that break the worker
+  are invisible. Add a `logError` call and set `workerFailed = true`
+  on first error.
+- **Worker construction `catch {}` is bare.** Same file. CSP, bundler
+  path bugs, OOM all degrade silently to setTimeout scheduling with
+  no signal.
+- **App.tsx dirty-guard cancel-revert path has a re-entry race.** The
+  effect calls `setPatternId(session.pattern.id)` on Cancel, which
+  re-fires the same effect. Double-clicks of Library cards while a
+  confirm dialog is open will compound state. Guard with a ref-based
+  "in flight" flag.
+
+### HIGH (production hot-paths)
+- **`out.send()` rejection unhandled in `sink.ts` and `clock.ts`.**
+  Web MIDI's `send()` throws `InvalidStateError` synchronously when
+  an output is hot-unplugged. The whole bus listener chain unwinds.
+  Wrap each `send()` with try/catch + `logError` and treat as a
+  per-message drop.
+- **Clock listener "first device wins" comment is a lie.** The bridge
+  attaches `attachClockListener` to *every* active input. Multi-source
+  clock makes BPM flap and fires `session.start/stop` twice per
+  message. Either dedupe to first active input, or warn the user
+  when multiple clocks arrive.
+- **Clock sender effect captures stale `MidiOutputLike` ref.** If the
+  user hot-unplugs and re-plugs a device with the same id, the cached
+  `out` reference is the disposed handle. `outputs` is intentionally
+  not in deps to avoid re-arming the interval; the cost is hot-unplug
+  brittleness. Either accept the cost (add `outputs` to deps) or
+  guard `send()` and stop on `InvalidStateError`.
+- **`enable()` throws bare `Error`.** "Web MIDI API not available" is
+  surfaced raw to the user. Replace with an actionable message
+  ("Use Chrome or Edge over HTTPS").
+- **`registerEngineMaster` effect's `.then()` has no `.catch()`.** If
+  `engine.ensureCtx()` rejects (rare iOS Safari edge case), all
+  master-bus knobs are dead but the UI looks fine.
+- **`loadInPractice`'s `refreshUserCache` rejection silently dropped.**
+  IDB version mismatch falls back to seed pattern with no signal.
+
+### MEDIUM
+- Bare `catch {}` blocks across `App.tsx` URL-encoding fallback,
+  `sound-engine.ts` bar-listener isolation + dispose chain. Each is
+  defensive but should `logWarn` at minimum.
+- Test-button `setTimeout` for note-off in `Midi.tsx` doesn't clean
+  up on unmount (150 ms leak, harmless but inconsistent with
+  `attachMidiSink`'s `pendingTimers` discipline).
+
+## 2. Type design
+
+### Highest leverage: branded `BusAddress`
+The single biggest win across the MIDI / router / sink modules is a
+template-literal-typed `BusAddress` (e.g.
+`` `channel.${number}` | `master.${string}` ``) with helper
+constructors `channelAddress(n)` / `masterAddress(...)`. Today these
+addresses pass as raw strings through `TriggerMap.toAddress`,
+`ParamEvent.target`, `Router.registerModule`, the persistence layer,
+and the secret-tab autocomplete. A typo like `master.gain.gain`
+(which the code-reviewer caught) would be a compile error instead of
+a silent dead mapping.
+
+### Other type-design weaknesses
+- **`ChannelOutConfig` empty-string sentinel.** `outputId === ''`
+  means "unconfigured", checked redundantly in three places. Make it
+  `string | null` (better) or a tagged union (best).
+- **`ClockSenderHandle` lifecycle isn't enforced.** Methods can be
+  called in any order; `start` after `dispose` re-arms a timer. Add
+  a `disposed` flag and make every method a no-op after dispose, or
+  model state as `'idle' | 'running' | 'disposed'`.
+- **`Pattern.stepUnit` cast to `MeterPreset.stepUnit` lacks
+  validation.** A corrupt save with `stepUnit: 7` is laundered into
+  the literal union without any guard. Add a
+  `parseStepUnit(n: number): StepUnit | null` at every Pattern →
+  MeterPreset boundary.
+- **`MidiBridge` exposes 24 fields and raw setters.** Anemic React
+  object. Two pragmatic fixes: replace `setChannelOuts(next)` with
+  `updateChannelOut(idx, patch)` so length-matching is structural;
+  group clock fields into a nested `clock: { listen, send }`.
+- **`getMasterGain` / `getDry` / `getReverbFx` / `getDelayFx` all
+  return `ControllableModule | null`** for the same "engine not
+  initialized yet" reason. Consider one
+  `getMixModules(): { dry, master, reverb, delay } | null` so callers
+  handle the not-ready case once.
+- **MIDI numeric ranges (channel 0..15, byte 0..127) live only in
+  JSDoc.** Branded `MidiChannel` / `MidiByte` types or
+  clamp-on-construct factory functions would prevent persisted
+  garbage.
+
+## 3. Code quality / convention
+
+### HIGH (already fixed in commit 5167b8e)
+- ✅ `master.gain.gain` autocomplete entry → `master.gain.value`
+- ✅ "DEV-only" comment + badge in `Midi.tsx` removed (dev gate was
+  ungated when the URL was made shippable)
+- ✅ `clock.dispose()` while running emits `0xFC`
+- ✅ `master.dry` test coverage added
+- ✅ `midiChannelOut.test.ts` parallel test file added
+
+### MEDIUM (deferred)
+- **Studio numerator input collapses custom grouping to `[n]`.** Mid-
+  edit grouping like `7/8 (2+2+3)` is wiped to `[9]` if the user
+  types 9 in the numerator. Should preserve trailing structure or
+  warn explicitly.
+- **`bf_kit` localStorage value lifted to `KitId` without
+  validation.** `(localStorage.getItem('bf_kit') as KitId) || '808'`.
+  A foreign value (e.g. an old `"606"`) flows into `engine.setKit`
+  with no guard. Validate against the known list (the same way
+  `bf_theme` is validated).
+
+### LOW
+- **App.tsx dirty-guard effect deps too broad.** `session` is in deps
+  and changes whenever any session field does. The `pattern.id ===
+  patternId` early-return makes it a steady-state no-op, but
+  splitting deps to `[patternId, session.pattern.id, session.dirty,
+  session.loadPattern]` would tighten intent.
+- **Library `?detail=<id>` parser duplicated.** `Library.tsx` has its
+  own inline `readDetailParam()` that bypasses `lib/urlState.ts`'s
+  exported `detail` field. Consolidate.
+- **Bar-listener `setTimeout` in `sound-engine.ts` has no cleanup.**
+  After `stop()`, queued listener callbacks for already-scheduled
+  bars still fire (the trainer's BPM ramp could nudge BPM
+  post-stop). Track timers in a `Set` and clear on stop/dispose.
+
+## How to use this doc
+
+When picking up work in any module mentioned above, scan the relevant
+section first. The `❌ → ✅` markers indicate items already addressed.
+Items left as bare bullets are the open-but-known list — please don't
+re-discover them, just decide whether to fix in scope or punt back to
+this list.
+
+When agents run a future review, append a dated section above this
+one rather than rewriting in place; the historical record is useful
+for tracking what's been weighed vs. blindly missed.

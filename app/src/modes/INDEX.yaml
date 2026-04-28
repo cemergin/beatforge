@@ -1,54 +1,59 @@
 # INDEX.yaml — src/modes
-# Practice, Studio, Library (and a dev-only _Patterns sandbox).
+# Practice, Sound (the renamed Studio), Library, and the hidden Midi tab.
 
 path: app/src/modes
 purpose: >
-  Three user-facing modes plus a dev-only migration sandbox. All share
-  the single AudioEngine passed in from App.tsx. Switching tabs always
-  calls engine.stop(), so playback never bleeds across modes.
+  Four route-level pages backed by the shared SoundEngine + Session +
+  Router from App.tsx. Tab switches stop the engine but leave session
+  state alive (pattern + sticky edits + kit + bpm + channels survive
+  cross-tab). The MIDI tab is reachable only via ?tab=_midi (no nav
+  chip in the UI).
 
-last_indexed: 2026-04-23
+last_indexed: 2026-04-28
 
 contents:
   - name: Practice
     kind: folder
     path: Practice
     summary: >
-      The daily-use metronome + pattern trainer. Practice.tsx owns the
-      mode layout, BPM / swing / volume / kit / mute controls, and the
-      three visualizations (linear, pill, circular). Trainer.tsx is the
-      speed-trainer widget — repeat-for-N-bars, increase BPM by N.
+      The daily-use metronome + speed trainer. Practice.tsx owns BPM /
+      swing / volume / kit / mute, three step-grid views (linear,
+      pill, circular), audible cursors, and the trainer subscription
+      to bar events for the BPM ramp. Trainer.tsx is the speed-trainer
+      widget (repeat-for-N-bars, increase BPM by N).
     contents:
       - Practice.tsx
       - Trainer.tsx
 
-  - name: Studio
+  - name: Sound
     kind: folder
-    path: Studio
+    path: Sound
     summary: >
-      Step-sequencer authoring. StudioGrid.tsx is the edit surface,
-      StudioSidebar.tsx holds pattern meta + tracks, presets.ts ships
-      starter kits, SaveDialog persists to Dexie, ExportImport handles
-      JSON round-trips. Load-in-practice handoff also lives here.
+      The renamed Studio — step-sequencer authoring + per-channel sound
+      design. Sound.tsx is a long file (~2050 lines) containing the
+      page layout, save/load logic for both SoundPattern (full sound
+      design) and UserPattern (Library-visible record), the metadata
+      form, the master mix strip (DRY/REV/DLY), the top control bar
+      (BPM + meter + grouping + count-in + swing), and 5 channel strip
+      sections each with COLOR / MIX disclosures. Knob.tsx +
+      SpectrumAnalyzer.tsx are extracted helpers.
     contents:
-      - Studio.tsx
-      - StudioGrid.tsx
-      - StudioSidebar.tsx
-      - SaveDialog.tsx
-      - ExportImport.tsx
-      - presets.ts
+      - Sound.tsx
+      - Knob.tsx
+      - SpectrumAnalyzer.tsx
 
   - name: Library
     kind: folder
     path: Library
     summary: >
-      Discovery surface for the 294-pattern catalog. Library.tsx is the
-      shell with tabs and preview. PatternCard / PatternDetail render
-      rows + detail pane. Filters.tsx + filterState.ts drive facet
-      filtering; StarterPaths suggests entry points; GroupingBrowser
-      lets users explore by meter/grouping; WorldMap lays regions on a
-      globe; regions.ts + paths.ts + relatedRhythms.ts hold the static
-      metadata that powers all of it.
+      Discovery surface for the 536-pattern catalog. Library.tsx is
+      the shell with search / filters / pagination. PatternCard +
+      PatternDetail render rows + modal (Esc + backdrop close + URL-
+      shareable via ?detail=<id>). Filters.tsx + filterState.ts drive
+      facet filtering (meter / region / genre / kit / source — the
+      'local' source chip surfaces user-saved patterns). StarterPaths
+      suggests entry points. WorldMap maps regions onto a globe.
+      regions.ts + paths.ts hold the static metadata.
     contents:
       - Library.tsx
       - PatternCard.tsx
@@ -56,28 +61,48 @@ contents:
       - Filters.tsx
       - filterState.ts
       - StarterPaths.tsx
-      - GroupingBrowser.tsx
       - WorldMap.tsx
       - regions.ts
       - paths.ts
       - relatedRhythms.ts
 
-  - name: _Patterns
+  - name: Midi
     kind: folder
-    path: _Patterns
+    path: Midi
     summary: >
-      Dev-only sandbox (hidden in production via import.meta.env.DEV).
-      Used during seed migration and schema experiments.
-    stability: experimental
+      The hidden secret-tab UI for Web MIDI. Reachable via ?tab=_midi
+      from any build (no nav chip). Midi.tsx renders five sections:
+      input device toggles, input mappings (CC/note → bus address,
+      saved to localStorage), per-audio-channel MIDI-out routing
+      (5 rows: enable/output/midiChannel/note/velocity scale + test
+      button), clock I/O toggles (off by default, soft-sync), test
+      send, and the live monitor with pause/resume + clear. State
+      lives in lib/useMidiBridge.ts; this page is just the UI.
     contents:
-      - PatternsSandbox.tsx
+      - Midi.tsx
+    stability: shipping
+    notes: >
+      Production users never see this tab unless they know the URL.
+      Engineering audit notes for the MIDI module live in
+      docs/2026-04-28-engineering-review-notes.md (hot-unplug
+      handling, auto-enable error surfacing, branded BusAddress).
+
+invariants:
+  - "Tab switches stop the engine. The session keeps running across
+    the route boundary (pattern + kit + bpm + channels survive)."
+  - "External pattern handoffs (Library card click, URL ?pattern=)
+    flow through App.tsx → setPatternId → ModeShell's session
+    bridge. The dirty-guard runs there: window.confirm before
+    discarding sticky session edits."
 
 related_indexes:
   - path: ../INDEX.yaml
-    why: Parent src layout.
+    why: Parent src/ map.
   - path: ../audio/INDEX.yaml
     why: The engine these modes drive.
   - path: ../patterns/INDEX.yaml
     why: Pattern schema + catalog Library exposes.
-  - path: ../../../docs/INDEX.yaml
-    why: Spec that defines what each mode must do.
+  - path: ../lib/INDEX.yaml
+    why: useMidiBridge + db + storage + urlState.
+  - path: ../../docs/2026-04-28-engineering-review-notes.md
+    why: Open concerns for Sound + Midi modules.
