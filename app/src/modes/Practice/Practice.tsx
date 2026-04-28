@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { SoundEngine } from '../../audio/runtime/sound-engine';
-import { naturalToStepBpm, parseTimeSigDenom, stepToNaturalBpm } from '../../audio/tempo';
+import { parseTimeSigDenom, stepToNaturalBpm } from '../../audio/tempo';
 import { useMetronome } from '../../audio/useMetronome';
 import { useSession } from '../../modules/session';
 import type { KitId, Pattern, Velocity, VoiceId } from '../../patterns/types';
@@ -235,13 +235,20 @@ export function Practice({ engine, patternId, onPatternChange, onOpenSoundPatter
       clearCountInTimer();
     } else {
       if (bpm < trainerCfg.from && trainerOn) setBpm(trainerCfg.from);
-      const stepBpm = naturalToStepBpm(bpm, pattern.stepUnit, denom);
-      engine.setBpm(stepBpm);
+      // BPM is already pushed to the engine by useMetronome's
+      // engine.setNaturalBpm effect — no need to re-push it here
+      // with the legacy step-BPM conversion (which would clobber
+      // the correct quarter-BPM the session computed).
       engine.start(countInBars);
       setPlaying(true);
       clearCountInTimer();
       if (countInBars > 0) {
         setCountingIn(true);
+        // barSec at the engine's now-quarter-BPM convention. natural
+        // bpm × stepUnit / denom gives main-step bpm; pattern.steps /
+        // mainStepBpm × 60 gives the bar duration in seconds —
+        // identical to the legacy AudioEngine formula.
+        const stepBpm = (bpm * pattern.stepUnit) / denom;
         const barSec = pattern.steps * (60 / stepBpm);
         countInTimerRef.current = setTimeout(() => {
           setCountingIn(false);
