@@ -11,6 +11,7 @@ import { PATTERNS } from './patterns/seed';
 // live in one editor on top of the shared session.
 const Library = lazy(() => import('./modes/Library/Library').then((m) => ({ default: m.Library })));
 const Sound = lazy(() => import('./modes/Sound/Sound').then((m) => ({ default: m.Sound })));
+const Midi = lazy(() => import('./modes/Midi/Midi').then((m) => ({ default: m.Midi })));
 import { patternById, registerPatternSource } from './patterns/seed';
 import { deserializePattern } from './patterns/serialize';
 import { loadAllSafe } from './lib/db';
@@ -57,6 +58,7 @@ export default function App() {
     if (url.tab) return url.tab;
     const t = localStorage.getItem('bf_tab');
     if (t === 'library' || t === 'practice' || t === 'studio') return t;
+    if (DEV_MODE && t === '_midi') return '_midi';
     // Old 'sound' setting → studio (the Sound page was renamed to
     // Studio; its features ported in place).
     if (t === 'sound') return 'studio';
@@ -300,6 +302,16 @@ export default function App() {
           >
             Studio
           </button>
+          {DEV_MODE && (
+            <button
+              className={`bf-chip ${tab === '_midi' ? 'on' : 'ghost'}`}
+              onClick={() => switchTab('_midi')}
+              type="button"
+              title="Dev: secret MIDI tab"
+            >
+              MIDI
+            </button>
+          )}
         </nav>
         <div className="bf-topright">
           <div className="bf-theme-seg" role="group" aria-label="theme">
@@ -402,6 +414,11 @@ function ModeShell({
             initialSoundPatternId={initialSoundPatternId}
             onConsumedInitial={() => setInitialSoundPatternId(null)}
           />
+        </Suspense>
+      )}
+      {tab === '_midi' && (
+        <Suspense fallback={<div className="bf-mode-loading">loading midi…</div>}>
+          <Midi engine={engine} />
         </Suspense>
       )}
     </>
