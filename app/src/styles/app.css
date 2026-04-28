@@ -2992,6 +2992,14 @@ textarea.bf-sound-meta-input {
   border-radius: var(--r-xs);
   background: var(--bg);
   color: var(--fg);
+  text-align: center;
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+.bf-sound-bpm-input::-webkit-outer-spin-button,
+.bf-sound-bpm-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 /* Custom time-sig A / B controls in the meter feel-control. The
@@ -3003,13 +3011,23 @@ textarea.bf-sound-meta-input {
 }
 .bf-sound-meter-num {
   font-family: var(--mono); font-size: var(--fs-micro);
-  width: 44px;
-  padding: 4px 6px;
+  width: 56px;
+  padding: 4px 8px;
   border: var(--bw-1) solid var(--line);
   border-radius: var(--r-xs);
   background: var(--bg);
   color: var(--fg);
   text-align: center;
+  /* Hide the native number-input spin buttons — they crowd the
+     small width and the denominator dropdown is already a tight
+     stepper for the same purpose. */
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+.bf-sound-meter-num::-webkit-outer-spin-button,
+.bf-sound-meter-num::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 .bf-sound-meter-num:focus { outline: none; border-color: var(--accent); }
 .bf-sound-meter-slash {
