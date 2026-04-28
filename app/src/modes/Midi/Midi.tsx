@@ -70,16 +70,23 @@ export function Midi({ bridge, channels }: Props) {
 
   const [log, setLog] = useState<LogEntry[]>([]);
   const logIdRef = useRef(0);
+  // When paused, drop incoming messages from the visible log so the
+  // user can freeze + inspect what's already captured. Existing entries
+  // stay; resume keeps capturing fresh ones (no replay buffer).
+  const [paused, setPaused] = useState(false);
+  const pausedRef = useRef(paused);
+  useEffect(() => { pausedRef.current = paused; }, [paused]);
 
   // Test-send form state.
   const [testOutputId, setTestOutputId] = useState<string>('');
   const [sendChannel, setSendChannel] = useState(0);
   const [sendNote, setSendNote] = useState(36);
-  const [sendVel, setSendVel] = useState(100);
+  const [sendVel, setSendVel] = useState(99);
   const [sendCc, setSendCc] = useState(74);
   const [sendCcVal, setSendCcVal] = useState(64);
 
   const pushLog = useCallback((entry: Omit<LogEntry, 'id'>) => {
+    if (pausedRef.current) return;
     setLog((prev) => {
       const next: LogEntry = { ...entry, id: ++logIdRef.current };
       const out = prev.length >= MAX_LOG ? prev.slice(prev.length - MAX_LOG + 1) : prev;
@@ -149,6 +156,27 @@ export function Midi({ bridge, channels }: Props) {
   const updateChannelOut = useCallback((idx: number, patch: Partial<ChannelOutConfig>) => {
     setChannelOuts(channelOuts.map((c, i) => (i === idx ? { ...c, ...patch } : c)));
   }, [channelOuts, setChannelOuts]);
+
+  /** Fire one note-on / note-off pair to the row's configured output
+   *  using the row's MIDI channel + note + velocityScale, so the user
+   *  can verify wiring without playing a full pattern. Velocity baseline
+   *  is 99 (a normal hit) scaled by the row's velocityScale fraction. */
+  const testChannelOut = useCallback((idx: number) => {
+    const cfg = channelOuts[idx];
+    if (!cfg || !cfg.outputId) return;
+    const out = outputs.find((o) => o.id === cfg.outputId);
+    if (!out) return;
+    const velByte = Math.max(1, Math.min(127, Math.round(99 * cfg.velocityScale)));
+    const status = 0x90 | (cfg.midiChannel & 0x0f);
+    const onData = [status, cfg.note & 0x7f, velByte];
+    out.send(onData);
+    pushLog({ ts: performance.now(), dir: 'out', source: out.name ?? out.id, raw: onData, decoded: decodeMidi(onData) });
+    const offData = [0x80 | (cfg.midiChannel & 0x0f), cfg.note & 0x7f, 0];
+    setTimeout(() => {
+      out.send(offData);
+      pushLog({ ts: performance.now(), dir: 'out', source: out.name ?? out.id, raw: offData, decoded: decodeMidi(offData) });
+    }, 150);
+  }, [channelOuts, outputs, pushLog]);
 
   const clearLog = useCallback(() => setLog([]), []);
 
@@ -270,6 +298,7 @@ export function Midi({ bridge, channels }: Props) {
                   cfg={cfg}
                   outputs={outputs}
                   onChange={(patch) => updateChannelOut(idx, patch)}
+                  onTest={() => testChannelOut(idx)}
                 />
               ))}
             </div>
@@ -392,6 +421,14 @@ export function Midi({ bridge, channels }: Props) {
               <h2 className="bf-zone-title">Monitor</h2>
               <span className="bf-zone-sub">
                 {log.length} of {MAX_LOG} max
+                <button
+                  className="bf-linkbtn"
+                  type="button"
+                  onClick={() => setPaused((p) => !p)}
+                  title={paused ? 'Resume capture' : 'Pause capture (existing entries stay)'}
+                >
+                  {paused ? ' ▶ resume' : ' ❚❚ pause'}
+                </button>
                 <button className="bf-linkbtn" type="button" onClick={clearLog}> clear</button>
               </span>
             </div>
@@ -493,9 +530,11 @@ interface ChannelOutRowProps {
   cfg: ChannelOutConfig;
   outputs: MidiOutputLike[];
   onChange: (patch: Partial<ChannelOutConfig>) => void;
+  onTest: () => void;
 }
 
-function ChannelOutRow({ idx, label, cfg, outputs, onChange }: ChannelOutRowProps) {
+function ChannelOutRow({ idx, label, cfg, outputs, onChange, onTest }: ChannelOutRowProps) {
+  const canTest = cfg.outputId !== '';
   return (
     <div className="bf-midi-map-row">
       <span className="bf-midi-kind">ch{idx + 1}</span>
@@ -558,6 +597,15 @@ function ChannelOutRow({ idx, label, cfg, outputs, onChange }: ChannelOutRowProp
           className="bf-midi-input small"
         />
       </label>
+      <button
+        type="button"
+        className="bf-chip sm"
+        onClick={onTest}
+        disabled={!canTest}
+        title={canTest ? 'Send a single note hit at this row\'s config' : 'Pick an output device first'}
+      >
+        test
+      </button>
     </div>
   );
 }
