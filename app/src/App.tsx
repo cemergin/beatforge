@@ -228,15 +228,16 @@ export default function App() {
     return () => { engine.stop(); };
   }, [engine]);
 
-  // Switching tabs stops any in-flight playback from either mode.
+  // Tab switches preserve playback — the session is the source of
+  // truth, and the engine keeps running across the route boundary.
+  // Practice/Studio/Sound all subscribe to the same playing state.
   const switchTab = (next: Tab) => {
-    if (next !== tab) {
-      engine.stop();
-      setTab(next);
-    }
+    if (next !== tab) setTab(next);
   };
 
   const loadInPractice = useCallback((id: string) => {
+    // Loading a NEW pattern is a deliberate reset point — stop any
+    // in-flight playback so the user starts fresh on the new piece.
     engine.stop();
     // Ensure the cache has this id before Practice reads it (user patterns).
     refreshUserCache().finally(() => {

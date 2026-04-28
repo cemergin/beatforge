@@ -22,6 +22,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { SoundEngine } from './runtime/sound-engine';
 import { parseTimeSigDenom } from './tempo';
+import { useSession } from '../modules/session';
 import { getMasterVolume, setMasterVolume as storeMasterVolume } from '../lib/storage';
 import type { TrainerCfg } from '../modes/Practice/Trainer';
 
@@ -87,9 +88,28 @@ export function useMetronome(engine: SoundEngine, opts: MetronomeOptions): UseMe
   const { timeSig, swingable, playing } = opts;
   const denom = parseTimeSigDenom(timeSig);
 
+  // BPM + swing live in the Session so they ride with the user across
+  // tab switches. Practice / Studio / Sound all see the same tempo
+  // even when the modes themselves remount on tab change. The other
+  // metronome state (count-in, accents, master volume, tap-tempo,
+  // trainer config) stays mode-local because no other surface
+  // reads it.
+  const session = useSession();
+  const bpm = session.bpm;
+  const swing = session.swing;
+  // Preserve the legacy "function-form setter" API the trainer
+  // effects rely on — session.setBpm only takes a number, so we
+  // resolve the function form against the current session bpm here.
+  const setBpm = useCallback((next: number | ((prev: number) => number)) => {
+    const v = typeof next === 'function' ? next(session.bpm) : next;
+    session.setBpm(v);
+  }, [session]);
+  const setSwing = useCallback((next: number | ((prev: number) => number)) => {
+    const v = typeof next === 'function' ? next(session.swing) : next;
+    session.setSwing(v);
+  }, [session]);
+
   // ── State ────────────────────────────────────────────────────────
-  const [bpm, setBpm] = useState(opts.initialBpm);
-  const [swing, setSwing] = useState(opts.initialSwing);
   const [strong, setStrong] = useState(100);
   const [weak, setWeak] = useState(55);
   const [countInBars, setCountInBars] = useState(0);
@@ -104,12 +124,13 @@ export function useMetronome(engine: SoundEngine, opts: MetronomeOptions): UseMe
   const [tapTimes, setTapTimes] = useState<number[]>([]);
 
   // ── Engine sync ──────────────────────────────────────────────────
+  // BPM is pushed to the engine by SessionProvider directly. Swing
+  // needs a per-pattern swingable override here — when the loaded
+  // pattern doesn't allow swing, force the engine to 0.5 (straight)
+  // regardless of the slider value. The slider value still rides in
+  // session so a swingable pattern picks it up automatically.
   useEffect(() => {
-    engine.setNaturalBpm(bpm, denom);
-  }, [engine, bpm, denom]);
-
-  useEffect(() => {
-    engine.setSwing(swingable ? 0.5 + ((swing - 50) / 100) * 0.34 : 0.5);
+    if (!swingable) engine.setSwing(0.5);
   }, [engine, swing, swingable]);
 
   useEffect(() => {
@@ -137,6 +158,10 @@ export function useMetronome(engine: SoundEngine, opts: MetronomeOptions): UseMe
         ? Math.min(trainerCfg.to, b + trainerCfg.step)
         : Math.max(trainerCfg.to, b - trainerCfg.step));
     }
+    // setBpm intentionally not in deps — adding it would re-fire this
+    // effect every BPM change (since setBpm closes over session.bpm),
+    // looping. The trigger is trainerBar; setBpm is read at call time.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [trainerBar, trainerOn, playing, trainerCfg]);
 
   // ── Speed trainer — time mode (countdown drives BpmHero/Trainer) ─
@@ -156,6 +181,8 @@ export function useMetronome(engine: SoundEngine, opts: MetronomeOptions): UseMe
       setTrainerCycleStartMs(performance.now());
     }, trainerCfg.bars * 1000);
     return () => clearInterval(iv);
+    // setBpm closure is captured at interval-creation; not in deps.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [trainerOn, trainerCfg, playing]);
   /* eslint-enable react-hooks/set-state-in-effect */
 
@@ -198,6 +225,8 @@ export function useMetronome(engine: SoundEngine, opts: MetronomeOptions): UseMe
     const clamped = Math.max(30, Math.min(400, Math.round(rawNaturalBpm)));
     setBpm(clamped);
     engine.setNaturalBpm(clamped, denom);
+    // setBpm closes over the live session; safe to omit from deps.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [engine, denom]);
 
   const resetTaps = useCallback(() => setTapTimes([]), []);

@@ -12,8 +12,11 @@
 // defaults, drops edits. Used by Library's "open here" handoffs.
 
 import { useCallback, useMemo, useState } from 'react';
-import type { KitId, Pattern } from '../../patterns/types';
+import { ALL_VOICES, type KitId, type Pattern } from '../../patterns/types';
+import type { Channel } from '../../patterns/types-sound';
+import { defaultChannelEffects } from '../../patterns/types-sound';
 import type { SoundEngine } from '../../audio/runtime/sound-engine';
+import { buildKitMachine } from '../../audio/runtime/kit-presets';
 import { parseTimeSigDenom, stepToNaturalBpm } from '../../audio/tempo';
 import type { Session } from './types';
 import { SessionContext } from './context';
@@ -33,9 +36,23 @@ function naturalBpmForPattern(p: Pattern): number {
   return stepToNaturalBpm(p.bpm.default, p.stepUnit, denom);
 }
 
+/** Default channels for a kit — one Channel per ALL_VOICES position,
+ *  machine = kit preset, effects = defaults. Used on initial mount,
+ *  on loadPattern, and on setKit to re-seed timbre across channels. */
+function channelsForKit(kit: KitId): Channel[] {
+  return ALL_VOICES.map((voiceId) => ({
+    label: voiceId,
+    machine: buildKitMachine(kit, voiceId),
+    effects: defaultChannelEffects(),
+  }));
+}
+
 export function SessionProvider({ engine, initialPattern, initialKit, children }: SessionProviderProps) {
   const [pattern, setPatternState] = useState<Pattern>(initialPattern);
   const [kit, setKitState] = useState<KitId>(initialKit ?? initialPattern.defaultKit);
+  const [channels, setChannelsState] = useState<Channel[]>(
+    () => channelsForKit(initialKit ?? initialPattern.defaultKit),
+  );
   const [bpm, setBpmState] = useState<number>(() => naturalBpmForPattern(initialPattern));
   const [swing, setSwingState] = useState<number>(50);
   const [playing, setPlaying] = useState<boolean>(false);
@@ -51,9 +68,13 @@ export function SessionProvider({ engine, initialPattern, initialKit, children }
     setPatternState(next);
     const nextKit = next.defaultKit;
     setKitState(nextKit);
+    const nextChannels = channelsForKit(nextKit);
+    setChannelsState(nextChannels);
     setBpmState(naturalBpmForPattern(next));
     // Engine sync: load pattern first (sets stepUnit/steps), then kit
-    // (re-applies machine presets), then bpm.
+    // (re-applies machine presets across channels), then bpm. The
+    // channels-from-kit reset is what setKit does internally on the
+    // engine; we don't need a separate engine.setChannels call.
     engine.setKit(nextKit);
     engine.loadPattern(next);
     const denom = parseTimeSigDenom(next.timeSig);
@@ -62,7 +83,33 @@ export function SessionProvider({ engine, initialPattern, initialKit, children }
 
   const setKit = useCallback((k: KitId) => {
     setKitState(k);
+    setChannelsState(channelsForKit(k));
     engine.setKit(k);
+  }, [engine]);
+
+  const setChannels = useCallback((next: Channel[]) => {
+    setChannelsState(next);
+    // Push every channel's machine + effects to the engine so the
+    // audio graph matches the React state. setMachines also calls
+    // ensureStripCount internally so a length change works.
+    engine.setMachines(next.map((c) => c.machine));
+    next.forEach((c, i) => engine.applyChannelEffects(i, c.effects));
+  }, [engine]);
+
+  const setChannel = useCallback((idx: number, updater: (prev: Channel) => Channel) => {
+    setChannelsState((prev) => {
+      const next = prev.slice();
+      const cur = prev[idx];
+      if (!cur) return prev;
+      const updated = updater(cur);
+      next[idx] = updated;
+      // Push the per-channel changes to the engine. machine and
+      // effects update independently — we always push both for
+      // simplicity (cheap; the engine's adapter layer dedupes).
+      engine.applyChannelMachine(idx, updated.machine);
+      engine.applyChannelEffects(idx, updated.effects);
+      return next;
+    });
   }, [engine]);
 
   const setPattern = useCallback((updater: (prev: Pattern) => Pattern) => {
@@ -100,12 +147,14 @@ export function SessionProvider({ engine, initialPattern, initialKit, children }
   }, [engine]);
 
   const session: Session = useMemo(() => ({
-    pattern, kit, bpm, swing, playing,
-    loadPattern, setKit, setPattern, setBpm, setSwing,
+    pattern, kit, channels, bpm, swing, playing,
+    loadPattern, setKit, setChannels, setChannel,
+    setPattern, setBpm, setSwing,
     start, stop,
   }), [
-    pattern, kit, bpm, swing, playing,
-    loadPattern, setKit, setPattern, setBpm, setSwing, start, stop,
+    pattern, kit, channels, bpm, swing, playing,
+    loadPattern, setKit, setChannels, setChannel,
+    setPattern, setBpm, setSwing, start, stop,
   ]);
 
   return (
