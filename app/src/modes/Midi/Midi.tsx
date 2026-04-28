@@ -66,7 +66,14 @@ export function Midi({ bridge, channels }: Props) {
     clockListenEnabled, setClockListenEnabled,
     clockSendEnabled, setClockSendEnabled,
     clockSendOutputId, setClockSendOutputId,
+    resetSettings,
   } = bridge;
+
+  const onResetClick = useCallback(() => {
+    if (window.confirm('Reset all MIDI settings? Mappings, channel routing, clock toggles, and active inputs will be cleared. The browser MIDI permission stays granted.')) {
+      resetSettings();
+    }
+  }, [resetSettings]);
 
   const [log, setLog] = useState<LogEntry[]>([]);
   const logIdRef = useRef(0);
@@ -228,6 +235,14 @@ export function Midi({ bridge, channels }: Props) {
             {!access
               ? <button className="bf-chip on" onClick={() => { void enable(); }} type="button">Enable Web MIDI</button>
               : <span className="bf-midi-status">enabled · {inputs.length} in / {outputs.length} out</span>}
+            <button
+              className="bf-chip ghost sm"
+              type="button"
+              onClick={onResetClick}
+              title="Wipe all persisted MIDI settings (mappings, channel routing, clock toggles, active inputs)"
+            >
+              reset settings
+            </button>
           </div>
           {enableError && <div className="bf-midi-error">{enableError}</div>}
         </div>

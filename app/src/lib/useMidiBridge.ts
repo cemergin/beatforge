@@ -55,6 +55,13 @@ export interface MidiBridge {
    *  can show outbound traffic. Returns an unsubscribe. */
   subscribeSent: (fn: SentListener) => () => void;
 
+  /** Wipe every persisted MIDI setting (mappings, channel-out routing,
+   *  clock toggles, active inputs, auto-enable flag) and reset the
+   *  in-memory bridge state. The Web MIDI access itself is left
+   *  alone — the browser's permission grant survives the reset, so
+   *  the next enable() call still skips the prompt. */
+  resetSettings: () => void;
+
   // ── Clock I/O ───────────────────────────────────────────────────
   /** Listen-in toggle. Off by default — we don't want to silently
    *  override the user's BPM when a controller happens to be sending
@@ -272,6 +279,29 @@ export function useMidiBridge(engine: SoundEngine, channelCount: number): MidiBr
     wasPlayingRef.current = session.playing;
   }, [session.playing]);
 
+  const resetSettings = useCallback(() => {
+    // Clear every key the bridge writes. We don't touch the WebMIDI
+    // access — the browser's permission grant is independent of our
+    // local state.
+    for (const key of [
+      'bf_midi_mappings_v1',
+      'bf_midi_channel_out_v1',
+      'bf_midi_clock_listen',
+      'bf_midi_clock_send',
+      'bf_midi_clock_out',
+      'bf_midi_active_inputs',
+      'bf_midi_auto_enable',
+    ]) {
+      try { localStorage.removeItem(key); } catch { /* ignore */ }
+    }
+    setInputMappings([]);
+    setChannelOuts(loadChannelOuts(channelCount));
+    setClockListenEnabled(false);
+    setClockSendEnabled(false);
+    setClockSendOutputId('');
+    setActiveInputIds(new Set());
+  }, [channelCount]);
+
   return {
     midi, access, enable, enableError,
     inputs, outputs,
@@ -282,6 +312,7 @@ export function useMidiBridge(engine: SoundEngine, channelCount: number): MidiBr
     clockListenEnabled, setClockListenEnabled,
     clockSendEnabled, setClockSendEnabled,
     clockSendOutputId, setClockSendOutputId,
+    resetSettings,
   };
 }
 
