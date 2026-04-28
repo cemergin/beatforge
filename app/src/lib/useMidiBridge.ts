@@ -119,10 +119,29 @@ export function useMidiBridge(engine: SoundEngine, channelCount: number): MidiBr
       setAccess(a);
       setInputs(midi.inputs());
       setOutputs(midi.outputs());
+      // Sticky flag — once the user has enabled MIDI in this browser,
+      // re-acquire access automatically on subsequent loads. The
+      // browser's permission grant + this flag together let us skip
+      // the manual button click for return visits.
+      try { localStorage.setItem('bf_midi_auto_enable', '1'); } catch { /* ignore */ }
     } catch (e) {
       setEnableError(e instanceof Error ? e.message : String(e));
     }
   }, [midi]);
+
+  // Auto-enable on mount if the user has previously enabled MIDI.
+  // We only attempt this once per bridge instance to avoid retry
+  // storms when the browser revokes permission. If auto-enable fails
+  // silently, the user can still click the manual button.
+  const autoEnableTriedRef = useRef(false);
+  useEffect(() => {
+    if (autoEnableTriedRef.current) return;
+    autoEnableTriedRef.current = true;
+    let prev: string | null = null;
+    try { prev = localStorage.getItem('bf_midi_auto_enable'); } catch { /* ignore */ }
+    if (prev !== '1') return;
+    void enable();
+  }, [enable]);
 
   // Refs the sink reads at trigger time. Ref-then-effect-mirror
   // keeps the sink registration stable (no re-attach per knob) while
