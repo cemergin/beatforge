@@ -5,10 +5,10 @@ import type { KitId, Pattern } from './patterns/types';
 import { SessionProvider, useSession } from './modules/session';
 import { PATTERNS } from './patterns/seed';
 
-// Library + Studio + Sound are split into their own chunks. Practice
-// is the landing tab and stays in the main bundle.
+// Library + Sound are split into their own chunks. Practice is the
+// landing tab and stays in the main bundle. Studio was retired — its
+// pattern-saving + metadata-editing features will live on Sound.
 const Library = lazy(() => import('./modes/Library/Library').then((m) => ({ default: m.Library })));
-const Studio = lazy(() => import('./modes/Studio/Studio').then((m) => ({ default: m.Studio })));
 const Sound = lazy(() => import('./modes/Sound/Sound').then((m) => ({ default: m.Sound })));
 const PatternsSandbox = lazy(() => import('./modes/_Patterns/PatternsSandbox').then((m) => ({ default: m.PatternsSandbox })));
 import { patternById, registerPatternSource } from './patterns/seed';
@@ -56,7 +56,10 @@ export default function App() {
     const url = readCurrentUrl();
     if (url.tab) return url.tab;
     const t = localStorage.getItem('bf_tab');
-    if (t === 'library' || t === 'studio' || t === 'practice' || t === 'sound') return t;
+    if (t === 'library' || t === 'practice' || t === 'sound') return t;
+    // Old 'studio' setting → Sound (Studio tab retired; features
+    // ported into Sound).
+    if (t === 'studio') return 'sound';
     // _patterns is dev-only — never restore it in production builds.
     if (t === '_patterns' && DEV_MODE) return '_patterns';
     return 'practice';
@@ -67,9 +70,6 @@ export default function App() {
     if (url.pattern) return url.pattern;
     return localStorage.getItem('bf_pattern') || 'karsilama';
   });
-
-  // Library → Studio handoff: a full Pattern object (seed, read-only).
-  const [initialStudioPattern, setInitialStudioPattern] = useState<Pattern | null>(null);
 
   // Practice → Sound handoff: a saved-soundPattern id. Cleared by Sound
   // after consumption so a navigation back to Sound (without a fresh
@@ -250,10 +250,15 @@ export default function App() {
     });
   }, [engine, refreshUserCache]);
 
-  const openInStudio = useCallback((p: Pattern) => {
+  // Library → Sound handoff (was Library → Studio before Studio
+  // retired). Drops the pattern into the session and opens Sound
+  // for sound design + saving.
+  const openInSound = useCallback((p: Pattern) => {
     engine.stop();
-    setInitialStudioPattern(p);
-    setTab('studio');
+    // The session bridge in ModeShell calls session.loadPattern when
+    // patternId changes, so route through patternId for consistency.
+    setPatternId(p.id);
+    setTab('sound');
   }, [engine]);
 
   // Initial pattern for the session — derived from the current patternId
@@ -282,13 +287,6 @@ export default function App() {
             type="button"
           >
             Practice
-          </button>
-          <button
-            className={`bf-chip ${tab === 'studio' ? 'on' : 'ghost'}`}
-            onClick={() => switchTab('studio')}
-            type="button"
-          >
-            Studio
           </button>
           <button
             className={`bf-chip ${tab === 'library' ? 'on' : 'ghost'}`}
@@ -340,13 +338,11 @@ export default function App() {
           engine={engine}
           patternId={patternId}
           setPatternId={setPatternId}
-          initialStudioPattern={initialStudioPattern}
-          setInitialStudioPattern={setInitialStudioPattern}
           initialSoundPatternId={initialSoundPatternId}
           setInitialSoundPatternId={setInitialSoundPatternId}
           setTab={setTab}
           loadInPractice={loadInPractice}
-          openInStudio={openInStudio}
+          openInSound={openInSound}
           refreshUserCache={refreshUserCache}
         />
       </SessionProvider>
@@ -360,13 +356,11 @@ interface ModeShellProps {
   engine: SoundEngine;
   patternId: string;
   setPatternId: (id: string) => void;
-  initialStudioPattern: Pattern | null;
-  setInitialStudioPattern: (p: Pattern | null) => void;
   initialSoundPatternId: string | null;
   setInitialSoundPatternId: (id: string | null) => void;
   setTab: (t: Tab) => void;
   loadInPractice: (id: string) => void;
-  openInStudio: (p: Pattern) => void;
+  openInSound: (p: Pattern) => void;
   refreshUserCache: () => Promise<void>;
 }
 
@@ -378,9 +372,8 @@ interface ModeShellProps {
  *  including in-flight edits." */
 function ModeShell({
   tab, engine, patternId, setPatternId,
-  initialStudioPattern, setInitialStudioPattern,
   initialSoundPatternId, setInitialSoundPatternId,
-  setTab, loadInPractice, openInStudio, refreshUserCache,
+  setTab, loadInPractice, openInSound,
 }: ModeShellProps) {
   const session = useSession();
   // patternId → session.loadPattern when they diverge. Keeps Library
@@ -405,22 +398,12 @@ function ModeShell({
           }}
         />
       )}
-      {tab === 'studio' && (
-        <Suspense fallback={<div className="bf-mode-loading">loading studio…</div>}>
-          <Studio
-            engine={engine}
-            initialPattern={initialStudioPattern}
-            onConsumedInitial={() => setInitialStudioPattern(null)}
-            onLoadInPractice={(id) => { refreshUserCache(); loadInPractice(id); }}
-          />
-        </Suspense>
-      )}
       {tab === 'library' && (
         <Suspense fallback={<div className="bf-mode-loading">loading library…</div>}>
           <Library
             engine={engine}
             onLoadInPractice={loadInPractice}
-            onOpenInStudio={openInStudio}
+            onOpenInStudio={openInSound}
           />
         </Suspense>
       )}

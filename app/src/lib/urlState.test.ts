@@ -17,8 +17,12 @@ describe('readUrlState', () => {
 
   it('parses each known tab', () => {
     expect(readUrlState('?tab=practice', opts).tab).toBe('practice');
-    expect(readUrlState('?tab=studio', opts).tab).toBe('studio');
     expect(readUrlState('?tab=library', opts).tab).toBe('library');
+    expect(readUrlState('?tab=sound', opts).tab).toBe('sound');
+  });
+
+  it('redirects ?tab=studio (retired) to sound', () => {
+    expect(readUrlState('?tab=studio', opts).tab).toBe('sound');
   });
 
   it('rejects unknown tab values', () => {
@@ -45,8 +49,9 @@ describe('readUrlState', () => {
   });
 
   it('ignores extra params it doesn\'t understand', () => {
-    expect(readUrlState('?tab=studio&p=longhash&pattern=maqsum&utm=foo', opts))
-      .toEqual({ tab: 'studio', pattern: 'maqsum' });
+    // ?tab=studio is now redirected to ?tab=sound (Studio retired).
+    expect(readUrlState('?tab=sound&p=longhash&pattern=maqsum&utm=foo', opts))
+      .toEqual({ tab: 'sound', pattern: 'maqsum' });
   });
 
   it('handles malformed search strings', () => {

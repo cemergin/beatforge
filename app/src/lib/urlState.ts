@@ -1,7 +1,7 @@
 // URL → (tab, pattern) parser. Pure function — no window/DOM access
 // so it's testable against any search string.
 
-export type Tab = 'practice' | 'studio' | 'library' | 'sound' | '_patterns';
+export type Tab = 'practice' | 'library' | 'sound' | '_patterns';
 
 export interface UrlState {
   tab: Tab | null;
@@ -24,8 +24,12 @@ export function readUrlState(search: string, opts: ParseOpts): UrlState {
   const params = new URLSearchParams(search);
   const rawTab = params.get('tab');
   let tab: Tab | null = null;
-  if (rawTab === 'practice' || rawTab === 'studio' || rawTab === 'library' || rawTab === 'sound') {
+  if (rawTab === 'practice' || rawTab === 'library' || rawTab === 'sound') {
     tab = rawTab;
+  } else if (rawTab === 'studio') {
+    // Studio tab was removed — its features moved into Sound. Old
+    // links land on Sound so URLs in the wild still work.
+    tab = 'sound';
   } else if (rawTab === '_patterns' && opts.devMode) {
     tab = '_patterns';
   }
