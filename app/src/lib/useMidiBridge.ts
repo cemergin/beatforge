@@ -84,14 +84,27 @@ export function useMidiBridge(engine: SoundEngine, channelCount: number): MidiBr
     () => loadChannelOuts(channelCount),
   );
   const [inputMappings, setInputMappings] = useState<MidiInputMap[]>(() => loadMidiMappings());
-  const [activeInputIds, setActiveInputIds] = useState<Set<string>>(() => new Set());
+  const [activeInputIds, setActiveInputIds] = useState<Set<string>>(
+    () => new Set(loadStringArray('bf_midi_active_inputs')),
+  );
 
-  // Clock toggles — off by default (user must opt in). NOT persisted
-  // because we want a session that didn't request clock I/O to start
-  // clean. If you accidentally enabled clock-listen, a reload clears it.
-  const [clockListenEnabled, setClockListenEnabled] = useState(false);
-  const [clockSendEnabled, setClockSendEnabled] = useState(false);
-  const [clockSendOutputId, setClockSendOutputId] = useState('');
+  // Clock toggles — off by default on first run. Once a user has
+  // enabled them, the choice sticks across reloads so a long
+  // session-or-restart doesn't drop the rig out of sync.
+  const [clockListenEnabled, setClockListenEnabled] = useState(
+    () => readBool('bf_midi_clock_listen', false),
+  );
+  const [clockSendEnabled, setClockSendEnabled] = useState(
+    () => readBool('bf_midi_clock_send', false),
+  );
+  const [clockSendOutputId, setClockSendOutputId] = useState(
+    () => readString('bf_midi_clock_out', ''),
+  );
+
+  useEffect(() => { writeBool('bf_midi_clock_listen', clockListenEnabled); }, [clockListenEnabled]);
+  useEffect(() => { writeBool('bf_midi_clock_send', clockSendEnabled); }, [clockSendEnabled]);
+  useEffect(() => { writeString('bf_midi_clock_out', clockSendOutputId); }, [clockSendOutputId]);
+  useEffect(() => { writeStringArray('bf_midi_active_inputs', [...activeInputIds]); }, [activeInputIds]);
 
   // Persist mutations.
   useEffect(() => { saveChannelOuts(channelOuts); }, [channelOuts]);
@@ -270,4 +283,34 @@ export function useMidiBridge(engine: SoundEngine, channelCount: number): MidiBr
     clockSendEnabled, setClockSendEnabled,
     clockSendOutputId, setClockSendOutputId,
   };
+}
+
+// ── localStorage helpers ─────────────────────────────────────────
+// Tiny shims so the bridge persists toggles + selected device ids
+// across reloads without dragging in a serialization library. Each
+// helper swallows storage errors silently — quota / disabled
+// storage shouldn't break the MIDI tab.
+
+function readBool(key: string, fallback: boolean): boolean {
+  try { return localStorage.getItem(key) === '1'; } catch { return fallback; }
+}
+function writeBool(key: string, value: boolean): void {
+  try { localStorage.setItem(key, value ? '1' : '0'); } catch { /* ignore */ }
+}
+function readString(key: string, fallback: string): string {
+  try { return localStorage.getItem(key) ?? fallback; } catch { return fallback; }
+}
+function writeString(key: string, value: string): void {
+  try { localStorage.setItem(key, value); } catch { /* ignore */ }
+}
+function loadStringArray(key: string): string[] {
+  try {
+    const raw = localStorage.getItem(key);
+    if (!raw) return [];
+    const parsed: unknown = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed.filter((v): v is string => typeof v === 'string') : [];
+  } catch { return []; }
+}
+function writeStringArray(key: string, value: string[]): void {
+  try { localStorage.setItem(key, JSON.stringify(value)); } catch { /* ignore */ }
 }
