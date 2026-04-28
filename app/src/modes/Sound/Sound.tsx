@@ -28,7 +28,10 @@ import {
   saveSoundKit,
   listSoundKits,
   deleteSoundKit,
+  saveUserPattern,
+  type UserPattern,
 } from '../../lib/db';
+import type { Genre, RegionId } from '../../patterns/types';
 import { SpectrumAnalyzer } from './SpectrumAnalyzer';
 import { Knob } from './Knob';
 import { StepGrid } from '../../components/StepGrid';
@@ -40,6 +43,79 @@ import { PillGrid } from '../../components/PillGrid';
 import { GROUP_COLORS, groupIndexForStep } from '../../components/visual-helpers';
 
 const COLOR_FX_TYPES: ColorFx['type'][] = ['none', 'overdrive', 'bitcrush', 'filter'];
+
+/** Translate Studio's editor state into a UserPattern Library can
+ *  list. Voice-keyed tracks come from the positional sequence rows
+ *  (KK / SN / HH / OH / CP); BPM converts from quarter to step BPM
+ *  (UserPattern uses step-BPM convention to match seeds). */
+function buildUserPatternFromStudio(args: {
+  id: string;
+  name: string;
+  meter: { stepUnit: 4 | 8 | 16; label: string };
+  grouping: number[];
+  sequence: SoundSequence;
+  bpm: number;
+  defaultKit: import('../../patterns/types').KitId;
+  region: RegionId;
+  genre: Genre;
+  tags: string[];
+  story: string;
+  swingable: boolean;
+  existingCreatedAt: number;
+  now: number;
+}): UserPattern {
+  const stepsPerBar = args.grouping.reduce((a, b) => a + b, 0);
+  const tracks = tracksFromSequence(args.sequence);
+  // SoundPattern.bpm is quarter-BPM; UserPattern.bpm.default is the
+  // step-BPM convention seeds use.
+  const stepBpm = Math.round(args.bpm * args.meter.stepUnit / 4);
+  return {
+    id: args.id,
+    name: args.name,
+    origin: 'You',
+    tradition: 'user',
+    genre: args.genre,
+    timeSig: args.meter.label.includes('/')
+      ? args.meter.label
+      : `${stepsPerBar}/${args.meter.stepUnit}`,
+    grouping: [...args.grouping],
+    steps: stepsPerBar,
+    stepUnit: args.meter.stepUnit,
+    bpm: {
+      default: stepBpm,
+      min: Math.max(30, Math.round(stepBpm * 0.5)),
+      max: Math.round(stepBpm * 2),
+    },
+    tracks,
+    defaultKit: args.defaultKit,
+    region: args.region,
+    difficulty: 'beginner',
+    tags: args.tags,
+    swingable: args.swingable,
+    story: args.story || undefined,
+    user: true,
+    createdAt: args.existingCreatedAt,
+    updatedAt: args.now,
+  };
+}
+
+/** Region + genre option lists for the metadata <select>s. Kept
+ *  as a literal here so we don't add a runtime export to types.ts;
+ *  TS catches drift via the satisfies clause. */
+const REGION_OPTIONS: readonly RegionId[] = [
+  'turkey-ottoman', 'arabic-swana', 'persia', 'india',
+  'west-africa', 'modern-african', 'north-east-african',
+  'cuba-afrocaribbean', 'brazil', 'andean-south-america', 'caribbean',
+  'balkans', 'iberia-flamenco', 'caucasus-mediterranean',
+  'gamelan-southeast-asia', 'east-asia', 'central-asian-pacific',
+  'celtic-europe', 'electronic-western', 'global-electronic',
+  'underground-electronic', 'internet-born', 'exercise',
+] as const;
+
+const GENRE_OPTIONS: readonly Genre[] = [
+  'folk-dance', 'classical', 'devotional', 'popular',
+  'electronic', 'hip-hop', 'jazz', 'ceremonial', 'exercise',
+] as const;
 
 function defaultColorFx(type: ColorFx['type']): ColorFx {
   switch (type) {
@@ -438,6 +514,17 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
   const [savedId, setSavedId] = useState<string | null>(null);
   const [savedList, setSavedList] = useState<SoundPattern[]>([]);
   const [toast, setToast] = useState<string | null>(null);
+  // Pattern-shape metadata that ships with each save into IDB so the
+  // pattern shows up in Library alongside seeds. Defaults are
+  // intentionally generic; the user can refine via the metadata
+  // disclosure under the pattern name. defaultKit defaults to '808'
+  // for fresh patterns; a load fills it from the saved record.
+  const [defaultKit, setDefaultKitState] = useState<KitId>('808');
+  const [patternRegion, setPatternRegion] = useState<RegionId>('electronic-western');
+  const [patternGenre, setPatternGenre] = useState<Genre>('popular');
+  const [patternTags, setPatternTags] = useState<string[]>(['user-saved']);
+  const [patternStory, setPatternStory] = useState<string>('');
+  const [swingable, setSwingable] = useState<boolean>(false);
 
   // Kit persistence — separate from pattern; "kit" = the channel
   // palette only (machine configs + per-channel mixer + colour FX).
@@ -759,7 +846,33 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
       updatedAt: now,
     };
     try {
+      // Save BOTH a SoundPattern (channels + sequence + FX state)
+      // and a UserPattern (voice-keyed tracks + metadata) so the
+      // pattern shows up in Library alongside seeds. Same id +
+      // updatedAt so the two records pair cleanly. Library reads
+      // the UserPattern; loading a saved pattern in Studio
+      // restores the SoundPattern flavour with full sound design.
       await saveSoundPattern(pattern);
+      const userPattern = buildUserPatternFromStudio({
+        id,
+        name: trimmed,
+        meter,
+        grouping,
+        sequence,
+        bpm,
+        defaultKit,
+        region: patternRegion,
+        genre: patternGenre,
+        tags: patternTags,
+        story: patternStory,
+        swingable,
+        existingCreatedAt: existing?.createdAt ?? now,
+        now,
+      });
+      try { await saveUserPattern(userPattern); } catch {
+        // Library record is best-effort — failure here doesn't
+        // invalidate the SoundPattern that's already on disk.
+      }
       setSavedId(id);
       setName(trimmed);
       setToast(savedId ? 'Updated' : 'Saved');
@@ -772,6 +885,7 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
     countInBars, swing, strongAmp, weakAmp,
     reverbWet, reverbSize, reverbDecay,
     delayWet, delayTime, delayFeedback,
+    defaultKit, patternRegion, patternGenre, patternTags, patternStory, swingable,
     refreshSavedList,
   ]);
 
@@ -1234,6 +1348,85 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
           </div>
           {toast && <span className="bf-sound-toast">{toast}</span>}
         </div>
+
+        {/* Metadata disclosure — region / genre / tags / story / kit
+            ride along with the saved pattern so it appears properly
+            in Library. Defaults are sensible for "I just made this";
+            users can refine before saving. */}
+        <Disclosure
+          className="bf-sound-meta"
+          summaryClassName="bf-sound-meta-head"
+          summary={<span>metadata</span>}
+        >
+          <div className="bf-sound-meta-grid">
+            <label className="bf-sound-meta-field">
+              <span className="bf-mini-label">region</span>
+              <select
+                className="bf-sound-meta-input"
+                value={patternRegion}
+                onChange={(e) => setPatternRegion(e.target.value as RegionId)}
+              >
+                {REGION_OPTIONS.map((r) => (
+                  <option key={r} value={r}>{r}</option>
+                ))}
+              </select>
+            </label>
+            <label className="bf-sound-meta-field">
+              <span className="bf-mini-label">genre</span>
+              <select
+                className="bf-sound-meta-input"
+                value={patternGenre}
+                onChange={(e) => setPatternGenre(e.target.value as Genre)}
+              >
+                {GENRE_OPTIONS.map((g) => (
+                  <option key={g} value={g}>{g}</option>
+                ))}
+              </select>
+            </label>
+            <label className="bf-sound-meta-field">
+              <span className="bf-mini-label">default kit</span>
+              <select
+                className="bf-sound-meta-input"
+                value={defaultKit}
+                onChange={(e) => setDefaultKitState(e.target.value as KitId)}
+              >
+                {ALL_KITS.map((k) => (
+                  <option key={k} value={k}>{k === 'frameDrum' ? 'frame' : k}</option>
+                ))}
+              </select>
+            </label>
+            <label className="bf-sound-meta-field">
+              <span className="bf-mini-label">swingable</span>
+              <input
+                type="checkbox"
+                checked={swingable}
+                onChange={(e) => setSwingable(e.target.checked)}
+              />
+            </label>
+            <label className="bf-sound-meta-field bf-sound-meta-tags">
+              <span className="bf-mini-label">tags (comma-sep)</span>
+              <input
+                className="bf-sound-meta-input"
+                type="text"
+                value={patternTags.join(', ')}
+                onChange={(e) => setPatternTags(
+                  e.target.value.split(',').map((t) => t.trim()).filter(Boolean),
+                )}
+                placeholder="house, four-on-floor"
+              />
+            </label>
+            <label className="bf-sound-meta-field bf-sound-meta-story">
+              <span className="bf-mini-label">story</span>
+              <textarea
+                className="bf-sound-meta-input"
+                rows={2}
+                value={patternStory}
+                onChange={(e) => setPatternStory(e.target.value)}
+                placeholder="Where this rhythm comes from, what to listen for…"
+              />
+            </label>
+          </div>
+        </Disclosure>
 
         <TransportBar
           isPlaying={isPlaying}

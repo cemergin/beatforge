@@ -2496,6 +2496,30 @@ input[type="number"] { font: inherit; color: inherit; }
   cursor: pointer;
 }
 .bf-sound-kit-preset:hover { color: var(--fg); border-color: var(--accent); }
+
+.bf-sound-meta {
+  margin: var(--sp-2) 0 var(--sp-3);
+  border: var(--bw-1) solid var(--line);
+  border-radius: var(--r-sm);
+  background: var(--bg);
+}
+.bf-sound-meta-head { padding: var(--sp-2) var(--sp-3); }
+.bf-sound-meta-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--sp-3); padding: var(--sp-3);
+}
+.bf-sound-meta-field { display: flex; flex-direction: column; gap: 4px; }
+.bf-sound-meta-tags, .bf-sound-meta-story { grid-column: 1 / -1; }
+.bf-sound-meta-input {
+  appearance: none;
+  font: inherit; font-size: var(--fs-mini);
+  padding: 5px 8px;
+  border: var(--bw-1) solid var(--line);
+  border-radius: var(--r-xs);
+  background: var(--bg);
+  color: var(--fg);
+}
+.bf-sound-meta-input:focus { border-color: var(--accent); outline: 0; }
 .bf-sound-saveBtn,
 .bf-sound-newBtn {
   font-family: var(--mono); font-size: var(--fs-micro);
