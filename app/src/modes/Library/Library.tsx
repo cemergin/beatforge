@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Fuse from 'fuse.js';
-import type { AudioEngine } from '../../audio/engine';
+import type { SoundEngine } from '../../audio/runtime/sound-engine';
 import type { Genre, KitId, Pattern, RegionId } from '../../patterns/types';
 import { PATTERNS, patternById } from '../../patterns/seed';
 import { getHighlights, getRecent, toggleHighlight } from '../../lib/storage';
@@ -14,7 +14,7 @@ import { PatternDetail } from './PatternDetail';
 import type { StarterPath } from './paths';
 
 interface Props {
-  engine: AudioEngine;
+  engine: SoundEngine;
   onLoadInPractice: (id: string) => void;
   onOpenInStudio?: (pattern: Pattern) => void;
 }

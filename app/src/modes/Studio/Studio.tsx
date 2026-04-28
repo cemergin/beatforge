@@ -2,7 +2,7 @@
 // sequencer for sketching your own patterns on top of the same engine".
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { AudioEngine } from '../../audio/engine';
+import type { SoundEngine } from '../../audio/runtime/sound-engine';
 import { denomGlyph, naturalToStepBpm, parseTimeSigDenom, stepToNaturalBpm } from '../../audio/tempo';
 import { useMetronome } from '../../audio/useMetronome';
 import { clonePattern, resizeTracksToSteps } from './patternOps';
@@ -36,7 +36,7 @@ import { ExportImport } from './ExportImport';
 import { Trainer } from '../Practice/Trainer';
 
 interface Props {
-  engine: AudioEngine;
+  engine: SoundEngine;
   initialPattern: Pattern | null;
   onConsumedInitial: () => void;
   onLoadInPractice: (id: string) => void;

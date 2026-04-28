@@ -20,8 +20,8 @@
 // resetTaps, etc.) — this hook never reads the pattern itself.
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import type { AudioEngine } from './engine';
-import { naturalToStepBpm, parseTimeSigDenom } from './tempo';
+import type { SoundEngine } from './runtime/sound-engine';
+import { parseTimeSigDenom } from './tempo';
 import { getMasterVolume, setMasterVolume as storeMasterVolume } from '../lib/storage';
 import type { TrainerCfg } from '../modes/Practice/Trainer';
 
@@ -83,8 +83,8 @@ export interface UseMetronome {
   setMasterVolume: (v: number) => void;
 }
 
-export function useMetronome(engine: AudioEngine, opts: MetronomeOptions): UseMetronome {
-  const { stepUnit, timeSig, swingable, playing } = opts;
+export function useMetronome(engine: SoundEngine, opts: MetronomeOptions): UseMetronome {
+  const { timeSig, swingable, playing } = opts;
   const denom = parseTimeSigDenom(timeSig);
 
   // ── State ────────────────────────────────────────────────────────
@@ -105,8 +105,8 @@ export function useMetronome(engine: AudioEngine, opts: MetronomeOptions): UseMe
 
   // ── Engine sync ──────────────────────────────────────────────────
   useEffect(() => {
-    engine.setBpm(naturalToStepBpm(bpm, stepUnit, denom));
-  }, [engine, bpm, stepUnit, denom]);
+    engine.setNaturalBpm(bpm, denom);
+  }, [engine, bpm, denom]);
 
   useEffect(() => {
     engine.setSwing(swingable ? 0.5 + ((swing - 50) / 100) * 0.34 : 0.5);
@@ -121,7 +121,7 @@ export function useMetronome(engine: AudioEngine, opts: MetronomeOptions): UseMe
   // setTrainerBar fires from the engine's onBar callback (async, not
   // during render). React-19's lint can't see through the indirection.
   useEffect(() => {
-    return engine.subscribeOnBar((bar) => setTrainerBar(bar));
+    return engine.subscribeOnBar((bar: number) => setTrainerBar(bar));
   }, [engine]);
 
   // ── Speed trainer — cycles mode ──────────────────────────────────
@@ -197,8 +197,8 @@ export function useMetronome(engine: AudioEngine, opts: MetronomeOptions): UseMe
     const rawNaturalBpm = 60_000 / medianMs;
     const clamped = Math.max(30, Math.min(400, Math.round(rawNaturalBpm)));
     setBpm(clamped);
-    engine.setBpm(naturalToStepBpm(clamped, stepUnit, denom));
-  }, [engine, stepUnit, denom]);
+    engine.setNaturalBpm(clamped, denom);
+  }, [engine, denom]);
 
   const resetTaps = useCallback(() => setTapTimes([]), []);
 

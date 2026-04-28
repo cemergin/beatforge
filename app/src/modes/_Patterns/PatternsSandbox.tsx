@@ -13,7 +13,7 @@
 // import.meta.glob with `eager: false` only emits fetch-on-demand chunks.
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { AudioEngine } from '../../audio/engine';
+import type { SoundEngine } from '../../audio/runtime/sound-engine';
 import { naturalTempo } from '../../audio/tempo';
 import type { KitId, Pattern, RegionId, VoiceId, Velocity } from '../../patterns/types';
 import { BeatDots } from '../../components/BeatDots';
@@ -73,7 +73,7 @@ function buildDraftIndex(): DraftEntry[] {
 }
 
 interface Props {
-  engine: AudioEngine;
+  engine: SoundEngine;
 }
 
 export function PatternsSandbox({ engine }: Props) {

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import type { AudioEngine } from '../../audio/engine';
+import type { SoundEngine } from '../../audio/runtime/sound-engine';
 import type { Pattern } from '../../patterns/types';
 import { naturalTempo } from '../../audio/tempo';
 import { PATTERNS, patternById } from '../../patterns/seed';
@@ -10,7 +10,7 @@ import { sameGrouping, sameRegion, similarGroove } from './relatedRhythms';
 
 interface Props {
   pattern: Pattern;
-  engine: AudioEngine;
+  engine: SoundEngine;
   onClose: () => void;
   onOpenPattern: (id: string) => void;
   onLoadInPractice: (id: string) => void;

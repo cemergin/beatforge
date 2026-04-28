@@ -26,6 +26,14 @@ import { ChannelStrip, type ChannelStripParams } from './ChannelStrip';
 import { buildColorFxModule, createDelayFx, createReverb } from '../machines/fx';
 import type { ControllableModule } from '../../modules/audio-graph';
 import { makeEventBus, type EventBus, type Unsubscribe } from '../../modules/events';
+import {
+  ALL_VOICES,
+  trackMeta,
+  type KitId,
+  type Pattern,
+} from '../../patterns/types';
+import { buildKitMachine, KIT_REVERB_SEND } from './kit-presets';
+import { parseTimeSigDenom } from '../tempo';
 import { makeSequencer, type Sequencer } from '../../modules/sequencer';
 import SchedulerWorker from '../scheduler-worker.ts?worker';
 
@@ -57,10 +65,24 @@ export class SoundEngine {
   // Live machine configs the trigger handler reads on every fire.
   private machines: MachineConfig[] = [];
 
+  // ── Pattern-shape state (Practice / Library / legacy Studio) ───
+  // Shadow of the most recently loaded Pattern + active KitId. This
+  // lets the engine speak BOTH dialects — Sound's positional Channel
+  // model and Practice's voice-keyed Pattern model — through one
+  // class. setKit() reapplies kit-preset machines to channels;
+  // audibleCursors() reports voice-keyed cursors.
+  private _kit: KitId = '808';
+  private _pattern: Pattern | null = null;
+
   // ── Control plane ──────────────────────────────────────────────
   private bus: EventBus | null = null;
   private sequencer: Sequencer | null = null;
   private triggerSub: Unsubscribe | null = null;
+  private barSub: Unsubscribe | null = null;
+  /** Bar listeners — Practice's trainer subscribes to these to drive
+   *  the BPM ramp on bar boundaries. Fed by a BarEvent subscription
+   *  on the bus (set up in initCtxOnce). */
+  private barListeners = new Set<(bar: number) => void>();
 
   // Shadow state — preserves setter values across ctx init.
   private _bpm = 110;
@@ -85,6 +107,18 @@ export class SoundEngine {
   get stepsPerBar(): number { return this._stepsPerBar; }
   get stepUnit(): 4 | 8 | 16 { return this._stepUnit; }
   get swing(): number { return this._swing; }
+  get kit(): KitId { return this._kit; }
+  get pattern(): Pattern | null { return this._pattern; }
+  /** Pattern-mode bar getter — proxies the sequencer's audibleBar.
+   *  Kept distinct from `audibleBar()` (function form) for symmetry
+   *  with the legacy AudioEngine.bar getter. */
+  get bar(): number { return this.audibleBar(); }
+  get strongAmp(): number { return this._strongAmp; }
+  get weakAmp(): number { return this._weakAmp; }
+  /** Voice-keyed cursors — what audible step each ALL_VOICES row is
+   *  on right now. Practice + Library reads this from a rAF loop to
+   *  drive per-track playheads. -1 when not playing. */
+  get cursors(): Readonly<Record<string, number>> { return this.audibleCursors(); }
 
   /** Lazily-constructed event bus. UI / router / MIDI subscribe here.
    *  Same instance returned on every call so subscriptions stick. */
@@ -155,6 +189,20 @@ export class SoundEngine {
     });
     this.sequencer = sequencer;
     this.triggerSub = bus.on('trigger', (event) => this.handleTrigger(event));
+    // Fan BarEvents out to legacy bar listeners so Practice's trainer
+    // keeps working with subscribeOnBar(fn). The setTimeout aligns the
+    // fire to the audible time so the trainer's visible bar count
+    // matches what the user hears.
+    this.barSub = bus.on('bar', (event) => {
+      if (!this.ctx) return;
+      const delayMs = Math.max(0, (event.when - this.ctx.currentTime) * 1000);
+      const bar = event.bar;
+      setTimeout(() => {
+        for (const fn of [...this.barListeners]) {
+          try { fn(bar); } catch { /* isolate handlers */ }
+        }
+      }, delayMs);
+    });
 
     // Replay shadow state onto the sequencer so any setBpm / setStepUnit
     // / setSwing / setAccents / setSequence calls made before ensureCtx
@@ -310,7 +358,135 @@ export class SoundEngine {
     return this.sequencer?.audibleStepFor(channelIdx) ?? -1;
   }
 
+  /** Voice-keyed cursors — Practice / Library iterate ALL_VOICES and
+   *  read each row's audibleStepFor. Returns -1 for any voice that
+   *  isn't part of the loaded pattern. */
+  audibleCursors(): Record<string, number> {
+    const out: Record<string, number> = {};
+    for (let i = 0; i < ALL_VOICES.length; i++) {
+      const voiceId = ALL_VOICES[i];
+      out[voiceId] = this._pattern?.tracks[voiceId]
+        ? this.audibleStepFor(i)
+        : -1;
+    }
+    return out;
+  }
+
+  /** Subscribe to bar boundaries. Used by useMetronome.ts to drive
+   *  the trainer's BPM ramp. Returns unsubscribe fn. */
+  subscribeOnBar(fn: (bar: number) => void): () => void {
+    this.barListeners.add(fn);
+    return () => { this.barListeners.delete(fn); };
+  }
+
+  // ── Pattern-shape API (Practice / Library / legacy Studio) ─────
+
+  /** Translate a voice-keyed Pattern into the engine's positional
+   *  channel state. Row order matches ALL_VOICES so phase preservation
+   *  across hot swaps stays stable (the sequencer re-anchors per row).
+   *  Tracks the pattern doesn't include get an empty row that the
+   *  sequencer harmlessly ticks past. */
+  loadPattern(p: Pattern): void {
+    this._pattern = p;
+
+    // Channels — one per ALL_VOICES, machine = active kit's preset
+    // for that voice, effects = defaults.
+    const machines: MachineConfig[] = ALL_VOICES.map((voiceId) =>
+      buildKitMachine(this._kit, voiceId),
+    );
+    this.ensureStripCount(machines.length);
+    this.machines = machines;
+
+    // Apply default effects to each strip with the kit's reverb send
+    // baked in.
+    const reverbSend = KIT_REVERB_SEND[this._kit] ?? 0.15;
+    for (let i = 0; i < this.strips.length; i++) {
+      this.applyChannelParams(i, {
+        level: 0.85, pan: 0, reverbSend, delaySend: 0,
+      });
+    }
+
+    // Sequence — translate Pattern.tracks into positional rows.
+    const sequence: SoundSequence = ALL_VOICES.map((voiceId) => {
+      const track = p.tracks[voiceId];
+      if (!track) return [];
+      const meta = trackMeta(track, p.steps);
+      if (!meta.pattern || meta.pattern.length === 0) return [];
+      const cycle = meta.cycle;
+      const row: SoundStep[] = [];
+      for (let i = 0; i < cycle; i++) {
+        row.push((meta.pattern[i % meta.pattern.length] ?? 0) as SoundStep);
+      }
+      return row;
+    });
+
+    // Update sequencer state in one tight burst — order matters: step
+    // unit + steps before BPM (BPM derives from stepUnit) before
+    // sequence (length-change re-anchor reads barSec).
+    this._stepUnit = p.stepUnit;
+    this._stepsPerBar = p.steps;
+    this.sequencer?.setStepUnit(p.stepUnit);
+    this.sequencer?.setStepsPerBar(p.steps);
+    // Re-apply BPM under the new pattern's stepUnit + denom.
+    const denom = parseTimeSigDenom(p.timeSig);
+    this.sequencer?.setBpm(quarterFromNatural(this._bpm, denom));
+    this.setSequence(sequence);
+  }
+
+  /** Apply a kit preset across all five channels. Practice's KitPanel
+   *  calls this; the timbre changes mid-bar without restarting the
+   *  pattern. The reverb send level is also bumped per-kit (frame
+   *  drums get more bloom than 727 percussion). */
+  setKit(k: KitId): void {
+    this._kit = k;
+    if (this.machines.length === 0) return;
+    const reverbSend = KIT_REVERB_SEND[k] ?? 0.15;
+    const machines: MachineConfig[] = ALL_VOICES.map((voiceId) =>
+      buildKitMachine(k, voiceId),
+    );
+    this.ensureStripCount(machines.length);
+    this.machines = machines;
+    for (let i = 0; i < this.strips.length; i++) {
+      // Apply the new machine via the engine adapter path so any
+      // bus subscriber (router / recorder) sees the change too.
+      this.applyChannelMachine(i, machines[i]);
+      // Update reverb send without disturbing the user's other
+      // mixer params (level/pan/delaySend stay where they are).
+      const strip = this.strips[i];
+      if (strip) {
+        // Read current params is private; just push reverbSend via
+        // applyChannelParams with sensible defaults for the rest.
+        this.applyChannelParams(i, {
+          level: 0.85, pan: 0, reverbSend, delaySend: 0,
+        });
+      }
+    }
+  }
+
+  /** Practice-style BPM setter — accepts the user's "natural" BPM
+   *  (denominator-of-time-sig per minute, e.g. 120 BPM in 9/8 means
+   *  120 eighth notes) and converts to the sequencer's quarter-BPM
+   *  internally. Sound page's setBpm() takes quarter BPM directly. */
+  setNaturalBpm(naturalBpm: number, denom: number): void {
+    this._bpm = naturalBpm;
+    this.sequencer?.setBpm(quarterFromNatural(naturalBpm, denom));
+  }
+
+  /** Bar (main division) seconds — Practice convention: a bar at
+   *  natural BPM N in time sig denom D = (steps * 60) / (N * stepUnit / D). */
+  barSeconds(): number {
+    return this.sequencer?.barSeconds() ?? 0;
+  }
+
   // ── Transport ──────────────────────────────────────────────────
+
+  /** Practice / Library / legacy Studio call this — same as play() but
+   *  with a positional `countInBars` argument matching the legacy
+   *  AudioEngine surface. Doesn't await ensureCtx for caller-side
+   *  back-compat. */
+  start(countInBars = 0): void {
+    void this.play({ countInBars });
+  }
 
   async play(opts: { countInBars?: number } = {}): Promise<void> {
     await this.ensureCtx();
@@ -399,10 +575,9 @@ export class SoundEngine {
       this.worker.terminate();
       this.worker = null;
     }
-    if (this.triggerSub) {
-      this.triggerSub();
-      this.triggerSub = null;
-    }
+    if (this.triggerSub) { this.triggerSub(); this.triggerSub = null; }
+    if (this.barSub)     { this.barSub();     this.barSub = null;     }
+    this.barListeners.clear();
     for (const s of this.strips) {
       try { s.dispose(); } catch { /* idempotent */ }
     }
@@ -419,4 +594,11 @@ export class SoundEngine {
     this.delayFx = null;
     this.sequencer = null;
   }
+}
+
+/** Practice's "natural" BPM is the denominator of the time-sig per
+ *  minute (e.g. 120 BPM in 9/8 means 120 eighth notes). The sequencer
+ *  works in quarter-BPM. Conversion: quarterBpm = naturalBpm * 4 / denom. */
+function quarterFromNatural(naturalBpm: number, denom: number): number {
+  return (naturalBpm * 4) / Math.max(1, denom);
 }

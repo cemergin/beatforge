@@ -1,5 +1,5 @@
 import { Suspense, lazy, useCallback, useEffect, useRef, useState } from 'react';
-import { AudioEngine } from './audio/engine';
+import { SoundEngine } from './audio/runtime/sound-engine';
 import { Practice } from './modes/Practice/Practice';
 import type { KitId, Pattern } from './patterns/types';
 
@@ -35,7 +35,7 @@ export default function App() {
   // useState lazy initializer creates the engine once. Refs were the
   // older pattern but React 19 lint flags `ref.current` reads during
   // render — a lazy useState is the supported equivalent.
-  const [engine] = useState(() => new AudioEngine());
+  const [engine] = useState(() => new SoundEngine());
 
   // On unmount (HMR, full-tree teardown) release the Worker + ctx so
   // they don't leak across reloads. React 19 StrictMode double-mounts

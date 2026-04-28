@@ -1,10 +1,31 @@
-// Web Audio helpers for machine renderers. The four primitive
-// constructors (createOsc/Gain/Biquad/Noise) re-export from the
-// canonical location in audio/kits/_util.ts so we have ONE source
-// of truth even while the new + legacy systems coexist. Adding
-// ampEnvelope here since it's only consumed by the new system.
+// Web Audio helpers for machine renderers. Tiny wrappers around
+// AudioContext.createX so machine files don't repeat the same boilerplate.
 
-export { createOsc, createGain, createBiquad, createNoise } from '../../kits/_util';
+export function createOsc(ctx: AudioContext): OscillatorNode {
+  return ctx.createOscillator();
+}
+
+export function createGain(ctx: AudioContext): GainNode {
+  return ctx.createGain();
+}
+
+export function createBiquad(ctx: AudioContext): BiquadFilterNode {
+  return ctx.createBiquadFilter();
+}
+
+/** Short-lived white-noise buffer source. Fills `dur` seconds of
+ *  [-1, 1] uniform noise and returns an unstarted source. Caller is
+ *  responsible for connect() + start(). */
+export function createNoise(ctx: AudioContext, dur: number): AudioBufferSourceNode {
+  const rate = ctx.sampleRate;
+  const len = Math.ceil(rate * dur);
+  const buf = ctx.createBuffer(1, len, rate);
+  const d = buf.getChannelData(0);
+  for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
+  const src = ctx.createBufferSource();
+  src.buffer = buf;
+  return src;
+}
 
 /** Short-burst transient duration shared by clap, crackle, etc.
  *  12 ms is short enough to register as a click but long enough that

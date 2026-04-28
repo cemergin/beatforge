@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { AudioEngine } from '../../audio/engine';
+import type { SoundEngine } from '../../audio/runtime/sound-engine';
 import { naturalToStepBpm, parseTimeSigDenom, stepToNaturalBpm } from '../../audio/tempo';
 import { useMetronome } from '../../audio/useMetronome';
 import type { KitId, Pattern, Track, Velocity, VoiceId } from '../../patterns/types';
@@ -59,7 +59,7 @@ function buildClickSkeleton(pattern: Pattern): Pattern {
 }
 
 interface Props {
-  engine: AudioEngine;
+  engine: SoundEngine;
   patternId: string;
   onPatternChange: (id: string) => void;
   /** When a user clicks one of their saved soundPatterns from the
