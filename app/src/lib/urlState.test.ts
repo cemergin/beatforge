@@ -10,7 +10,18 @@ const opts = {
 
 describe('readUrlState', () => {
   it('returns nulls for empty search', () => {
-    expect(readUrlState('', opts)).toEqual({ tab: null, pattern: null });
+    expect(readUrlState('', opts)).toEqual({ tab: null, pattern: null, detail: null });
+  });
+
+  it('parses ?detail=<id> for the Library modal', () => {
+    expect(readUrlState('?tab=library&detail=karsilama', opts).detail).toBe('karsilama');
+    // Detail strings aren't validated by the parser — Library does the
+    // membership check against its own loaded corpus.
+    expect(readUrlState('?detail=user-abc-123', opts).detail).toBe('user-abc-123');
+  });
+
+  it('returns null detail when missing', () => {
+    expect(readUrlState('?tab=library', opts).detail).toBeNull();
   });
 
   it('parses each known tab', () => {
@@ -42,16 +53,16 @@ describe('readUrlState', () => {
 
   it('parses tab + pattern together', () => {
     expect(readUrlState('?tab=practice&pattern=soukous', opts))
-      .toEqual({ tab: 'practice', pattern: 'soukous' });
+      .toEqual({ tab: 'practice', pattern: 'soukous', detail: null });
   });
 
   it('ignores extra params it doesn\'t understand', () => {
     expect(readUrlState('?tab=studio&p=longhash&pattern=maqsum&utm=foo', opts))
-      .toEqual({ tab: 'studio', pattern: 'maqsum' });
+      .toEqual({ tab: 'studio', pattern: 'maqsum', detail: null });
   });
 
   it('handles malformed search strings', () => {
-    expect(readUrlState('?', opts)).toEqual({ tab: null, pattern: null });
+    expect(readUrlState('?', opts)).toEqual({ tab: null, pattern: null, detail: null });
     expect(readUrlState('?tab', opts).tab).toBeNull();
   });
 });

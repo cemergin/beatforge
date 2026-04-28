@@ -47,10 +47,19 @@ function normalize(s: string): string {
   return s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 }
 
+/** Pull `?detail=<id>` straight off window.location. The parser in
+ *  lib/urlState.ts canonically owns this, but Library needs the value
+ *  on every render path (mount, popstate) so a tiny inline read
+ *  beats threading state through App. */
+function readDetailParam(): string | null {
+  if (typeof window === 'undefined') return null;
+  return new URLSearchParams(window.location.search).get('detail') || null;
+}
+
 export function Library({ engine, onLoadInPractice, onOpenInStudio }: Props) {
   const [query, setQuery] = useState('');
   const [filters, setFilters] = useState<FilterState>(DEFAULT_FILTERS);
-  const [detailId, setDetailId] = useState<string | null>(null);
+  const [detailId, setDetailId] = useState<string | null>(() => readDetailParam());
   const [activePath, setActivePath] = useState<StarterPath | null>(null);
   const [regionPreview, setRegionPreview] = useState<RegionId | null>(null);
 
@@ -93,6 +102,29 @@ export function Library({ engine, onLoadInPractice, onOpenInStudio }: Props) {
     // eslint-disable-next-line react-hooks/set-state-in-effect -- legitimate sync of derived state to query/filter inputs.
     setPage(1);
   }, [query, filters, activePath]);
+
+  // URL ↔ detailId sync. Opening / swapping / closing the modal
+  // updates ?detail=<id> via replaceState; we don't push new history
+  // entries because the modal is a transient view, not a navigation.
+  // Popstate (browser back/forward) re-reads the URL and applies it.
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const current = params.get('detail');
+    if (detailId === current) return;
+    if (detailId) params.set('detail', detailId);
+    else params.delete('detail');
+    const search = params.toString();
+    const next = `${window.location.pathname}${search ? '?' + search : ''}${window.location.hash}`;
+    window.history.replaceState(null, '', next);
+  }, [detailId]);
+
+  useEffect(() => {
+    const onPop = () => {
+      setDetailId(readDetailParam());
+    };
+    window.addEventListener('popstate', onPop);
+    return () => window.removeEventListener('popstate', onPop);
+  }, []);
 
   const searchRef = useRef<HTMLInputElement | null>(null);
   const resultsRef = useRef<HTMLDivElement | null>(null);

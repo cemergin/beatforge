@@ -6,6 +6,10 @@ export type Tab = 'practice' | 'library' | 'studio' | '_midi';
 export interface UrlState {
   tab: Tab | null;
   pattern: string | null;
+  /** ?detail=<id> — opens the Library pattern-detail modal direct
+   *  from the URL. The Library validates the id against its
+   *  loaded corpus, so unknown ids fall through silently. */
+  detail: string | null;
 }
 
 interface ParseOpts {
@@ -35,5 +39,6 @@ export function readUrlState(search: string, opts: ParseOpts): UrlState {
   }
   const rawPattern = params.get('pattern');
   const pattern = rawPattern && opts.seedExists(rawPattern) ? rawPattern : null;
-  return { tab, pattern };
+  const detail = params.get('detail') || null;
+  return { tab, pattern, detail };
 }
