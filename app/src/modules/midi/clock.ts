@@ -60,7 +60,10 @@ export function attachClockListener(
           const sum = intervals.reduce((a, b) => a + b, 0);
           const avgMs = sum / intervals.length;
           // 60_000 ms/min ÷ (24 ppq × avg_ms_per_tick) = quarter-note BPM.
-          const bpm = 60_000 / (24 * avgMs);
+          // Round to 2 decimals — the 3rd/4th decimal is below the
+          // measurement noise floor of setTimeout/MIDI roundtrip and
+          // makes the BPM display flap on every tick.
+          const bpm = Math.round((60_000 / (24 * avgMs)) * 100) / 100;
           if (Number.isFinite(bpm) && bpm > 0) callbacks.onBpm(bpm);
         }
       }
