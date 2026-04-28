@@ -8,6 +8,10 @@ interface Props {
   allMeters: string[];
   allGenres: Genre[];
   allKits: KitId[];
+  /** Number of user-saved patterns. The 'local' source chip is
+   *  hidden until at least one exists so first-time users don't
+   *  see a chip pointing to nothing. */
+  localCount?: number;
 }
 
 function toggle<T>(arr: T[], v: T): T[] {
@@ -15,10 +19,38 @@ function toggle<T>(arr: T[], v: T): T[] {
 }
 
 export function Filters({
-  filters, setFilters, allMeters, allGenres, allKits,
+  filters, setFilters, allMeters, allGenres, allKits, localCount = 0,
 }: Props) {
   return (
     <div className="bf-lib-filters-block">
+      {localCount > 0 && (
+        <div className="bf-filter-row-wrap">
+          <span className="bf-filter-label">source</span>
+          <div className="bf-chip-row">
+            <button
+              className={`bf-chip sm ${filters.source === 'all' ? 'on' : 'ghost'}`}
+              onClick={() => setFilters({ ...filters, source: 'all' })}
+              type="button"
+            >
+              all
+            </button>
+            <button
+              className={`bf-chip sm ${filters.source === 'seed' ? 'on' : 'ghost'}`}
+              onClick={() => setFilters({ ...filters, source: 'seed' })}
+              type="button"
+            >
+              seed
+            </button>
+            <button
+              className={`bf-chip sm ${filters.source === 'local' ? 'on' : 'ghost'}`}
+              onClick={() => setFilters({ ...filters, source: 'local' })}
+              type="button"
+            >
+              local ({localCount})
+            </button>
+          </div>
+        </div>
+      )}
       <FilterRow
         label="meter"
         values={allMeters}

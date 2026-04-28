@@ -88,7 +88,22 @@ describe('applyFilters', () => {
       regions: ['turkey-ottoman'],
       genres: [],
       kits: ['909'],
+      source: 'all',
     });
     expect(out.map((x) => x.id)).toEqual(['b']);
+  });
+
+  it('source=local keeps only user-flagged patterns', () => {
+    const seed = p({ id: 's' });
+    const userP = { ...p({ id: 'u' }), user: true } as Pattern;
+    const out = applyFilters([seed, userP], { ...DEFAULT_FILTERS, source: 'local' });
+    expect(out.map((x) => x.id)).toEqual(['u']);
+  });
+
+  it('source=seed drops user-flagged patterns', () => {
+    const seed = p({ id: 's' });
+    const userP = { ...p({ id: 'u' }), user: true } as Pattern;
+    const out = applyFilters([seed, userP], { ...DEFAULT_FILTERS, source: 'seed' });
+    expect(out.map((x) => x.id)).toEqual(['s']);
   });
 });

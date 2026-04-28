@@ -3,6 +3,7 @@ import Fuse from 'fuse.js';
 import type { SoundEngine } from '../../audio/runtime/sound-engine';
 import type { Genre, KitId, Pattern, RegionId } from '../../patterns/types';
 import { PATTERNS, patternById } from '../../patterns/seed';
+import { listUserPatterns } from '../../lib/db';
 import { getHighlights, getRecent, toggleHighlight } from '../../lib/storage';
 import { Filters } from './Filters';
 import { applyFilters, DEFAULT_FILTERS, type FilterState } from './filterState';
@@ -60,6 +61,33 @@ export function Library({ engine, onLoadInPractice, onOpenInStudio }: Props) {
   );
   const [page, setPage] = useState(1);
 
+  // User-saved patterns from IDB. Loaded once on mount via promise-
+  // then so the React-19 set-state-in-effect lint stays happy. Also
+  // refreshed on focus so saving in Studio + tab-switching here
+  // shows the new pattern without a full page reload.
+  const [userPatterns, setUserPatterns] = useState<Pattern[]>([]);
+  useEffect(() => {
+    let active = true;
+    const load = () => listUserPatterns()
+      .then((list) => { if (active) setUserPatterns(list); })
+      .catch(() => { /* IDB unavailable */ });
+    load();
+    const onFocus = () => load();
+    window.addEventListener('focus', onFocus);
+    return () => {
+      active = false;
+      window.removeEventListener('focus', onFocus);
+    };
+  }, []);
+
+  // Combined corpus — seeds + user patterns. Used everywhere PATTERNS
+  // was used directly so user-saved rhythms surface in search,
+  // filters, region browsing, and the cards grid.
+  const allPatterns = useMemo(() => {
+    if (userPatterns.length === 0) return PATTERNS;
+    return [...PATTERNS, ...userPatterns];
+  }, [userPatterns]);
+
   // Reset to page 1 whenever the result set could change.
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect -- legitimate sync of derived state to query/filter inputs.
@@ -88,9 +116,10 @@ export function Library({ engine, onLoadInPractice, onOpenInStudio }: Props) {
     return () => window.removeEventListener('keydown', onKey);
   }, []);
 
-  // Fuse index — built once per PATTERNS reference (static in v1).
+  // Fuse index — rebuilt when the user-pattern list changes so
+  // newly saved patterns are searchable without a page reload.
   const fuse = useMemo(() => {
-    const searchable = PATTERNS.map((p) => ({
+    const searchable = allPatterns.map((p) => ({
       p,
       name: normalize(p.name),
       origin: normalize(p.origin),
@@ -104,41 +133,42 @@ export function Library({ engine, onLoadInPractice, onOpenInStudio }: Props) {
       threshold: 0.35,
       ignoreLocation: true,
     });
-  }, []);
+  }, [allPatterns]);
 
-  // Facet option lists — derived from PATTERNS.
+  // Facet option lists — derived from the combined corpus so user
+  // patterns' regions / genres / kits surface in the filter chips.
   const allMeters = useMemo(
-    () => Array.from(new Set(PATTERNS.map((p) => p.timeSig))).sort(),
-    [],
+    () => Array.from(new Set(allPatterns.map((p) => p.timeSig))).sort(),
+    [allPatterns],
   );
   const allGenres = useMemo<Genre[]>(
-    () => Array.from(new Set(PATTERNS.map((p) => p.genre))).sort() as Genre[],
-    [],
+    () => Array.from(new Set(allPatterns.map((p) => p.genre))).sort() as Genre[],
+    [allPatterns],
   );
   const allKits = useMemo<KitId[]>(
-    () => Array.from(new Set(PATTERNS.map((p) => p.defaultKit))).sort() as KitId[],
-    [],
+    () => Array.from(new Set(allPatterns.map((p) => p.defaultKit))).sort() as KitId[],
+    [allPatterns],
   );
 
   // Apply filters + search to compute the results set.
   const searched = useMemo<Pattern[]>(() => {
     const q = normalize(query.trim());
-    if (!q) return PATTERNS;
+    if (!q) return allPatterns;
     return fuse.search(q).map((r) => r.item.p);
-  }, [query, fuse]);
+  }, [query, fuse, allPatterns]);
 
   const filtered = useMemo<Pattern[]>(() => {
     // When a starter path is active, it's the dominant filter — everything
     // else (search/region/meter/...) is ignored so the path's sequence is
     // visible in its intended order.
     if (activePath) {
-      const known = new Map(PATTERNS.map((p) => [p.id, p] as const));
+      const known = new Map(allPatterns.map((p) => [p.id, p] as const));
       return activePath.patternIds
         .map((id) => known.get(id))
         .filter((p): p is Pattern => !!p);
     }
     return applyFilters(searched, filters);
-  }, [searched, filters, activePath]);
+  }, [searched, filters, activePath, allPatterns]);
 
   const scrollToResults = useCallback(() => {
     requestAnimationFrame(() => {
@@ -155,7 +185,7 @@ export function Library({ engine, onLoadInPractice, onOpenInStudio }: Props) {
   }, [scrollToResults]);
 
   const onPickPath = useCallback((path: StarterPath) => {
-    const known = new Set(PATTERNS.map((p) => p.id));
+    const known = new Set(allPatterns.map((p) => p.id));
     const valid = path.patternIds.filter((id) => known.has(id));
     if (valid.length === 0) return;
     // Open the path's filtered view INSIDE the Library, don't jump to Practice.
@@ -166,26 +196,26 @@ export function Library({ engine, onLoadInPractice, onOpenInStudio }: Props) {
     setFilters(DEFAULT_FILTERS);
     setRegionPreview(null);
     scrollToResults();
-  }, [scrollToResults]);
+  }, [allPatterns, scrollToResults]);
 
   const clearActivePath = useCallback(() => setActivePath(null), []);
 
   const startPathFromFirst = useCallback(() => {
     if (!activePath) return;
-    const known = new Set(PATTERNS.map((p) => p.id));
+    const known = new Set(allPatterns.map((p) => p.id));
     const valid = activePath.patternIds.filter((id) => known.has(id));
     if (valid.length === 0) return;
     const next = { ...pathProgress, [activePath.id]: 0 };
     setPathProgress(next);
     writePathProgress(next);
     onLoadInPractice(valid[0]);
-  }, [activePath, pathProgress, onLoadInPractice]);
+  }, [activePath, allPatterns, pathProgress, onLoadInPractice]);
 
   const surprise = useCallback(() => {
-    const pool = filtered.length > 0 ? filtered : PATTERNS;
+    const pool = filtered.length > 0 ? filtered : allPatterns;
     const pick = pool[Math.floor(Math.random() * pool.length)];
     onLoadInPractice(pick.id);
-  }, [filtered, onLoadInPractice]);
+  }, [filtered, allPatterns, onLoadInPractice]);
 
   const onToggleStar = useCallback((id: string) => {
     setHighlights(toggleHighlight(id));
@@ -197,7 +227,12 @@ export function Library({ engine, onLoadInPractice, onOpenInStudio }: Props) {
   // arrow function, breaking shallow-equal prop check.
   const openDetail = useCallback((id: string) => setDetailId(id), []);
 
-  const detailPattern = detailId ? patternById(detailId) ?? null : null;
+  // Look up the detail pattern from the combined corpus rather than
+  // patternById — user patterns live in Library's own state and may
+  // not yet be in App.tsx's userCache when this modal opens.
+  const detailPattern = detailId
+    ? (allPatterns.find((p) => p.id === detailId) ?? patternById(detailId) ?? null)
+    : null;
 
   return (
     <main className="bf-lib-page">
@@ -205,8 +240,8 @@ export function Library({ engine, onLoadInPractice, onOpenInStudio }: Props) {
         <div>
           <h1 className="bf-lib-title">Library</h1>
           <p className="bf-lib-sub">
-            {PATTERNS.length} world rhythms and exercises. Search, browse the map,
-            or follow a starter path.
+            {PATTERNS.length} world rhythms{userPatterns.length > 0 && <> + {userPatterns.length} of yours</>}. Search,
+            browse the map, or follow a starter path.
           </p>
           <div className="bf-lib-hero-actions">
             <button className="bf-chip on" onClick={surprise} type="button">
@@ -279,6 +314,7 @@ export function Library({ engine, onLoadInPractice, onOpenInStudio }: Props) {
           allMeters={allMeters}
           allGenres={allGenres}
           allKits={allKits}
+          localCount={userPatterns.length}
         />
       </section>
 
@@ -417,7 +453,7 @@ export function Library({ engine, onLoadInPractice, onOpenInStudio }: Props) {
                     <h2 className="bf-zone-title">Results</h2>
                     <span className="bf-zone-sub">
                       {filtered.length === 0
-                        ? `0 of ${PATTERNS.length}`
+                        ? `0 of ${allPatterns.length}`
                         : `${start + 1}–${end} of ${filtered.length}`}
                     </span>
                   </div>
