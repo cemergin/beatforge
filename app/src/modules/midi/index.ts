@@ -15,3 +15,9 @@ export {
   type ChannelOutConfig,
   type SinkSpec,
 } from './sink';
+export {
+  attachClockListener,
+  makeClockSender,
+  type ClockListenerCallbacks,
+  type ClockSenderHandle,
+} from './clock';

@@ -63,6 +63,9 @@ export function Midi({ bridge, channels }: Props) {
     inputMappings, setInputMappings,
     activeInputIds, setActiveInputIds,
     subscribeSent,
+    clockListenEnabled, setClockListenEnabled,
+    clockSendEnabled, setClockSendEnabled,
+    clockSendOutputId, setClockSendOutputId,
   } = bridge;
 
   const [log, setLog] = useState<LogEntry[]>([]);
@@ -269,6 +272,50 @@ export function Midi({ bridge, channels }: Props) {
                   onChange={(patch) => updateChannelOut(idx, patch)}
                 />
               ))}
+            </div>
+          </section>
+
+          <section className="bf-lib-zone">
+            <div className="bf-zone-head">
+              <h2 className="bf-zone-title">Clock I/O</h2>
+              <span className="bf-zone-sub">Off by default. Soft-sync only — BPM tracks within ~tens of ms.</span>
+            </div>
+            <div className="bf-midi-maps">
+              <div className="bf-midi-map-row">
+                <span className="bf-midi-kind">in</span>
+                <label className="bf-midi-field">
+                  <input
+                    type="checkbox"
+                    checked={clockListenEnabled}
+                    onChange={(e) => setClockListenEnabled(e.target.checked)}
+                  />
+                  listen on active inputs (BPM + start/stop)
+                </label>
+              </div>
+              <div className="bf-midi-map-row">
+                <span className="bf-midi-kind">out</span>
+                <label className="bf-midi-field">
+                  <input
+                    type="checkbox"
+                    checked={clockSendEnabled}
+                    onChange={(e) => setClockSendEnabled(e.target.checked)}
+                  />
+                  send 24 PPQN
+                </label>
+                <label className="bf-midi-field grow">
+                  to
+                  <select
+                    value={clockSendOutputId}
+                    onChange={(e) => setClockSendOutputId(e.target.value)}
+                    className="bf-midi-input"
+                  >
+                    <option value="">— none —</option>
+                    {outputs.map((o) => (
+                      <option key={o.id} value={o.id}>{o.name ?? o.id}</option>
+                    ))}
+                  </select>
+                </label>
+              </div>
             </div>
           </section>
 

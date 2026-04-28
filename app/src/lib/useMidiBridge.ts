@@ -9,9 +9,12 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { SoundEngine } from '../audio/runtime/sound-engine';
 import {
+  attachClockListener,
   attachMidiSink,
+  makeClockSender,
   makeMidiModule,
   type ChannelOutConfig,
+  type ClockSenderHandle,
   type MidiAccessLike,
   type MidiInputLike,
   type MidiInputMap,
@@ -51,6 +54,20 @@ export interface MidiBridge {
   /** Subscribe to outgoing sink emissions so the MIDI tab's monitor
    *  can show outbound traffic. Returns an unsubscribe. */
   subscribeSent: (fn: SentListener) => () => void;
+
+  // ── Clock I/O ───────────────────────────────────────────────────
+  /** Listen-in toggle. Off by default — we don't want to silently
+   *  override the user's BPM when a controller happens to be sending
+   *  clock. The listener input is the FIRST active monitored input;
+   *  swap it by toggling inputs in the Inputs section. */
+  clockListenEnabled: boolean;
+  setClockListenEnabled: (b: boolean) => void;
+
+  /** Send-out toggle + chosen output. Off by default. */
+  clockSendEnabled: boolean;
+  setClockSendEnabled: (b: boolean) => void;
+  clockSendOutputId: string;
+  setClockSendOutputId: (id: string) => void;
 }
 
 export function useMidiBridge(engine: SoundEngine, channelCount: number): MidiBridge {
@@ -68,6 +85,13 @@ export function useMidiBridge(engine: SoundEngine, channelCount: number): MidiBr
   );
   const [inputMappings, setInputMappings] = useState<MidiInputMap[]>(() => loadMidiMappings());
   const [activeInputIds, setActiveInputIds] = useState<Set<string>>(() => new Set());
+
+  // Clock toggles — off by default (user must opt in). NOT persisted
+  // because we want a session that didn't request clock I/O to start
+  // clean. If you accidentally enabled clock-listen, a reload clears it.
+  const [clockListenEnabled, setClockListenEnabled] = useState(false);
+  const [clockSendEnabled, setClockSendEnabled] = useState(false);
+  const [clockSendOutputId, setClockSendOutputId] = useState('');
 
   // Persist mutations.
   useEffect(() => { saveChannelOuts(channelOuts); }, [channelOuts]);
@@ -153,6 +177,69 @@ export function useMidiBridge(engine: SoundEngine, channelCount: number): MidiBr
     return () => { for (const off of offs) off(); };
   }, [access, inputs, activeInputIds, inputMappings, midi]);
 
+  // Clock LISTEN — attach to all currently active inputs. The first
+  // device sending clock wins (most rigs only have one master). BPM
+  // is smoothed inside the listener; transport messages route to
+  // session.start / session.stop. Off by default per user request.
+  const sessionStartRef = useRef(session.start);
+  useEffect(() => { sessionStartRef.current = session.start; }, [session.start]);
+  const sessionStopRef = useRef(session.stop);
+  useEffect(() => { sessionStopRef.current = session.stop; }, [session.stop]);
+  const sessionSetBpmRef = useRef(session.setBpm);
+  useEffect(() => { sessionSetBpmRef.current = session.setBpm; }, [session.setBpm]);
+
+  useEffect(() => {
+    if (!access || !clockListenEnabled) return;
+    const offs: Array<() => void> = [];
+    for (const input of inputs) {
+      if (!activeInputIds.has(input.id)) continue;
+      offs.push(attachClockListener(input, {
+        onBpm: (bpm) => sessionSetBpmRef.current(bpm),
+        onStart: () => sessionStartRef.current(),
+        onContinue: () => sessionStartRef.current(),
+        onStop: () => sessionStopRef.current(),
+      }));
+    }
+    return () => { for (const off of offs) off(); };
+  }, [access, clockListenEnabled, inputs, activeInputIds]);
+
+  // Clock SEND — drives 24 PPQN to the chosen output. Tracks
+  // session.playing so 0xFA / 0xFC fire automatically when the user
+  // hits play / stop in any tab; tracks session.bpm so tempo changes
+  // re-arm the interval. Off by default.
+  const senderRef = useRef<ClockSenderHandle | null>(null);
+  useEffect(() => {
+    if (!access || !clockSendEnabled || !clockSendOutputId) return;
+    const out = outputs.find((o) => o.id === clockSendOutputId);
+    if (!out) return;
+    const handle = makeClockSender(out, session.bpm, (data) => {
+      for (const l of sentListenersRef.current) l({ outputId: out.id, data });
+    });
+    senderRef.current = handle;
+    return () => {
+      handle.dispose();
+      senderRef.current = null;
+    };
+    // outputs/session.bpm/session.playing intentionally NOT in deps —
+    // we react to those via subsequent effects so the sender survives
+    // tempo automation without re-allocating its interval.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [access, clockSendEnabled, clockSendOutputId]);
+
+  // Push BPM updates to the active sender.
+  useEffect(() => {
+    senderRef.current?.setBpm(session.bpm);
+  }, [session.bpm]);
+
+  // Mirror session.playing → 0xFA / 0xFC.
+  const wasPlayingRef = useRef(false);
+  useEffect(() => {
+    if (!senderRef.current) { wasPlayingRef.current = session.playing; return; }
+    if (session.playing && !wasPlayingRef.current) senderRef.current.start();
+    else if (!session.playing && wasPlayingRef.current) senderRef.current.stop();
+    wasPlayingRef.current = session.playing;
+  }, [session.playing]);
+
   return {
     midi, access, enable, enableError,
     inputs, outputs,
@@ -160,5 +247,8 @@ export function useMidiBridge(engine: SoundEngine, channelCount: number): MidiBr
     inputMappings, setInputMappings,
     activeInputIds, setActiveInputIds,
     subscribeSent,
+    clockListenEnabled, setClockListenEnabled,
+    clockSendEnabled, setClockSendEnabled,
+    clockSendOutputId, setClockSendOutputId,
   };
 }
