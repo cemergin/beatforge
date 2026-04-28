@@ -2927,14 +2927,12 @@ textarea.bf-sound-meta-input {
 
 /* Studio top control bar — most-touched controls (BPM, meter,
    grouping, count-in, swing, clear) live in one wrapping flex row
-   right under the title. Keeps the daily-driver controls reachable
+   right under the subtitle. Keeps the daily-driver controls reachable
    without scrolling past ensemble/pattern/save chrome. */
 .bf-sound-topbar {
   display: flex; flex-wrap: wrap; align-items: center;
   gap: var(--sp-2) var(--sp-3);
   padding: var(--sp-2) 0;
-  border-top: var(--bw-1) dashed var(--line);
-  border-bottom: var(--bw-1) dashed var(--line);
 }
 .bf-transport-play-hero {
   /* Slightly bigger than the in-row play button — it's the primary

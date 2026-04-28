@@ -1199,6 +1199,12 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
           </button>
         </div>
 
+        <p className="bf-sound-sub">
+          Lay it down: sequence the steps, shape each voice. <kbd>Space</kbd>
+          plays. <kbd>A</kbd>–<kbd>G</kbd> auditions (<kbd>Q</kbd>–<kbd>T</kbd>
+          accent). Click any cell to cycle off → on → accent.
+        </p>
+
         {/* Top control bar — most-touched controls live here so they're
             always reachable without scrolling: BPM, meter, grouping,
             count-in, swing. Save / metadata / mix sliders sit below. */}
@@ -1283,12 +1289,6 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
           </div>
           <button type="button" className="bf-sound-clear-btn" onClick={onClear} title="Clear all steps">clear</button>
         </div>
-
-        <p className="bf-sound-sub">
-          Lay it down: sequence the steps, shape each voice. <kbd>Space</kbd>
-          plays. <kbd>A</kbd>–<kbd>G</kbd> auditions (<kbd>Q</kbd>–<kbd>T</kbd>
-          accent). Click any cell to cycle off → on → accent.
-        </p>
       </header>
 
       <section className="bf-sound-sequencer">
