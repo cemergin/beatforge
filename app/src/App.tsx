@@ -27,13 +27,10 @@ import './styles/app.css';
 type Theme = 'warm' | 'noir' | 'paper';
 const THEMES: readonly Theme[] = ['warm', 'noir', 'paper'];
 
-const DEV_MODE = import.meta.env.DEV;
-
 // Pull the URL parser from a separate module so it's pure + testable.
 function readCurrentUrl(): UrlState {
   return readUrlState(window.location.search, {
     seedExists: (id) => !!patternById(id),
-    devMode: DEV_MODE,
   });
 }
 
@@ -60,8 +57,7 @@ export default function App() {
     const url = readCurrentUrl();
     if (url.tab) return url.tab;
     const t = localStorage.getItem('bf_tab');
-    if (t === 'library' || t === 'practice' || t === 'studio') return t;
-    if (DEV_MODE && t === '_midi') return '_midi';
+    if (t === 'library' || t === 'practice' || t === 'studio' || t === '_midi') return t;
     // Old 'sound' setting → studio (the Sound page was renamed to
     // Studio; its features ported in place).
     if (t === 'sound') return 'studio';
@@ -305,16 +301,8 @@ export default function App() {
           >
             Studio
           </button>
-          {DEV_MODE && (
-            <button
-              className={`bf-chip ${tab === '_midi' ? 'on' : 'ghost'}`}
-              onClick={() => switchTab('_midi')}
-              type="button"
-              title="Dev: secret MIDI tab"
-            >
-              MIDI
-            </button>
-          )}
+          {/* The MIDI tab is intentionally NOT in the nav. Reachable
+              via ?tab=_midi for users who know the URL. */}
         </nav>
         <div className="bf-topright">
           <div className="bf-theme-seg" role="group" aria-label="theme">

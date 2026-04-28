@@ -6,9 +6,7 @@ import { readUrlState } from './urlState';
 const KNOWN_SEEDS = new Set(['karsilama', 'soukous', 'maqsum']);
 const opts = {
   seedExists: (id: string) => KNOWN_SEEDS.has(id),
-  devMode: false,
 };
-const devOpts = { ...opts, devMode: true };
 
 describe('readUrlState', () => {
   it('returns nulls for empty search', () => {
@@ -30,9 +28,8 @@ describe('readUrlState', () => {
     expect(readUrlState('?tab=', opts).tab).toBeNull();
   });
 
-  it('_midi is dev-mode only', () => {
-    expect(readUrlState('?tab=_midi', opts).tab).toBeNull();
-    expect(readUrlState('?tab=_midi', devOpts).tab).toBe('_midi');
+  it('_midi accessible regardless of build (button hidden, URL works)', () => {
+    expect(readUrlState('?tab=_midi', opts).tab).toBe('_midi');
   });
 
   it('returns valid pattern id when seed exists', () => {
