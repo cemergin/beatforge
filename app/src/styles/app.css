@@ -2534,6 +2534,34 @@ input[type="number"] { font: inherit; color: inherit; }
 .bf-sound-saveBtn:hover { color: #fff; background: var(--accent); border-color: var(--accent); }
 .bf-sound-newBtn:hover { color: var(--fg); border-color: var(--accent); }
 
+/* Visual hierarchy for the Save cluster — pattern is the dominant
+   CTA (filled), ensemble is the power-user secondary (outline only). */
+.bf-sound-saveBtn-primary {
+  color: #fff;
+  background: var(--accent);
+  border-color: var(--accent);
+  font-weight: 600;
+}
+.bf-sound-saveBtn-primary:hover {
+  filter: brightness(1.05);
+}
+.bf-sound-saveBtn-secondary {
+  /* Already the default outline look; explicit class so a designer
+     can rebalance without touching the base rule. */
+}
+.bf-sound-patternbar-primary { /* hook for future emphasis tweaks */ }
+.bf-sound-kitbar-secondary {
+  /* Subtle desat so the kit row reads as supporting, not competing. */
+  opacity: 0.85;
+}
+.bf-sound-bar-hint {
+  font-family: var(--mono); font-size: var(--fs-micro);
+  letter-spacing: 0.04em; text-transform: lowercase;
+  color: var(--muted);
+  font-weight: 400;
+  margin-left: 4px;
+}
+
 .bf-sound-savedlist {
   display: flex; flex-wrap: wrap; gap: 4px;
   flex: 1;

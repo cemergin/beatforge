@@ -1169,8 +1169,10 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
       </header>
 
       <section className="bf-sound-sequencer">
-        <div className="bf-sound-patternbar bf-sound-kitbar">
-          <span className="bf-sound-bar-tag">ensemble</span>
+        <div className="bf-sound-patternbar bf-sound-kitbar bf-sound-kitbar-secondary">
+          <span className="bf-sound-bar-tag" title="Saves only the 5 channel voices — reusable across patterns.">
+            ensemble <span className="bf-sound-bar-hint">(sounds only)</span>
+          </span>
           <select
             className="bf-sound-kit-preset"
             value=""
@@ -1202,11 +1204,11 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
           />
           <button
             type="button"
-            className="bf-sound-saveBtn"
+            className="bf-sound-saveBtn bf-sound-saveBtn-secondary"
             onClick={() => void onSaveKit()}
-            title={savedKitId ? 'Update saved ensemble' : 'Save the current channel palette'}
+            title={savedKitId ? 'Update saved sounds — beat is unaffected' : 'Save the 5 channel voices for reuse across patterns'}
           >
-            {savedKitId ? 'update' : 'save ensemble'}
+            {savedKitId ? 'update sounds' : 'save sounds'}
           </button>
           <div className="bf-sound-savedlist" role="list">
             {savedKitList.length === 0 && (
@@ -1240,8 +1242,10 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
           </div>
         </div>
 
-        <div className="bf-sound-patternbar">
-          <span className="bf-sound-bar-tag">pattern</span>
+        <div className="bf-sound-patternbar bf-sound-patternbar-primary">
+          <span className="bf-sound-bar-tag" title="Saves the beat AND the current sounds. Use this to save your work.">
+            pattern <span className="bf-sound-bar-hint">(beat + sounds)</span>
+          </span>
           <input
             className="bf-sound-name"
             type="text"
@@ -1252,11 +1256,11 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
           />
           <button
             type="button"
-            className="bf-sound-saveBtn"
+            className="bf-sound-saveBtn bf-sound-saveBtn-primary"
             onClick={() => void onSave()}
-            title={savedId ? 'Update saved pattern' : 'Save to local'}
+            title={savedId ? 'Update saved pattern (beat + sounds)' : 'Save the beat plus the current sounds'}
           >
-            {savedId ? 'update' : 'save'}
+            {savedId ? 'update pattern' : 'save pattern'}
           </button>
           <button
             type="button"
