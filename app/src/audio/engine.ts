@@ -1,114 +1,110 @@
-// BeatForge audio engine.
+// AudioEngine — Practice / Library / legacy-Studio audio runtime.
 //
-// Scheduler: per-track independent (spec §4.5). Each track has its own
-// `subdivisions` count (equal steps per bar) and its own step duration.
-// Bar duration derives from pattern.steps × (60/BPM); BPM is always tied
-// to the main division.
+// Owns the audio plane:
+//   - AudioContext lifecycle, master + dynamics + reverb send
+//   - Kit voice dispatch (via audio/kits/ recipes)
 //
-// Kit synthesis lives in `./kits/`. The engine owns the master bus +
-// reverb send + scheduler + dispatch; each kit provides a KitRecipe
-// keyed by VoiceId. Adding a kit doesn't touch this file.
+// Delegates the control plane to modules/sequencer:
+//   - All BPM / swing / accents state
+//   - Per-row anchor-derive scheduling math
+//   - Cooperative catch-up after stalls
+//   - Bar / Step / Trigger / Transport emission
+//
+// Pattern.tracks (voice-keyed) are translated into the sequencer's
+// positional rows on every loadPattern. The row order is fixed by
+// ALL_VOICES so a track's row index is stable across hot swaps —
+// preserves phase when the user edits cells mid-playback.
 
-import { trackMeta, type KitId, type Pattern, type Velocity, type VoiceId } from '../patterns/types';
+import {
+  ALL_VOICES,
+  trackMeta,
+  type KitId,
+  type Pattern,
+  type Velocity,
+  type VoiceId,
+} from '../patterns/types';
 import { buildVoiceCtx, kitRecipes } from './kits';
 import { createAudioContext } from './audio-context';
-// Vite's explicit `?worker` import emits a dedicated chunk with correct
-// JS MIME — avoids the `new URL()` pattern falling back to an inlined
-// data URL tagged `video/mp2t` because the source file has a .ts ext.
+import { makeEventBus, type EventBus, type Unsubscribe } from '../modules/events';
+import { makeSequencer, type Sequence, type Sequencer, type Step } from '../modules/sequencer';
 import SchedulerWorker from './scheduler-worker.ts?worker';
 
 type BarListener = (bar: number) => void;
 
 interface TrackCache {
   voiceId: VoiceId;
-  subdivisions: number;
+  /** Position in the sequencer's rows[] array — stable across hot
+   *  swaps because it's derived from ALL_VOICES order, not the
+   *  pattern's track keys. */
+  rowIdx: number;
   cycle: number;
-  pattern: Velocity[];
   isMainDivision: boolean;
-  stepsPerBar: number; // p.steps / subdivisions — stepSec = stepsPerBar * (60/bpm)
-  hasAccents: boolean; // all-zero tracks can be skipped entirely in tick()
 }
 
+const CHANNEL_TRIGGER_ADDRESS = /^channel\.(\d+)$/;
+
 export class AudioEngine {
-  // ── Audio graph (private to the class) ──────────────────────────
+  // ── Audio graph ─────────────────────────────────────────────────
   private ctx: AudioContext | null = null;
   private master: GainNode | null = null;
-  // The reverb ConvolverNode is kept alive by the audio graph (master
-  // chain + reverbReturn both hold it), no class field needed.
   private reverbSend: GainNode | null = null;
+  private masterVolume = 0.85;
 
-  // ── Public state ────────────────────────────────────────────────
-  // Readable from anywhere; mutation only through the setX() methods
-  // below. The setters fire side effects (gain ramps, scheduler
-  // re-anchoring, listener fan-out) that direct assignment would skip.
+  // ── Pattern state (public surface) ──────────────────────────────
   private _kit: KitId = '808';
-  private _running = false;
   private _pattern: Pattern | null = null;
   private _bpm = 120;
   private _swing = 0.5;
   private _strongAmp = 1.0;
   private _weakAmp = 0.5;
-  // Per-frame visual state (rAF reads via audibleCursors()).
-  private _cursors: Record<string, number> = {};
-  private _bar = 0;
 
+  // Voice-keyed caches the audibleCursors getter walks.
+  private trackCaches: TrackCache[] = [];
+
+  // ── Control plane ──────────────────────────────────────────────
+  private bus: EventBus | null = null;
+  private sequencer: Sequencer | null = null;
+  private triggerSub: Unsubscribe | null = null;
+  private barSub: Unsubscribe | null = null;
+
+  // Bar-boundary listeners. Multiple modes can subscribe concurrently —
+  // Practice + legacy Studio + the trainer all want to hear bar
+  // boundaries independently. Fed by a BarEvent subscription on the
+  // bus.
+  private barListeners = new Set<BarListener>();
+
+  // ── Scheduler driver ───────────────────────────────────────────
+  private readonly lookaheadMs = 15;
+  private readonly scheduleAheadS = 0.30;
+  private worker: Worker | null = null;
+  private workerFailed = false;
+  private timerId: ReturnType<typeof setTimeout> | null = null;
+  private ctxInitPromise: Promise<void> | null = null;
+
+  // ── Public read-only getters ───────────────────────────────────
   get kit(): KitId { return this._kit; }
-  get running(): boolean { return this._running; }
+  get running(): boolean { return this.sequencer?.running() ?? false; }
   get pattern(): Pattern | null { return this._pattern; }
   get bpm(): number { return this._bpm; }
   get swing(): number { return this._swing; }
   get strongAmp(): number { return this._strongAmp; }
   get weakAmp(): number { return this._weakAmp; }
-  get cursors(): Readonly<Record<string, number>> { return this._cursors; }
-  get bar(): number { return this._bar; }
+  get bar(): number { return this.sequencer?.audibleBar() ?? 0; }
+  /** Last-scheduled cursors. Kept for back-compat; new callers
+   *  should use audibleCursors() instead. */
+  get cursors(): Readonly<Record<string, number>> { return this.audibleCursors(); }
 
-  // Bar-boundary listeners. Multiple modes can subscribe concurrently —
-  // prevents the "last-mode-wins" race where Practice unmount stripped
-  // Studio's handler.
-  private barListeners = new Set<BarListener>();
+  /** Lazily-constructed event bus. */
+  getEventBus(): EventBus {
+    if (!this.bus) this.bus = makeEventBus();
+    return this.bus;
+  }
 
   /** Subscribe to bar-boundary events. Returns unsubscribe fn. */
   subscribeOnBar(fn: BarListener): () => void {
     this.barListeners.add(fn);
     return () => { this.barListeners.delete(fn); };
   }
-
-  // Scheduler timing. lookaheadMs is how often tick() fires; scheduleAheadS
-  // is how far into Web Audio's future we queue notes. Must be sized so
-  // (scheduleAhead >> lookahead) and so that a worst-case main-thread stall
-  // still leaves a margin — React renders and devtools panels can freeze
-  // the event loop for 100+ms on a slow device. 300ms horizon survives that.
-  private readonly lookaheadMs = 15;
-  private readonly scheduleAheadS = 0.30;
-  // Tick cadence lives in a Worker when available (immune to React /
-  // devtools / background-tab throttling). timerId is the setTimeout
-  // fallback when Worker construction fails.
-  private worker: Worker | null = null;
-  private workerFailed = false;
-  private timerId: ReturnType<typeof setTimeout> | null = null;
-  private nextNoteTimes: Record<string, number> = {};
-  private nextIdx: Record<string, number> = {};
-  // Anchors per track for bounded-drift derivation. nextNoteTime[tr] is
-  // derived as `anchorTime + (nextIdx - anchorIdx) * stepSec` each tick
-  // rather than accumulated via `+= stepSec`. Re-anchored on BPM change
-  // so rate changes take effect smoothly without jumping the phase.
-  private anchorTime: Record<string, number> = {};
-  private anchorIdx: Record<string, number> = {};
-  private nextBarTime = 0;
-  private barAnchorTime = 0;
-  private barAnchorIdx = 0;
-  private startTime = 0;
-
-  // Per-pattern track caches. Built once in loadPattern() so tick() avoids
-  // Object.keys() + trackMeta() allocations every 15ms. Null until a
-  // pattern is loaded.
-  private trackCaches: TrackCache[] = [];
-
-  // Race guard: two concurrent play clicks (or play + preview)
-  // fire ensureCtx() simultaneously; without this, both would race
-  // to construct an AudioContext and audio graph. Whoever wins the
-  // second half wins the assignments, orphaning the first graph.
-  private ctxInitPromise: Promise<void> | null = null;
 
   async ensureCtx(): Promise<void> {
     if (this.ctx) {
@@ -117,8 +113,6 @@ export class AudioEngine {
     }
     if (!this.ctxInitPromise) {
       this.ctxInitPromise = this.initCtxOnce().finally(() => {
-        // Clear so a later failure (e.g. ctx got closed and needs
-        // rebuilding) doesn't permanently block re-init.
         this.ctxInitPromise = null;
       });
     }
@@ -127,7 +121,7 @@ export class AudioEngine {
 
   private async initCtxOnce(): Promise<void> {
     const ctx = createAudioContext();
-    if (!ctx) return;   // Web Audio not supported — engine stays inert
+    if (!ctx) return;
     const master = ctx.createGain();
     master.gain.value = this.masterVolume;
 
@@ -141,17 +135,39 @@ export class AudioEngine {
     const reverb = ctx.createConvolver();
     reverb.buffer = this.makeImpulseFor(ctx, 1.8, 2.2);
     const reverbSend = ctx.createGain();
-    reverbSend.gain.value = kitRecipes[this.kit].reverbSend;
+    reverbSend.gain.value = kitRecipes[this._kit].reverbSend;
     reverbSend.connect(reverb);
     const reverbReturn = ctx.createGain();
     reverbReturn.gain.value = 0.6;
     reverb.connect(reverbReturn).connect(master);
 
-    // Commit all references atomically — either we have a full graph
-    // or none of it.
     this.ctx = ctx;
     this.master = master;
     this.reverbSend = reverbSend;
+
+    // Build the sequencer + wire its bus to this engine. Subscribe to
+    // TriggerEvent so kit voices fire when the sequencer says so;
+    // subscribe to BarEvent so legacy bar listeners keep getting fed.
+    const bus = this.getEventBus();
+    const sequencer = makeSequencer({
+      bus,
+      clock: () => ctx.currentTime,
+      scheduleAheadS: this.scheduleAheadS,
+    });
+    this.sequencer = sequencer;
+    this.triggerSub = bus.on('trigger', (event) => this.handleTrigger(event));
+    this.barSub = bus.on('bar', (event) => this.handleBar(event));
+
+    // Replay shadow state.
+    sequencer.setBpm(this._bpm);
+    sequencer.setStepUnit(this._pattern?.stepUnit ?? 16);
+    sequencer.setStepsPerBar(this._pattern?.steps ?? 16);
+    sequencer.setSwing(this._swing);
+    sequencer.setAccents(this._strongAmp, this._weakAmp);
+    sequencer.setRowCount(ALL_VOICES.length);
+    if (this._pattern) {
+      sequencer.setSequence(this.buildSequence(this._pattern));
+    }
 
     if (ctx.state === 'suspended') await ctx.resume();
   }
@@ -169,72 +185,61 @@ export class AudioEngine {
     return impulse;
   }
 
+  /** TriggerEvent handler — maps `channel.<n>` back to the voiceId
+   *  in ALL_VOICES[n] and fires the kit recipe's voice renderer. */
+  private handleTrigger(event: { target: string; when: number; velocity: number }): void {
+    const m = CHANNEL_TRIGGER_ADDRESS.exec(event.target);
+    if (!m || !this.ctx || !this.master) return;
+    const idx = parseInt(m[1], 10);
+    const voiceId = ALL_VOICES[idx];
+    if (!voiceId) return;
+    const vc = buildVoiceCtx(this.ctx, this.master, this.reverbSend);
+    kitRecipes[this._kit].voices[voiceId](vc, event.when, event.velocity);
+  }
+
+  /** BarEvent handler — fans out to subscribed bar listeners on a
+   *  short timer aligned with the audible time so the trainer's
+   *  visible bar count matches what the user hears. */
+  private handleBar(event: { bar: number; when: number }): void {
+    if (!this.ctx) return;
+    const delayMs = Math.max(0, (event.when - this.ctx.currentTime) * 1000);
+    const bar = event.bar;
+    setTimeout(() => {
+      for (const fn of [...this.barListeners]) {
+        try { fn(bar); } catch { /* isolate handlers */ }
+      }
+    }, delayMs);
+  }
+
   setKit(k: KitId): void {
     this._kit = k;
     if (this.reverbSend) this.reverbSend.gain.value = kitRecipes[k].reverbSend;
   }
 
   /** Per-track cursor for what's AUDIBLE right now — not last-scheduled.
-   * The scheduler queues notes up to 300ms into Web Audio's future; the
-   * cursor field (this.cursors) reflects the last-scheduled step, so
-   * reading it from a rAF loop shows the visual cursor 300ms ahead of
-   * the audio. This method computes what step the audio clock is
-   * actually playing by inverting the anchor formula:
-   *
-   *   stepsSinceAnchor = floor((now - anchorTime) / stepSec)
-   *   audibleIdx = (anchorIdx + stepsSinceAnchor) % cycle
-   *
-   * Cheap — O(tracks), called once per frame. Swing is ignored for the
-   * visual (≤34ms visual lag on swung steps, below the perceptibility
-   * threshold for this use case).
-   */
+   *  Maps each cached voice id to its sequencer row + asks the
+   *  sequencer for the audible step. */
   audibleCursors(): Record<string, number> {
     const out: Record<string, number> = {};
-    if (!this.ctx || !this.running) return this.cursors;
-    const now = this.ctx.currentTime;
-    if (now < this.startTime) {
-      // Count-in still running — no track steps audible yet.
+    if (!this.sequencer) {
       for (const c of this.trackCaches) out[c.voiceId] = -1;
       return out;
     }
-    const beatSec = 60 / this.bpm;
     for (const c of this.trackCaches) {
-      const tr = c.voiceId;
-      const anchorT = this.anchorTime[tr];
-      const anchorI = this.anchorIdx[tr];
-      if (anchorT === undefined || anchorI === undefined) {
-        out[tr] = this.cursors[tr] ?? -1;
-        continue;
-      }
-      const stepSec = c.stepsPerBar * beatSec;
-      if (stepSec <= 0) { out[tr] = -1; continue; }
-      const stepsSinceAnchor = Math.floor((now - anchorT) / stepSec);
-      const globalIdx = anchorI + stepsSinceAnchor;
-      const cycle = c.cycle;
-      out[tr] = ((globalIdx % cycle) + cycle) % cycle;
+      out[c.voiceId] = this.sequencer.audibleStepFor(c.rowIdx);
     }
     return out;
   }
 
   setBpm(b: number): void {
-    // Re-anchor each track so the rate change takes effect from "now"
-    // without jumping phase. The anchor-derive formula in tick() computes
-    // nextNoteTime from (nextIdx - anchorIdx) * stepSec — if we didn't
-    // re-anchor, the new stepSec would apply retroactively to every step
-    // since startTime, resulting in an instant phase shift.
-    if (this.running) {
-      for (const tr of Object.keys(this.nextIdx)) {
-        this.anchorTime[tr] = this.nextNoteTimes[tr];
-        this.anchorIdx[tr] = this.nextIdx[tr];
-      }
-      this.barAnchorTime = this.nextBarTime;
-    }
+    // Practice's BPM convention: `b` is "main steps per minute" so
+    // barSeconds = steps * (60 / bpm). The sequencer uses quarter-
+    // BPM internally — convert at the boundary.
     this._bpm = b;
+    const stepUnit = this._pattern?.stepUnit ?? 16;
+    this.sequencer?.setBpm(quarterBpmFromMainStep(b, stepUnit));
   }
 
-  // Master volume 0..1; persists via the master gain node.
-  // Uses a short linear ramp to avoid the click/pop of an abrupt gain jump.
-  private masterVolume = 0.85;
   setMasterVolume(v: number): void {
     this.masterVolume = Math.max(0, Math.min(1, v));
     if (this.master && this.ctx) {
@@ -246,73 +251,39 @@ export class AudioEngine {
     }
   }
   getMasterVolume(): number { return this.masterVolume; }
-  setSwing(s: number): void { this._swing = s; }
+
+  setSwing(s: number): void {
+    this._swing = s;
+    this.sequencer?.setSwing(s);
+  }
   setAccents(strong: number, weak: number): void {
     this._strongAmp = strong;
     this._weakAmp = weak;
+    this.sequencer?.setAccents(strong, weak);
   }
 
   loadPattern(p: Pattern): void {
-    const wasRunning = this.running;
     this._pattern = p;
     this.rebuildTrackCaches();
-
-    if (!wasRunning) {
-      // Fresh load — start() will seed nextNoteTimes + anchors from startTime.
-      this._cursors = {};
-      this.nextIdx = {};
-      this.anchorTime = {};
-      this.anchorIdx = {};
-      Object.keys(p.tracks).forEach((tr) => {
-        this._cursors[tr] = -1;
-        this.nextIdx[tr] = 0;
-      });
-      return;
-    }
-
-    // Hot swap while playing: preserve scheduler phase so cell edits,
-    // grouping picks, and group-accent tweaks don't snap the playhead
-    // back to step 0.
-    //   - SURVIVING tracks: re-anchor so a changed stepSec (from a
-    //     steps or stepUnit change in Studio mid-playback) takes effect
-    //     from "now" without retroactively warping the past. Mirrors
-    //     setBpm's re-anchor logic.
-    //   - NEW tracks: enter at the next bar boundary.
-    //   - REMOVED tracks: pruned so tick() doesn't touch stale entries.
-    for (const tr of Object.keys(this.nextIdx)) {
-      if (tr in p.tracks) {
-        this.anchorTime[tr] = this.nextNoteTimes[tr];
-        this.anchorIdx[tr] = this.nextIdx[tr];
-      }
-    }
-    this.barAnchorTime = this.nextBarTime;
-    for (const tr of Object.keys(p.tracks)) {
-      if (!(tr in this.nextIdx)) {
-        this.nextIdx[tr] = 0;
-        this._cursors[tr] = -1;
-        this.nextNoteTimes[tr] = this.nextBarTime;
-        this.anchorTime[tr] = this.nextBarTime;
-        this.anchorIdx[tr] = 0;
-      }
-    }
-    for (const tr of Object.keys(this.nextIdx)) {
-      if (!(tr in p.tracks)) {
-        delete this.nextIdx[tr];
-        delete this.nextNoteTimes[tr];
-        delete this._cursors[tr];
-        delete this.anchorTime[tr];
-        delete this.anchorIdx[tr];
-      }
-    }
+    if (!this.sequencer) return;
+    this.sequencer.setStepUnit(p.stepUnit);
+    this.sequencer.setStepsPerBar(p.steps);
+    // Re-apply BPM under the new pattern's stepUnit — the conversion
+    // factor changes when stepUnit changes.
+    this.sequencer.setBpm(quarterBpmFromMainStep(this._bpm, p.stepUnit));
+    this.sequencer.setSequence(this.buildSequence(p));
   }
 
-  /** Build per-track caches once per loadPattern so tick() avoids the
-   * Object.keys() + trackMeta() call for every track, every 15ms. */
+  /** Cache voice-id → row-index pairs + cycle metadata for cursor
+   *  reads. Row order matches ALL_VOICES so re-loads keep stable
+   *  positions; tracks the pattern doesn't include get an empty
+   *  row (which the sequencer harmlessly ticks past). */
   private rebuildTrackCaches(): void {
-    const p = this.pattern;
+    const p = this._pattern;
     this.trackCaches = [];
     if (!p) return;
-    for (const voiceId of Object.keys(p.tracks) as VoiceId[]) {
+    for (let i = 0; i < ALL_VOICES.length; i++) {
+      const voiceId = ALL_VOICES[i];
       const trackData = p.tracks[voiceId];
       if (!trackData) continue;
       const meta = trackMeta(trackData, p.steps);
@@ -320,27 +291,61 @@ export class AudioEngine {
       if (!meta.pattern || meta.pattern.length === 0) continue;
       this.trackCaches.push({
         voiceId,
-        subdivisions: meta.subdivisions,
+        rowIdx: i,
         cycle: meta.cycle,
-        pattern: meta.pattern,
         isMainDivision: meta.subdivisions === p.steps,
-        stepsPerBar: p.steps / meta.subdivisions,
-        hasAccents: meta.pattern.some((v) => v > 0),
       });
     }
   }
 
-  start(countInBars = 0): void {
-    if (!this.pattern || !this.ctx || this.running) return;
-    this._running = true;
-    const now = this.ctx.currentTime + 0.06;
-    const barSec = this.pattern.steps * (60 / this.bpm);
+  /** Translate Pattern.tracks into the sequencer's positional rows.
+   *  Row index = ALL_VOICES position (stable across hot swaps).
+   *  Tracks with cycle ≠ subdivisions get expanded so the row's
+   *  ringSteps reflects the cycle. Rows for absent voices are []. */
+  private buildSequence(p: Pattern): Sequence {
+    const out: Step[][] = [];
+    for (const voiceId of ALL_VOICES) {
+      const trackData = p.tracks[voiceId];
+      if (!trackData) { out.push([]); continue; }
+      const meta = trackMeta(trackData, p.steps);
+      if (!meta.pattern || meta.pattern.length === 0) { out.push([]); continue; }
+      // Expand the pattern across `cycle` steps if cycle > pattern.length.
+      // For most tracks cycle === pattern.length; the expansion handles
+      // the few patterns that use cycle as a "loop length × shorter
+      // pattern" shorthand.
+      const cycle = meta.cycle;
+      const row: Step[] = [];
+      for (let i = 0; i < cycle; i++) {
+        row.push((meta.pattern[i % meta.pattern.length] ?? 0) as Step);
+      }
+      out.push(row);
+    }
+    return out;
+  }
 
-    // Count-in: clicks at the FIRST STEP of each subgroup, with the pattern's
-    // actual grouping. For 2+2+2+3 (9/8) → 4 clicks at step positions 0, 2, 4, 6
-    // — unevenly spaced to reflect the grouping, not evenly spaced over the bar.
+  /** Bar (main division) seconds — kept on Practice's convention so
+   *  callers (useMetronome, trainer-time-mode) see the familiar
+   *  `steps * (60 / bpm)` formula even though the sequencer
+   *  internally works in quarter-BPM. */
+  barSeconds(): number {
+    if (!this._pattern) return 0;
+    return this._pattern.steps * (60 / this._bpm);
+  }
+
+  start(countInBars = 0): void {
+    if (!this.pattern || !this.ctx || !this.sequencer || this.sequencer.running()) return;
+    const ctx = this.ctx;
+    // Use Practice's main-step BPM convention for count-in math —
+    // matches the sequencer's actual scheduling (which we converted
+    // via quarterBpmFromMainStep on setBpm) AND keeps existing
+    // count-in tests passing.
+    const barSec = this.barSeconds();
+    const stepSec = barSec / this.pattern.steps;
+    const headRoom = ctx.currentTime + 0.06;
+
+    // Count-in: clicks at the FIRST STEP of each subgroup, with the
+    // pattern's actual grouping (e.g. 9/8 = 2+2+2+3).
     if (countInBars > 0) {
-      const stepSec = barSec / this.pattern.steps;
       const downbeatSteps: number[] = [];
       let acc = 0;
       for (const g of this.pattern.grouping) {
@@ -349,39 +354,23 @@ export class AudioEngine {
       }
       for (let bar = 0; bar < countInBars; bar++) {
         downbeatSteps.forEach((stepIdx, beatIdx) => {
-          const t = now + bar * barSec + stepIdx * stepSec;
-          // Beat 1 of each bar = strong; other group downbeats = medium
+          const t = headRoom + bar * barSec + stepIdx * stepSec;
           this.countInClick(t, beatIdx === 0 ? 1.0 : 0.6);
         });
       }
     }
 
-    this.startTime = now + countInBars * barSec;
-    this.nextBarTime = this.startTime;
-    this.barAnchorTime = this.startTime;
-    this.barAnchorIdx = 0;
-    this._bar = 0;
-
-    Object.keys(this.pattern.tracks).forEach((tr) => {
-      this.nextNoteTimes[tr] = this.startTime;
-      this.nextIdx[tr] = 0;
-      this._cursors[tr] = -1;
-      this.anchorTime[tr] = this.startTime;
-      this.anchorIdx[tr] = 0;
-    });
-
+    this.sequencer.play({ startTime: headRoom, countInBars });
     this.ensureWorker();
     if (this.worker) {
       this.worker.postMessage({ type: 'start', intervalMs: this.lookaheadMs });
     }
-    // Fire an immediate tick() to fill the buffer before the first worker
-    // message arrives (~15ms delay). The worker/timeout chain takes over
-    // from there.
+    // Pre-fill before the first worker tick arrives (~15 ms latency).
     this.tick();
   }
 
-  /** Lazily construct the scheduler worker. Falls back to setTimeout on
-   * failure (older browsers, certain embed contexts, test environments). */
+  /** Lazily construct the scheduler worker. Falls back to setTimeout
+   *  on failure (older browsers, certain embed contexts, test envs). */
   private ensureWorker(): void {
     if (this.worker || this.workerFailed) return;
     try {
@@ -394,11 +383,19 @@ export class AudioEngine {
     }
   }
 
-  // Neutral count-in click — kit-independent (always a wood-like tick).
+  private tick = (): void => {
+    if (!this.sequencer || !this.sequencer.running()) return;
+    this.sequencer.tick();
+    if (!this.worker) {
+      this.timerId = setTimeout(this.tick, this.lookaheadMs);
+    }
+  };
+
+  /** Neutral count-in click — kit-independent (always a wood-like tick). */
   private countInClick(when: number, amp: number): void {
     const ctx = this.ctx;
     const master = this.master;
-    if (!ctx || !master) return; // pre-ensureCtx() call — no-op
+    if (!ctx || !master) return;
     const osc = ctx.createOscillator();
     const g = ctx.createGain();
     osc.frequency.value = amp > 0.8 ? 2200 : 1400;
@@ -411,7 +408,7 @@ export class AudioEngine {
   }
 
   stop(): void {
-    this._running = false;
+    this.sequencer?.stop();
     if (this.timerId) {
       clearTimeout(this.timerId);
       this.timerId = null;
@@ -421,11 +418,11 @@ export class AudioEngine {
     }
   }
 
-  /** Full teardown — use on unmount / hot-reload / test cleanup. `stop()`
-   * pauses playback but keeps the Worker + AudioContext alive; `dispose()`
-   * lets the GC reclaim them. Safe to call multiple times. */
+  /** Full teardown — use on unmount / hot-reload / test cleanup. */
   dispose(): void {
     this.stop();
+    if (this.triggerSub) { this.triggerSub(); this.triggerSub = null; }
+    if (this.barSub) { this.barSub(); this.barSub = null; }
     if (this.worker) {
       this.worker.terminate();
       this.worker = null;
@@ -437,120 +434,23 @@ export class AudioEngine {
     this.master = null;
     this.reverbSend = null;
     this.trackCaches = [];
+    this.sequencer = null;
   }
+}
 
-  // Bar (main division) seconds — BPM = steps/min at main rate (spec §4.2).
-  barSeconds(): number {
-    const p = this.pattern;
-    if (!p) return 0;
-    return p.steps * (60 / this.bpm);
-  }
+// Re-export Velocity for callers that imported it from this module.
+export type { Velocity };
 
-  private tick = (): void => {
-    if (!this.running || !this.ctx || !this.pattern) return;
-    const ctx = this.ctx;
-    const horizon = ctx.currentTime + this.scheduleAheadS;
-    const nowCatchUp = ctx.currentTime;
-    const stepUnit = this.pattern.stepUnit;
-    const swing = this.swing;
-    const beatSec = 60 / this.bpm;
-    const caches = this.trackCaches;
-
-    // Catch-up: if a main-thread stall pushed any track past nowCatchUp,
-    // snap the whole grid forward together. Per-track snapping was
-    // letting non-stalled tracks keep their old schedule while stalled
-    // tracks advanced to (now + 5ms), which broke phase between voices
-    // that should have been in lock-step. Pick one common recovery
-    // time and apply it to every track that's behind, so all tracks
-    // stay aligned on the same grid.
-    let stalled = false;
-    for (let ci = 0; ci < caches.length; ci++) {
-      const tr = caches[ci].voiceId;
-      if (!caches[ci].hasAccents) continue;
-      if (this.nextNoteTimes[tr] < nowCatchUp) { stalled = true; break; }
-    }
-    if (stalled) {
-      const recoverT = nowCatchUp + 0.005;
-      for (let ci = 0; ci < caches.length; ci++) {
-        const tr = caches[ci].voiceId;
-        if (!caches[ci].hasAccents) continue;
-        if (this.nextNoteTimes[tr] < recoverT) {
-          this.nextNoteTimes[tr] = recoverT;
-          this.anchorTime[tr] = recoverT;
-          this.anchorIdx[tr] = this.nextIdx[tr];
-        }
-      }
-    }
-
-    // Per-track scheduling — iterate pre-computed caches (no per-tick
-    // Object.keys or trackMeta allocations).
-    for (let ci = 0; ci < caches.length; ci++) {
-      const c = caches[ci];
-      const tr = c.voiceId;
-      if (!c.hasAccents) continue; // skip silent tracks entirely
-      const stepSec = c.stepsPerBar * beatSec; // (steps/subdiv) * (60/bpm)
-
-      while (this.nextNoteTimes[tr] < horizon) {
-        let tPlay = this.nextNoteTimes[tr];
-
-        // Swing applies only to main-division 16th-step tracks.
-        if (stepUnit === 16 && c.isMainDivision && (this.nextIdx[tr] % 2 === 1)) {
-          tPlay += (swing - 0.5) * 2 * stepSec;
-        }
-
-        const idx = this.nextIdx[tr] % c.cycle;
-        const vel = c.pattern[idx];
-        if (vel > 0) this.trigger(tr, tPlay, vel);
-
-        this._cursors[tr] = idx;
-
-        // Anchor-derive next note time — `anchor + (idx - anchorIdx) * stepSec`
-        // rather than `+= stepSec` — so cumulative float-add drift stays
-        // bounded across long sessions. Re-anchors happen on setBpm() and
-        // on catch-up, so this formula is always correct for the current
-        // BPM segment.
-        this.nextIdx[tr] += 1;
-        this.nextNoteTimes[tr] = this.anchorTime[tr]
-          + (this.nextIdx[tr] - this.anchorIdx[tr]) * stepSec;
-      }
-    }
-
-    // Bar boundary — count off full bars (for trainer / stop-after).
-    // Uses the same anchor-derive pattern: barIndex is computed relative to
-    // barAnchor (not startTime), so a setBpm mid-session doesn't retroactively
-    // rewrite bar numbering. Multiple bars scheduled in one tick all get
-    // correct, unique indices.
-    const barSec = this.pattern.steps * beatSec;
-    while (this.nextBarTime < horizon) {
-      const tBar = this.nextBarTime;
-      const barIndex = Math.round((tBar - this.barAnchorTime) / barSec) + this.barAnchorIdx;
-      if (barIndex > 0) {
-        const b = barIndex;
-        const delayMs = Math.max(0, (tBar - ctx.currentTime) * 1000);
-        setTimeout(() => {
-          this._bar = b;
-          for (const fn of [...this.barListeners]) {
-            try { fn(b); } catch { /* isolate */ }
-          }
-        }, delayMs);
-      }
-      this.nextBarTime = this.barAnchorTime
-        + (barIndex + 1 - this.barAnchorIdx) * barSec;
-    }
-
-    // Re-arm only when the worker isn't available — it drives the cadence
-    // otherwise via postMessage('tick').
-    if (!this.worker) {
-      this.timerId = setTimeout(this.tick, this.lookaheadMs);
-    }
-  };
-
-  private trigger(voice: VoiceId, when: number, velLevel: Velocity): void {
-    const amp = velLevel === 2 ? this.strongAmp : this.weakAmp;
-    // Dispatch into the kit registry. Pre-ensureCtx() calls are ignored
-    // (ctx is null) — scheduler won't reach this path before start().
-    if (!this.ctx || !this.master) return;
-    const vc = buildVoiceCtx(this.ctx, this.master, this.reverbSend);
-    kitRecipes[this.kit].voices[voice](vc, when, amp);
-  }
+/** Practice's BPM is "main-step BPM" (a step at the pattern's
+ *  stepUnit per minute) so 16-step pattern at bpm=120 → 0.5 sec/step.
+ *  The sequencer uses quarter-BPM (240 / (bpm * stepUnit) per step)
+ *  so for the SAME audio cadence we need bpm = mainStep * 4 / stepUnit:
+ *
+ *    main-step bpm 120 + stepUnit 16 → quarter bpm 30
+ *      sequencer stepSec = 240 / (30 * 16) = 0.5 ✓
+ *    main-step bpm 120 + stepUnit 8  → quarter bpm 60
+ *      sequencer stepSec = 240 / (60 * 8) = 0.5 ✓ (an eighth at this BPM)
+ */
+function quarterBpmFromMainStep(mainStepBpm: number, stepUnit: number): number {
+  return mainStepBpm * 4 / stepUnit;
 }
