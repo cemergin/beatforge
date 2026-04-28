@@ -1,7 +1,9 @@
-import { Suspense, lazy, useCallback, useEffect, useRef, useState } from 'react';
+import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { SoundEngine } from './audio/runtime/sound-engine';
 import { Practice } from './modes/Practice/Practice';
 import type { KitId, Pattern } from './patterns/types';
+import { SessionProvider, useSession } from './modules/session';
+import { PATTERNS } from './patterns/seed';
 
 // Library + Studio + Sound are split into their own chunks. Practice
 // is the landing tab and stays in the main bundle.
@@ -249,6 +251,17 @@ export default function App() {
     setTab('studio');
   }, [engine]);
 
+  // Initial pattern for the session — derived from the current patternId
+  // at provider mount. The ModeShell child reconciles further patternId
+  // changes via session.loadPattern.
+  const initialPatternMemo = useMemo(
+    () => patternById(patternId) ?? PATTERNS[0],
+    // patternId is intentionally read once at provider construction;
+    // subsequent patternId changes go through ModeShell's bridge effect.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  );
+
   return (
     <div className="bf-root" data-theme={theme}>
       <header className="bf-top">
@@ -316,6 +329,66 @@ export default function App() {
         </div>
       </header>
 
+      <SessionProvider engine={engine} initialPattern={initialPatternMemo}>
+        <ModeShell
+          tab={tab}
+          engine={engine}
+          patternId={patternId}
+          setPatternId={setPatternId}
+          initialStudioPattern={initialStudioPattern}
+          setInitialStudioPattern={setInitialStudioPattern}
+          initialSoundPatternId={initialSoundPatternId}
+          setInitialSoundPatternId={setInitialSoundPatternId}
+          setTab={setTab}
+          loadInPractice={loadInPractice}
+          openInStudio={openInStudio}
+          refreshUserCache={refreshUserCache}
+        />
+      </SessionProvider>
+      <UpdateBanner />
+    </div>
+  );
+}
+
+interface ModeShellProps {
+  tab: Tab;
+  engine: SoundEngine;
+  patternId: string;
+  setPatternId: (id: string) => void;
+  initialStudioPattern: Pattern | null;
+  setInitialStudioPattern: (p: Pattern | null) => void;
+  initialSoundPatternId: string | null;
+  setInitialSoundPatternId: (id: string | null) => void;
+  setTab: (t: Tab) => void;
+  loadInPractice: (id: string) => void;
+  openInStudio: (p: Pattern) => void;
+  refreshUserCache: () => Promise<void>;
+}
+
+/** Bridges App-level patternId ↔ session.pattern. When patternId changes
+ *  externally (URL nav, Library handoff), call session.loadPattern so
+ *  the session sees the new pattern. Sticky edits within session.pattern
+ *  flow back via session.setPattern — patternId tracks "what was last
+ *  loaded" while session.pattern tracks "what's playing right now,
+ *  including in-flight edits." */
+function ModeShell({
+  tab, engine, patternId, setPatternId,
+  initialStudioPattern, setInitialStudioPattern,
+  initialSoundPatternId, setInitialSoundPatternId,
+  setTab, loadInPractice, openInStudio, refreshUserCache,
+}: ModeShellProps) {
+  const session = useSession();
+  // patternId → session.loadPattern when they diverge. Keeps Library
+  // handoffs and URL nav as the explicit "load new" trigger; session
+  // is the runtime source for the rest.
+  useEffect(() => {
+    if (session.pattern.id === patternId) return;
+    const p = patternById(patternId);
+    if (p) session.loadPattern(p);
+  }, [patternId, session]);
+
+  return (
+    <>
       {tab === 'practice' && (
         <Practice
           engine={engine}
@@ -359,7 +432,6 @@ export default function App() {
           <PatternsSandbox engine={engine} />
         </Suspense>
       )}
-      <UpdateBanner />
-    </div>
+    </>
   );
 }
