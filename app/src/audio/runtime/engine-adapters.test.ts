@@ -63,8 +63,16 @@ function fakeEngine() {
     set: masterGainSet,
     dispose: () => {},
   };
+  const drySet = vi.fn();
+  const dryModule = {
+    input: null, output: null,
+    params: [{ name: 'value' as const, kind: 'continuous' as const, default: 0.85 }],
+    set: drySet,
+    dispose: () => {},
+  };
   const calls = {
     masterGainSet,
+    drySet,
     reverbSet,
     delaySet,
     applyChannelParams: vi.fn(),
@@ -73,6 +81,7 @@ function fakeEngine() {
   };
   const engine = {
     getMasterGain: () => masterGainModule,
+    getDry: () => dryModule,
     getReverbFx: () => reverbFx,
     getDelayFx: () => delayFx,
     applyChannelParams: calls.applyChannelParams,
@@ -126,6 +135,7 @@ describe('registerEngineMaster — direct module wiring', () => {
   it('skips registration when getMasterGain / getReverbFx / getDelayFx return null', () => {
     const engine = {
       getMasterGain: () => null,
+      getDry: () => null,
       getReverbFx: () => null,
       getDelayFx: () => null,
     } as unknown as SoundEngine;

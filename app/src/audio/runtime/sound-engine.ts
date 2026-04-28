@@ -54,6 +54,11 @@ export class SoundEngine {
   // ── Audio graph ─────────────────────────────────────────────────
   private ctx: AudioContext | null = null;
   private master: GainNode | null = null;
+  /** Dry-signal gain — sits between the channel strips and `master`.
+   *  Lets the user set the dry/wet balance of the global mix without
+   *  touching the post-everything `master.gain`. Wrapped as
+   *  ControllableModule and registered at `master.dry`. */
+  private dry: GainNode | null = null;
   private analyser: AnalyserNode | null = null;
   private revBus: GainNode | null = null;
   private dlyBus: GainNode | null = null;
@@ -64,6 +69,7 @@ export class SoundEngine {
    *  interface every other audio unit uses (reverb, delay, channel
    *  knobs, voice machine knobs). */
   private masterGainModule: ControllableModule | null = null;
+  private dryModule: ControllableModule | null = null;
   private strips: ChannelStrip[] = [];
   private ctxInitPromise: Promise<void> | null = null;
 
@@ -165,15 +171,49 @@ export class SoundEngine {
     const reverbFx = createReverb(ctx, { wet: 0.5, size: 1.8, decay: 2.2 });
     const delayFx  = createDelayFx(ctx, { wet: 0.5, time: 0.25, feedback: 0.35 });
 
+    // Damping on the wet returns — high-shelf cuts ultrasonic noise
+    // (anything above ~16 kHz in the FX tail) and low-shelf cuts
+    // sub-30 Hz energy that just eats headroom on small monitors.
+    // Inserted between fx output and master so they shape returns
+    // only, leaving the dry path full-band.
+    const reverbHfDamp = makeShelf(ctx, 'highshelf', 16_000, -8);
+    const reverbLfDamp = makeShelf(ctx, 'lowshelf',     30, -12);
+    const delayHfDamp  = makeShelf(ctx, 'highshelf', 16_000, -8);
+    const delayLfDamp  = makeShelf(ctx, 'lowshelf',     30, -12);
+
     if (reverbFx.input)  revBus.connect(reverbFx.input);
-    if (reverbFx.output) reverbFx.output.connect(master);
+    if (reverbFx.output) reverbFx.output.connect(reverbHfDamp).connect(reverbLfDamp).connect(master);
     if (delayFx.input)   dlyBus.connect(delayFx.input);
-    if (delayFx.output)  delayFx.output.connect(master);
+    if (delayFx.output)  delayFx.output.connect(delayHfDamp).connect(delayLfDamp).connect(master);
+
+    // Dry-signal gain — channel strips connect here instead of
+    // master directly, so DRY is independent of the wet returns.
+    const dry = ctx.createGain();
+    dry.gain.value = 0.85;
+    dry.connect(master);
 
     const strips: ChannelStrip[] = [];
     for (let i = 0; i < NUM_CHANNELS; i++) {
-      strips.push(new ChannelStrip(ctx, master, revBus, dlyBus, buildColorFxModule));
+      strips.push(new ChannelStrip(ctx, dry, revBus, dlyBus, buildColorFxModule));
     }
+
+    const dryModule: ControllableModule = {
+      input: dry,
+      output: dry,
+      params: [
+        { name: 'value', kind: 'continuous', min: 0, max: 1, default: 0.85, unit: '' },
+      ],
+      set(name, value, opts) {
+        if (name !== 'value' || typeof value !== 'number') return;
+        const when = opts?.when ?? ctx.currentTime;
+        const ramp = opts?.ramp ?? 0.015;
+        const v = Math.max(0, Math.min(1, value));
+        dry.gain.cancelScheduledValues(when);
+        dry.gain.setValueAtTime(dry.gain.value, when);
+        dry.gain.linearRampToValueAtTime(v, when + ramp);
+      },
+      dispose: () => {},
+    };
 
     // Wrap master GainNode as a ControllableModule so the router can
     // ramp it through the same .set('value', v) call every other knob
@@ -199,6 +239,8 @@ export class SoundEngine {
     this.ctx = ctx;
     this.master = master;
     this.masterGainModule = masterGainModule;
+    this.dry = dry;
+    this.dryModule = dryModule;
     this.analyser = analyser;
     this.revBus = revBus;
     this.dlyBus = dlyBus;
@@ -260,11 +302,11 @@ export class SoundEngine {
 
   /** Grow or shrink the strips array AND the sequencer's row count. */
   private ensureStripCount(n: number): void {
-    if (!this.ctx || !this.master) return;
+    if (!this.ctx || !this.dry) return;
     const target = Math.max(0, Math.floor(n));
     while (this.strips.length < target) {
       this.strips.push(new ChannelStrip(
-        this.ctx, this.master, this.revBus, this.dlyBus, buildColorFxModule,
+        this.ctx, this.dry, this.revBus, this.dlyBus, buildColorFxModule,
       ));
     }
     while (this.strips.length > target) {
@@ -329,6 +371,11 @@ export class SoundEngine {
   /** Direct access to the master gain's ControllableModule. The
    *  router targets it at `master.gain` for ParamEvent dispatch. */
   getMasterGain(): ControllableModule | null { return this.masterGainModule; }
+
+  /** Dry-bus gain — channels feed this; the wet returns sum into the
+   *  master separately. Lets users dial DRY independently of the
+   *  reverb/delay return levels. Routed at `master.dry`. */
+  getDry(): ControllableModule | null { return this.dryModule; }
 
   // ── Sequencer-delegating setters ───────────────────────────────
 
@@ -630,9 +677,12 @@ export class SoundEngine {
     try { this.reverbFx?.dispose(); } catch { /* idempotent */ }
     try { this.delayFx?.dispose();  } catch { /* idempotent */ }
     try { this.masterGainModule?.dispose(); } catch { /* idempotent */ }
+    try { this.dryModule?.dispose(); } catch { /* idempotent */ }
     if (this.ctx && this.ctx.state !== 'closed') void this.ctx.close();
     this.ctx = null;
     this.master = null;
+    this.dry = null;
+    this.dryModule = null;
     this.masterGainModule = null;
     this.analyser = null;
     this.revBus = null;
@@ -648,4 +698,20 @@ export class SoundEngine {
  *  works in quarter-BPM. Conversion: quarterBpm = naturalBpm * 4 / denom. */
 function quarterFromNatural(naturalBpm: number, denom: number): number {
   return (naturalBpm * 4) / Math.max(1, denom);
+}
+
+/** Inline helper: build a shelf filter for the wet returns. Used to
+ *  trim ultrasonic noise (>~16 kHz) and subsonic energy (<30 Hz) so
+ *  reverb / delay tails don't muddy the low end or hiss in the highs. */
+function makeShelf(
+  ctx: AudioContext,
+  type: 'highshelf' | 'lowshelf',
+  frequency: number,
+  gainDb: number,
+): BiquadFilterNode {
+  const f = ctx.createBiquadFilter();
+  f.type = type;
+  f.frequency.value = frequency;
+  f.gain.value = gainDb;
+  return f;
 }

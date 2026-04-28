@@ -30,10 +30,10 @@ import {
   type UserPattern,
 } from '../../lib/db';
 import type { Genre, RegionId } from '../../patterns/types';
+import { getMasterVolume, setMasterVolume as persistMasterVolume } from '../../lib/storage';
 import { SpectrumAnalyzer } from './SpectrumAnalyzer';
 import { Knob } from './Knob';
 import { StepGrid } from '../../components/StepGrid';
-import { TransportBar } from '../../components/TransportBar';
 import { Disclosure } from '../../components/Disclosure';
 import { BeatDots } from '../../components/BeatDots';
 import { CircularGrid } from '../../components/CircularGrid';
@@ -525,7 +525,19 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
   const [swing, setSwing] = useState(0.5);
   const [strongAmp, setStrongAmp] = useState(1.0);
   const [weakAmp, setWeakAmp] = useState(0.55);
-  const [masterVolume, setMasterVolume] = useState(0.85);
+  // Two-axis master mix:
+  //   masterVolume → master.gain (post-everything output level, top-of-Studio slider)
+  //   dryLevel     → master.dry  (dry-bus gain — independent of wet returns)
+  // masterVolume persists via lib/storage so a user's hardware-level
+  // preference rides across sessions. dryLevel stays local to the
+  // session — it's an artistic mix choice that belongs with the
+  // pattern, not the user.
+  const [masterVolume, setMasterVolumeState] = useState(() => getMasterVolume());
+  const setMasterVolume = useCallback((v: number) => {
+    setMasterVolumeState(v);
+    persistMasterVolume(v);
+  }, []);
+  const [dryLevel, setDryLevel] = useState(0.85);
   // Master wet defaults audible so the moment a per-channel send goes
   // up, the user hears the master FX. User can dial dry.
   const [reverbWet, setReverbWet] = useState(0.5);
@@ -609,6 +621,9 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
   useEffect(() => {
     engine.getEventBus().emit({ type: 'param', target: 'master.gain.value', value: masterVolume });
   }, [engine, masterVolume]);
+  useEffect(() => {
+    engine.getEventBus().emit({ type: 'param', target: 'master.dry.value', value: dryLevel });
+  }, [engine, dryLevel]);
   useEffect(() => {
     engine.getEventBus().emit({ type: 'param', target: 'master.reverb.wet', value: reverbWet });
   }, [engine, reverbWet]);
@@ -1153,6 +1168,28 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
           <h1 className="bf-sound-title">Studio</h1>
           <button
             type="button"
+            className={`bf-transport-play bf-transport-play-hero ${isPlaying ? 'on' : ''}`}
+            onClick={() => void onPlayToggle()}
+            aria-label={isPlaying ? 'Stop' : 'Play'}
+            title={isPlaying ? 'Stop (Space)' : 'Play (Space)'}
+          >
+            {isPlaying ? '■' : '▶'}
+          </button>
+          <div className="bf-sound-volume" title="Master volume — post-everything output level">
+            <span className="bf-sound-volume-ico" aria-hidden="true">
+              {masterVolume === 0 ? '🔇' : masterVolume < 0.35 ? '🔈' : masterVolume < 0.7 ? '🔉' : '🔊'}
+            </span>
+            <input
+              type="range"
+              min={0}
+              max={100}
+              value={Math.round(masterVolume * 100)}
+              onChange={(e) => setMasterVolume(Number(e.target.value) / 100)}
+              aria-label="Master volume"
+            />
+          </div>
+          <button
+            type="button"
             className={`bf-spectrum-toggle ${showSpectrum ? 'on' : ''}`}
             onClick={() => setShowSpectrum((v) => !v)}
             title="Show / hide the spectrum readout"
@@ -1161,6 +1198,92 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
             {showSpectrum ? 'hide spectrum' : 'show spectrum'}
           </button>
         </div>
+
+        {/* Top control bar — most-touched controls live here so they're
+            always reachable without scrolling: BPM, meter, grouping,
+            count-in, swing. Save / metadata / mix sliders sit below. */}
+        <div className="bf-sound-topbar" role="toolbar" aria-label="Studio transport">
+          <div className="bf-transport-bpm">
+            <label className="bf-transport-bpm-label" htmlFor="bf-sound-bpm">BPM</label>
+            <input
+              id="bf-sound-bpm"
+              type="number" inputMode="numeric"
+              min={30} max={300}
+              value={bpm}
+              onChange={(e) => {
+                const n = Number(e.target.value);
+                if (Number.isFinite(n)) setBpm(Math.max(30, Math.min(300, Math.round(n))));
+              }}
+            />
+          </div>
+          <button type="button" className="bf-transport-tap" onClick={onTap} title="Tap tempo (T)">tap</button>
+          {currentBar > 0 && (
+            <span className="bf-transport-bar-counter" aria-label="Current bar">bar {currentBar}</span>
+          )}
+          <select
+            className="bf-meter-select"
+            value={meter.label}
+            aria-label="Meter"
+            onChange={(e) => {
+              const next = SOUND_METERS.find((m) => m.label === e.target.value);
+              if (next) onMeterChange(next);
+            }}
+          >
+            {SOUND_METERS.map((m) => (
+              <option key={m.label} value={m.label}>{m.label} ({m.grouping.join('+')})</option>
+            ))}
+          </select>
+          <div className="bf-sound-grouping-picker" role="toolbar" aria-label="Grouping">
+            <span className="bf-sound-grouping-label">grouping</span>
+            {groupingOptions.length > 1 && groupingOptions.map((g, i) => {
+              const isCurrent = g.join('+') === grouping.join('+');
+              return (
+                <button
+                  key={i}
+                  type="button"
+                  className={`bf-sound-grouping-btn ${isCurrent ? 'on' : ''}`}
+                  onClick={() => onGroupingChange(g)}
+                  title={`Apply ${g.join('+')} grouping`}
+                >
+                  {g.join('+')}
+                </button>
+              );
+            })}
+            <GroupingTextEditor
+              key={grouping.join(',')}
+              initialText={grouping.join(',')}
+              stepsPerBar={stepsPerBar}
+              onApply={onGroupingTextApply}
+            />
+          </div>
+          <div className="bf-feel-control">
+            <span className="bf-feel-label">count-in</span>
+            <div className="bf-feel-pills">
+              {[0, 1, 2, 4].map((n) => (
+                <button
+                  key={n}
+                  type="button"
+                  className={`bf-feel-pill ${countInBars === n ? 'on' : ''}`}
+                  onClick={() => setCountInBars(n)}
+                >
+                  {n === 0 ? 'off' : `${n}b`}
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className={`bf-feel-control ${meter.stepUnit === 4 ? 'disabled' : ''}`}>
+            <span className="bf-feel-label">swing {Math.round(swing * 100)}%</span>
+            <input
+              type="range" min={0.5} max={0.67} step={0.01}
+              value={swing}
+              disabled={meter.stepUnit === 4}
+              onChange={(e) => setSwing(Number(e.target.value))}
+              aria-label="Swing"
+            />
+          </div>
+          <button type="button" className="bf-sound-clear-btn" onClick={onClear} title="Clear all steps">clear</button>
+        </div>
+
         <p className="bf-sound-sub">
           Lay it down: sequence the steps, shape each voice. <kbd>Space</kbd>
           plays. <kbd>A</kbd>–<kbd>G</kbd> auditions (<kbd>Q</kbd>–<kbd>T</kbd>
@@ -1382,89 +1505,7 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
           </div>
         </Disclosure>
 
-        <TransportBar
-          isPlaying={isPlaying}
-          bpm={bpm}
-          onPlayToggle={() => void onPlayToggle()}
-          onBpmChange={setBpm}
-          onClear={onClear}
-          onTap={onTap}
-          barCounter={currentBar}
-          rightSlot={
-            <select
-              className="bf-meter-select"
-              value={meter.label}
-              aria-label="Meter"
-              onChange={(e) => {
-                const next = SOUND_METERS.find((m) => m.label === e.target.value);
-                if (next) onMeterChange(next);
-              }}
-            >
-              {SOUND_METERS.map((m) => (
-                <option key={m.label} value={m.label}>
-                  {m.label} ({m.grouping.join('+')})
-                </option>
-              ))}
-            </select>
-          }
-        />
-        <div className="bf-sound-grouping-picker" role="toolbar" aria-label="Grouping">
-          <span className="bf-sound-grouping-label">grouping</span>
-          {groupingOptions.length > 1 && groupingOptions.map((g, i) => {
-            const isCurrent = g.join('+') === grouping.join('+');
-            return (
-              <button
-                key={i}
-                type="button"
-                className={`bf-sound-grouping-btn ${isCurrent ? 'on' : ''}`}
-                onClick={() => onGroupingChange(g)}
-                title={`Apply ${g.join('+')} grouping`}
-              >
-                {g.join('+')}
-              </button>
-            );
-          })}
-          <GroupingTextEditor
-            key={grouping.join(',')}
-            initialText={grouping.join(',')}
-            stepsPerBar={stepsPerBar}
-            onApply={onGroupingTextApply}
-          />
-        </div>
-
         <div className="bf-sound-feelbar">
-          <div className="bf-feel-control">
-            <span className="bf-feel-label">count-in</span>
-            <div className="bf-feel-pills">
-              {[0, 1, 2, 4].map((n) => (
-                <button
-                  key={n}
-                  type="button"
-                  className={`bf-feel-pill ${countInBars === n ? 'on' : ''}`}
-                  onClick={() => setCountInBars(n)}
-                >
-                  {n === 0 ? 'off' : `${n}b`}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className={`bf-feel-control ${meter.stepUnit === 4 ? 'disabled' : ''}`}>
-            <span className="bf-feel-label">
-              swing {Math.round(swing * 100)}%
-            </span>
-            <input
-              type="range"
-              min={0.5}
-              max={0.67}
-              step={0.01}
-              value={swing}
-              disabled={meter.stepUnit === 4}
-              onChange={(e) => setSwing(Number(e.target.value))}
-              aria-label="Swing"
-            />
-          </div>
-
           <div className="bf-feel-control">
             <span className="bf-feel-label">
               strong {Math.round(strongAmp * 100)}%
@@ -1499,16 +1540,16 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
 
           <div className="bf-feel-control">
             <span className="bf-feel-label">
-              vol {Math.round(masterVolume * 100)}%
+              dry {Math.round(dryLevel * 100)}%
             </span>
             <input
               type="range"
               min={0}
               max={1}
               step={0.01}
-              value={masterVolume}
-              onChange={(e) => setMasterVolume(Number(e.target.value))}
-              aria-label="Master volume"
+              value={dryLevel}
+              onChange={(e) => setDryLevel(Number(e.target.value))}
+              aria-label="Dry-bus level"
             />
           </div>
 

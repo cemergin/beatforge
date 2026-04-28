@@ -55,6 +55,8 @@ export function registerEngineMaster(
   const offs: Array<() => void> = [];
   const masterGain = engine.getMasterGain();
   if (masterGain) offs.push(router.registerModule('master.gain', masterGain));
+  const dry = engine.getDry();
+  if (dry)        offs.push(router.registerModule('master.dry', dry));
   const reverb = engine.getReverbFx();
   if (reverb)     offs.push(router.registerModule('master.reverb', reverb));
   const delay = engine.getDelayFx();

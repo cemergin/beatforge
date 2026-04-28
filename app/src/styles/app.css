@@ -1491,8 +1491,26 @@ input[type="number"] { font: inherit; color: inherit; }
 }
 
 .bf-sound-title-row {
-  display: flex; align-items: baseline; gap: var(--sp-3);
+  display: flex; align-items: center; gap: var(--sp-3);
+  flex-wrap: wrap;
 }
+/* Master volume sits next to the Studio title — same shape as
+   Practice's .bf-volume so the control reads as identical across
+   modes. Width-capped so the title still owns the row visually. */
+.bf-sound-volume {
+  display: flex; align-items: center; gap: var(--sp-3);
+  padding: var(--sp-2) var(--sp-3);
+  background: var(--bg-2);
+  border: var(--bw-1) solid var(--line);
+  border-radius: var(--r-md);
+  margin-left: auto;
+  min-width: 220px;
+  max-width: 320px;
+}
+.bf-sound-volume-ico {
+  font-size: var(--fs-md); line-height: 1; flex-shrink: 0; width: 18px; text-align: center;
+}
+.bf-sound-volume input[type="range"] { flex: 1; accent-color: var(--accent); }
 .bf-spectrum-toggle {
   appearance: none; border: 1px solid var(--border);
   background: transparent; color: var(--muted);
@@ -2905,6 +2923,38 @@ textarea.bf-sound-meta-input {
 .bf-view-shape-circle {
   width: 12px; height: 12px;
   border-radius: 50%;
+}
+
+/* Studio top control bar — most-touched controls (BPM, meter,
+   grouping, count-in, swing, clear) live in one wrapping flex row
+   right under the title. Keeps the daily-driver controls reachable
+   without scrolling past ensemble/pattern/save chrome. */
+.bf-sound-topbar {
+  display: flex; flex-wrap: wrap; align-items: center;
+  gap: var(--sp-2) var(--sp-3);
+  padding: var(--sp-2) 0;
+  border-top: var(--bw-1) dashed var(--line);
+  border-bottom: var(--bw-1) dashed var(--line);
+}
+.bf-transport-play-hero {
+  /* Slightly bigger than the in-row play button — it's the primary
+     CTA when the page first loads. */
+  font-size: 18px;
+  padding: 6px 14px;
+}
+.bf-sound-clear-btn {
+  font-family: var(--mono); font-size: var(--fs-micro);
+  letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 5px 10px;
+  border: var(--bw-1) solid var(--line);
+  border-radius: var(--r-xs);
+  background: var(--bg);
+  color: var(--muted);
+  cursor: pointer;
+}
+.bf-sound-clear-btn:hover { color: var(--fg); border-color: var(--accent); }
+.bf-sound-topbar .bf-sound-grouping-picker {
+  border: none; padding: 0;
 }
 
 /* Grouping permutation picker — sits under the transport, only
