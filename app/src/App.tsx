@@ -5,12 +5,12 @@ import type { KitId, Pattern } from './patterns/types';
 import { SessionProvider, useSession } from './modules/session';
 import { PATTERNS } from './patterns/seed';
 
-// Library + Sound are split into their own chunks. Practice is the
-// landing tab and stays in the main bundle. Studio was retired — its
-// pattern-saving + metadata-editing features will live on Sound.
+// Library + Studio are split into their own chunks. Practice is the
+// landing tab and stays in the main bundle. The Studio component
+// is the renamed Sound page; pattern + metadata + sound design all
+// live in one editor on top of the shared session.
 const Library = lazy(() => import('./modes/Library/Library').then((m) => ({ default: m.Library })));
 const Sound = lazy(() => import('./modes/Sound/Sound').then((m) => ({ default: m.Sound })));
-const PatternsSandbox = lazy(() => import('./modes/_Patterns/PatternsSandbox').then((m) => ({ default: m.PatternsSandbox })));
 import { patternById, registerPatternSource } from './patterns/seed';
 import { deserializePattern } from './patterns/serialize';
 import { loadAllSafe } from './lib/db';
@@ -60,8 +60,6 @@ export default function App() {
     // Old 'sound' setting → studio (the Sound page was renamed to
     // Studio; its features ported in place).
     if (t === 'sound') return 'studio';
-    // _patterns is dev-only — never restore it in production builds.
-    if (t === '_patterns' && DEV_MODE) return '_patterns';
     return 'practice';
   });
 
@@ -302,16 +300,6 @@ export default function App() {
           >
             Studio
           </button>
-          {DEV_MODE && (
-            <button
-              className={`bf-chip ${tab === '_patterns' ? 'on' : 'ghost'}`}
-              onClick={() => switchTab('_patterns')}
-              type="button"
-              title="Dev-only: pattern migration sandbox"
-            >
-              _patterns
-            </button>
-          )}
         </nav>
         <div className="bf-topright">
           <div className="bf-theme-seg" role="group" aria-label="theme">
@@ -414,11 +402,6 @@ function ModeShell({
             initialSoundPatternId={initialSoundPatternId}
             onConsumedInitial={() => setInitialSoundPatternId(null)}
           />
-        </Suspense>
-      )}
-      {DEV_MODE && tab === '_patterns' && (
-        <Suspense fallback={<div className="bf-mode-loading">loading…</div>}>
-          <PatternsSandbox engine={engine} />
         </Suspense>
       )}
     </>

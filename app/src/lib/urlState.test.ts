@@ -30,9 +30,9 @@ describe('readUrlState', () => {
     expect(readUrlState('?tab=', opts).tab).toBeNull();
   });
 
-  it('_patterns is dev-mode only', () => {
-    expect(readUrlState('?tab=_patterns', opts).tab).toBeNull();
-    expect(readUrlState('?tab=_patterns', devOpts).tab).toBe('_patterns');
+  it('_midi is dev-mode only', () => {
+    expect(readUrlState('?tab=_midi', opts).tab).toBeNull();
+    expect(readUrlState('?tab=_midi', devOpts).tab).toBe('_midi');
   });
 
   it('returns valid pattern id when seed exists', () => {

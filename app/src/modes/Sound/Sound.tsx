@@ -320,15 +320,27 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
   // FX, level/pan/sends ride with the user across tabs. setChannels
   // accepts the same (Channel[] | (prev) => Channel[]) signature
   // existing handlers use; internally it forwards to session.
+  //
+  // sessionRef keeps setChannels' identity stable across renders so
+  // every per-knob useCallback that depends on it can leave its
+  // deps array clean. session.channels is read at call time (always
+  // fresh) via the ref, not via closure.
   const channels = session.channels;
+  // Mirror session into a ref via effect (React 19's purity lint
+  // forbids ref writes during render). The first call to
+  // setChannels before the effect runs will see the initial session
+  // — fine because both are the SessionProvider's first render.
+  const sessionRef = useRef(session);
+  useEffect(() => { sessionRef.current = session; }, [session]);
   const setChannels = useCallback(
     (updaterOrValue: Channel[] | ((prev: Channel[]) => Channel[])) => {
+      const cur = sessionRef.current;
       const next = typeof updaterOrValue === 'function'
-        ? updaterOrValue(session.channels.slice())
+        ? updaterOrValue(cur.channels.slice())
         : updaterOrValue;
-      session.setChannels(next);
+      cur.setChannels(next);
     },
-    [session],
+    [],
   );
   // Sequence seeded from session.pattern on mount so Practice→Sound
   // lands on the same beats. Hydration effect below keeps it in
@@ -885,7 +897,7 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
       effects: { ...c.effects, colorFx: { ...c.effects.colorFx } },
     })));
     setToast(`Kit: ${k.name}`);
-  }, []);
+  }, [setChannels]);
 
   const onDeleteSavedKit = useCallback(async (id: string) => {
     try {
@@ -963,7 +975,7 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
     engine.getEventBus().emit({
       type: 'param', target: `channel.${channelIdx}.machine.${knobId}`, value,
     });
-  }, [engine]);
+  }, [engine, setChannels]);
 
   const setDiscrete = useCallback((channelIdx: number, fieldId: string, value: string) => {
     setChannels((cs) => cs.map((c, i) => (
@@ -972,7 +984,7 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
     engine.getEventBus().emit({
       type: 'param', target: `channel.${channelIdx}.machine.${fieldId}`, value,
     });
-  }, [engine]);
+  }, [engine, setChannels]);
 
   const setMixer = useCallback(
     (channelIdx: number, field: 'level' | 'pan' | 'reverbSend' | 'delaySend', value: number) => {
@@ -985,7 +997,7 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
         type: 'param', target: `channel.${channelIdx}.${field}`, value,
       });
     },
-    [engine],
+    [engine, setChannels],
   );
 
   const swapArchetype = useCallback((channelIdx: number, id: VoiceArchetypeId) => {
@@ -995,11 +1007,11 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
     engine.getEventBus().emit({
       type: 'param', target: `channel.${channelIdx}.machine.archetype`, value: id,
     });
-  }, [engine]);
+  }, [engine, setChannels]);
 
   const setChannelLabel = useCallback((channelIdx: number, label: string) => {
     setChannels((cs) => cs.map((c, i) => (i === channelIdx ? { ...c, label } : c)));
-  }, []);
+  }, [setChannels]);
 
   // Per-channel polyrhythm: cycle that row's length through a fixed
   // ladder. n === stepsPerBar means "main rate" (no polyrhythm).
@@ -1026,7 +1038,7 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
     engine.getEventBus().emit({
       type: 'param', target: `channel.${channelIdx}.color.type`, value: type,
     });
-  }, [engine]);
+  }, [engine, setChannels]);
 
   // Update one parameter of the current colorFx. The cast is safe at
   // runtime because the caller knows the active type — we only ever
@@ -1043,7 +1055,7 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
         type: 'param', target: `channel.${channelIdx}.color.${field}`, value,
       });
     },
-    [engine],
+    [engine, setChannels],
   );
 
   const applyPreset = useCallback((channelIdx: number, presetId: string) => {
@@ -1066,7 +1078,7 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
       }
       return { ...c, machine: merged };
     }));
-  }, [engine]);
+  }, [engine, setChannels]);
 
   return (
     <main className="bf-sound-page">

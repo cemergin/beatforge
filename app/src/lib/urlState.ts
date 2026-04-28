@@ -1,7 +1,7 @@
 // URL → (tab, pattern) parser. Pure function — no window/DOM access
 // so it's testable against any search string.
 
-export type Tab = 'practice' | 'library' | 'studio' | '_patterns';
+export type Tab = 'practice' | 'library' | 'studio' | '_midi';
 
 export interface UrlState {
   tab: Tab | null;
@@ -13,7 +13,7 @@ interface ParseOpts {
    *  the short ?pattern= URL form). User-/shared-pattern ids fall
    *  through to the ?p= hash form. */
   seedExists: (id: string) => boolean;
-  /** Whether the dev-only `_patterns` tab is allowed in URLs. */
+  /** Whether dev-only tabs (e.g. _midi) are allowed in URLs. */
   devMode: boolean;
 }
 
@@ -30,8 +30,8 @@ export function readUrlState(search: string, opts: ParseOpts): UrlState {
     // The 'sound' tab was renamed to 'studio'. Old links land on
     // studio so URLs in the wild still work.
     tab = 'studio';
-  } else if (rawTab === '_patterns' && opts.devMode) {
-    tab = '_patterns';
+  } else if (rawTab === '_midi' && opts.devMode) {
+    tab = '_midi';
   }
   const rawPattern = params.get('pattern');
   const pattern = rawPattern && opts.seedExists(rawPattern) ? rawPattern : null;
