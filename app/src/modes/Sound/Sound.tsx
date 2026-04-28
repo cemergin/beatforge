@@ -343,7 +343,13 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
   const [sequence, setSequence] = useState<SoundSequence>(
     () => sequenceFromPattern(session.pattern),
   );
-  const [bpm, setBpm] = useState(110);
+  // BPM flows through the session — natural BPM (denominator-based)
+  // is the same convention Practice uses. session.bpm = 276 in
+  // Practice → Sound's BPM field reads 276 too. setBpm pushes to
+  // session, which converts to quarter-BPM internally and forwards
+  // to the engine via setNaturalBpm.
+  const bpm = session.bpm;
+  const setBpm = session.setBpm;
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentStep, setCurrentStep] = useState(-1);
   const [currentBar, setCurrentBar] = useState(0);
@@ -541,11 +547,12 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
     return () => { for (const off of offs) off(); };
   }, [router, engine, channelCount]);
 
-  // Push sequence + BPM + stepUnit + grouping + feel/master to the
-  // engine. Each useEffect tracks a single state slice so we don't
-  // resend everything on a single-knob tweak.
+  // Push sequence + stepUnit + grouping + feel/master to the engine.
+  // Each useEffect tracks a single state slice so we don't resend
+  // everything on a single-knob tweak. BPM pushed by SessionProvider
+  // — Sound's `bpm` is just session.bpm so a separate effect would
+  // duplicate work.
   useEffect(() => { engine.setSequence(sequence); }, [engine, sequence]);
-  useEffect(() => { engine.setBpm(bpm); }, [engine, bpm]);
   useEffect(() => { engine.setStepUnit(meter.stepUnit); }, [engine, meter.stepUnit]);
   useEffect(() => { engine.setStepsPerBar(stepsPerBar); }, [engine, stepsPerBar]);
   useEffect(() => { engine.setGrouping(grouping); }, [engine, grouping]);
@@ -710,6 +717,8 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
     const avgInterval = sum / (taps.length - 1);
     const candidate = Math.round(60000 / avgInterval);
     if (candidate >= 30 && candidate <= 300) setBpm(candidate);
+    // setBpm closes over the live session — safe to omit from deps.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Save / load / delete handlers. Each `save` either creates a new
@@ -812,6 +821,8 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
     setDelayTime(p.delayTime ?? 0.25);
     setDelayFeedback(p.delayFeedback ?? 0.35);
     setToast(`Loaded ${p.name}`);
+    // setBpm + many setters close over engine/session; safe to omit.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [engine, isPlaying]);
 
   // Cross-tab handoff — when Practice (or any other surface) routes
