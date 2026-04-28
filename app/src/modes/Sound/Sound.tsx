@@ -710,9 +710,7 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
     const avgInterval = sum / (taps.length - 1);
     const candidate = Math.round(60000 / avgInterval);
     if (candidate >= 30 && candidate <= 300) setBpm(candidate);
-    // setBpm closes over the live session — safe to omit from deps.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [setBpm]);
 
   // Save / load / delete handlers. Each `save` either creates a new
   // pattern (no savedId) or updates the current one (preserves
