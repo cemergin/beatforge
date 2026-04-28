@@ -2677,6 +2677,20 @@ input[type="number"] { font: inherit; color: inherit; }
   border-color: var(--accent);
 }
 
+/* Compact meter picker — collapses 8 inline pills into a single
+   dropdown so the transport bar isn't 8 chips wide. */
+.bf-meter-select {
+  font-family: var(--mono); font-size: var(--fs-micro);
+  letter-spacing: 0.06em;
+  padding: 4px 8px;
+  border-radius: var(--r-xs);
+  border: var(--bw-1) solid var(--line);
+  background: var(--bg);
+  color: var(--fg);
+  cursor: pointer;
+}
+.bf-meter-select:focus { outline: none; border-color: var(--accent); }
+
 /* Feel + master bar — count-in / swing / accents / vol / rev / dly */
 .bf-sound-feelbar {
   display: flex; flex-wrap: wrap; align-items: center;

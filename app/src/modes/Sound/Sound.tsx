@@ -1387,19 +1387,21 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
           onTap={onTap}
           barCounter={currentBar}
           rightSlot={
-            <div className="bf-meter-pills" aria-label="Meter">
+            <select
+              className="bf-meter-select"
+              value={meter.label}
+              aria-label="Meter"
+              onChange={(e) => {
+                const next = SOUND_METERS.find((m) => m.label === e.target.value);
+                if (next) onMeterChange(next);
+              }}
+            >
               {SOUND_METERS.map((m) => (
-                <button
-                  key={m.label}
-                  type="button"
-                  className={`bf-meter-pill ${m.label === meter.label ? 'on' : ''}`}
-                  onClick={() => onMeterChange(m)}
-                  title={`${m.label} — grouping ${m.grouping.join('+')}`}
-                >
-                  {m.label}
-                </button>
+                <option key={m.label} value={m.label}>
+                  {m.label} ({m.grouping.join('+')})
+                </option>
               ))}
-            </div>
+            </select>
           }
         />
         <div className="bf-sound-grouping-picker" role="toolbar" aria-label="Grouping">
@@ -1537,64 +1539,66 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
           </div>
         </div>
 
-        <div className="bf-sound-fxbar">
-          <span className="bf-fx-section">reverb</span>
+        <Disclosure summary={<span>fx details</span>}>
+          <div className="bf-sound-fxbar">
+            <span className="bf-fx-section">reverb</span>
 
-          <div className="bf-feel-control">
-            <span className="bf-feel-label">size {reverbSize.toFixed(1)}s</span>
-            <input
-              type="range"
-              min={0.3}
-              max={4}
-              step={0.05}
-              value={reverbSize}
-              onChange={(e) => setReverbSize(Number(e.target.value))}
-              aria-label="Reverb size (seconds)"
-            />
+            <div className="bf-feel-control">
+              <span className="bf-feel-label">size {reverbSize.toFixed(1)}s</span>
+              <input
+                type="range"
+                min={0.3}
+                max={4}
+                step={0.05}
+                value={reverbSize}
+                onChange={(e) => setReverbSize(Number(e.target.value))}
+                aria-label="Reverb size (seconds)"
+              />
+            </div>
+
+            <div className="bf-feel-control">
+              <span className="bf-feel-label">decay {reverbDecay.toFixed(1)}</span>
+              <input
+                type="range"
+                min={1}
+                max={6}
+                step={0.1}
+                value={reverbDecay}
+                onChange={(e) => setReverbDecay(Number(e.target.value))}
+                aria-label="Reverb decay shape"
+              />
+            </div>
+
+            <span className="bf-feel-divider" />
+            <span className="bf-fx-section">delay</span>
+
+            <div className="bf-feel-control">
+              <span className="bf-feel-label">time {Math.round(delayTime * 1000)}ms</span>
+              <input
+                type="range"
+                min={0.02}
+                max={1.5}
+                step={0.01}
+                value={delayTime}
+                onChange={(e) => setDelayTime(Number(e.target.value))}
+                aria-label="Delay time (seconds)"
+              />
+            </div>
+
+            <div className="bf-feel-control">
+              <span className="bf-feel-label">fb {Math.round(delayFeedback * 100)}%</span>
+              <input
+                type="range"
+                min={0}
+                max={0.7}
+                step={0.01}
+                value={delayFeedback}
+                onChange={(e) => setDelayFeedback(Number(e.target.value))}
+                aria-label="Delay feedback"
+              />
+            </div>
           </div>
-
-          <div className="bf-feel-control">
-            <span className="bf-feel-label">decay {reverbDecay.toFixed(1)}</span>
-            <input
-              type="range"
-              min={1}
-              max={6}
-              step={0.1}
-              value={reverbDecay}
-              onChange={(e) => setReverbDecay(Number(e.target.value))}
-              aria-label="Reverb decay shape"
-            />
-          </div>
-
-          <span className="bf-feel-divider" />
-          <span className="bf-fx-section">delay</span>
-
-          <div className="bf-feel-control">
-            <span className="bf-feel-label">time {Math.round(delayTime * 1000)}ms</span>
-            <input
-              type="range"
-              min={0.02}
-              max={1.5}
-              step={0.01}
-              value={delayTime}
-              onChange={(e) => setDelayTime(Number(e.target.value))}
-              aria-label="Delay time (seconds)"
-            />
-          </div>
-
-          <div className="bf-feel-control">
-            <span className="bf-feel-label">fb {Math.round(delayFeedback * 100)}%</span>
-            <input
-              type="range"
-              min={0}
-              max={0.7}
-              step={0.01}
-              value={delayFeedback}
-              onChange={(e) => setDelayFeedback(Number(e.target.value))}
-              aria-label="Delay feedback"
-            />
-          </div>
-        </div>
+        </Disclosure>
 
         <div className="bf-sound-beatdots-wrap">
           <BeatDots
