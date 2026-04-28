@@ -427,6 +427,7 @@ function ModeShell({
       {tab === 'sound' && (
         <Suspense fallback={<div className="bf-mode-loading">loading sound lab…</div>}>
           <Sound
+            engine={engine}
             initialSoundPatternId={initialSoundPatternId}
             onConsumedInitial={() => setInitialSoundPatternId(null)}
           />

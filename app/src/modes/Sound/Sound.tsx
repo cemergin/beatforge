@@ -6,6 +6,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { SoundEngine, type SoundSequence, type SoundStep } from '../../audio/runtime/sound-engine';
 import { registerEngineChannel, registerEngineMaster } from '../../audio/runtime/engine-adapters';
 import { makeRouter } from '../../modules/router';
+import { useSession } from '../../modules/session';
+import { trackMeta } from '../../patterns/types';
 import {
   VOICE_MACHINES,
   type VoiceArchetypeId,
@@ -188,24 +190,12 @@ const SOUND_METERS: MeterPreset[] = [
   { label: '11/8', grouping: [2, 2, 3, 2, 2], stepUnit: 8 },
   { label: '12/8', grouping: [3, 3, 3, 3],    stepUnit: 8 },
 ];
-const DEFAULT_METER = SOUND_METERS[0];
-
 const sumGroup = (g: number[]): number => g.reduce((a, b) => a + b, 0);
 
 function emptySequence(stepsPerBar: number): SoundSequence {
   return Array.from({ length: NUM_CHANNELS }, () =>
     Array<SoundStep>(stepsPerBar).fill(0),
   );
-}
-
-// Friendly default — four-on-the-floor with backbeat snare and 8th-note
-// hats. Gives the page an alive sound on first load; clear button wipes it.
-function defaultSequence(): SoundSequence {
-  const seq = emptySequence(sumGroup(DEFAULT_METER.grouping));
-  for (const s of [0, 4, 8, 12]) seq[0][s] = 1;        // kick on the quarters
-  seq[1][4] = 2; seq[1][12] = 2;                        // snare backbeat (accented)
-  for (const s of [0, 2, 4, 6, 8, 10, 12, 14]) seq[2][s] = 1; // hat 8ths
-  return seq;
 }
 
 /** Resize each row to `newSteps` — truncate if shorter, pad with 0s
@@ -217,6 +207,63 @@ function resizeSequence(seq: SoundSequence, newSteps: number): SoundSequence {
     if (row.length > newSteps) return row.slice(0, newSteps);
     return [...row, ...Array<SoundStep>(newSteps - row.length).fill(0)];
   });
+}
+
+/** Translate session.pattern into the MeterPreset shape Sound's UI
+ *  uses. Falls back to a synthesized preset when the pattern's
+ *  grouping doesn't match any built-in. */
+function meterFromPattern(p: import('../../patterns/types').Pattern): MeterPreset {
+  const match = SOUND_METERS.find(
+    (m) => m.stepUnit === p.stepUnit && m.grouping.join(',') === p.grouping.join(','),
+  );
+  if (match) return match;
+  return {
+    label: p.timeSig,
+    grouping: p.grouping.slice(),
+    stepUnit: p.stepUnit as 4 | 8 | 16,
+  };
+}
+
+/** Translate session.pattern.tracks (voice-keyed) into Sound's
+ *  positional SoundSequence. Row order matches NUM_CHANNELS — the
+ *  classic 5-piece kick/snare/hat/tom/clap layout. Tracks the
+ *  pattern doesn't include get an empty row of stepsPerBar zeros. */
+function sequenceFromPattern(p: import('../../patterns/types').Pattern): SoundSequence {
+  const out: SoundSequence = [];
+  const ALL_VOICES_LOCAL: import('../../patterns/types').VoiceId[] = ['KK', 'SN', 'HH', 'OH', 'CP'];
+  for (let i = 0; i < NUM_CHANNELS; i++) {
+    const voiceId = ALL_VOICES_LOCAL[i];
+    const track = voiceId ? p.tracks[voiceId] : undefined;
+    if (!track) {
+      out.push(Array<SoundStep>(p.steps).fill(0));
+      continue;
+    }
+    const meta = trackMeta(track, p.steps);
+    if (!meta.pattern || meta.pattern.length === 0) {
+      out.push(Array<SoundStep>(p.steps).fill(0));
+      continue;
+    }
+    const cycle = meta.cycle;
+    const row: SoundStep[] = [];
+    for (let i = 0; i < cycle; i++) {
+      row.push((meta.pattern[i % meta.pattern.length] ?? 0) as SoundStep);
+    }
+    out.push(row);
+  }
+  return out;
+}
+
+/** Reverse of sequenceFromPattern — write Sound's positional rows
+ *  back into a Pattern.tracks shape. Used by Sound's outbound sync
+ *  so cell edits in Sound show up in Practice's pattern. */
+function tracksFromSequence(seq: SoundSequence): import('../../patterns/types').Pattern['tracks'] {
+  const ALL_VOICES_LOCAL: import('../../patterns/types').VoiceId[] = ['KK', 'SN', 'HH', 'OH', 'CP'];
+  const out: import('../../patterns/types').Pattern['tracks'] = {};
+  for (let i = 0; i < Math.min(seq.length, ALL_VOICES_LOCAL.length); i++) {
+    const voiceId = ALL_VOICES_LOCAL[i];
+    out[voiceId] = seq[i].slice() as import('../../patterns/types').Velocity[];
+  }
+  return out;
 }
 
 function defaultChannels(): Channel[] {
@@ -244,6 +291,9 @@ function shortFor(label: string): string {
 }
 
 interface SoundProps {
+  /** Shared engine from App.tsx — must be the same instance every
+   *  other mode uses so cross-tab session state stays consistent. */
+  engine: SoundEngine;
   /** Optional: when set, the Sound page auto-loads that soundPattern on
    *  mount (or when the id changes). Used by Practice's "saved sounds"
    *  cross-tab handoff so a single click takes the user from "discover"
@@ -253,9 +303,10 @@ interface SoundProps {
   onConsumedInitial?: () => void;
 }
 
-export function Sound({ initialSoundPatternId, onConsumedInitial }: SoundProps = {}) {
-  const [engine] = useState(() => new SoundEngine());
-  useEffect(() => () => { engine.dispose(); }, [engine]);
+export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: SoundProps) {
+  // App.tsx owns engine lifecycle; Sound is a viewer/editor of the
+  // shared engine state. Disposal happens at App unmount.
+  const session = useSession();
 
   // Modular control plane: router dispatches ParamEvents arriving on
   // the engine's bus into ControllableModules. Master/reverb/delay
@@ -286,7 +337,12 @@ export function Sound({ initialSoundPatternId, onConsumedInitial }: SoundProps =
   }, [engine, router]);
 
   const [channels, setChannels] = useState<Channel[]>(() => defaultChannels());
-  const [sequence, setSequence] = useState<SoundSequence>(() => defaultSequence());
+  // Sequence seeded from session.pattern on mount so Practice→Sound
+  // lands on the same beats. Hydration effect below keeps it in
+  // sync when session.pattern changes externally.
+  const [sequence, setSequence] = useState<SoundSequence>(
+    () => sequenceFromPattern(session.pattern),
+  );
   const [bpm, setBpm] = useState(110);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentStep, setCurrentStep] = useState(-1);
@@ -295,13 +351,73 @@ export function Sound({ initialSoundPatternId, onConsumedInitial }: SoundProps =
   // step. Refilled every frame from engine.audibleStepFor(i). When all
   // channels are at main rate every entry equals currentStep.
   const [rowCursors, setRowCursors] = useState<number[]>([]);
-  const [meter, setMeter] = useState<MeterPreset>(DEFAULT_METER);
-  // grouping is mutable per-permutation while meter stays the canonical
-  // preset. Picking a different permutation reorders the additive
-  // groups but keeps stepsPerBar (and thus the sequence column count)
-  // unchanged. Switching meter resets grouping to that preset's canonical.
-  const [grouping, setGrouping] = useState<number[]>(DEFAULT_METER.grouping);
+  // Initial meter / grouping seeded from session.pattern so
+  // tab-switching from Practice / Library lands on the SAME pattern
+  // shape Sound was just hearing. session.pattern is always present
+  // (SessionProvider seeds it on mount).
+  const [meter, setMeter] = useState<MeterPreset>(() => meterFromPattern(session.pattern));
+  const [grouping, setGrouping] = useState<number[]>(() => session.pattern.grouping.slice());
   const stepsPerBar = sumGroup(grouping);
+
+  // Hydrate Sound's local state from session.pattern whenever the
+  // session swaps pattern (Library load, Practice handoff). The
+  // session.pattern reference also changes on cell edits made in
+  // OTHER tabs — Sound mirrors those too. To prevent a feedback
+  // loop with Sound's outbound writes, we track the last-mirrored
+  // session.pattern via a ref + skip when Sound itself just wrote.
+  const lastSessionPatternRef = useRef(session.pattern);
+  const ignoreNextSessionRef = useRef(false);
+  useEffect(() => {
+    if (lastSessionPatternRef.current === session.pattern) return;
+    lastSessionPatternRef.current = session.pattern;
+    if (ignoreNextSessionRef.current) {
+      ignoreNextSessionRef.current = false;
+      return;
+    }
+    setMeter(meterFromPattern(session.pattern));
+    setGrouping(session.pattern.grouping.slice());
+    setSequence(sequenceFromPattern(session.pattern));
+  }, [session.pattern]);
+
+  // Outbound: Sound's local edits to sequence + grouping + meter
+  // flow back into session.pattern so other tabs see them. Skips
+  // the first render (initial state matches session) and any time
+  // the sequence/grouping/meter values match what session already
+  // has — avoids a feedback loop when the inbound effect just set
+  // them. Bpm flows separately — Sound's bpm is quarter-BPM and
+  // doesn't yet round-trip session.bpm cleanly.
+  const lastPushedRef = useRef<{
+    sequence: SoundSequence; grouping: number[]; stepUnit: 4 | 8 | 16;
+  } | null>(null);
+  useEffect(() => {
+    const stepUnit = meter.stepUnit;
+    const groupingStr = grouping.join(',');
+    const last = lastPushedRef.current;
+    if (last) {
+      // Cheap dirty check: if everything matches the last push, skip.
+      if (last.stepUnit === stepUnit
+          && last.grouping.join(',') === groupingStr
+          && last.sequence === sequence) return;
+    }
+    // Build the next pattern shape and push to session. Identity
+    // comparison via lastPushedRef means a Sound→session→Sound
+    // round-trip terminates after one cycle.
+    const nextTracks = tracksFromSequence(sequence);
+    const nextSteps = stepsPerBar;
+    const nextGrouping = grouping.slice();
+    const denomFromMeter = meter.label.includes('/') ? Number(meter.label.split('/')[1]) : 4;
+    const nextTimeSig = `${nextSteps * (stepUnit / denomFromMeter)}/${denomFromMeter}`;
+    ignoreNextSessionRef.current = true;
+    session.setPattern((prev) => ({
+      ...prev,
+      tracks: nextTracks,
+      steps: nextSteps,
+      stepUnit,
+      grouping: nextGrouping,
+      timeSig: meter.label.includes('/') ? meter.label : nextTimeSig,
+    }));
+    lastPushedRef.current = { sequence, grouping: nextGrouping, stepUnit };
+  }, [sequence, grouping, meter, stepsPerBar, session]);
   const [viewMode, setViewMode] = useState<'linear' | 'pill' | 'circular'>('linear');
 
   // Pattern persistence — name + last-saved id (`null` until first save).
