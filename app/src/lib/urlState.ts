@@ -1,7 +1,7 @@
 // URL → (tab, pattern) parser. Pure function — no window/DOM access
 // so it's testable against any search string.
 
-export type Tab = 'practice' | 'studio' | 'library' | 'sound' | '_patterns' | '_lab';
+export type Tab = 'practice' | 'studio' | 'library' | 'sound' | '_patterns';
 
 export interface UrlState {
   tab: Tab | null;
@@ -28,8 +28,6 @@ export function readUrlState(search: string, opts: ParseOpts): UrlState {
     tab = rawTab;
   } else if (rawTab === '_patterns' && opts.devMode) {
     tab = '_patterns';
-  } else if (rawTab === '_lab' && opts.devMode) {
-    tab = '_lab';
   }
   const rawPattern = params.get('pattern');
   const pattern = rawPattern && opts.seedExists(rawPattern) ? rawPattern : null;
