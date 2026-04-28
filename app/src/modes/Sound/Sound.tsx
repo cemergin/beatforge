@@ -1308,13 +1308,13 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
             in Library. Defaults are sensible for "I just made this";
             users can refine before saving. */}
         <Disclosure
-          className="bf-sound-meta"
-          summaryClassName="bf-sound-meta-head"
-          summary={<span className="bf-sound-section-tag">metadata</span>}
+          className="bf-sound-meta bf-sound-disclosure-row"
+          summaryClassName="bf-sound-meta-head bf-sound-disclosure-head"
+          summary={<span className="bf-feel-label">metadata</span>}
         >
-          <div className="bf-sound-meta-grid">
-            <label className="bf-sound-meta-field">
-              <span className="bf-mini-label">region</span>
+          <div className="bf-sound-feelbar bf-sound-meta-feelbar">
+            <label className="bf-feel-control">
+              <span className="bf-feel-label">region</span>
               <select
                 className="bf-sound-meta-input"
                 value={patternRegion}
@@ -1325,8 +1325,8 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
                 ))}
               </select>
             </label>
-            <label className="bf-sound-meta-field">
-              <span className="bf-mini-label">genre</span>
+            <label className="bf-feel-control">
+              <span className="bf-feel-label">genre</span>
               <select
                 className="bf-sound-meta-input"
                 value={patternGenre}
@@ -1337,8 +1337,8 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
                 ))}
               </select>
             </label>
-            <label className="bf-sound-meta-field">
-              <span className="bf-mini-label">default kit</span>
+            <label className="bf-feel-control">
+              <span className="bf-feel-label">default kit</span>
               <select
                 className="bf-sound-meta-input"
                 value={defaultKit}
@@ -1349,16 +1349,16 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
                 ))}
               </select>
             </label>
-            <label className="bf-sound-meta-field bf-sound-meta-toggle">
+            <label className="bf-feel-control bf-sound-meta-toggle">
               <input
                 type="checkbox"
                 checked={swingable}
                 onChange={(e) => setSwingable(e.target.checked)}
               />
-              <span className="bf-mini-label">swingable</span>
+              <span className="bf-feel-label">swingable</span>
             </label>
-            <label className="bf-sound-meta-field bf-sound-meta-tags">
-              <span className="bf-mini-label">tags (comma-sep)</span>
+            <label className="bf-feel-control bf-feel-grow">
+              <span className="bf-feel-label">tags</span>
               <input
                 className="bf-sound-meta-input"
                 type="text"
@@ -1369,8 +1369,8 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
                 placeholder="house, four-on-floor"
               />
             </label>
-            <label className="bf-sound-meta-field bf-sound-meta-story">
-              <span className="bf-mini-label">story</span>
+            <label className="bf-feel-control bf-feel-fullrow">
+              <span className="bf-feel-label">story</span>
               <textarea
                 className="bf-sound-meta-input"
                 rows={2}
@@ -1544,11 +1544,11 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
         </div>
 
         <Disclosure
-          className="bf-sound-fxdetails"
-          summaryClassName="bf-sound-fxdetails-head"
-          summary={<span className="bf-sound-section-tag">fx details</span>}
+          className="bf-sound-fxdetails bf-sound-disclosure-row"
+          summaryClassName="bf-sound-fxdetails-head bf-sound-disclosure-head"
+          summary={<span className="bf-feel-label">fx details</span>}
         >
-          <div className="bf-sound-fxbar">
+          <div className="bf-sound-fxbar bf-sound-fxbar-flat">
             <span className="bf-fx-section">reverb</span>
 
             <div className="bf-feel-control">
