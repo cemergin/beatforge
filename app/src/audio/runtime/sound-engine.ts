@@ -59,6 +59,11 @@ export class SoundEngine {
   private dlyBus: GainNode | null = null;
   private reverbFx: ControllableModule | null = null;
   private delayFx: ControllableModule | null = null;
+  /** Master gain wrapped as a ControllableModule. Lets the router
+   *  target master.gain.value directly through the same .set()
+   *  interface every other audio unit uses (reverb, delay, channel
+   *  knobs, voice machine knobs). */
+  private masterGainModule: ControllableModule | null = null;
   private strips: ChannelStrip[] = [];
   private ctxInitPromise: Promise<void> | null = null;
 
@@ -170,8 +175,30 @@ export class SoundEngine {
       strips.push(new ChannelStrip(ctx, master, revBus, dlyBus, buildColorFxModule));
     }
 
+    // Wrap master GainNode as a ControllableModule so the router can
+    // ramp it through the same .set('value', v) call every other knob
+    // uses. The wrapper is a tiny inline adapter — no extra nodes.
+    const masterGainModule: ControllableModule = {
+      input: master,
+      output: master,
+      params: [
+        { name: 'value', kind: 'continuous', min: 0, max: 1, default: 0.85, unit: '' },
+      ],
+      set(name, value, opts) {
+        if (name !== 'value' || typeof value !== 'number') return;
+        const when = opts?.when ?? ctx.currentTime;
+        const ramp = opts?.ramp ?? 0.015;
+        const v = Math.max(0, Math.min(1, value));
+        master.gain.cancelScheduledValues(when);
+        master.gain.setValueAtTime(master.gain.value, when);
+        master.gain.linearRampToValueAtTime(v, when + ramp);
+      },
+      dispose: () => {},
+    };
+
     this.ctx = ctx;
     this.master = master;
+    this.masterGainModule = masterGainModule;
     this.analyser = analyser;
     this.revBus = revBus;
     this.dlyBus = dlyBus;
@@ -288,9 +315,20 @@ export class SoundEngine {
   }
 
   setMasterVolume(v: number): void {
+    // Routes through the master gain ControllableModule so any
+    // subscriber (router, recorder) sees the same ramp every other
+    // knob produces. Falls back to direct write before ensureCtx().
+    if (this.masterGainModule) {
+      this.masterGainModule.set('value', v);
+      return;
+    }
     if (!this.master) return;
     this.master.gain.value = Math.max(0, Math.min(1, v));
   }
+
+  /** Direct access to the master gain's ControllableModule. The
+   *  router targets it at `master.gain` for ParamEvent dispatch. */
+  getMasterGain(): ControllableModule | null { return this.masterGainModule; }
 
   // ── Sequencer-delegating setters ───────────────────────────────
 
@@ -584,9 +622,11 @@ export class SoundEngine {
     this.strips = [];
     try { this.reverbFx?.dispose(); } catch { /* idempotent */ }
     try { this.delayFx?.dispose();  } catch { /* idempotent */ }
+    try { this.masterGainModule?.dispose(); } catch { /* idempotent */ }
     if (this.ctx && this.ctx.state !== 'closed') void this.ctx.close();
     this.ctx = null;
     this.master = null;
+    this.masterGainModule = null;
     this.analyser = null;
     this.revBus = null;
     this.dlyBus = null;

@@ -39,38 +39,26 @@ function adapter(
   return { input: null, output: null, params, set, dispose: () => {} };
 }
 
-export function engineMasterGain(engine: SoundEngine): ControllableModule {
-  return adapter(
-    [{ name: 'value', kind: 'continuous', min: 0, max: 1, default: 0.85, unit: '' }],
-    (name, value) => {
-      if (name === 'value' && typeof value === 'number') {
-        engine.setMasterVolume(value);
-      }
-    },
-  );
-}
-
 /** Register the three master modules on a router. Returns one
  *  unsubscribe that tears all of them down.
  *
- *  Master gain still goes through a thin shim because the engine
- *  owns the master GainNode privately. Reverb and delay are the
- *  actual ControllableModules from machines/fx — the router calls
- *  their .set() directly with no extra translation.
+ *  Every master target is a ControllableModule from machines/fx
+ *  (reverb, delay) or the SoundEngine's master-gain wrapper. The
+ *  router calls each .set() directly — no translation shim.
  *
  *  Caller MUST await engine.ensureCtx() before calling this; the
- *  reverb / delay modules don't exist until the AudioContext is
- *  initialized. */
+ *  modules don't exist until the AudioContext is initialized. */
 export function registerEngineMaster(
   router: import('../../modules/router').Router,
   engine: SoundEngine,
 ): () => void {
   const offs: Array<() => void> = [];
-  offs.push(router.registerModule('master.gain', engineMasterGain(engine)));
+  const masterGain = engine.getMasterGain();
+  if (masterGain) offs.push(router.registerModule('master.gain', masterGain));
   const reverb = engine.getReverbFx();
-  if (reverb) offs.push(router.registerModule('master.reverb', reverb));
+  if (reverb)     offs.push(router.registerModule('master.reverb', reverb));
   const delay = engine.getDelayFx();
-  if (delay) offs.push(router.registerModule('master.delay', delay));
+  if (delay)      offs.push(router.registerModule('master.delay', delay));
   return () => { for (const off of offs) off(); };
 }
 

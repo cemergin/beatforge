@@ -5,7 +5,6 @@ import {
   engineChannelColor,
   engineChannelMachine,
   engineChannelMixer,
-  engineMasterGain,
   registerEngineChannel,
   registerEngineMaster,
 } from './engine-adapters';
@@ -57,8 +56,15 @@ function fakeEngine() {
   const delayFx = createDelayFx(audioCtx());
   const reverbSet = vi.spyOn(reverbFx, 'set');
   const delaySet = vi.spyOn(delayFx, 'set');
+  const masterGainSet = vi.fn();
+  const masterGainModule = {
+    input: null, output: null,
+    params: [{ name: 'value' as const, kind: 'continuous' as const, default: 0.85 }],
+    set: masterGainSet,
+    dispose: () => {},
+  };
   const calls = {
-    setMasterVolume: vi.fn(),
+    masterGainSet,
     reverbSet,
     delaySet,
     applyChannelParams: vi.fn(),
@@ -66,7 +72,7 @@ function fakeEngine() {
     applyChannelMachine: vi.fn(),
   };
   const engine = {
-    setMasterVolume: calls.setMasterVolume,
+    getMasterGain: () => masterGainModule,
     getReverbFx: () => reverbFx,
     getDelayFx: () => delayFx,
     applyChannelParams: calls.applyChannelParams,
@@ -80,28 +86,8 @@ function defaultEffects(): ChannelEffects {
   return { level: 0.85, pan: 0, colorFx: { type: 'none' }, reverbSend: 0, delaySend: 0 };
 }
 
-describe('engineMasterGain adapter', () => {
-  it('forwards set("value", number) to engine.setMasterVolume', () => {
-    const { engine, calls } = fakeEngine();
-    engineMasterGain(engine).set('value', 0.42);
-    expect(calls.setMasterVolume).toHaveBeenCalledWith(0.42);
-  });
-
-  it('ignores unknown params', () => {
-    const { engine, calls } = fakeEngine();
-    engineMasterGain(engine).set('mute', 1);
-    expect(calls.setMasterVolume).not.toHaveBeenCalled();
-  });
-
-  it('ignores non-number values', () => {
-    const { engine, calls } = fakeEngine();
-    engineMasterGain(engine).set('value', 'half');
-    expect(calls.setMasterVolume).not.toHaveBeenCalled();
-  });
-});
-
-describe('registerEngineMaster — direct FX module wiring', () => {
-  it('reverb + delay register the actual FX modules from machines/fx', () => {
+describe('registerEngineMaster — direct module wiring', () => {
+  it('master.gain + reverb + delay register the actual modules', () => {
     const { engine, calls } = fakeEngine();
     const router = makeRouter();
     const bus = makeEventBus();
@@ -112,12 +98,12 @@ describe('registerEngineMaster — direct FX module wiring', () => {
     bus.emit({ type: 'param', target: 'master.reverb.wet', value: 0.3 });
     bus.emit({ type: 'param', target: 'master.delay.time', value: 0.5 });
 
-    expect(calls.setMasterVolume).toHaveBeenCalledWith(0.7);
+    expect(calls.masterGainSet).toHaveBeenCalledWith('value', 0.7, expect.any(Object));
     expect(calls.reverbSet).toHaveBeenCalledWith('wet', 0.3, expect.any(Object));
     expect(calls.delaySet).toHaveBeenCalledWith('time', 0.5, expect.any(Object));
   });
 
-  it('teardown unregisters every adapter', () => {
+  it('teardown unregisters every module', () => {
     const { engine, calls } = fakeEngine();
     const router = makeRouter();
     const bus = makeEventBus();
@@ -125,27 +111,21 @@ describe('registerEngineMaster — direct FX module wiring', () => {
     router.bindBus(bus);
 
     bus.emit({ type: 'param', target: 'master.gain.value', value: 0.5 });
-    expect(calls.setMasterVolume).toHaveBeenCalledOnce();
+    expect(calls.masterGainSet).toHaveBeenCalledOnce();
 
     off();
     bus.emit({ type: 'param', target: 'master.gain.value', value: 0.2 });
     bus.emit({ type: 'param', target: 'master.reverb.wet', value: 0.1 });
     bus.emit({ type: 'param', target: 'master.delay.feedback', value: 0.4 });
 
-    expect(calls.setMasterVolume).toHaveBeenCalledOnce();
+    expect(calls.masterGainSet).toHaveBeenCalledOnce();
     expect(calls.reverbSet).not.toHaveBeenCalled();
     expect(calls.delaySet).not.toHaveBeenCalled();
   });
 
-  it('skips reverb / delay registration when getReverbFx returns null (ctx not ready)', () => {
-    const calls = {
-      setMasterVolume: vi.fn(),
-      applyChannelParams: vi.fn(),
-      applyChannelColorFx: vi.fn(),
-      applyChannelMachine: vi.fn(),
-    };
+  it('skips registration when getMasterGain / getReverbFx / getDelayFx return null', () => {
     const engine = {
-      setMasterVolume: calls.setMasterVolume,
+      getMasterGain: () => null,
       getReverbFx: () => null,
       getDelayFx: () => null,
     } as unknown as SoundEngine;
@@ -155,8 +135,7 @@ describe('registerEngineMaster — direct FX module wiring', () => {
     router.bindBus(bus);
     bus.emit({ type: 'param', target: 'master.gain.value', value: 0.6 });
     bus.emit({ type: 'param', target: 'master.reverb.wet', value: 0.3 });
-    expect(calls.setMasterVolume).toHaveBeenCalledWith(0.6);
-    // No throw on the unknown reverb target — router silently drops.
+    // No throw — router silently drops unknown targets.
   });
 });
 
