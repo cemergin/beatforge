@@ -2503,7 +2503,10 @@ input[type="number"] { font: inherit; color: inherit; }
    No own borders — the preceding bar's border-bottom serves as the
    divider, and the following element handles its own top edge. */
 .bf-sound-disclosure-row {
-  /* No card border, no margin — sits flush in the column flow. */
+  /* Trailing dashed divider so closed disclosures still read as a
+     bounded section. Top border comes from the previous element's
+     bottom border, so we don't double up. */
+  border-bottom: var(--bw-1) dashed var(--line);
 }
 .bf-sound-disclosure-head {
   padding: var(--sp-2) 0;
