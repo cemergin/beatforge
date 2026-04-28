@@ -2484,6 +2484,18 @@ input[type="number"] { font: inherit; color: inherit; }
   background: var(--bg);
   color: var(--fg);
 }
+.bf-sound-kit-preset {
+  appearance: none;
+  font-family: var(--mono); font-size: var(--fs-micro);
+  letter-spacing: 0.08em; text-transform: lowercase;
+  padding: 5px 24px 5px 10px;
+  border: var(--bw-1) solid var(--line);
+  border-radius: var(--r-xs);
+  background: var(--bg) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path d='M0 0h10L5 6z' fill='%23888'/></svg>") no-repeat right 8px center;
+  color: var(--muted);
+  cursor: pointer;
+}
+.bf-sound-kit-preset:hover { color: var(--fg); border-color: var(--accent); }
 .bf-sound-saveBtn,
 .bf-sound-newBtn {
   font-family: var(--mono); font-size: var(--fs-micro);

@@ -7,7 +7,7 @@ import { SoundEngine, type SoundSequence, type SoundStep } from '../../audio/run
 import { registerEngineChannel, registerEngineMaster } from '../../audio/runtime/engine-adapters';
 import { makeRouter } from '../../modules/router';
 import { useSession } from '../../modules/session';
-import { trackMeta } from '../../patterns/types';
+import { trackMeta, ALL_KITS, type KitId } from '../../patterns/types';
 import {
   VOICE_MACHINES,
   type VoiceArchetypeId,
@@ -1095,6 +1095,27 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
       <section className="bf-sound-sequencer">
         <div className="bf-sound-patternbar bf-sound-kitbar">
           <span className="bf-sound-bar-tag">ensemble</span>
+          <select
+            className="bf-sound-kit-preset"
+            value=""
+            onChange={(e) => {
+              const kit = e.target.value as KitId;
+              if (!kit) return;
+              session.setKit(kit);
+              setKitName(`${kit === 'frameDrum' ? 'frame' : kit} kit`);
+              setSavedKitId(null);
+              e.target.value = '';
+            }}
+            title="Load a default ensemble as a starting point"
+            aria-label="Load default ensemble"
+          >
+            <option value="">load preset…</option>
+            {ALL_KITS.map((k) => (
+              <option key={k} value={k}>
+                {k === 'frameDrum' ? 'frame' : k}
+              </option>
+            ))}
+          </select>
           <input
             className="bf-sound-name"
             type="text"
