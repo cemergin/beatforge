@@ -1,31 +1,32 @@
 // Secret MIDI tab — dev-only (?tab=_midi, gated by import.meta.env.DEV).
 //
 // Three jobs:
-//   1. Enable Web MIDI + list inputs/outputs so the user can confirm
-//      their hardware is detected.
-//   2. Edit a mapping table (CC / note → bus address) that drives the
-//      makeMidiModule bridge. Mappings persist to localStorage so the
-//      same physical knob still maps after a reload.
+//   1. Enable Web MIDI (delegates to the bridge) + list inputs/outputs
+//      so the user can confirm their hardware is detected.
+//   2. Edit the input mapping table (CC / note → bus address) and the
+//      per-channel MIDI-out routing (audio channel → output device +
+//      MIDI channel + note + velocity). Both persist to localStorage.
 //   3. Live monitor — show every raw MIDI message coming in (and
-//      anything we send via the test buttons going out) so the user
-//      can verify the channel/CC numbers their controller emits.
+//      anything we send via the test buttons or the sequencer sink
+//      going out) so the user can verify the channel/CC numbers their
+//      controller emits.
 //
-// The MIDI module itself was shipped earlier (modules/midi). This page
-// is the first place it actually attaches to a SoundEngine in the app
-// runtime.
+// State + lifecycle live in `useMidiBridge` at ModeShell. This page
+// is just the control panel.
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { SoundEngine } from '../../audio/runtime/sound-engine';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import type { Channel } from '../../patterns/types-sound';
 import {
-  makeMidiModule,
-  type MidiInputLike,
+  type ChannelOutConfig,
   type MidiInputMap,
   type MidiOutputLike,
 } from '../../modules/midi';
-import { loadMidiMappings, saveMidiMappings } from '../../lib/midiMappings';
+import type { MidiBridge } from '../../lib/useMidiBridge';
 
 interface Props {
-  engine: SoundEngine;
+  bridge: MidiBridge;
+  /** Engine channels for the per-channel-out UI labels. */
+  channels: readonly Channel[];
 }
 
 interface LogEntry {
@@ -54,31 +55,26 @@ const COMMON_ADDRESSES: readonly string[] = [
   'channel.4',
 ];
 
-export function Midi({ engine }: Props) {
-  const [enabled, setEnabled] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [inputs, setInputs] = useState<MidiInputLike[]>([]);
-  const [outputs, setOutputs] = useState<MidiOutputLike[]>([]);
-  const [activeInputIds, setActiveInputIds] = useState<Set<string>>(new Set());
-  const [outputId, setOutputId] = useState<string>('');
-  const [mappings, setMappings] = useState<MidiInputMap[]>(() => loadMidiMappings());
+export function Midi({ bridge, channels }: Props) {
+  const {
+    access, enable, enableError,
+    inputs, outputs,
+    channelOuts, setChannelOuts,
+    inputMappings, setInputMappings,
+    activeInputIds, setActiveInputIds,
+    subscribeSent,
+  } = bridge;
+
   const [log, setLog] = useState<LogEntry[]>([]);
   const logIdRef = useRef(0);
 
   // Test-send form state.
+  const [testOutputId, setTestOutputId] = useState<string>('');
   const [sendChannel, setSendChannel] = useState(0);
   const [sendNote, setSendNote] = useState(36);
   const [sendVel, setSendVel] = useState(100);
   const [sendCc, setSendCc] = useState(74);
   const [sendCcVal, setSendCcVal] = useState(64);
-
-  // Persist mappings whenever the editor changes them.
-  useEffect(() => { saveMidiMappings(mappings); }, [mappings]);
-
-  // The MIDI module is bound to the engine's bus so mappings emit
-  // ParamEvent / TriggerEvent at the same addresses the audio router
-  // already understands.
-  const midi = useMemo(() => makeMidiModule(engine.getEventBus()), [engine]);
 
   const pushLog = useCallback((entry: Omit<LogEntry, 'id'>) => {
     setLog((prev) => {
@@ -88,29 +84,15 @@ export function Midi({ engine }: Props) {
     });
   }, []);
 
-  const enable = useCallback(async () => {
-    setError(null);
-    try {
-      const access = await midi.enable();
-      midi.attach(access);
-      setEnabled(true);
-      setInputs(midi.inputs());
-      setOutputs(midi.outputs());
-    } catch (e) {
-      setError(e instanceof Error ? e.message : String(e));
-    }
-  }, [midi]);
-
-  // Bind active inputs to (a) raw monitor + (b) the mapping bridge.
-  // Re-runs when the user toggles inputs in the UI or edits the
-  // mapping list. The unsubscribe stack tears both attachments down.
+  // Raw monitor — attaches a 'midimessage' listener to every active
+  // input, in addition to the bridge's mapping bridge. Tab-local: the
+  // monitor only runs while the MIDI tab is mounted, but the mapping
+  // bridge itself survives tab switches.
   useEffect(() => {
-    if (!enabled) return;
+    if (!access) return;
     const offs: Array<() => void> = [];
     for (const input of inputs) {
       if (!activeInputIds.has(input.id)) continue;
-
-      // Raw monitor — captures every byte regardless of mapping match.
       const monitor = (event: { data: Uint8Array }) => {
         const data = Array.from(event.data);
         pushLog({
@@ -123,39 +105,54 @@ export function Midi({ engine }: Props) {
       };
       input.addEventListener('midimessage', monitor);
       offs.push(() => input.removeEventListener('midimessage', monitor));
-
-      // Bridge — runs the user's mapping table against this input.
-      offs.push(midi.bindInput(input, mappings));
     }
     return () => { for (const off of offs) off(); };
-  }, [enabled, inputs, activeInputIds, mappings, midi, pushLog]);
+  }, [access, inputs, activeInputIds, pushLog]);
+
+  // Subscribe to outgoing messages emitted by the sequencer sink so
+  // the monitor shows out-traffic alongside in-traffic.
+  useEffect(() => {
+    return subscribeSent((entry) => {
+      const out = outputs.find((o) => o.id === entry.outputId);
+      pushLog({
+        ts: performance.now(),
+        dir: 'out',
+        source: out?.name ?? entry.outputId,
+        raw: entry.data,
+        decoded: decodeMidi(entry.data),
+      });
+    });
+  }, [subscribeSent, outputs, pushLog]);
 
   // Mapping editor mutations.
   const addMapping = useCallback((kind: 'note' | 'cc') => {
-    setMappings((prev) => prev.concat(
+    const next: MidiInputMap[] = inputMappings.concat(
       kind === 'note'
         ? { kind: 'note', toAddress: 'channel.0' }
         : { kind: 'cc', cc: 74, toAddress: 'channel.0.color.cutoff', scale: 'linear' },
-    ));
-  }, []);
+    );
+    setInputMappings(next);
+  }, [inputMappings, setInputMappings]);
 
   const updateMapping = useCallback((idx: number, patch: Partial<MidiInputMap>) => {
-    setMappings((prev) => prev.map((m, i) => (i === idx ? { ...m, ...patch } as MidiInputMap : m)));
-  }, []);
+    const next = inputMappings.map((m, i) => (i === idx ? { ...m, ...patch } as MidiInputMap : m));
+    setInputMappings(next);
+  }, [inputMappings, setInputMappings]);
 
   const removeMapping = useCallback((idx: number) => {
-    setMappings((prev) => prev.filter((_, i) => i !== idx));
-  }, []);
+    setInputMappings(inputMappings.filter((_, i) => i !== idx));
+  }, [inputMappings, setInputMappings]);
+
+  const updateChannelOut = useCallback((idx: number, patch: Partial<ChannelOutConfig>) => {
+    setChannelOuts(channelOuts.map((c, i) => (i === idx ? { ...c, ...patch } : c)));
+  }, [channelOuts, setChannelOuts]);
 
   const clearLog = useCallback(() => setLog([]), []);
 
-  // Test send — picks the chosen output and emits one MIDI message.
-  // The same message is logged outbound so the user sees the byte
-  // sequence next to incoming traffic.
   const findOutput = useCallback((): MidiOutputLike | null => {
-    if (!outputId) return null;
-    return outputs.find((o) => o.id === outputId) ?? null;
-  }, [outputId, outputs]);
+    if (!testOutputId) return null;
+    return outputs.find((o) => o.id === testOutputId) ?? null;
+  }, [testOutputId, outputs]);
 
   const sendNoteOn = useCallback(() => {
     const out = findOutput();
@@ -182,12 +179,10 @@ export function Midi({ engine }: Props) {
   }, [findOutput, sendChannel, sendCc, sendCcVal, pushLog]);
 
   const toggleInput = useCallback((id: string) => {
-    setActiveInputIds((prev) => {
-      const next = new Set(prev);
-      if (next.has(id)) next.delete(id); else next.add(id);
-      return next;
-    });
-  }, []);
+    const next = new Set(activeInputIds);
+    if (next.has(id)) next.delete(id); else next.add(id);
+    setActiveInputIds(next);
+  }, [activeInputIds, setActiveInputIds]);
 
   return (
     <main className="bf-midi-page">
@@ -195,18 +190,19 @@ export function Midi({ engine }: Props) {
         <div>
           <h1 className="bf-lib-title">MIDI <span className="bf-midi-badge">DEV</span></h1>
           <p className="bf-lib-sub">
-            Hidden tab. Bind controller CCs and notes to bus addresses, watch traffic in both directions.
+            Hidden tab. Bind controller CCs and notes to bus addresses, route each audio channel to a MIDI device,
+            watch traffic in both directions.
           </p>
           <div className="bf-lib-hero-actions">
-            {!enabled
-              ? <button className="bf-chip on" onClick={enable} type="button">Enable Web MIDI</button>
+            {!access
+              ? <button className="bf-chip on" onClick={() => { void enable(); }} type="button">Enable Web MIDI</button>
               : <span className="bf-midi-status">enabled · {inputs.length} in / {outputs.length} out</span>}
           </div>
-          {error && <div className="bf-midi-error">{error}</div>}
+          {enableError && <div className="bf-midi-error">{enableError}</div>}
         </div>
       </header>
 
-      {enabled && (
+      {access && (
         <>
           <section className="bf-lib-zone">
             <div className="bf-zone-head">
@@ -233,11 +229,11 @@ export function Midi({ engine }: Props) {
 
           <section className="bf-lib-zone">
             <div className="bf-zone-head">
-              <h2 className="bf-zone-title">Mappings</h2>
+              <h2 className="bf-zone-title">Input mappings</h2>
               <span className="bf-zone-sub">CC / note → bus address. Saved to localStorage.</span>
             </div>
             <div className="bf-midi-maps">
-              {mappings.map((m, idx) => (
+              {inputMappings.map((m, idx) => (
                 <MappingRow
                   key={idx}
                   map={m}
@@ -248,8 +244,8 @@ export function Midi({ engine }: Props) {
               <div className="bf-chip-row">
                 <button className="bf-chip sm ghost" type="button" onClick={() => addMapping('note')}>+ note</button>
                 <button className="bf-chip sm ghost" type="button" onClick={() => addMapping('cc')}>+ cc</button>
-                {mappings.length > 0 && (
-                  <button className="bf-chip sm ghost" type="button" onClick={() => setMappings([])}>clear all</button>
+                {inputMappings.length > 0 && (
+                  <button className="bf-chip sm ghost" type="button" onClick={() => setInputMappings([])}>clear all</button>
                 )}
               </div>
             </div>
@@ -257,14 +253,35 @@ export function Midi({ engine }: Props) {
 
           <section className="bf-lib-zone">
             <div className="bf-zone-head">
-              <h2 className="bf-zone-title">Outputs</h2>
-              <span className="bf-zone-sub">Pick a device, then use Send to inject test messages.</span>
+              <h2 className="bf-zone-title">Channel outputs</h2>
+              <span className="bf-zone-sub">
+                Each audio channel → MIDI device + channel + note. Note duration = one step at the current BPM/stepUnit.
+              </span>
+            </div>
+            <div className="bf-midi-maps">
+              {channelOuts.map((cfg, idx) => (
+                <ChannelOutRow
+                  key={idx}
+                  idx={idx}
+                  label={channels[idx]?.label ?? `ch${idx + 1}`}
+                  cfg={cfg}
+                  outputs={outputs}
+                  onChange={(patch) => updateChannelOut(idx, patch)}
+                />
+              ))}
+            </div>
+          </section>
+
+          <section className="bf-lib-zone">
+            <div className="bf-zone-head">
+              <h2 className="bf-zone-title">Test send</h2>
+              <span className="bf-zone-sub">Pick a device, then inject a single message manually.</span>
             </div>
             <div className="bf-midi-send">
               <select
                 className="bf-midi-input"
-                value={outputId}
-                onChange={(e) => setOutputId(e.target.value)}
+                value={testOutputId}
+                onChange={(e) => setTestOutputId(e.target.value)}
               >
                 <option value="">— select output —</option>
                 {outputs.map((o) => (
@@ -289,6 +306,7 @@ export function Midi({ engine }: Props) {
                   className="bf-midi-input small"
                 />
               </label>
+              <span className="bf-midi-noteName">{noteName(sendNote)}</span>
               <label className="bf-midi-field">
                 vel
                 <input
@@ -298,8 +316,8 @@ export function Midi({ engine }: Props) {
                   className="bf-midi-input small"
                 />
               </label>
-              <button type="button" className="bf-chip sm" onClick={sendNoteOn} disabled={!outputId}>note on</button>
-              <button type="button" className="bf-chip sm" onClick={sendNoteOff} disabled={!outputId}>note off</button>
+              <button type="button" className="bf-chip sm" onClick={sendNoteOn} disabled={!testOutputId}>note on</button>
+              <button type="button" className="bf-chip sm" onClick={sendNoteOff} disabled={!testOutputId}>note off</button>
               <label className="bf-midi-field">
                 cc#
                 <input
@@ -318,7 +336,7 @@ export function Midi({ engine }: Props) {
                   className="bf-midi-input small"
                 />
               </label>
-              <button type="button" className="bf-chip sm" onClick={sendCcMsg} disabled={!outputId}>cc</button>
+              <button type="button" className="bf-chip sm" onClick={sendCcMsg} disabled={!testOutputId}>cc</button>
             </div>
           </section>
 
@@ -422,6 +440,81 @@ function MappingRow({ map, onChange, onRemove }: MappingRowProps) {
   );
 }
 
+interface ChannelOutRowProps {
+  idx: number;
+  label: string;
+  cfg: ChannelOutConfig;
+  outputs: MidiOutputLike[];
+  onChange: (patch: Partial<ChannelOutConfig>) => void;
+}
+
+function ChannelOutRow({ idx, label, cfg, outputs, onChange }: ChannelOutRowProps) {
+  return (
+    <div className="bf-midi-map-row">
+      <span className="bf-midi-kind">ch{idx + 1}</span>
+      <span className="bf-midi-channel-label">{label}</span>
+      <label className="bf-midi-field">
+        <input
+          type="checkbox"
+          checked={cfg.enabled}
+          onChange={(e) => onChange({ enabled: e.target.checked })}
+        />
+        enable
+      </label>
+      <label className="bf-midi-field grow">
+        out
+        <select
+          value={cfg.outputId}
+          onChange={(e) => onChange({ outputId: e.target.value })}
+          className="bf-midi-input"
+        >
+          <option value="">— none —</option>
+          {outputs.map((o) => (
+            <option key={o.id} value={o.id}>{o.name ?? o.id}</option>
+          ))}
+        </select>
+      </label>
+      <label className="bf-midi-field">
+        ch
+        <input
+          type="number" min={1} max={16}
+          value={cfg.midiChannel + 1}
+          onChange={(e) => {
+            const n = clamp(parseInt(e.target.value, 10) || 1, 1, 16);
+            onChange({ midiChannel: n - 1 });
+          }}
+          className="bf-midi-input small"
+        />
+      </label>
+      <label className="bf-midi-field">
+        note
+        <input
+          type="number" min={0} max={127}
+          value={cfg.note}
+          onChange={(e) => {
+            const n = clamp(parseInt(e.target.value, 10) || 0, 0, 127);
+            onChange({ note: n });
+          }}
+          className="bf-midi-input small"
+        />
+      </label>
+      <span className="bf-midi-noteName">{noteName(cfg.note)}</span>
+      <label className="bf-midi-field">
+        vel×
+        <input
+          type="number" min={0} max={1} step={0.05}
+          value={cfg.velocityScale}
+          onChange={(e) => {
+            const n = parseFloat(e.target.value);
+            onChange({ velocityScale: Number.isFinite(n) ? clamp(n, 0, 1) : 1 });
+          }}
+          className="bf-midi-input small"
+        />
+      </label>
+    </div>
+  );
+}
+
 function decodeMidi(data: number[]): string {
   if (data.length < 1) return '';
   const status = data[0];
@@ -429,8 +522,10 @@ function decodeMidi(data: number[]): string {
   const ch = status & 0x0f;
   const b1 = data[1] ?? 0;
   const b2 = data[2] ?? 0;
-  if (high === 0x80) return `note off  ch${ch} n${b1}`;
-  if (high === 0x90) return b2 === 0 ? `note off  ch${ch} n${b1}` : `note on   ch${ch} n${b1} v${b2}`;
+  if (high === 0x80) return `note off  ch${ch} ${noteName(b1)} (${b1})`;
+  if (high === 0x90) return b2 === 0
+    ? `note off  ch${ch} ${noteName(b1)} (${b1})`
+    : `note on   ch${ch} ${noteName(b1)} (${b1}) v${b2}`;
   if (high === 0xb0) return `cc        ch${ch} #${b1}=${b2}`;
   if (high === 0xe0) return `pitch     ch${ch} ${(b2 << 7) | b1}`;
   if (high === 0xc0) return `program   ch${ch} ${b1}`;
@@ -440,6 +535,17 @@ function decodeMidi(data: number[]): string {
   if (status === 0xfb) return 'continue';
   if (status === 0xfc) return 'stop';
   return `0x${status.toString(16)}`;
+}
+
+const NOTE_NAMES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+
+/** MIDI 60 = C4 (Yamaha / Roland convention). Some ecosystems use
+ *  C3 = 60; we pick the common one and document it. */
+function noteName(n: number): string {
+  if (n < 0 || n > 127) return '';
+  const name = NOTE_NAMES[n % 12];
+  const octave = Math.floor(n / 12) - 1;
+  return `${name}${octave}`;
 }
 
 function clamp(n: number, lo: number, hi: number): number {

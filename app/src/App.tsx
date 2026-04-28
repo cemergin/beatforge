@@ -6,6 +6,7 @@ import { SessionProvider, useSession } from './modules/session';
 import { PATTERNS } from './patterns/seed';
 import { makeRouter, type Router } from './modules/router';
 import { registerEngineChannel, registerEngineMaster } from './audio/runtime/engine-adapters';
+import { useMidiBridge } from './lib/useMidiBridge';
 
 // Library + Studio are split into their own chunks. Practice is the
 // landing tab and stays in the main bundle. The Studio component
@@ -430,6 +431,11 @@ function ModeShell({
     return () => { for (const off of offs) off(); };
   }, [router, engine, channelCount]);
 
+  // MIDI bridge — single owner for Web MIDI access, configs, sink,
+  // and input bindings. Lives at the shell level so all of those
+  // survive tab switches; the secret MIDI tab is a UI on top.
+  const midiBridge = useMidiBridge(engine, channelCount);
+
   return (
     <>
       {tab === 'practice' && (
@@ -463,7 +469,7 @@ function ModeShell({
       )}
       {tab === '_midi' && (
         <Suspense fallback={<div className="bf-mode-loading">loading midi…</div>}>
-          <Midi engine={engine} />
+          <Midi bridge={midiBridge} channels={channels} />
         </Suspense>
       )}
     </>

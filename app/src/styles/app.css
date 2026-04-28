@@ -2997,3 +2997,15 @@ input[type="number"] { font: inherit; color: inherit; }
 .bf-midi-src { color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .bf-midi-bytes { color: var(--muted); }
 .bf-midi-decoded { color: var(--fg); }
+.bf-midi-channel-label {
+  font-family: var(--mono);
+  font-size: var(--fs-micro);
+  min-width: 80px;
+  color: var(--fg);
+}
+.bf-midi-noteName {
+  font-family: var(--mono);
+  font-size: var(--fs-micro);
+  color: var(--muted);
+  min-width: 40px;
+}

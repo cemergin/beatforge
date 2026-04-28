@@ -9,3 +9,9 @@ export type {
   TriggerMap,
 } from './types';
 export { makeMidiModule } from './midi';
+export {
+  attachMidiSink,
+  DEFAULT_CHANNEL_OUT,
+  type ChannelOutConfig,
+  type SinkSpec,
+} from './sink';
