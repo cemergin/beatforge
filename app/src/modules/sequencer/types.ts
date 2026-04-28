@@ -87,4 +87,10 @@ export interface Sequencer {
   /** Pump the scheduler. Hosts call this on a worker postMessage,
    *  setTimeout, or rAF cadence. Idempotent when not running. */
   tick(): void;
+
+  /** Re-anchor every row to the start of the next bar so all rows
+   *  reset to step 0 in unison. Used when the user makes a change
+   *  that should resync the grid (focus toggle from groove ↔ click).
+   *  No-op when not playing. */
+  restartFromNextBar(): void;
 }

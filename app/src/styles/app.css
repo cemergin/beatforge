@@ -159,6 +159,11 @@ input[type="number"] { font: inherit; color: inherit; }
   background: var(--bg-2); border: var(--bw-1) solid var(--line);
   border-radius: var(--r-lg); padding: var(--sp-6) var(--sp-7); box-shadow: var(--shadow);
 }
+.bf-pattern-dirty {
+  display: inline-block; margin-left: 6px;
+  color: var(--accent); font-weight: 700;
+  font-size: 0.85em; vertical-align: 1px;
+}
 .bf-pattern-name {
   font-size: clamp(16px, 3.2vw, 24px);
   font-weight: 700;

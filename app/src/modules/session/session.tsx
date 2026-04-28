@@ -49,6 +49,7 @@ function channelsForKit(kit: KitId): Channel[] {
 
 export function SessionProvider({ engine, initialPattern, initialKit, children }: SessionProviderProps) {
   const [pattern, setPatternState] = useState<Pattern>(initialPattern);
+  const [origin, setOriginState] = useState<Pattern>(initialPattern);
   const [kit, setKitState] = useState<KitId>(initialKit ?? initialPattern.defaultKit);
   const [channels, setChannelsState] = useState<Channel[]>(
     () => channelsForKit(initialKit ?? initialPattern.defaultKit),
@@ -56,6 +57,7 @@ export function SessionProvider({ engine, initialPattern, initialKit, children }
   const [bpm, setBpmState] = useState<number>(() => naturalBpmForPattern(initialPattern));
   const [swing, setSwingState] = useState<number>(50);
   const [playing, setPlaying] = useState<boolean>(false);
+  const dirty = pattern !== origin;
 
   // Push pattern + kit + bpm + swing into the engine on each change.
   // The engine internally compares + re-anchors; cheap when nothing
@@ -66,6 +68,7 @@ export function SessionProvider({ engine, initialPattern, initialKit, children }
 
   const loadPattern = useCallback((next: Pattern) => {
     setPatternState(next);
+    setOriginState(next);
     const nextKit = next.defaultKit;
     setKitState(nextKit);
     const nextChannels = channelsForKit(nextKit);
@@ -147,12 +150,12 @@ export function SessionProvider({ engine, initialPattern, initialKit, children }
   }, [engine]);
 
   const session: Session = useMemo(() => ({
-    pattern, kit, channels, bpm, swing, playing,
+    pattern, origin, dirty, kit, channels, bpm, swing, playing,
     loadPattern, setKit, setChannels, setChannel,
     setPattern, setBpm, setSwing,
     start, stop,
   }), [
-    pattern, kit, channels, bpm, swing, playing,
+    pattern, origin, dirty, kit, channels, bpm, swing, playing,
     loadPattern, setKit, setChannels, setChannel,
     setPattern, setBpm, setSwing, start, stop,
   ]);

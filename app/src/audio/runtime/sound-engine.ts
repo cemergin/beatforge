@@ -396,6 +396,13 @@ export class SoundEngine {
     return this.sequencer?.audibleStepFor(channelIdx) ?? -1;
   }
 
+  /** Re-anchor every channel's playhead to the next bar so they
+   *  resync to step 0 in unison. Used by Practice's groove ↔ click
+   *  focus toggle so all channels start together after a swap. */
+  restartFromNextBar(): void {
+    this.sequencer?.restartFromNextBar();
+  }
+
   /** Voice-keyed cursors — Practice / Library iterate ALL_VOICES and
    *  read each row's audibleStepFor. Returns -1 for any voice that
    *  isn't part of the loaded pattern. */

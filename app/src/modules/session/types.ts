@@ -26,6 +26,17 @@ export interface Session {
   /** Current pattern (with any sticky edits applied). Never null —
    *  the session is always seeded with a default on mount. */
   readonly pattern: Pattern;
+  /** The "origin" pattern — what the user last loaded via
+   *  loadPattern (Library handoff, Practice click, share-link
+   *  decode). Stays stable across sticky edits so consumers can
+   *  detect drift via `dirty`. */
+  readonly origin: Pattern;
+  /** True when `pattern` has diverged from `origin` — the user has
+   *  tweaked cells, grouping, or something else under the hood.
+   *  Practice / Studio surface this with a "*" or "New Pattern"
+   *  marker so the user knows they're editing, not playing the
+   *  pristine seed. */
+  readonly dirty: boolean;
   /** Active kit id. Drives voice machine presets across channels. */
   readonly kit: KitId;
   /** Per-channel sound design — machine + effects + color FX. Length

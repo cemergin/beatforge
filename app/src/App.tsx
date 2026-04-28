@@ -228,11 +228,15 @@ export default function App() {
     return () => { engine.stop(); };
   }, [engine]);
 
-  // Tab switches preserve playback — the session is the source of
-  // truth, and the engine keeps running across the route boundary.
-  // Practice/Studio/Sound all subscribe to the same playing state.
+  // Tab switches stop in-flight playback (the user clicks play in
+  // the new tab to resume). State stays sticky via the session —
+  // pattern hits, channel sounds, kit, and bpm carry over without
+  // the audio context jank of cross-tab continuation.
   const switchTab = (next: Tab) => {
-    if (next !== tab) setTab(next);
+    if (next !== tab) {
+      engine.stop();
+      setTab(next);
+    }
   };
 
   const loadInPractice = useCallback((id: string) => {

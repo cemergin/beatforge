@@ -272,6 +272,26 @@ export function makeSequencer(opts: SequencerOptions): Sequencer {
     }
   };
 
+  /** Re-anchor every row to the start of the next bar. Used when
+   *  the user makes a change that should resync all rows to step 0
+   *  in unison (e.g. groove ↔ click toggle). No-op when not
+   *  playing — the next play() will start everything from 0
+   *  anyway. */
+  const restartFromNextBar = (): void => {
+    if (!running) return;
+    const bar = barSeconds();
+    if (bar <= 0) return;
+    const elapsed = clock() - _startTime;
+    const barsCompleted = elapsed > 0 ? Math.floor(elapsed / bar) + 1 : 0;
+    const nextBarStart = _startTime + barsCompleted * bar;
+    for (let i = 0; i < nextNoteTimes.length; i++) {
+      nextNoteTimes[i] = nextBarStart;
+      nextIdxs[i] = 0;
+      anchorTimes[i] = nextBarStart;
+      anchorIdxs[i] = 0;
+    }
+  };
+
   return {
     setBpm, setStepUnit, setStepsPerBar, setSwing,
     setSequence, setAccents, setRowCount,
@@ -284,6 +304,6 @@ export function makeSequencer(opts: SequencerOptions): Sequencer {
     startTime: () => _startTime,
     audibleBar, audibleStep, audibleStepFor,
     stepSeconds, barSeconds,
-    tick,
+    tick, restartFromNextBar,
   };
 }

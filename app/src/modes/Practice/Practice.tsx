@@ -2,7 +2,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { SoundEngine } from '../../audio/runtime/sound-engine';
 import { naturalToStepBpm, parseTimeSigDenom, stepToNaturalBpm } from '../../audio/tempo';
 import { useMetronome } from '../../audio/useMetronome';
-import type { KitId, Pattern, Track, Velocity, VoiceId } from '../../patterns/types';
+import { useSession } from '../../modules/session';
+import type { KitId, Pattern, Velocity, VoiceId } from '../../patterns/types';
 import { trackMeta } from '../../patterns/types';
 import { PATTERNS, patternById } from '../../patterns/seed';
 import {
@@ -70,18 +71,19 @@ interface Props {
 
 export function Practice({ engine, patternId, onPatternChange, onOpenSoundPattern }: Props) {
   const setPatternId = onPatternChange;
+  const session = useSession();
+  // The seed pattern (read-only; Library + Practice's reset path).
   const seedPattern: Pattern = useMemo(
     () => patternById(patternId) ?? PATTERNS[0],
     [patternId],
   );
-  // Track-level overrides applied to the seed pattern for the current
-  // session. Cleared on pattern change. Keeps the imported seed object
-  // immutable (Library previews + other modes see the pristine version).
-  const [editedTracks, setEditedTracks] = useState<Partial<Record<VoiceId, Track>>>({});
-  const pattern: Pattern = useMemo(
-    () => ({ ...seedPattern, tracks: { ...seedPattern.tracks, ...editedTracks } }),
-    [seedPattern, editedTracks],
-  );
+  // The live pattern lives in the session, with cell edits applied.
+  // session.setPattern propagates to Studio + Sound; Library load
+  // resets via session.loadPattern (called from App.tsx's bridge).
+  const pattern: Pattern = session.pattern;
+  // Cleared by reset-to-original — derived from comparing pattern to
+  // seedPattern. The user-visible "↺" chip flips on identity change.
+  const hasEdits = pattern !== seedPattern && pattern.id === seedPattern.id;
 
   const [playing, setPlaying] = useState(false);
   const [cursors, setCursors] = useState<Record<string, number>>({});
@@ -185,22 +187,33 @@ export function Practice({ engine, patternId, onPatternChange, onOpenSoundPatter
     setPlaying(false);
     setCountingIn(false);
     clearCountInTimer();
-    setEditedTracks({});
-    setBpm(stepToNaturalBpm(pattern.bpm.default, pattern.stepUnit, parseTimeSigDenom(pattern.timeSig)));
-    setSwing(swingDefaultToSlider(pattern.swingDefault));
-    setGrouping(pattern.grouping);
-    setKitOverrideState(getKitOverride(pattern.id));
+    // Edit clearing now happens automatically via session.loadPattern
+    // (called from App.tsx's bridge effect when patternId changes).
+    setBpm(stepToNaturalBpm(seedPattern.bpm.default, seedPattern.stepUnit, parseTimeSigDenom(seedPattern.timeSig)));
+    setSwing(swingDefaultToSlider(seedPattern.swingDefault));
+    setGrouping(seedPattern.grouping);
+    setKitOverrideState(getKitOverride(seedPattern.id));
     resetTaps();
-    localStorage.setItem('bf_pattern', pattern.id);
+    localStorage.setItem('bf_pattern', seedPattern.id);
     setTrainerBar(0);
-    setRecent(pushRecent(pattern.id));
+    setRecent(pushRecent(seedPattern.id));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [patternId]);
   /* eslint-enable react-hooks/set-state-in-effect */
 
+  // Track the previous focus so we can detect a groove ↔ click toggle
+  // and restart the grid in unison. Cell edits (pattern alone changes)
+  // shouldn't reset phase; focus toggles should.
+  const prevFocusRef = useRef<FocusMode>(focus);
   useEffect(() => {
+    const focusChanged = prevFocusRef.current !== focus;
+    prevFocusRef.current = focus;
     const base = focus === 'click' ? buildClickSkeleton(pattern) : pattern;
     engine.loadPattern({ ...base, grouping });
+    // Force every channel back to step 0 of the next bar so they
+    // start together after the swap (otherwise rows whose length
+    // didn't change keep playing at their current phase).
+    if (focusChanged) engine.restartFromNextBar();
   }, [engine, pattern, grouping, focus]);
 
   useEffect(() => { engine.setKit(activeKit); }, [engine, activeKit]);
@@ -309,20 +322,20 @@ export function Practice({ engine, patternId, onPatternChange, onOpenSoundPatter
     return [...out].map((s) => s.split(',').map(Number));
   }, [pattern]);
 
-  // Clone the seed track into session-local state; never mutate the seed.
-  // (Bug fix — prior version did arr[s] = ... which corrupted the shared
-  // imported PATTERNS object.)
+  // Toggle a single cell — pushes the new pattern through the session
+  // so Studio + Sound see the same edits. Never mutates the seed
+  // pattern object (Library previews + the reset path read it).
   const toggleStep = useCallback((tr: VoiceId, s: number) => {
-    setEditedTracks((prev) => {
-      const current = prev[tr] ?? seedPattern.tracks[tr];
+    session.setPattern((prev) => {
+      const current = prev.tracks[tr];
       if (!current) return prev;
       const srcArr: Velocity[] = Array.isArray(current) ? current : current.pattern;
       const nextArr: Velocity[] = srcArr.slice();
       nextArr[s] = (nextArr[s] === 0 ? 2 : nextArr[s] === 2 ? 1 : 0) as Velocity;
       const newTrack = Array.isArray(current) ? nextArr : { ...current, pattern: nextArr };
-      return { ...prev, [tr]: newTrack };
+      return { ...prev, tracks: { ...prev.tracks, [tr]: newTrack } };
     });
-  }, [seedPattern]);
+  }, [session]);
 
   // CircularGrid expects positional rows now (refactored to be
   // engine-agnostic so Sound + Practice + Studio can all drive it).
@@ -380,7 +393,7 @@ export function Practice({ engine, patternId, onPatternChange, onOpenSoundPatter
       const seedMatch = PATTERNS.find((p) => p.id === effective.id);
       const untouched = !!seedMatch
         && effective.grouping.join('+') === seedMatch.grouping.join('+')
-        && Object.keys(editedTracks).length === 0;
+        && !hasEdits;
       const url = await buildSmartShareUrl(
         effective,
         (id) => untouched && id === seedMatch!.id,
@@ -391,7 +404,7 @@ export function Practice({ engine, patternId, onPatternChange, onOpenSoundPatter
       setShareToast('Copy failed');
     }
     window.setTimeout(() => setShareToast(null), 1800);
-  }, [pattern, grouping, editedTracks]);
+  }, [pattern, grouping, hasEdits]);
 
   return (
     <main className="bf-main">
@@ -442,7 +455,16 @@ export function Practice({ engine, patternId, onPatternChange, onOpenSoundPatter
 
         <div className="bf-pattern-card">
           <div className="bf-pattern-head">
-            <div className="bf-pattern-name">{pattern.name}</div>
+            <div className="bf-pattern-name">
+              {pattern.name}
+              {session.dirty && (
+                <span
+                  className="bf-pattern-dirty"
+                  title="You've tweaked this pattern from the original"
+                  aria-label="Pattern has unsaved edits"
+                >*</span>
+              )}
+            </div>
             <div className="bf-pattern-head-actions">
               <button
                 className="bf-share-btn"
@@ -638,11 +660,11 @@ export function Practice({ engine, patternId, onPatternChange, onOpenSoundPatter
             {pattern.steps} steps · {pattern.stepUnit === 8 ? 'eighths' : pattern.stepUnit === 16 ? 'sixteenths' : 'quarters'}
             {pattern.poly && ' · polyrhythm'}
           </div>
-          {Object.keys(editedTracks).length > 0 && (
+          {hasEdits && (
             <button
               type="button"
               className="bf-reset-edits"
-              onClick={() => setEditedTracks({})}
+              onClick={() => session.loadPattern(seedPattern)}
               title="Revert your tweaks and restore the original rhythm"
             >
               ↺ reset to original
