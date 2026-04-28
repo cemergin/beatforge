@@ -138,6 +138,12 @@ export function Practice({ engine, patternId, onPatternChange, onOpenSoundPatter
     );
   }, [patternQuery]);
 
+  // Which saved ensemble (SoundKit) is currently applied — used to
+  // mark the corresponding row as selected. Cleared on pattern
+  // change and on kit override (since either action diverges from
+  // the saved ensemble's exact channel state).
+  const [activeEnsembleId, setActiveEnsembleId] = useState<string | null>(null);
+
   // User's saved soundPatterns + soundKits from the new Sound system.
   // Loaded once on mount via promise-then so the React-19
   // set-state-in-effect lint stays happy.
@@ -193,6 +199,7 @@ export function Practice({ engine, patternId, onPatternChange, onOpenSoundPatter
     setSwing(swingDefaultToSlider(seedPattern.swingDefault));
     setGrouping(seedPattern.grouping);
     setKitOverrideState(getKitOverride(seedPattern.id));
+    setActiveEnsembleId(null);
     resetTaps();
     localStorage.setItem('bf_pattern', seedPattern.id);
     setTrainerBar(0);
@@ -581,18 +588,23 @@ export function Practice({ engine, patternId, onPatternChange, onOpenSoundPatter
               {savedSoundKits.length > 0 && (
                 <div className="bf-mini-label" style={{ padding: '6px 8px 2px' }}>ensembles</div>
               )}
-              {savedSoundKits.map((kit) => (
-                <button
-                  key={kit.id}
-                  className="bf-pattern-row"
-                  onClick={() => onOpenSoundPattern?.(kit.id)}
-                  title={`${kit.channels.map((c) => c.label).join(', ')} — open Sound to apply this ensemble`}
-                  disabled
-                >
-                  <span className="bf-pattern-row-name">{kit.name}</span>
-                  <span className="bf-pattern-row-sig">ensemble</span>
-                </button>
-              ))}
+              {savedSoundKits.map((kit) => {
+                const isActive = activeEnsembleId === kit.id;
+                return (
+                  <button
+                    key={kit.id}
+                    className={`bf-pattern-row ${isActive ? 'on' : ''}`}
+                    onClick={() => {
+                      session.setChannels(kit.channels);
+                      setActiveEnsembleId(kit.id);
+                    }}
+                    title={`${kit.channels.map((c) => c.label).join(', ')} — apply this ensemble`}
+                  >
+                    <span className="bf-pattern-row-name">{kit.name}</span>
+                    <span className="bf-pattern-row-sig">ensemble</span>
+                  </button>
+                );
+              })}
             </div>
           </Disclosure>
         )}
@@ -706,6 +718,10 @@ export function Practice({ engine, patternId, onPatternChange, onOpenSoundPatter
         <KitPanel
           activeKit={activeKit}
           onSelect={(k) => {
+            // Picking a kit preset diverges from any saved ensemble
+            // — clear the active marker so the saved row isn't shown
+            // as selected anymore.
+            setActiveEnsembleId(null);
             if (k === pattern.defaultKit) {
               clearKitOverride(pattern.id);
               setKitOverrideState(null);
@@ -716,6 +732,7 @@ export function Practice({ engine, patternId, onPatternChange, onOpenSoundPatter
           }}
           resetTo={kitOverride ? pattern.defaultKit : null}
           onReset={() => {
+            setActiveEnsembleId(null);
             clearKitOverride(pattern.id);
             setKitOverrideState(null);
           }}

@@ -12,7 +12,7 @@ export function KitPanel({ activeKit, onSelect, resetTo, onReset }: Props) {
   return (
     <div className="bf-panel">
       <div className="bf-panel-head">
-        kit
+        ensemble
         {resetTo && onReset && (
           <button
             className="bf-kit-reset"
