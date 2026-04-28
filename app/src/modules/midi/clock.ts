@@ -137,6 +137,13 @@ export function makeClockSender(
     },
     dispose: () => {
       if (timer) { clearInterval(timer); timer = null; }
+      // Tell the downstream rig to stop too. Without 0xFC the synth
+      // / DAW thinks playback is still running and may keep its
+      // arpeggiator / transport going after we've torn down.
+      if (running) {
+        try { output.send([CLOCK_STOP]); onSent?.([CLOCK_STOP]); }
+        catch { /* output may already be closed; nothing to do */ }
+      }
       running = false;
     },
   };

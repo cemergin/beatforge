@@ -134,4 +134,23 @@ describe('makeClockSender', () => {
     vi.advanceTimersByTime(500);
     expect(out.sent).toEqual([]);
   });
+
+  it('dispose-while-running emits 0xFC so downstream rigs stop', () => {
+    const out = makeOutput();
+    const handle = makeClockSender(out, 120);
+    handle.start();
+    out.sent.length = 0;
+    handle.dispose();
+    expect(out.sent).toContainEqual([CLOCK_STOP]);
+  });
+
+  it('dispose-while-stopped does not emit a duplicate 0xFC', () => {
+    const out = makeOutput();
+    const handle = makeClockSender(out, 120);
+    handle.start();
+    handle.stop();
+    out.sent.length = 0;
+    handle.dispose();
+    expect(out.sent).toEqual([]);
+  });
 });

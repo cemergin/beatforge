@@ -1,4 +1,6 @@
-// Secret MIDI tab — dev-only (?tab=_midi, gated by import.meta.env.DEV).
+// Secret MIDI tab — reachable via ?tab=_midi from any build. The nav
+// chip is hidden in the UI; the tab is for users who know the URL
+// (originally dev-only, ungated 2026-04-28 so power users can use it).
 //
 // Three jobs:
 //   1. Enable Web MIDI (delegates to the bridge) + list inputs/outputs
@@ -41,7 +43,8 @@ interface LogEntry {
 const MAX_LOG = 200;
 
 const COMMON_ADDRESSES: readonly string[] = [
-  'master.gain.gain',
+  'master.gain.value',
+  'master.dry.value',
   'master.reverb.wet',
   'master.delay.wet',
   'channel.0',
@@ -226,7 +229,7 @@ export function Midi({ bridge, channels }: Props) {
     <main className="bf-midi-page">
       <header className="bf-lib-hero">
         <div>
-          <h1 className="bf-lib-title">MIDI <span className="bf-midi-badge">DEV</span></h1>
+          <h1 className="bf-lib-title">MIDI <span className="bf-midi-badge">hidden</span></h1>
           <p className="bf-lib-sub">
             Hidden tab. Bind controller CCs and notes to bus addresses, route each audio channel to a MIDI device,
             watch traffic in both directions.

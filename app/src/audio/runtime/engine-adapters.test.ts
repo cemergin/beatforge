@@ -96,7 +96,7 @@ function defaultEffects(): ChannelEffects {
 }
 
 describe('registerEngineMaster — direct module wiring', () => {
-  it('master.gain + reverb + delay register the actual modules', () => {
+  it('master.gain + dry + reverb + delay register the actual modules', () => {
     const { engine, calls } = fakeEngine();
     const router = makeRouter();
     const bus = makeEventBus();
@@ -104,10 +104,12 @@ describe('registerEngineMaster — direct module wiring', () => {
     router.bindBus(bus);
 
     bus.emit({ type: 'param', target: 'master.gain.value', value: 0.7 });
+    bus.emit({ type: 'param', target: 'master.dry.value', value: 0.6 });
     bus.emit({ type: 'param', target: 'master.reverb.wet', value: 0.3 });
     bus.emit({ type: 'param', target: 'master.delay.time', value: 0.5 });
 
     expect(calls.masterGainSet).toHaveBeenCalledWith('value', 0.7, expect.any(Object));
+    expect(calls.drySet).toHaveBeenCalledWith('value', 0.6, expect.any(Object));
     expect(calls.reverbSet).toHaveBeenCalledWith('wet', 0.3, expect.any(Object));
     expect(calls.delaySet).toHaveBeenCalledWith('time', 0.5, expect.any(Object));
   });
