@@ -4,6 +4,8 @@ import { Practice } from './modes/Practice/Practice';
 import type { KitId, Pattern } from './patterns/types';
 import { SessionProvider, useSession } from './modules/session';
 import { PATTERNS } from './patterns/seed';
+import { makeRouter, type Router } from './modules/router';
+import { registerEngineChannel, registerEngineMaster } from './audio/runtime/engine-adapters';
 
 // Library + Studio are split into their own chunks. Practice is the
 // landing tab and stays in the main bundle. The Studio component
@@ -384,6 +386,49 @@ function ModeShell({
     const p = patternById(patternId);
     if (p) session.loadPattern(p);
   }, [patternId, session]);
+
+  // Modular control plane lives at the shell level so input-mapped
+  // ParamEvents (from the secret MIDI tab) drive audio regardless of
+  // which mode is mounted. Previously Studio owned the router; the
+  // MIDI tab couldn't actually control sound because Studio was
+  // unmounted while the user was editing mappings.
+  const [router] = useState<Router>(() => makeRouter());
+  useEffect(() => {
+    let active = true;
+    let unregisterMaster: (() => void) | null = null;
+    const unbind = router.bindBus(engine.getEventBus());
+    void engine.ensureCtx().then(() => {
+      if (!active) return;
+      unregisterMaster = registerEngineMaster(router, engine);
+    });
+    return () => {
+      active = false;
+      unbind();
+      unregisterMaster?.();
+    };
+  }, [engine, router]);
+
+  // Per-channel adapter registrations — keyed on channel COUNT to
+  // avoid tearing down the adapter cache on every knob tweak. Knob
+  // changes also emit ParamEvents that update the cache, so the cache
+  // stays correct without re-registering. Reads channels through a
+  // ref so the registration effect only fires when the count changes.
+  const channels = session.channels;
+  const channelsRefForRegister = useRef(channels);
+  useEffect(() => { channelsRefForRegister.current = channels; }, [channels]);
+  const channelCount = channels.length;
+  useEffect(() => {
+    const offs: Array<() => void> = [];
+    const cur = channelsRefForRegister.current;
+    for (let i = 0; i < channelCount; i++) {
+      const ch = cur[i];
+      if (!ch) continue;
+      offs.push(registerEngineChannel(router, engine, i, {
+        effects: ch.effects, machine: ch.machine,
+      }));
+    }
+    return () => { for (const off of offs) off(); };
+  }, [router, engine, channelCount]);
 
   return (
     <>

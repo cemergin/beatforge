@@ -4,8 +4,6 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { SoundEngine, type SoundSequence, type SoundStep } from '../../audio/runtime/sound-engine';
-import { registerEngineChannel, registerEngineMaster } from '../../audio/runtime/engine-adapters';
-import { makeRouter } from '../../modules/router';
 import { useSession } from '../../modules/session';
 import { trackMeta, ALL_KITS, type KitId } from '../../patterns/types';
 import {
@@ -364,33 +362,10 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
   // shared engine state. Disposal happens at App unmount.
   const session = useSession();
 
-  // Modular control plane: router dispatches ParamEvents arriving on
-  // the engine's bus into ControllableModules. Master/reverb/delay
-  // are registered at master.gain / master.reverb / master.delay so
-  // any future producer (MIDI, automation, recall) can drive them
-  // through the same path the sliders use. Reverb + delay register
-  // the FX modules from machines/fx DIRECTLY — the router calls
-  // their .set() with no engine-side shim.
-  //
-  // Bus binding fires immediately (the bus is lazily owned by the
-  // engine and works without an AudioContext). Master FX
-  // registration waits for ensureCtx() because the FX modules
-  // don't exist until the context is initialized.
-  const [router] = useState(() => makeRouter());
-  useEffect(() => {
-    let active = true;
-    let unregister: (() => void) | null = null;
-    const unbind = router.bindBus(engine.getEventBus());
-    void engine.ensureCtx().then(() => {
-      if (!active) return;
-      unregister = registerEngineMaster(router, engine);
-    });
-    return () => {
-      active = false;
-      unbind();
-      unregister?.();
-    };
-  }, [engine, router]);
+  // Modular control plane is owned by App's ModeShell — router +
+  // master + per-channel adapters live there so input-mapped events
+  // (MIDI tab, automation) drive audio regardless of which mode is
+  // mounted. Sound just emits ParamEvents on engine.getEventBus().
 
   // Channels live in the session — labels, machine configs, color
   // FX, level/pan/sends ride with the user across tabs. setChannels
@@ -611,33 +586,8 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
     });
   }, [engine, channels]);
 
-  // Per-channel adapter registrations. Every time the channel count
-  // changes, tear down old adapter registrations and register fresh
-  // ones at channel.<n>, channel.<n>.color, channel.<n>.machine
-  // with the channel's CURRENT state as the adapter's initial cache.
-  // After this effect runs, ParamEvents like channel.0.machine.pitch
-  // route directly to engine.applyChannelMachine.
-  //
-  // Why count, not full channels[]: re-registering on every knob
-  // tweak would discard the adapter's state cache mid-edit. The
-  // count-only dependency means the registration is stable across
-  // knob changes; the adapter caches stay correct because every
-  // knob change ALSO emits a ParamEvent that updates the cache.
-  const channelsRefForRegister = useRef(channels);
-  useEffect(() => { channelsRefForRegister.current = channels; }, [channels]);
-  const channelCount = channels.length;
-  useEffect(() => {
-    const offs: Array<() => void> = [];
-    const cur = channelsRefForRegister.current;
-    for (let i = 0; i < channelCount; i++) {
-      const ch = cur[i];
-      if (!ch) continue;
-      offs.push(registerEngineChannel(router, engine, i, {
-        effects: ch.effects, machine: ch.machine,
-      }));
-    }
-    return () => { for (const off of offs) off(); };
-  }, [router, engine, channelCount]);
+  // Per-channel adapter registrations live in ModeShell — see comment
+  // on the router setup above.
 
   // Push sequence + stepUnit + grouping + feel/master to the engine.
   // Each useEffect tracks a single state slice so we don't resend
