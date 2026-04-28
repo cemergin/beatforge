@@ -36,12 +36,24 @@ function naturalBpmForPattern(p: Pattern): number {
   return stepToNaturalBpm(p.bpm.default, p.stepUnit, denom);
 }
 
+/** Friendly labels per VoiceId — what shows up as the channel name
+ *  in Sound's mixer + the row label in BeatDots / StepGrid. Matches
+ *  the pre-session local default Sound used to ship. */
+const VOICE_LABELS: Record<typeof ALL_VOICES[number], string> = {
+  KK: 'Kick',
+  SN: 'Snare',
+  HH: 'Hat',
+  OH: 'Open hat',
+  CP: 'Clap',
+};
+
 /** Default channels for a kit — one Channel per ALL_VOICES position,
- *  machine = kit preset, effects = defaults. Used on initial mount,
- *  on loadPattern, and on setKit to re-seed timbre across channels. */
+ *  machine = kit preset, effects = defaults, label = friendly voice
+ *  name. Used on initial mount, on loadPattern, and on setKit to
+ *  re-seed timbre across channels. */
 function channelsForKit(kit: KitId): Channel[] {
   return ALL_VOICES.map((voiceId) => ({
-    label: voiceId,
+    label: VOICE_LABELS[voiceId] ?? voiceId,
     machine: buildKitMachine(kit, voiceId),
     effects: defaultChannelEffects(),
   }));

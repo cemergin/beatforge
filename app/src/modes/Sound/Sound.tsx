@@ -15,13 +15,11 @@ import {
   MACHINE_CATEGORY_LABEL,
   MACHINE_CATEGORY_ORDER,
 } from '../../audio/machines/registry';
-import type { MachineConfig } from '../../audio/machines/types';
 import {
   type Channel,
   type ColorFx,
   type SoundPattern,
   type SoundKit,
-  defaultChannelEffects,
 } from '../../patterns/types-sound';
 import {
   saveSoundPattern,
@@ -266,24 +264,6 @@ function tracksFromSequence(seq: SoundSequence): import('../../patterns/types').
   return out;
 }
 
-function defaultChannels(): Channel[] {
-  const k = (archetype: VoiceArchetypeId, presetId?: string): MachineConfig => {
-    const m = VOICE_MACHINES[archetype];
-    const preset = presetId && m.presets ? m.presets[presetId] : undefined;
-    return { ...m.defaults, ...preset };
-  };
-  // Classic 5-piece drum kit lineup — fastest path to laying a groove
-  // down on first load. Users still swap any channel to bell/kalimba/
-  // FM/etc via the machine picker.
-  return [
-    { label: 'Kick',    machine: k('kick'),     effects: defaultChannelEffects() },
-    { label: 'Snare',   machine: k('snare'),    effects: defaultChannelEffects() },
-    { label: 'Hat',     machine: k('hat'),      effects: defaultChannelEffects() },
-    { label: 'Tom',     machine: k('tom'),      effects: defaultChannelEffects() },
-    { label: 'Cowbell', machine: k('cowbell'),  effects: defaultChannelEffects() },
-  ];
-}
-
 /** 3-char abbreviation derived from a channel's display name — used as
  *  the row label in StepGrid, the ring label in CircularGrid, etc. */
 function shortFor(label: string): string {
@@ -336,7 +316,20 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
     };
   }, [engine, router]);
 
-  const [channels, setChannels] = useState<Channel[]>(() => defaultChannels());
+  // Channels live in the session — labels, machine configs, color
+  // FX, level/pan/sends ride with the user across tabs. setChannels
+  // accepts the same (Channel[] | (prev) => Channel[]) signature
+  // existing handlers use; internally it forwards to session.
+  const channels = session.channels;
+  const setChannels = useCallback(
+    (updaterOrValue: Channel[] | ((prev: Channel[]) => Channel[])) => {
+      const next = typeof updaterOrValue === 'function'
+        ? updaterOrValue(session.channels.slice())
+        : updaterOrValue;
+      session.setChannels(next);
+    },
+    [session],
+  );
   // Sequence seeded from session.pattern on mount so Practice→Sound
   // lands on the same beats. Hydration effect below keeps it in
   // sync when session.pattern changes externally.
