@@ -1,10 +1,22 @@
-// SoundEngine — audio runtime for the Sound page. Owns its own audio
-// graph (master + analyser + reverb + delay + 5 channel strips) AND a
-// look-ahead scheduler so the page can host a sequencer without
-// depending on the production AudioEngine. Scheduler design mirrors
-// AudioEngine (worker-driven 15ms tick, 300ms scheduleAhead, anchor-
-// derive nextNoteTime, audibleStep() inverts the anchor formula for UI)
-// — kept in sync with that file so the unification path is short.
+// SoundEngine — audio runtime for the Sound page.
+//
+// Owns the audio plane:
+//   - AudioContext lifecycle
+//   - Master gain + analyser
+//   - Master reverb + delay (ControllableModules from machines/fx)
+//   - Per-channel ChannelStrips with color FX slot
+//   - Voice machine triggering (subscribes to TriggerEvent)
+//
+// Delegates the control plane to modules/sequencer:
+//   - All BPM / stepUnit / stepsPerBar / swing / accents state
+//   - The look-ahead tick loop (worker still drives the cadence —
+//     SoundEngine pumps sequencer.tick() on each worker message)
+//   - Bar / Step / Trigger / Transport emission on the bus
+//
+// The audio side and the control side talk through TriggerEvent.
+// The sequencer emits at addresses like `channel.0`; SoundEngine
+// subscribes via the bus, looks up the matching machine cfg + strip,
+// and calls triggerVoice. Same flow MIDI input will use later.
 
 import { triggerVoice } from '../machines/registry';
 import type { MachineConfig, VoiceCtx } from '../machines/types';
@@ -13,9 +25,8 @@ import type { ChannelEffects, ColorFx } from '../../patterns/types-sound';
 import { ChannelStrip, type ChannelStripParams } from './ChannelStrip';
 import { buildColorFxModule, createDelayFx, createReverb } from '../machines/fx';
 import type { ControllableModule } from '../../modules/audio-graph';
-import { makeEventBus, type EventBus } from '../../modules/events';
-// Vite explicit-worker import — see engine.ts for the MIME-fallback
-// reasoning. Must use the `?worker` query, not `new URL(...)`.
+import { makeEventBus, type EventBus, type Unsubscribe } from '../../modules/events';
+import { makeSequencer, type Sequencer } from '../../modules/sequencer';
 import SchedulerWorker from '../scheduler-worker.ts?worker';
 
 const NUM_CHANNELS = 5;
@@ -25,17 +36,17 @@ export type SoundStep = 0 | 1 | 2;
 /** [channelIdx][stepIdx] grid. Outer length = NUM_CHANNELS. */
 export type SoundSequence = SoundStep[][];
 
+/** Match `channel.<n>` exactly — the Sequencer's default trigger
+ *  address tree. Anchored so a deeper target like
+ *  `channel.0.machine.pitch` (a ParamEvent target) doesn't accidentally
+ *  trip the trigger handler. */
+const CHANNEL_TRIGGER_ADDRESS = /^channel\.(\d+)$/;
+
 export class SoundEngine {
   // ── Audio graph ─────────────────────────────────────────────────
   private ctx: AudioContext | null = null;
   private master: GainNode | null = null;
   private analyser: AnalyserNode | null = null;
-  // Master FX. revBus/dlyBus are the per-channel send sums that feed
-  // into the FX modules. The modules themselves are ControllableModules
-  // (machines/fx) — wet/size/decay/time/feedback all flow through
-  // .set(name, value), which the Router can drive directly. The
-  // engine's setReverb*/setDelay* setters are kept for backwards
-  // compat (Sound.tsx + bus-bridged adapters) but delegate to .set().
   private revBus: GainNode | null = null;
   private dlyBus: GainNode | null = null;
   private reverbFx: ControllableModule | null = null;
@@ -43,68 +54,33 @@ export class SoundEngine {
   private strips: ChannelStrip[] = [];
   private ctxInitPromise: Promise<void> | null = null;
 
-  // ── Sequencer state ─────────────────────────────────────────────
-  private _running = false;
+  // Live machine configs the trigger handler reads on every fire.
+  private machines: MachineConfig[] = [];
+
+  // ── Control plane ──────────────────────────────────────────────
+  private bus: EventBus | null = null;
+  private sequencer: Sequencer | null = null;
+  private triggerSub: Unsubscribe | null = null;
+
+  // Shadow state — preserves setter values across ctx init.
   private _bpm = 110;
   private _stepsPerBar = 16;
-  // Step note value: 4 = quarter, 8 = eighth, 16 = sixteenth. BPM is
-  // always quarter-note BPM (familiar to users), so stepSec scales by
-  // (stepUnit / 4). Switching meter from 4/4 (stepUnit=16) to 6/8
-  // (stepUnit=8) doubles each step's duration without touching bpm.
   private _stepUnit: 4 | 8 | 16 = 16;
-  // Additive grouping (e.g. [2,2,3] for 7/8). Used for count-in to
-  // place clicks at downbeats — group boundaries — rather than evenly
-  // across the bar. Defaults to [stepsPerBar] (one big group, single
-  // downbeat per bar) when not explicitly set.
   private _grouping: number[] = [16];
-  private sequence: SoundSequence = [];
-  // Live machine configs the scheduler reads at trigger time. Sound.tsx
-  // pushes new copies on every channel change (knob tweak, preset apply,
-  // archetype swap). Cheap — just stashing the reference.
-  private machines: MachineConfig[] = [];
+  private _sequence: SoundSequence = [];
+  private _swing = 0.5;
   private _strongAmp = 1.0;
   private _weakAmp = 0.55;
-  // Swing: 0.5 = straight, 0.67 = heavy (triplet feel). Applied only to
-  // odd-indexed steps when stepUnit ∈ {8, 16} — see tick(). Quarter-
-  // note swing is just a tempo change, so stepUnit=4 ignores swing.
-  private _swing = 0.5;
 
-  // Scheduler infrastructure (mirrors AudioEngine's lookaheadMs /
-  // scheduleAheadS / worker-vs-setTimeout fallback).
+  // ── Scheduler driver ───────────────────────────────────────────
   private readonly lookaheadMs = 15;
   private readonly scheduleAheadS = 0.30;
   private worker: Worker | null = null;
   private workerFailed = false;
   private timerId: ReturnType<typeof setTimeout> | null = null;
-  // Per-channel scheduler state — each channel has its own playhead so
-  // polyrhythms (channels with sequence row length ≠ stepsPerBar) tick
-  // at their own rate. Length always tracks strips.length via
-  // ensureStripCount. Anchors re-set on setBpm/setStepUnit/length-change
-  // so float-add drift stays bounded across long sessions.
-  private nextNoteTimes: number[] = [];
-  private nextIdxs: number[] = [];
-  private anchorTimes: number[] = [];
-  private anchorIdxs: number[] = [];
-  // Cached row lengths so setSequence can detect a length change for a
-  // single channel and re-anchor only that one (instead of rebuilding
-  // the whole grid).
-  private rowLengths: number[] = [];
-  private startTime = 0;
 
-  // ── Event bus (control plane) ───────────────────────────────────
-  // Lazily created on first access. The engine emits BarEvents,
-  // StepEvents, TriggerEvents, and TransportEvents alongside its
-  // direct dispatch — UI / router / recorder / MIDI-out subscribe
-  // through the same channel. No subscribers ⇒ cost is one Map
-  // lookup per emit, near zero. The direct path (triggerVoice +
-  // ChannelStrip) remains the source of truth for audio output —
-  // events are read-only signals about what already happened.
-  private bus: EventBus | null = null;
-  // Last bar number we emitted a BarEvent for. Bar 0 is "not yet
-  // started"; the first emit fires when audibleBar() reaches 1.
-  private lastEmittedBar = 0;
-
-  get running(): boolean { return this._running; }
+  // ── Read-only state ────────────────────────────────────────────
+  get running(): boolean { return this.sequencer?.running() ?? false; }
   get bpm(): number { return this._bpm; }
   get stepsPerBar(): number { return this._stepsPerBar; }
   get stepUnit(): 4 | 8 | 16 { return this._stepUnit; }
@@ -144,11 +120,6 @@ export class SoundEngine {
     master.connect(analyser);
     analyser.connect(ctx.destination);
 
-    // Master FX modules. Each one is a ControllableModule from
-    // machines/fx — input is the bus that channel sends sum into,
-    // output is summed back to the master gain. wet/size/decay
-    // (reverb) and wet/time/feedback (delay) all flow through
-    // module.set(name, value).
     const revBus = ctx.createGain();
     const dlyBus = ctx.createGain();
 
@@ -173,40 +144,65 @@ export class SoundEngine {
     this.reverbFx = reverbFx;
     this.delayFx = delayFx;
     this.strips = strips;
+
+    // Build the sequencer wired to this engine's bus + clock. Subscribe
+    // to TriggerEvent so the audio plane reacts to the control plane.
+    const bus = this.getEventBus();
+    const sequencer = makeSequencer({
+      bus,
+      clock: () => ctx.currentTime,
+      scheduleAheadS: this.scheduleAheadS,
+    });
+    this.sequencer = sequencer;
+    this.triggerSub = bus.on('trigger', (event) => this.handleTrigger(event));
+
+    // Replay shadow state onto the sequencer so any setBpm / setStepUnit
+    // / setSwing / setAccents / setSequence calls made before ensureCtx
+    // take effect now.
+    sequencer.setBpm(this._bpm);
+    sequencer.setStepUnit(this._stepUnit);
+    sequencer.setStepsPerBar(this._stepsPerBar);
+    sequencer.setSwing(this._swing);
+    sequencer.setAccents(this._strongAmp, this._weakAmp);
+    sequencer.setRowCount(strips.length);
+    if (this._sequence.length > 0) sequencer.setSequence(this._sequence);
   }
 
-  /** Grow or shrink the strips array AND the per-channel scheduler
-   *  state to match `n`. Strips dispose cleanly when removed — colour
-   *  FX, panner, level, taps all disconnect, no orphaned nodes. New
-   *  channels' anchors initialize at startTime (or now if not playing)
-   *  so they tick from cycle 0 the moment a sequence row appears. */
+  /** Dispatch a TriggerEvent to the right voice + strip. The
+   *  sequencer emits at `channel.<n>`; deeper-addressed events (a
+   *  ParamEvent for `channel.0.color.cutoff`) are NOT triggers and
+   *  pass right through this regex. */
+  private handleTrigger(event: { target: string; when: number; velocity: number }): void {
+    const m = CHANNEL_TRIGGER_ADDRESS.exec(event.target);
+    if (!m || !this.ctx) return;
+    const ch = parseInt(m[1], 10);
+    const cfg = this.machines[ch];
+    const strip = this.strips[ch];
+    if (!cfg || !strip) return;
+    const vc: VoiceCtx = { ctx: this.ctx, destination: strip.input };
+    triggerVoice(cfg, vc, event.when, event.velocity);
+  }
+
+  /** Grow or shrink the strips array AND the sequencer's row count. */
   private ensureStripCount(n: number): void {
     if (!this.ctx || !this.master) return;
     const target = Math.max(0, Math.floor(n));
-    const t0 = this._running ? (this.ctx.currentTime + 0.01) : this.startTime;
     while (this.strips.length < target) {
       this.strips.push(new ChannelStrip(
         this.ctx, this.master, this.revBus, this.dlyBus, buildColorFxModule,
       ));
-      this.nextNoteTimes.push(t0);
-      this.nextIdxs.push(0);
-      this.anchorTimes.push(t0);
-      this.anchorIdxs.push(0);
-      this.rowLengths.push(0);
     }
     while (this.strips.length > target) {
       const s = this.strips.pop();
       try { s?.dispose(); } catch { /* idempotent */ }
-      this.nextNoteTimes.pop();
-      this.nextIdxs.pop();
-      this.anchorTimes.pop();
-      this.anchorIdxs.pop();
-      this.rowLengths.pop();
     }
+    this.sequencer?.setRowCount(this.strips.length);
   }
 
-  /** One-shot trigger (not sequenced — for audition + ASDFG keys). */
-  trigger(channelIdx: number, cfg: MachineConfig, amp = 1.0): void {
+  /** Audition a single voice immediately (UI hover / preset preview).
+   *  Doesn't go through the sequencer — direct dispatch with a tiny
+   *  look-ahead so the audio context can schedule. */
+  trigger(channelIdx: number, cfg: MachineConfig, amp: number): void {
     if (!this.ctx) return;
     const strip = this.strips[channelIdx];
     if (!strip) return;
@@ -227,18 +223,11 @@ export class SoundEngine {
     strip.applyColorFx(effects.colorFx);
   }
 
-  /** Apply just the color FX without touching mixer params. Used by
-   *  the channel-color adapter so it doesn't have to know the channel's
-   *  current mixer state to perform a color-only update. */
   applyChannelColorFx(channelIdx: number, colorFx: ColorFx): void {
     const strip = this.strips[channelIdx];
     if (strip) strip.applyColorFx(colorFx);
   }
 
-  /** Update one channel's machine config in place. The scheduler reads
-   *  this.machines[ch] every step — so the next trigger sees the new
-   *  cfg. Used by the channel-machine adapter to swap archetypes or
-   *  tweak knobs through ParamEvents. */
   applyChannelMachine(channelIdx: number, cfg: MachineConfig): void {
     if (channelIdx < 0 || channelIdx >= this.machines.length) return;
     const next = this.machines.slice();
@@ -255,98 +244,52 @@ export class SoundEngine {
     this.master.gain.value = Math.max(0, Math.min(1, v));
   }
 
-  // ── Sequencer API ───────────────────────────────────────────────
+  // ── Sequencer-delegating setters ───────────────────────────────
 
-  /** Replace the step grid. Each row's length is independent — rows
-   *  matching stepsPerBar tick at the main rate; rows with a different
-   *  length are polyrhythmic and tick at barSec / rowLength. When a
-   *  row's length changes, that channel snaps to step 0 at the next
-   *  bar boundary so the new cycle aligns musically. Other channels
-   *  are untouched. */
   setSequence(seq: SoundSequence): void {
-    if (this._running && this.ctx) {
-      const barSec = this.barSeconds();
-      const elapsed = this.ctx.currentTime - this.startTime;
-      const barsCompleted = elapsed > 0 ? Math.floor(elapsed / barSec) + 1 : 0;
-      const nextBarStart = this.startTime + barsCompleted * barSec;
-      for (let i = 0; i < seq.length; i++) {
-        const prevLen = this.rowLengths[i] ?? 0;
-        const newLen = seq[i]?.length ?? 0;
-        if (prevLen !== newLen) {
-          this.nextNoteTimes[i] = nextBarStart;
-          this.nextIdxs[i] = 0;
-          this.anchorTimes[i] = nextBarStart;
-          this.anchorIdxs[i] = 0;
-        }
-      }
-    }
-    this.rowLengths = seq.map((r) => r.length);
-    this.sequence = seq;
+    this._sequence = seq;
+    this.sequencer?.setSequence(seq);
   }
 
-  /** Set the main grid step count (== sum(grouping)). Polyrhythm
-   *  channels keep their own row lengths; this only changes what
-   *  "main rate" means + bar duration. Re-anchors all channels so
-   *  the new bar duration takes effect from "now". */
   setStepsPerBar(n: number): void {
     if (n <= 0) return;
-    if (this._running && this.ctx) {
-      for (let i = 0; i < this.strips.length; i++) {
-        this.anchorTimes[i] = this.nextNoteTimes[i];
-        this.anchorIdxs[i] = this.nextIdxs[i];
-      }
-    }
     this._stepsPerBar = n;
+    this.sequencer?.setStepsPerBar(n);
   }
 
-  /** Push the latest machine configs. Sound.tsx calls this on every
-   *  channel state change — knob tweak, preset apply, archetype swap,
-   *  add/remove channel. Length defines the active strip count, so
-   *  this also drives ensureStripCount. Triggers already in flight
-   *  aren't affected (Web Audio nodes already scheduled keep their
-   *  pre-tweak params); subsequent triggers pick up the new config. */
   setMachines(machines: MachineConfig[]): void {
     this.ensureStripCount(machines.length);
     this.machines = machines;
   }
 
   setBpm(b: number): void {
-    if (this._running) {
-      // Re-anchor every channel so the new step rate takes effect
-      // from "now" without retroactively warping past steps.
-      for (let i = 0; i < this.strips.length; i++) {
-        this.anchorTimes[i] = this.nextNoteTimes[i];
-        this.anchorIdxs[i] = this.nextIdxs[i];
-      }
-    }
     this._bpm = b;
+    this.sequencer?.setBpm(b);
   }
 
-  /** Step duration changes when stepUnit changes (16th → 8th doubles
-   *  stepSec). Re-anchor every channel so phase stays continuous. */
   setStepUnit(u: 4 | 8 | 16): void {
-    if (this._running) {
-      for (let i = 0; i < this.strips.length; i++) {
-        this.anchorTimes[i] = this.nextNoteTimes[i];
-        this.anchorIdxs[i] = this.nextIdxs[i];
-      }
-    }
     this._stepUnit = u;
+    this.sequencer?.setStepUnit(u);
   }
 
-  /** Grouping for count-in placement. Doesn't affect step rate. */
+  /** Grouping for count-in placement. Doesn't affect step rate, so
+   *  the sequencer doesn't need to know — it stays here for the
+   *  count-in click code path. */
   setGrouping(g: number[]): void {
     this._grouping = g.length > 0 ? [...g] : [this._stepsPerBar];
   }
 
-  /** Swing depth: 0.5 = straight, 0.67 ≈ heavy triplet feel. Clamped. */
   setSwing(s: number): void {
-    this._swing = Math.max(0.5, Math.min(0.75, s));
+    const clamped = Math.max(0.5, Math.min(0.75, s));
+    this._swing = clamped;
+    this.sequencer?.setSwing(clamped);
   }
 
-  // Master FX setters delegate to the ControllableModule machines.
-  // Same call surface as before so engine-adapters + Sound.tsx stay
-  // identical; the actual ramp / rebuild lives inside the FX module.
+  setAccents(strong: number, weak: number): void {
+    this._strongAmp = Math.max(0, strong);
+    this._weakAmp = Math.max(0, weak);
+    this.sequencer?.setAccents(this._strongAmp, this._weakAmp);
+  }
 
   setReverbWet(v: number): void   { this.reverbFx?.set('wet',   v); }
   setReverbSize(s: number): void  { this.reverbFx?.set('size',  s); }
@@ -355,93 +298,31 @@ export class SoundEngine {
   setDelayWet(v: number): void    { this.delayFx?.set('wet',      v); }
   setDelayFeedback(v: number): void { this.delayFx?.set('feedback', v); }
 
-  /** Direct access to the master FX modules. Lets a future router
-   *  registration target reverb / delay through the SAME .set()
-   *  interface every other audio unit uses, instead of going through
-   *  the engine-side adapter shims. Returns null if the AudioContext
-   *  hasn't been initialized yet. */
+  /** Direct access to the master FX modules. */
   getReverbFx(): ControllableModule | null { return this.reverbFx; }
   getDelayFx(): ControllableModule | null  { return this.delayFx; }
 
-  setAccents(strong: number, weak: number): void {
-    this._strongAmp = Math.max(0, strong);
-    this._weakAmp = Math.max(0, weak);
-  }
+  // ── Audible-state proxies (forward to sequencer) ───────────────
 
-  /** 1-indexed bar number that's audible RIGHT NOW. 0 when not playing
-   *  or during count-in. Counted from `startTime` (post-count-in), so
-   *  bar 1 starts on the first sequenced beat. Loops forever — the
-   *  number just keeps climbing. */
-  audibleBar(): number {
-    if (!this.ctx || !this._running) return 0;
-    const barSec = this.barSeconds();
-    if (barSec <= 0) return 0;
-    const elapsed = this.ctx.currentTime - this.startTime;
-    if (elapsed < 0) return 0;
-    return Math.floor(elapsed / barSec) + 1;
-  }
-
-  /** Audible step on the MAIN grid — proxies channel 0's cursor.
-   *  Drives the head row + hero BeatDots + view labels. In the common
-   *  case (no polyrhythm) channel 0 ticks at the main rate so this
-   *  reads exactly like a global cursor; with polyrhythm it falls
-   *  back to whatever channel 0's rate is. */
-  audibleStep(): number {
-    return this.audibleStepFor(0);
-  }
-
-  /** Audible step for a specific channel — independent for poly rows.
-   *  -1 if not playing or pre-count-in. */
+  audibleBar(): number { return this.sequencer?.audibleBar() ?? 0; }
+  audibleStep(): number { return this.sequencer?.audibleStep() ?? -1; }
   audibleStepFor(channelIdx: number): number {
-    if (!this.ctx || !this._running) return -1;
-    const stepSec = this.channelStepSec(channelIdx);
-    if (stepSec <= 0) return -1;
-    const now = this.ctx.currentTime;
-    if (now < this.startTime) return -1;
-    const ringSteps = this.sequence[channelIdx]?.length || this._stepsPerBar;
-    if (ringSteps <= 0) return -1;
-    const anchorT = this.anchorTimes[channelIdx] ?? this.startTime;
-    const anchorI = this.anchorIdxs[channelIdx] ?? 0;
-    const stepsSinceAnchor = Math.floor((now - anchorT) / stepSec);
-    const globalIdx = anchorI + stepsSinceAnchor;
-    return ((globalIdx % ringSteps) + ringSteps) % ringSteps;
+    return this.sequencer?.audibleStepFor(channelIdx) ?? -1;
   }
 
-  /** Main-grid step duration. Quarter-BPM × stepUnit determines
-   *  individual step length. stepsPerBar drives bar duration but not
-   *  step duration. 16th @ 120 BPM = 0.125s; 8th @ 120 BPM = 0.25s. */
-  private stepSeconds(): number {
-    return 240 / (this._bpm * this._stepUnit);
-  }
-
-  /** Bar duration — same for every channel, regardless of subdivisions.
-   *  Polyrhythm rows fit `rowLength` ticks into the same `barSec`. */
-  private barSeconds(): number {
-    return this.stepSeconds() * this._stepsPerBar;
-  }
-
-  /** Step duration for a specific channel. Polyrhythm rows divide
-   *  barSec by their own length; main-rate rows == stepSeconds(). */
-  private channelStepSec(channelIdx: number): number {
-    const ringSteps = this.sequence[channelIdx]?.length || this._stepsPerBar;
-    if (ringSteps <= 0) return 0;
-    return this.barSeconds() / ringSteps;
-  }
+  // ── Transport ──────────────────────────────────────────────────
 
   async play(opts: { countInBars?: number } = {}): Promise<void> {
     await this.ensureCtx();
-    if (!this.ctx || this._running) return;
-    this._running = true;
+    if (!this.ctx || !this.sequencer || this.sequencer.running()) return;
     const ctx = this.ctx;
-    const barSec = this.barSeconds();
-    const stepSec = this.stepSeconds();
+    const barSec = this.sequencer.barSeconds();
+    const stepSec = this.sequencer.stepSeconds();
     const countInBars = Math.max(0, Math.floor(opts.countInBars ?? 0));
     const headRoom = ctx.currentTime + 0.06;
-    const start = headRoom + countInBars * barSec;
 
     // Schedule a wood-tick at the start of each grouping cell of every
-    // count-in bar. Step 0 = strong (start of bar); other group heads
-    // = medium. Mirrors AudioEngine's count-in click for consistency.
+    // count-in bar.
     if (countInBars > 0) {
       const downbeatSteps: number[] = [];
       let acc = 0;
@@ -457,19 +338,7 @@ export class SoundEngine {
       }
     }
 
-    this.startTime = start;
-    this.lastEmittedBar = 0;
-    // Initialize each channel's playhead at startTime, idx 0. Per-row
-    // tick rate falls out of channelStepSec at scheduling time.
-    for (let i = 0; i < this.strips.length; i++) {
-      this.nextNoteTimes[i] = start;
-      this.nextIdxs[i] = 0;
-      this.anchorTimes[i] = start;
-      this.anchorIdxs[i] = 0;
-    }
-    if (this.bus) {
-      this.bus.emit({ type: 'transport', action: 'play', when: start });
-    }
+    this.sequencer.play({ startTime: headRoom, countInBars });
     this.ensureWorker();
     if (this.worker) {
       this.worker.postMessage({ type: 'start', intervalMs: this.lookaheadMs });
@@ -478,8 +347,18 @@ export class SoundEngine {
     this.tick();
   }
 
-  /** Kit-independent count-in click — wood-tick. Same shape as
-   *  AudioEngine.countInClick so the two engines feel identical. */
+  stop(): void {
+    this.sequencer?.stop();
+    if (this.timerId !== null) {
+      clearTimeout(this.timerId);
+      this.timerId = null;
+    }
+    if (this.worker) {
+      this.worker.postMessage({ type: 'stop' });
+    }
+  }
+
+  /** Kit-independent count-in click — wood-tick. */
   private countInClick(when: number, amp: number): void {
     const ctx = this.ctx;
     const master = this.master;
@@ -492,20 +371,6 @@ export class SoundEngine {
     osc.connect(g).connect(master);
     osc.start(when);
     osc.stop(when + 0.05);
-  }
-
-  stop(): void {
-    this._running = false;
-    if (this.timerId !== null) {
-      clearTimeout(this.timerId);
-      this.timerId = null;
-    }
-    if (this.worker) {
-      this.worker.postMessage({ type: 'stop' });
-    }
-    if (this.bus && this.ctx) {
-      this.bus.emit({ type: 'transport', action: 'stop', when: this.ctx.currentTime });
-    }
   }
 
   private ensureWorker(): void {
@@ -521,116 +386,8 @@ export class SoundEngine {
   }
 
   private tick = (): void => {
-    if (!this._running || !this.ctx) return;
-    const ctx = this.ctx;
-    const horizon = ctx.currentTime + this.scheduleAheadS;
-    const nowCatchUp = ctx.currentTime;
-    const mainStepSec = this.stepSeconds();
-
-    // Bar boundary detection — emit BarEvent each time the audible
-    // bar number ticks up. Lightweight: one comparison per tick. The
-    // `when` we pass is the audio-clock time of the audible bar's
-    // start (startTime + (bar-1) * barSec).
-    if (this.bus) {
-      const currentBar = this.audibleBar();
-      if (currentBar > this.lastEmittedBar) {
-        const barSec = this.barSeconds();
-        for (let b = this.lastEmittedBar + 1; b <= currentBar; b++) {
-          this.bus.emit({
-            type: 'bar',
-            bar: b,
-            when: this.startTime + (b - 1) * barSec,
-          });
-        }
-        this.lastEmittedBar = currentBar;
-      }
-    }
-
-    // Catch-up (cooperative). If any one channel has slipped past
-    // nowCatchUp, snap every channel that's behind to the same
-    // recovery time. Per-channel independent snapping was letting
-    // non-stalled channels keep their old schedule while stalled
-    // ones jumped to (now + 5ms), which broke phase across voices
-    // that should have been in lock-step. Polyrhythm channels have
-    // their own step rate but they all share a bar boundary; lining
-    // them up at recoverT loses < 5ms of relative phase, which is
-    // a small price to pay to never have audible drift after a stall.
-    let stalled = false;
-    for (let ch = 0; ch < this.strips.length; ch++) {
-      const row = this.sequence[ch];
-      if (!row || row.length === 0) continue;
-      if (this.nextNoteTimes[ch] < nowCatchUp) { stalled = true; break; }
-    }
-    if (stalled) {
-      const recoverT = nowCatchUp + 0.005;
-      for (let ch = 0; ch < this.strips.length; ch++) {
-        const row = this.sequence[ch];
-        if (!row || row.length === 0) continue;
-        if (this.nextNoteTimes[ch] < recoverT) {
-          this.nextNoteTimes[ch] = recoverT;
-          this.anchorTimes[ch] = recoverT;
-          this.anchorIdxs[ch] = this.nextIdxs[ch];
-        }
-      }
-    }
-
-    // Per-channel scheduling — each row ticks at its own rate. Empty
-    // rows still advance their playhead but trigger nothing, so the
-    // cursor stays correct if the user dials hits in mid-bar.
-    for (let ch = 0; ch < this.strips.length; ch++) {
-      const row = this.sequence[ch];
-      if (!row || row.length === 0) continue;
-      const ringSteps = row.length;
-      const channelStepSec = this.channelStepSec(ch);
-      if (channelStepSec <= 0) continue;
-
-      const cfg = this.machines[ch];
-      const strip = this.strips[ch];
-      // Skip swing on poly rows that aren't at the main rate — swing
-      // is musically a "main grid" feel. Apply it only when this row
-      // matches stepsPerBar (i.e. a non-poly main-rate channel).
-      const isMainRate = ringSteps === this._stepsPerBar;
-      const applySwing = isMainRate && this._stepUnit !== 4 && this._swing !== 0.5;
-
-      while (this.nextNoteTimes[ch] < horizon) {
-        let tPlay = this.nextNoteTimes[ch];
-        if (applySwing && (this.nextIdxs[ch] % 2) === 1) {
-          tPlay += (this._swing - 0.5) * 2 * mainStepSec;
-        }
-        const stepIdx = this.nextIdxs[ch] % ringSteps;
-        const v = row[stepIdx] ?? 0;
-        if (v > 0 && cfg && strip) {
-          const amp = v === 2 ? this._strongAmp : this._weakAmp;
-          const vc: VoiceCtx = { ctx, destination: strip.input };
-          triggerVoice(cfg, vc, tPlay, amp);
-          // Emit a TriggerEvent alongside the direct dispatch so any
-          // bus subscriber (router, recorder, MIDI-out) sees the same
-          // hit. The direct triggerVoice call above is still the
-          // source of truth for audio output.
-          if (this.bus) {
-            this.bus.emit({
-              type: 'trigger',
-              target: `channel.${ch}`,
-              velocity: amp,
-              when: tPlay,
-            });
-          }
-        }
-        if (this.bus) {
-          this.bus.emit({
-            type: 'step',
-            channel: ch,
-            step: stepIdx,
-            when: tPlay,
-          });
-        }
-
-        this.nextIdxs[ch] += 1;
-        this.nextNoteTimes[ch] = this.anchorTimes[ch]
-          + (this.nextIdxs[ch] - this.anchorIdxs[ch]) * channelStepSec;
-      }
-    }
-
+    if (!this.sequencer || !this.sequencer.running()) return;
+    this.sequencer.tick();
     if (!this.worker) {
       this.timerId = setTimeout(this.tick, this.lookaheadMs);
     }
@@ -641,6 +398,10 @@ export class SoundEngine {
     if (this.worker) {
       this.worker.terminate();
       this.worker = null;
+    }
+    if (this.triggerSub) {
+      this.triggerSub();
+      this.triggerSub = null;
     }
     for (const s of this.strips) {
       try { s.dispose(); } catch { /* idempotent */ }
@@ -656,5 +417,6 @@ export class SoundEngine {
     this.dlyBus = null;
     this.reverbFx = null;
     this.delayFx = null;
+    this.sequencer = null;
   }
 }
