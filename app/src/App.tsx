@@ -370,11 +370,28 @@ function ModeShell({
   // patternId → session.loadPattern when they diverge. Keeps Library
   // handoffs and URL nav as the explicit "load new" trigger; session
   // is the runtime source for the rest.
+  //
+  // Dirty guard — if the user has unsaved sticky edits and an external
+  // navigation (Library card, URL change, browser back) wants to load
+  // a different pattern, prompt before discarding. Cancel reverts
+  // patternId so the URL/state stays consistent.
   useEffect(() => {
     if (session.pattern.id === patternId) return;
     const p = patternById(patternId);
-    if (p) session.loadPattern(p);
-  }, [patternId, session]);
+    if (!p) return;
+    if (session.dirty) {
+      const ok = window.confirm(
+        `You have unsaved changes to "${session.pattern.name}". Discard them and load ${p.name}?`,
+      );
+      if (!ok) {
+        // Revert the external patternId back to what's actually loaded
+        // so the URL + Library highlights line up with reality.
+        setPatternId(session.pattern.id);
+        return;
+      }
+    }
+    session.loadPattern(p);
+  }, [patternId, session, setPatternId]);
 
   // Modular control plane lives at the shell level so input-mapped
   // ParamEvents (from the secret MIDI tab) drive audio regardless of
