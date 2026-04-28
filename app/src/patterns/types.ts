@@ -85,7 +85,7 @@ export interface Pattern {
   timeSig: string;
   grouping: number[];
   steps: number;
-  stepUnit: 8 | 16 | 4;
+  stepUnit: 2 | 4 | 8 | 16;
   poly?: boolean;
 
   // Tempo

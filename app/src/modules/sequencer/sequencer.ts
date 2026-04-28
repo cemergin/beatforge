@@ -38,7 +38,7 @@ export function makeSequencer(opts: SequencerOptions): Sequencer {
   let running = false;
   let bpm = 110;
   let stepsPerBar = 16;
-  let stepUnit: 4 | 8 | 16 = 16;
+  let stepUnit: 2 | 4 | 8 | 16 = 16;
   let sequence: Sequence = [];
   let strongAmp = 1.0;
   let weakAmp = 0.55;
@@ -80,7 +80,7 @@ export function makeSequencer(opts: SequencerOptions): Sequencer {
 
   // ── Public API ──────────────────────────────────────────────────
   const setBpm = (b: number): void => { reanchorAll(); bpm = b; };
-  const setStepUnit = (u: 4 | 8 | 16): void => { reanchorAll(); stepUnit = u; };
+  const setStepUnit = (u: 2 | 4 | 8 | 16): void => { reanchorAll(); stepUnit = u; };
   const setStepsPerBar = (n: number): void => {
     if (n <= 0) return;
     reanchorAll();

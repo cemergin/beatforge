@@ -98,7 +98,7 @@ export class SoundEngine {
   // Shadow state — preserves setter values across ctx init.
   private _bpm = 110;
   private _stepsPerBar = 16;
-  private _stepUnit: 4 | 8 | 16 = 16;
+  private _stepUnit: 2 | 4 | 8 | 16 = 16;
   private _grouping: number[] = [16];
   private _sequence: SoundSequence = [];
   private _swing = 0.5;
@@ -116,7 +116,7 @@ export class SoundEngine {
   get running(): boolean { return this.sequencer?.running() ?? false; }
   get bpm(): number { return this._bpm; }
   get stepsPerBar(): number { return this._stepsPerBar; }
-  get stepUnit(): 4 | 8 | 16 { return this._stepUnit; }
+  get stepUnit(): 2 | 4 | 8 | 16 { return this._stepUnit; }
   get swing(): number { return this._swing; }
   get kit(): KitId { return this._kit; }
   get pattern(): Pattern | null { return this._pattern; }
@@ -400,7 +400,7 @@ export class SoundEngine {
     this.sequencer?.setBpm(b);
   }
 
-  setStepUnit(u: 4 | 8 | 16): void {
+  setStepUnit(u: 2 | 4 | 8 | 16): void {
     this._stepUnit = u;
     this.sequencer?.setStepUnit(u);
   }

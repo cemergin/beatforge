@@ -706,7 +706,7 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
         <div className="bf-grid-stage">{grid}</div>
         <div className="bf-grid-foot">
           <div className="bf-mini-label">
-            {pattern.steps} steps · {pattern.stepUnit === 8 ? 'eighths' : pattern.stepUnit === 16 ? 'sixteenths' : 'quarters'}
+            {pattern.steps} steps · {pattern.stepUnit === 2 ? 'halves' : pattern.stepUnit === 8 ? 'eighths' : pattern.stepUnit === 16 ? 'sixteenths' : 'quarters'}
             {pattern.poly && ' · polyrhythm'}
           </div>
           {hasEdits && (

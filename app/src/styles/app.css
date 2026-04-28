@@ -2129,7 +2129,14 @@ input[type="number"] { font: inherit; color: inherit; }
 .bf-sound-analyzer {
   position: relative;
   background: var(--bg-2); border: var(--bw-1) solid var(--line);
-  border-radius: var(--r-md); height: 88px; overflow: hidden;
+  border-radius: var(--r-md); overflow: hidden;
+  /* In a flex column, plain `height: 88px` was being collapsed to
+     ~2px by flex-shrink. min-height + explicit flex-shrink: 0 keeps
+     the canvas its intended 88px so the spectrum has somewhere to
+     draw. */
+  min-height: 88px;
+  height: 88px;
+  flex-shrink: 0;
 }
 .bf-sound-analyzer canvas { width: 100%; height: 100%; display: block; }
 .bf-sound-analyzer-modes {

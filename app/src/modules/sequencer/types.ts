@@ -47,7 +47,7 @@ export interface SequencerOptions {
 export interface Sequencer {
   // ── State setters ──────────────────────────────────────────────
   setBpm(b: number): void;
-  setStepUnit(u: 4 | 8 | 16): void;
+  setStepUnit(u: 2 | 4 | 8 | 16): void;
   setStepsPerBar(n: number): void;
   setSwing(s: number): void;
   setSequence(seq: Sequence): void;
@@ -67,7 +67,7 @@ export interface Sequencer {
   running(): boolean;
   bpm(): number;
   stepsPerBar(): number;
-  stepUnit(): 4 | 8 | 16;
+  stepUnit(): 2 | 4 | 8 | 16;
   swing(): number;
   /** Time that bar 1 begins (post-count-in). 0 before play(). */
   startTime(): number;

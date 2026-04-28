@@ -59,7 +59,7 @@ export interface SoundPattern {
 
   bpm: number;                   // quarter-note BPM
   grouping: number[];            // additive (e.g. [2,2,3] for 7/8)
-  stepUnit: 4 | 8 | 16;          // denominator of the step note value
+  stepUnit: 2 | 4 | 8 | 16;          // denominator of the step note value
 
   /** [channelIdx][stepIdx] — outer length must equal channels.length;
    *  inner length must equal sum(grouping). */

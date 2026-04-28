@@ -122,7 +122,7 @@ export function isValidSoundPattern(p: unknown): p is SoundPattern {
     && typeof o.name === 'string'
     && typeof o.bpm === 'number'
     && Array.isArray(o.grouping)
-    && (o.stepUnit === 4 || o.stepUnit === 8 || o.stepUnit === 16)
+    && (o.stepUnit === 2 || o.stepUnit === 4 || o.stepUnit === 8 || o.stepUnit === 16)
     && Array.isArray(o.sequence)
     && Array.isArray(o.channels)
     && typeof o.createdAt === 'number'

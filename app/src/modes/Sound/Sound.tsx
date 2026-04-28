@@ -49,7 +49,7 @@ const COLOR_FX_TYPES: ColorFx['type'][] = ['none', 'overdrive', 'bitcrush', 'fil
 function buildUserPatternFromStudio(args: {
   id: string;
   name: string;
-  meter: { stepUnit: 4 | 8 | 16; label: string };
+  meter: { stepUnit: 2 | 4 | 8 | 16; label: string };
   grouping: number[];
   sequence: SoundSequence;
   bpm: number;
@@ -250,7 +250,7 @@ const NUM_CHANNELS = 5;
 interface MeterPreset {
   label: string;
   grouping: number[];
-  stepUnit: 4 | 8 | 16;
+  stepUnit: 2 | 4 | 8 | 16;
 }
 const SOUND_METERS: MeterPreset[] = [
   { label: '4/4',  grouping: [4, 4, 4, 4],    stepUnit: 16 },
@@ -292,7 +292,7 @@ function meterFromPattern(p: import('../../patterns/types').Pattern): MeterPrese
   return {
     label: p.timeSig,
     grouping: p.grouping.slice(),
-    stepUnit: p.stepUnit as 4 | 8 | 16,
+    stepUnit: p.stepUnit as 2 | 4 | 8 | 16,
   };
 }
 
@@ -449,7 +449,7 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
   // them. Bpm flows separately — Sound's bpm is quarter-BPM and
   // doesn't yet round-trip session.bpm cleanly.
   const lastPushedRef = useRef<{
-    sequence: SoundSequence; grouping: number[]; stepUnit: 4 | 8 | 16;
+    sequence: SoundSequence; grouping: number[]; stepUnit: 2 | 4 | 8 | 16;
   } | null>(null);
   useEffect(() => {
     const stepUnit = meter.stepUnit;
@@ -1231,19 +1231,55 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
           )}
           <div className="bf-feel-control">
             <span className="bf-feel-label">meter</span>
-            <select
-              className="bf-meter-select"
-              value={meter.label}
-              aria-label="Meter"
-              onChange={(e) => {
-                const next = SOUND_METERS.find((m) => m.label === e.target.value);
-                if (next) onMeterChange(next);
-              }}
-            >
-              {SOUND_METERS.map((m) => (
-                <option key={m.label} value={m.label}>{m.label} ({m.grouping.join('+')})</option>
-              ))}
-            </select>
+            <div className="bf-sound-meter-row">
+              <select
+                className="bf-meter-select"
+                value={SOUND_METERS.some((m) => m.label === meter.label) ? meter.label : '__custom'}
+                aria-label="Meter preset"
+                onChange={(e) => {
+                  const next = SOUND_METERS.find((m) => m.label === e.target.value);
+                  if (next) onMeterChange(next);
+                }}
+              >
+                {SOUND_METERS.map((m) => (
+                  <option key={m.label} value={m.label}>{m.label} ({m.grouping.join('+')})</option>
+                ))}
+                {!SOUND_METERS.some((m) => m.label === meter.label) && (
+                  <option value="__custom">{meter.label} (custom)</option>
+                )}
+              </select>
+              <input
+                type="number"
+                min={1} max={64}
+                value={sumGroup(meter.grouping)}
+                onChange={(e) => {
+                  const n = parseInt(e.target.value, 10);
+                  if (!Number.isFinite(n) || n < 1 || n > 64) return;
+                  onMeterChange({ label: `${n}/${meter.stepUnit}`, grouping: [n], stepUnit: meter.stepUnit });
+                }}
+                className="bf-sound-meter-num"
+                aria-label="Time signature numerator"
+                title="Numerator — number of beats per bar"
+              />
+              <span className="bf-sound-meter-slash">/</span>
+              <select
+                value={meter.stepUnit}
+                onChange={(e) => {
+                  const denom = parseInt(e.target.value, 10) as 2 | 4 | 8 | 16;
+                  if (denom !== 2 && denom !== 4 && denom !== 8 && denom !== 16) return;
+                  const num = sumGroup(meter.grouping);
+                  onMeterChange({ label: `${num}/${denom}`, grouping: meter.grouping, stepUnit: denom });
+                }}
+                className="bf-sound-meter-denom"
+                aria-label="Time signature denominator"
+                title="Denominator — beat unit (2, 4, 8, or 16)"
+              >
+                <option value={16}>16</option>
+                <option value={8}>8</option>
+                <option value={4}>4</option>
+                <option value={2}>2</option>
+              </select>
+            </div>
           </div>
           <div className="bf-feel-control">
             <span className="bf-feel-label">grouping</span>
@@ -1289,12 +1325,12 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
               ))}
             </div>
           </div>
-          <div className={`bf-feel-control ${meter.stepUnit === 4 ? 'disabled' : ''}`}>
+          <div className={`bf-feel-control ${(meter.stepUnit === 2 || meter.stepUnit === 4) ? 'disabled' : ''}`}>
             <span className="bf-feel-label">swing {Math.round(swing * 100)}%</span>
             <input
               type="range" min={0.5} max={0.67} step={0.01}
               value={swing}
-              disabled={meter.stepUnit === 4}
+              disabled={(meter.stepUnit === 2 || meter.stepUnit === 4)}
               onChange={(e) => setSwing(Number(e.target.value))}
               aria-label="Swing"
             />
