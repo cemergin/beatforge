@@ -40,6 +40,45 @@ function swingDefaultToSlider(s: number | undefined): number {
 
 type FocusMode = 'groove' | 'click';
 
+const ALL_VOICES_LOCAL: VoiceId[] = ['KK', 'SN', 'HH', 'OH', 'CP'];
+
+/** Translate a saved SoundPattern (positional channels + sequence)
+ *  into a voice-keyed Pattern Practice can play. Row 0 = KK,
+ *  row 1 = SN, etc. The defaultKit lands on '808' since saved
+ *  ensembles override channel state anyway. */
+function patternFromSoundPattern(sp: SoundPattern): Pattern {
+  const tracks: Pattern['tracks'] = {};
+  for (let i = 0; i < ALL_VOICES_LOCAL.length; i++) {
+    const row = sp.sequence[i];
+    if (row && row.length > 0) {
+      tracks[ALL_VOICES_LOCAL[i]] = row.slice() as Velocity[];
+    }
+  }
+  const stepsPerBar = sp.grouping.reduce((a, b) => a + b, 0);
+  // SoundPattern.bpm is quarter; convert back to step-BPM for the
+  // Pattern.bpm range field. (Practice's session reads natural BPM
+  // from this when loadPattern fires.)
+  const stepBpm = Math.round(sp.bpm * sp.stepUnit / 4);
+  return {
+    id: sp.id,
+    name: sp.name,
+    origin: '',
+    tradition: 'user',
+    genre: 'popular',
+    timeSig: `${stepsPerBar}/${sp.stepUnit}`,
+    grouping: sp.grouping.slice(),
+    steps: stepsPerBar,
+    stepUnit: sp.stepUnit,
+    bpm: { default: stepBpm, min: Math.max(30, Math.round(stepBpm * 0.5)), max: Math.round(stepBpm * 2) },
+    tracks,
+    defaultKit: '808',
+    region: 'electronic-western',
+    difficulty: 'beginner',
+    tags: ['user-saved'],
+    swingable: false,
+  };
+}
+
 /** Reduce a full pattern to its meter-skeleton: a single kick track that
  *  hits every group downbeat. Bar one strong (velocity 2), every other
  *  group downbeat weak (velocity 1). Keeps stepUnit / steps / grouping /
@@ -66,10 +105,13 @@ interface Props {
   /** When a user clicks one of their saved soundPatterns from the
    *  sidebar, route them to the Sound tab with that pattern preloaded.
    *  App.tsx wires this to setTab('sound') + setInitialSoundPatternId. */
+  /** Reserved — Practice's saved-pattern click used to route to the
+   *  Sound page; now we load in place via session.loadPattern.
+   *  Prop kept on the API so App.tsx still compiles, but unused here. */
   onOpenSoundPattern?: (id: string) => void;
 }
 
-export function Practice({ engine, patternId, onPatternChange, onOpenSoundPattern }: Props) {
+export function Practice({ engine, patternId, onPatternChange }: Props) {
   const setPatternId = onPatternChange;
   const session = useSession();
   // The seed pattern (read-only; Library + Practice's reset path).
@@ -559,49 +601,37 @@ export function Practice({ engine, patternId, onPatternChange, onOpenSoundPatter
           </Disclosure>
         )}
 
-        {(savedSoundPatterns.length > 0 || savedSoundKits.length > 0) && (
+        {savedSoundPatterns.length > 0 && (
           <Disclosure
             className="bf-panel bf-pattern-list-panel"
             summaryClassName="bf-panel-head"
             summary={
               <>
-                <span>your sounds</span>
-                <span className="bf-pattern-list-count">{savedSoundPatterns.length + savedSoundKits.length}</span>
+                <span>local patterns</span>
+                <span className="bf-pattern-list-count">{savedSoundPatterns.length}</span>
               </>
             }
           >
             <div className="bf-pattern-list">
-              {savedSoundPatterns.length > 0 && (
-                <div className="bf-mini-label" style={{ padding: '6px 8px 2px' }}>patterns</div>
-              )}
-              {savedSoundPatterns.map((sp) => (
-                <button
-                  key={sp.id}
-                  className="bf-pattern-row"
-                  onClick={() => onOpenSoundPattern?.(sp.id)}
-                  title={`Open in Sound — ${sp.bpm} BPM, ${sp.grouping.join('+')}`}
-                >
-                  <span className="bf-pattern-row-name">{sp.name}</span>
-                  <span className="bf-pattern-row-sig">↗ sound</span>
-                </button>
-              ))}
-              {savedSoundKits.length > 0 && (
-                <div className="bf-mini-label" style={{ padding: '6px 8px 2px' }}>ensembles</div>
-              )}
-              {savedSoundKits.map((kit) => {
-                const isActive = activeEnsembleId === kit.id;
+              {savedSoundPatterns.map((sp) => {
+                const isActive = pattern.id === sp.id;
                 return (
                   <button
-                    key={kit.id}
+                    key={sp.id}
                     className={`bf-pattern-row ${isActive ? 'on' : ''}`}
                     onClick={() => {
-                      session.setChannels(kit.channels);
-                      setActiveEnsembleId(kit.id);
+                      const p = patternFromSoundPattern(sp);
+                      session.loadPattern(p);
+                      session.setChannels(sp.channels);
+                      // session.bpm is natural; saved sp.bpm is
+                      // quarter — convert via denom.
+                      const denom = parseTimeSigDenom(p.timeSig);
+                      session.setBpm(Math.round(sp.bpm * denom / 4));
                     }}
-                    title={`${kit.channels.map((c) => c.label).join(', ')} — apply this ensemble`}
+                    title={`Load — ${sp.bpm} BPM, ${sp.grouping.join('+')}`}
                   >
-                    <span className="bf-pattern-row-name">{kit.name}</span>
-                    <span className="bf-pattern-row-sig">ensemble</span>
+                    <span className="bf-pattern-row-name">{sp.name}</span>
+                    <span className="bf-pattern-row-sig">{sp.grouping.reduce((a, b) => a + b, 0)}/{sp.stepUnit}</span>
                   </button>
                 );
               })}
@@ -735,6 +765,12 @@ export function Practice({ engine, patternId, onPatternChange, onOpenSoundPatter
             setActiveEnsembleId(null);
             clearKitOverride(pattern.id);
             setKitOverrideState(null);
+          }}
+          savedEnsembles={savedSoundKits}
+          activeSavedId={activeEnsembleId}
+          onSelectSaved={(kit) => {
+            session.setChannels(kit.channels);
+            setActiveEnsembleId(kit.id);
           }}
         />
 

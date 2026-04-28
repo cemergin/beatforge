@@ -6,12 +6,13 @@ export type Velocity = 0 | 1 | 2;   // 0 = off, 1 = ghost, 2 = accent
 
 export type KitId =
   | '808' | '909' | '707' | '727'
-  | 'frameDrum' | 'tabla' | 'gamelan';
+  | 'frameDrum' | 'tabla' | 'gamelan'
+  | 'congas' | 'latin';
 
 // Single source of truth for kit + voice enumerations. Adding a new
 // kit or voice means updating the union above AND this list — TS will
 // flag drift via the `satisfies readonly KitId[]` constraint.
-export const ALL_KITS = ['808', '909', '707', '727', 'frameDrum', 'tabla', 'gamelan'] as const satisfies readonly KitId[];
+export const ALL_KITS = ['808', '909', '707', '727', 'frameDrum', 'tabla', 'gamelan', 'congas', 'latin'] as const satisfies readonly KitId[];
 export const ALL_VOICES = ['KK', 'SN', 'HH', 'OH', 'CP'] as const satisfies readonly VoiceId[];
 
 /** Type-safe Object.keys over a Partial<Record<VoiceId, ...>>. Replaces

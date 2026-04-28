@@ -76,6 +76,27 @@ export const KIT_VOICE_PRESETS = {
     OH: { archetype: 'modal',   preset: 'tank' },
     CP: { archetype: 'cowbell', preset: 'woodblock' },
   },
+  // Afro-Cuban hand-drum ensemble — rumba / son / mambo flavour.
+  // Tumbadora (low conga) on KK, djembe-flavoured slap on SN,
+  // caxixi shaker on HH, bongo (high) for the OH role, palmas
+  // for the clap voice. Skin-and-wood through and through.
+  congas: {
+    KK: { archetype: 'tom',  preset: 'conga' },
+    SN: { archetype: 'tom',  preset: 'djembe' },
+    HH: { archetype: 'hat',  preset: 'caxixi' },
+    OH: { archetype: 'tom',  preset: 'bongo' },
+    CP: { archetype: 'clap', preset: 'palmas' },
+  },
+  // Latin percussion ensemble — claves, woodblock, maracas, agogo.
+  // No membranes — all metal and wood. Pairs naturally with the
+  // Brazilian baião / merengue / cha-cha-cha rhythms.
+  latin: {
+    KK: { archetype: 'cowbell', preset: 'clave' },
+    SN: { archetype: 'cowbell', preset: 'woodblock' },
+    HH: { archetype: 'hat',     preset: 'maraca' },
+    OH: { archetype: 'cowbell', preset: 'agogo' },
+    CP: { archetype: 'clap',    preset: 'palmas' },
+  },
 } as const satisfies Record<KitId, Record<VoiceId, VoicePreset>>;
 
 /** Build a MachineConfig for one (kit, voice) cell — the archetype's
@@ -104,6 +125,11 @@ export const KIT_REVERB_SEND: Record<KitId, number> = {
   frameDrum: 0.30,
   tabla: 0.22,
   gamelan: 0.34,
+  // Hand drums get a touch of room — gives the slap-tone bloom.
+  congas: 0.20,
+  // Latin perc stays drier — the wood + metal hits read crisper
+  // without ambience.
+  latin: 0.10,
 };
 
 /** Re-export ALL_KITS for downstream tests + UIs to iterate kits. */
