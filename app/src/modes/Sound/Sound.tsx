@@ -1310,7 +1310,7 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
         <Disclosure
           className="bf-sound-meta"
           summaryClassName="bf-sound-meta-head"
-          summary={<span>metadata</span>}
+          summary={<span className="bf-sound-section-tag">metadata</span>}
         >
           <div className="bf-sound-meta-grid">
             <label className="bf-sound-meta-field">
@@ -1349,13 +1349,13 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
                 ))}
               </select>
             </label>
-            <label className="bf-sound-meta-field">
-              <span className="bf-mini-label">swingable</span>
+            <label className="bf-sound-meta-field bf-sound-meta-toggle">
               <input
                 type="checkbox"
                 checked={swingable}
                 onChange={(e) => setSwingable(e.target.checked)}
               />
+              <span className="bf-mini-label">swingable</span>
             </label>
             <label className="bf-sound-meta-field bf-sound-meta-tags">
               <span className="bf-mini-label">tags (comma-sep)</span>
@@ -1543,7 +1543,11 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
           </div>
         </div>
 
-        <Disclosure summary={<span>fx details</span>}>
+        <Disclosure
+          className="bf-sound-fxdetails"
+          summaryClassName="bf-sound-fxdetails-head"
+          summary={<span className="bf-sound-section-tag">fx details</span>}
+        >
           <div className="bf-sound-fxbar">
             <span className="bf-fx-section">reverb</span>
 

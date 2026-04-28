@@ -2497,28 +2497,84 @@ input[type="number"] { font: inherit; color: inherit; }
 }
 .bf-sound-kit-preset:hover { color: var(--fg); border-color: var(--accent); }
 
-.bf-sound-meta {
+/* Studio's collapsible sections (metadata + fx details) — share the
+   same surface treatment as patternbar / kitbar so the visual language
+   stays consistent: mono labels, hairline border, accent-pill summary. */
+.bf-sound-section-tag {
+  font-family: var(--mono); font-size: var(--fs-micro);
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--accent);
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent) 12%, var(--bg));
+  font-weight: 600;
+}
+
+.bf-sound-meta,
+.bf-sound-fxdetails {
   margin: var(--sp-2) 0 var(--sp-3);
   border: var(--bw-1) solid var(--line);
   border-radius: var(--r-sm);
   background: var(--bg);
 }
-.bf-sound-meta-head { padding: var(--sp-2) var(--sp-3); }
+.bf-sound-meta-head,
+.bf-sound-fxdetails-head {
+  padding: var(--sp-2) var(--sp-3);
+  border-radius: var(--r-sm);
+}
+.bf-sound-meta[open] > .bf-sound-meta-head,
+.bf-sound-fxdetails[open] > .bf-sound-fxdetails-head {
+  border-bottom: var(--bw-1) dashed var(--line);
+  border-radius: var(--r-sm) var(--r-sm) 0 0;
+}
+.bf-sound-fxdetails > .bf-sound-fxdetails-head + .bf-sound-fxbar {
+  padding: var(--sp-3);
+  margin: 0;
+}
+
 .bf-sound-meta-grid {
   display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: var(--sp-3); padding: var(--sp-3);
+  align-items: end;
 }
-.bf-sound-meta-field { display: flex; flex-direction: column; gap: 4px; }
+.bf-sound-meta-field { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
 .bf-sound-meta-tags, .bf-sound-meta-story { grid-column: 1 / -1; }
+.bf-sound-meta-toggle {
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 6px; /* keeps baselines aligned with the selects */
+}
+.bf-sound-meta-toggle input[type="checkbox"] {
+  accent-color: var(--accent);
+  width: 14px; height: 14px;
+  cursor: pointer;
+}
 .bf-sound-meta-input {
   appearance: none;
-  font: inherit; font-size: var(--fs-mini);
-  padding: 5px 8px;
+  font-family: var(--mono);
+  font-size: var(--fs-micro);
+  letter-spacing: 0.04em;
+  padding: 5px 10px;
   border: var(--bw-1) solid var(--line);
   border-radius: var(--r-xs);
   background: var(--bg);
   color: var(--fg);
+  min-width: 0;
 }
+/* <select> variant — caret + lowercase value rendering matches
+   .bf-sound-kit-preset so all dropdowns in Studio look identical. */
+select.bf-sound-meta-input {
+  padding: 5px 24px 5px 10px;
+  text-transform: lowercase;
+  background: var(--bg) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path d='M0 0h10L5 6z' fill='%23888'/></svg>") no-repeat right 8px center;
+  cursor: pointer;
+}
+textarea.bf-sound-meta-input {
+  resize: vertical;
+  line-height: 1.4;
+}
+.bf-sound-meta-input:hover { border-color: var(--accent); }
 .bf-sound-meta-input:focus { border-color: var(--accent); outline: 0; }
 .bf-sound-saveBtn,
 .bf-sound-newBtn {
