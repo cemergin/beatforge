@@ -2904,8 +2904,14 @@ input[type="number"] { font: inherit; color: inherit; }
    same warm theme as everything else. Monitor uses a monospace
    family + tighter line-height to keep dozens of rows readable. */
 .bf-midi-page {
-  max-width: 1100px; margin: 0 auto;
-  padding: var(--sp-4);
+  /* Match .bf-lib-page so the page scrolls inside the grid row.
+     Without overflow-y the content blew past the viewport silently. */
+  overflow-y: auto;
+  height: 100%;
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px 32px 80px;
   display: flex; flex-direction: column; gap: var(--sp-4);
 }
 .bf-midi-badge {
