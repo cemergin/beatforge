@@ -1209,58 +1209,70 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
             always reachable without scrolling: BPM, meter, grouping,
             count-in, swing. Save / metadata / mix sliders sit below. */}
         <div className="bf-sound-topbar" role="toolbar" aria-label="Studio transport">
-          <div className="bf-transport-bpm">
-            <label className="bf-transport-bpm-label" htmlFor="bf-sound-bpm">BPM</label>
-            <input
-              id="bf-sound-bpm"
-              type="number" inputMode="numeric"
-              min={30} max={300}
-              value={bpm}
-              onChange={(e) => {
-                const n = Number(e.target.value);
-                if (Number.isFinite(n)) setBpm(Math.max(30, Math.min(300, Math.round(n))));
-              }}
-            />
+          <div className="bf-feel-control">
+            <span className="bf-feel-label">bpm</span>
+            <div className="bf-sound-bpm-row">
+              <input
+                id="bf-sound-bpm"
+                type="number" inputMode="numeric"
+                min={30} max={300}
+                value={bpm}
+                onChange={(e) => {
+                  const n = Number(e.target.value);
+                  if (Number.isFinite(n)) setBpm(Math.max(30, Math.min(300, Math.round(n))));
+                }}
+                className="bf-sound-bpm-input"
+              />
+              <button type="button" className="bf-transport-tap" onClick={onTap} title="Tap tempo (T)">tap</button>
+            </div>
           </div>
-          <button type="button" className="bf-transport-tap" onClick={onTap} title="Tap tempo (T)">tap</button>
           {currentBar > 0 && (
             <span className="bf-transport-bar-counter" aria-label="Current bar">bar {currentBar}</span>
           )}
-          <select
-            className="bf-meter-select"
-            value={meter.label}
-            aria-label="Meter"
-            onChange={(e) => {
-              const next = SOUND_METERS.find((m) => m.label === e.target.value);
-              if (next) onMeterChange(next);
-            }}
-          >
-            {SOUND_METERS.map((m) => (
-              <option key={m.label} value={m.label}>{m.label} ({m.grouping.join('+')})</option>
-            ))}
-          </select>
-          <div className="bf-sound-grouping-picker" role="toolbar" aria-label="Grouping">
-            <span className="bf-sound-grouping-label">grouping</span>
-            {groupingOptions.length > 1 && groupingOptions.map((g, i) => {
-              const isCurrent = g.join('+') === grouping.join('+');
-              return (
-                <button
-                  key={i}
-                  type="button"
-                  className={`bf-sound-grouping-btn ${isCurrent ? 'on' : ''}`}
-                  onClick={() => onGroupingChange(g)}
-                  title={`Apply ${g.join('+')} grouping`}
-                >
-                  {g.join('+')}
-                </button>
-              );
-            })}
-            <GroupingTextEditor
-              key={grouping.join(',')}
-              initialText={grouping.join(',')}
-              stepsPerBar={stepsPerBar}
-              onApply={onGroupingTextApply}
-            />
+          <div className="bf-feel-control">
+            <span className="bf-feel-label">meter</span>
+            <select
+              className="bf-meter-select"
+              value={meter.label}
+              aria-label="Meter"
+              onChange={(e) => {
+                const next = SOUND_METERS.find((m) => m.label === e.target.value);
+                if (next) onMeterChange(next);
+              }}
+            >
+              {SOUND_METERS.map((m) => (
+                <option key={m.label} value={m.label}>{m.label} ({m.grouping.join('+')})</option>
+              ))}
+            </select>
+          </div>
+          <div className="bf-feel-control">
+            <span className="bf-feel-label">grouping</span>
+            <div className="bf-sound-grouping-picker" role="toolbar" aria-label="Grouping">
+              {groupingOptions.length > 1 && (
+                <div className="bf-feel-pills">
+                  {groupingOptions.map((g, i) => {
+                    const isCurrent = g.join('+') === grouping.join('+');
+                    return (
+                      <button
+                        key={i}
+                        type="button"
+                        className={`bf-feel-pill ${isCurrent ? 'on' : ''}`}
+                        onClick={() => onGroupingChange(g)}
+                        title={`Apply ${g.join('+')} grouping`}
+                      >
+                        {g.join('+')}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+              <GroupingTextEditor
+                key={grouping.join(',')}
+                initialText={grouping.join(',')}
+                stepsPerBar={stepsPerBar}
+                onApply={onGroupingTextApply}
+              />
+            </div>
           </div>
           <div className="bf-feel-control">
             <span className="bf-feel-label">count-in</span>

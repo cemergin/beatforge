@@ -2951,9 +2951,27 @@ textarea.bf-sound-meta-input {
   cursor: pointer;
 }
 .bf-sound-clear-btn:hover { color: var(--fg); border-color: var(--accent); }
+.bf-sound-bpm-row {
+  display: flex; align-items: center; gap: 4px;
+}
+.bf-sound-bpm-input {
+  font-family: var(--mono); font-size: var(--fs-mini);
+  width: 56px;
+  padding: 4px 6px;
+  border: var(--bw-1) solid var(--line);
+  border-radius: var(--r-xs);
+  background: var(--bg);
+  color: var(--fg);
+}
 .bf-sound-topbar .bf-sound-grouping-picker {
   border: none; padding: 0;
+  /* Drop the wrapping border + padding when the picker lives inside
+     a .bf-feel-control — its parent owns the label/spacing. */
+  display: flex; flex-wrap: wrap; align-items: center;
+  gap: 4px;
 }
+/* Keep the legacy grouping-btn rules so any non-topbar usage still
+   renders, but inside the topbar we now use .bf-feel-pill. */
 
 /* Grouping permutation picker — sits under the transport, only
    appears when the canonical grouping has multiple permutations. */
