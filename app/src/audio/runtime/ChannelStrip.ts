@@ -1,18 +1,25 @@
-// ChannelStrip — per-channel audio bus. Owns the live AudioNodes
-// that sit between a voice machine's output and the kit's master /
-// reverb / delay buses.
+// ChannelStrip — per-channel audio bus, expressed via the
+// modules/audio-graph composition operators.
 //
-//   voice → [pan] → [level] → [colorFx?] ─┬─→ master
-//                                         ├─→ × revSend ─→ reverb
-//                                         └─→ × dlySend ─→ delay
+//   input → panner → level → colorIn ⇄ colorOut ─┬─→ master
+//                                                ├─→ × revSend ─→ reverb
+//                                                └─→ × dlySend ─→ delay
 //
-// Color FX is a swappable subgraph — when the user picks a
-// different type, we dispose the current ControllableModule and
-// build a new one. While a type stays put, knob changes go through
-// the module's .set() — live ramps, no rebuilds, no clicks.
+// Static prefix (input/panner/level/colorIn) is built with chain().
+// Output side (colorOut/revSend/dlySend) is built with tap() so
+// each send is a branched gain on the post-color signal — the same
+// one the master path hears. Color FX is the only DYNAMIC piece;
+// it lives between colorIn and colorOut and gets swapped in place
+// when the user picks a different type.
 
 import type { ColorFx } from '../../patterns/types-sound';
-import type { ControllableModule } from '../../modules/audio-graph';
+import {
+  chain,
+  tap,
+  wrap,
+  type AudioModule,
+  type ControllableModule,
+} from '../../modules/audio-graph';
 
 export interface ChannelStripParams {
   level: number;        // 0-1
@@ -31,15 +38,22 @@ export class ChannelStrip {
   readonly input: GainNode;
 
   private ctx: AudioContext;
-  private panner: StereoPannerNode;
   private level: GainNode;
+  private panner: StereoPannerNode;
   private colorIn: GainNode;
   private colorOut: GainNode;
-  private revTap: GainNode;
-  private dlyTap: GainNode;
+  /** Composed output side — colorOut → tap(rev) → tap(dly) → master.
+   *  Owned so dispose() cascades through the composition operators
+   *  without us tracking each gain individually. */
+  private outputComposite: AudioModule;
+  /** Send-gain handles surfaced from tap() — applyParams ramps
+   *  these directly. */
+  private revSend: GainNode;
+  private dlySend: GainNode;
+
   /** Currently mounted color FX module + the type that built it.
    *  Re-using the module across knob changes (instead of rebuilding
-   *  on every .applyColorFx) means continuous ramps stay glitch-free. */
+   *  on every applyColorFx) means continuous ramps stay glitch-free. */
   private currentColor: ControllableModule | null = null;
   private currentColorType: ColorFx['type'] = 'none';
   private fxBuilder: ColorFxBuilder | null = null;
@@ -54,36 +68,48 @@ export class ChannelStrip {
     this.ctx = ctx;
     this.fxBuilder = fxBuilder;
 
-    // The chain: input → pan → level → colorIn ⇄ colorOut → master
-    // The reverb/delay taps are post-color, so they hear the channel
-    // at its mixed/colored sound.
+    // ── Static prefix ──────────────────────────────────────────────
+    // input → panner → level → colorIn, all owned by this strip and
+    // wired together via chain(). The composition handles connect()
+    // for us; we just keep the raw node refs around to mutate
+    // .gain / .pan in applyParams.
     this.input = ctx.createGain();
     this.panner = ctx.createStereoPanner();
     this.level = ctx.createGain();
     this.colorIn = ctx.createGain();
     this.colorOut = ctx.createGain();
-    this.revTap = ctx.createGain();
-    this.revTap.gain.value = 0;
-    this.dlyTap = ctx.createGain();
-    this.dlyTap.gain.value = 0;
 
-    this.input.connect(this.panner);
-    this.panner.connect(this.level);
-    this.level.connect(this.colorIn);
+    chain(
+      wrap(this.input),
+      wrap(this.panner),
+      wrap(this.level),
+      wrap(this.colorIn),
+    );
+
     // Default passthrough — replaced when colorFx is set.
     this.colorIn.connect(this.colorOut);
 
-    this.colorOut.connect(masterIn);
-    if (revBus) this.colorOut.connect(this.revTap).connect(revBus);
-    if (dlyBus) this.colorOut.connect(this.dlyTap).connect(dlyBus);
+    // ── Output side via tap() ──────────────────────────────────────
+    // colorOut → master is the dry path. tap branches a side gain
+    // into each send bus. Send levels start at 0; applyParams ramps.
+    const dry = wrap(this.colorOut);
+    const withRev = tap(ctx, dry, revBus ? wrap(revBus) : silentSink(ctx), 0);
+    const withDly = tap(ctx, withRev, dlyBus ? wrap(dlyBus) : silentSink(ctx), 0);
+    // Connect the post-tap output to master. tap() exposes the same
+    // input/output as the wrapped main module, so withDly.output is
+    // colorOut — connecting it to master gives the dry signal path.
+    if (withDly.output) withDly.output.connect(masterIn);
+    this.outputComposite = withDly;
+    this.revSend = withRev.send;
+    this.dlySend = withDly.send;
   }
 
   /** Apply mixer parameters (level/pan/sends). */
   applyParams(p: ChannelStripParams): void {
     this.level.gain.value = Math.max(0, Math.min(1, p.level));
     this.panner.pan.value = Math.max(-1, Math.min(1, p.pan));
-    this.revTap.gain.value = Math.max(0, Math.min(1, p.reverbSend));
-    this.dlyTap.gain.value = Math.max(0, Math.min(1, p.delaySend));
+    this.revSend.gain.value = Math.max(0, Math.min(1, p.reverbSend));
+    this.dlySend.gain.value = Math.max(0, Math.min(1, p.delaySend));
   }
 
   /** Swap or update the channel's color FX.
@@ -137,13 +163,13 @@ export class ChannelStrip {
     if (this.currentColor) {
       try { this.currentColor.dispose(); } catch { /* idempotent */ }
     }
+    // Composed output side cleans up its own taps + send gains.
+    try { this.outputComposite.dispose(); } catch { /* idempotent */ }
     this.input.disconnect();
     this.panner.disconnect();
     this.level.disconnect();
     this.colorIn.disconnect();
     this.colorOut.disconnect();
-    this.revTap.disconnect();
-    this.dlyTap.disconnect();
   }
 }
 
@@ -165,4 +191,14 @@ function pushKnobs(mod: ControllableModule, cfg: ColorFx): void {
     mod.set('q',      cfg.q);
     mod.set('mix',    cfg.mix);
   }
+}
+
+/** Throwaway sink — used when a strip is built without a reverb or
+ *  delay bus (legacy AudioEngine paths). The tap still constructs a
+ *  send gain so the topology is uniform; signal just falls into a
+ *  disconnected gain that goes nowhere. */
+function silentSink(ctx: AudioContext): AudioModule {
+  const g = ctx.createGain();
+  g.gain.value = 0;
+  return wrap(g);
 }
