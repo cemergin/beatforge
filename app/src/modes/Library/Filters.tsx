@@ -1,6 +1,6 @@
 import type { Genre, KitId, RegionId } from '../../patterns/types';
-import { useT } from '../../i18n';
-import { REGIONS } from './regions';
+import { useT, useLang, type Key } from '../../i18n';
+import { REGIONS, localizedRegion } from './regions';
 import type { FilterState } from './filterState';
 
 interface Props {
@@ -23,6 +23,7 @@ export function Filters({
   filters, setFilters, allMeters, allGenres, allKits, localCount = 0,
 }: Props) {
   const t = useT();
+  const { lang } = useLang();
   return (
     <div className="bf-lib-filters-block">
       {localCount > 0 && (
@@ -64,7 +65,10 @@ export function Filters({
         label={t('library.region_filter')}
         values={REGIONS.map((r) => r.id)}
         selected={filters.regions}
-        renderLabel={(v) => REGIONS.find((r) => r.id === v)?.short ?? v}
+        renderLabel={(v) => {
+          const r = REGIONS.find((x) => x.id === v);
+          return r ? localizedRegion(r, lang).short : v;
+        }}
         onToggle={(v) => setFilters({ ...filters, regions: toggle(filters.regions, v as RegionId) })}
         onClear={() => setFilters({ ...filters, regions: [] })}
       />
@@ -72,6 +76,7 @@ export function Filters({
         label={t('library.genre_filter')}
         values={allGenres}
         selected={filters.genres}
+        renderLabel={(v) => t(`genre.${v}` as Key)}
         onToggle={(v) => setFilters({ ...filters, genres: toggle(filters.genres, v as Genre) })}
         onClear={() => setFilters({ ...filters, genres: [] })}
       />
