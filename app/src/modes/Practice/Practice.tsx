@@ -29,6 +29,7 @@ import { SwingPanel } from '../../components/metronome/SwingPanel';
 import { KitPanel } from '../../components/metronome/KitPanel';
 import { Trainer } from './Trainer';
 import { listSoundPatterns, listSoundKits } from '../../lib/db';
+import { loadStudioPattern, buildUserPatternView } from '../../modules/pattern-store';
 import type { SoundPattern, SoundKit } from '../../patterns/types-sound';
 
 type View = 'circular' | 'linear' | 'pill';
@@ -39,45 +40,6 @@ function swingDefaultToSlider(s: number | undefined): number {
 }
 
 type FocusMode = 'groove' | 'click';
-
-const ALL_VOICES_LOCAL: VoiceId[] = ['KK', 'SN', 'HH', 'OH', 'CP'];
-
-/** Translate a saved SoundPattern (positional channels + sequence)
- *  into a voice-keyed Pattern Practice can play. Row 0 = KK,
- *  row 1 = SN, etc. The defaultKit lands on '808' since saved
- *  ensembles override channel state anyway. */
-function patternFromSoundPattern(sp: SoundPattern): Pattern {
-  const tracks: Pattern['tracks'] = {};
-  for (let i = 0; i < ALL_VOICES_LOCAL.length; i++) {
-    const row = sp.sequence[i];
-    if (row && row.length > 0) {
-      tracks[ALL_VOICES_LOCAL[i]] = row.slice() as Velocity[];
-    }
-  }
-  const stepsPerBar = sp.grouping.reduce((a, b) => a + b, 0);
-  // SoundPattern.bpm is quarter; convert back to step-BPM for the
-  // Pattern.bpm range field. (Practice's session reads natural BPM
-  // from this when loadPattern fires.)
-  const stepBpm = Math.round(sp.bpm * sp.stepUnit / 4);
-  return {
-    id: sp.id,
-    name: sp.name,
-    origin: '',
-    tradition: 'user',
-    genre: 'popular',
-    timeSig: `${stepsPerBar}/${sp.stepUnit}`,
-    grouping: sp.grouping.slice(),
-    steps: stepsPerBar,
-    stepUnit: sp.stepUnit,
-    bpm: { default: stepBpm, min: Math.max(30, Math.round(stepBpm * 0.5)), max: Math.round(stepBpm * 2) },
-    tracks,
-    defaultKit: '808',
-    region: 'electronic-western',
-    difficulty: 'beginner',
-    tags: ['user-saved'],
-    swingable: false,
-  };
-}
 
 /** Reduce a full pattern to its meter-skeleton: a single kick track that
  *  hits every group downbeat. Bar one strong (velocity 2), every other
@@ -650,8 +612,18 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
                   <button
                     key={sp.id}
                     className={`bf-pattern-row ${isActive ? 'on' : ''}`}
-                    onClick={() => {
-                      const p = patternFromSoundPattern(sp);
+                    onClick={async () => {
+                      // Pull the StudioPattern (sound design + metadata)
+                      // via the facade so region / genre / tags / story
+                      // / defaultKit ride along instead of getting
+                      // synthesized as 'electronic-western / popular'.
+                      const studio = await loadStudioPattern(sp.id);
+                      if (!studio) return;
+                      // buildUserPatternView yields a UserPattern (which
+                      // extends Pattern with the metadata fields), so
+                      // session.loadPattern carries everything Practice
+                      // and the about-this-rhythm panel read.
+                      const p = buildUserPatternView(studio);
                       session.loadPattern(p);
                       session.setChannels(sp.channels);
                       // session.bpm is natural; saved sp.bpm is
