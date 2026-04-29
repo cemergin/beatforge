@@ -101,6 +101,22 @@ const EN = {
   'common.none':    'none',
   'common.reset':   'reset',
 
+  // ── Pattern genre labels (Library filter chips, PatternCard meta) ─
+  'genre.folk-dance':  'folk-dance',
+  'genre.classical':   'classical',
+  'genre.devotional':  'devotional',
+  'genre.popular':     'popular',
+  'genre.electronic':  'electronic',
+  'genre.hip-hop':     'hip-hop',
+  'genre.jazz':        'jazz',
+  'genre.ceremonial':  'ceremonial',
+  'genre.exercise':    'exercise',
+
+  // ── Pattern difficulty labels ─────────────────────────────────────
+  'difficulty.beginner':     'beginner',
+  'difficulty.intermediate': 'intermediate',
+  'difficulty.advanced':     'advanced',
+
   // ── Dirty-guard confirm dialog (interpolated) ────────────────────
   'dirty_guard.confirm': 'You have unsaved changes to "{name}". Discard them and load {next}?',
 
@@ -360,6 +376,20 @@ const TR: Partial<Record<Key, string>> = {
   'common.none':   'hiçbiri',
   'common.reset':  'sıfırla',
 
+  'genre.folk-dance':  'halk dansı',
+  'genre.classical':   'klasik',
+  'genre.devotional':  'tasavvuf',
+  'genre.popular':     'popüler',
+  'genre.electronic':  'elektronik',
+  'genre.hip-hop':     'hip-hop',
+  'genre.jazz':        'caz',
+  'genre.ceremonial':  'tören',
+  'genre.exercise':    'egzersiz',
+
+  'difficulty.beginner':     'başlangıç',
+  'difficulty.intermediate': 'orta',
+  'difficulty.advanced':     'ileri',
+
   'dirty_guard.confirm': '"{name}" üzerinde kaydedilmemiş değişiklikleriniz var. Bunları atıp {next} desenini yükleyelim mi?',
 
   'errors.render_crash':         'Bir şey çöktü',
@@ -602,6 +632,20 @@ const ES: Partial<Record<Key, string>> = {
   'common.off':    'apagado',
   'common.none':   'ninguno',
   'common.reset':  'restablecer',
+
+  'genre.folk-dance':  'danza folclórica',
+  'genre.classical':   'clásico',
+  'genre.devotional':  'devocional',
+  'genre.popular':     'popular',
+  'genre.electronic':  'electrónica',
+  'genre.hip-hop':     'hip-hop',
+  'genre.jazz':        'jazz',
+  'genre.ceremonial':  'ceremonial',
+  'genre.exercise':    'ejercicio',
+
+  'difficulty.beginner':     'principiante',
+  'difficulty.intermediate': 'intermedio',
+  'difficulty.advanced':     'avanzado',
 
   'dirty_guard.confirm': 'Tienes cambios sin guardar en "{name}". ¿Descartarlos y cargar {next}?',
 
@@ -848,6 +892,20 @@ const ZH: Partial<Record<Key, string>> = {
   'common.none':   '无',
   'common.reset':  '重置',
 
+  'genre.folk-dance':  '民间舞',
+  'genre.classical':   '古典',
+  'genre.devotional':  '宗教',
+  'genre.popular':     '流行',
+  'genre.electronic':  '电子',
+  'genre.hip-hop':     '嘻哈',
+  'genre.jazz':        '爵士',
+  'genre.ceremonial':  '仪式',
+  'genre.exercise':    '练习',
+
+  'difficulty.beginner':     '初级',
+  'difficulty.intermediate': '中级',
+  'difficulty.advanced':     '高级',
+
   'dirty_guard.confirm': '"{name}" 有未保存的更改。是否舍弃并加载 {next}？',
 
   'errors.render_crash':         '出现崩溃',
@@ -1090,6 +1148,20 @@ const FR: Partial<Record<Key, string>> = {
   'common.off':    'désactivé',
   'common.none':   'aucun',
   'common.reset':  'réinitialiser',
+
+  'genre.folk-dance':  'danse folk',
+  'genre.classical':   'classique',
+  'genre.devotional':  'dévotionnel',
+  'genre.popular':     'populaire',
+  'genre.electronic':  'électronique',
+  'genre.hip-hop':     'hip-hop',
+  'genre.jazz':        'jazz',
+  'genre.ceremonial':  'cérémoniel',
+  'genre.exercise':    'exercice',
+
+  'difficulty.beginner':     'débutant',
+  'difficulty.intermediate': 'intermédiaire',
+  'difficulty.advanced':     'avancé',
 
   'dirty_guard.confirm': 'Vous avez des modifications non enregistrées sur "{name}". Les abandonner et charger {next} ?',
 
@@ -1335,6 +1407,20 @@ const HI: Partial<Record<Key, string>> = {
   'common.none':   'कोई नहीं',
   'common.reset':  'रीसेट',
 
+  'genre.folk-dance':  'लोक-नृत्य',
+  'genre.classical':   'शास्त्रीय',
+  'genre.devotional':  'भक्ति',
+  'genre.popular':     'लोकप्रिय',
+  'genre.electronic':  'इलेक्ट्रॉनिक',
+  'genre.hip-hop':     'हिप-हॉप',
+  'genre.jazz':        'जैज़',
+  'genre.ceremonial':  'अनुष्ठानिक',
+  'genre.exercise':    'अभ्यास',
+
+  'difficulty.beginner':     'शुरुआती',
+  'difficulty.intermediate': 'मध्यम',
+  'difficulty.advanced':     'उन्नत',
+
   'dirty_guard.confirm': '"{name}" में सहेजे न गए बदलाव हैं। उन्हें छोड़ें और {next} लोड करें?',
 
   'errors.render_crash':         'कुछ क्रैश हुआ',
@@ -1578,6 +1664,20 @@ const RU: Partial<Record<Key, string>> = {
   'common.off':    'выкл',
   'common.none':   'нет',
   'common.reset':  'сброс',
+
+  'genre.folk-dance':  'народный танец',
+  'genre.classical':   'классика',
+  'genre.devotional':  'духовная',
+  'genre.popular':     'популярная',
+  'genre.electronic':  'электроника',
+  'genre.hip-hop':     'хип-хоп',
+  'genre.jazz':        'джаз',
+  'genre.ceremonial':  'обрядовая',
+  'genre.exercise':    'упражнение',
+
+  'difficulty.beginner':     'начальный',
+  'difficulty.intermediate': 'средний',
+  'difficulty.advanced':     'продвинутый',
 
   'dirty_guard.confirm': 'Есть несохранённые изменения в "{name}". Отменить и загрузить {next}?',
 

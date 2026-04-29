@@ -4,9 +4,9 @@ import type { Pattern } from '../../patterns/types';
 import { naturalTempo } from '../../audio/tempo';
 import { PATTERNS, patternById } from '../../patterns/seed';
 import { BeatDots } from '../../components/BeatDots';
-import { useT } from '../../i18n';
+import { useT, useLang } from '../../i18n';
 import { isHighlighted, toggleHighlight } from '../../lib/storage';
-import { REGION_BY_ID } from './regions';
+import { REGION_BY_ID, localizedRegion } from './regions';
 import { sameGrouping, sameRegion, similarGroove } from './relatedRhythms';
 
 interface Props {
@@ -22,6 +22,7 @@ export function PatternDetail({
   pattern, engine, onClose, onOpenPattern, onLoadInPractice, onOpenInStudio,
 }: Props) {
   const t = useT();
+  const { lang } = useLang();
   const [starred, setStarred] = useState<boolean>(() => isHighlighted(pattern.id));
   const [previewing, setPreviewing] = useState(false);
   const [shareToast, setShareToast] = useState<string | null>(null);
@@ -156,7 +157,7 @@ export function PatternDetail({
             <span className="bf-meta-badge alt">{pattern.defaultKit}</span>
             {region && (
               <span className="bf-meta-badge alt" style={{ color: region.color }}>
-                {region.label}
+                {localizedRegion(region, lang).label}
               </span>
             )}
             {pattern.poly && <span className="bf-poly-badge">poly</span>}
@@ -207,7 +208,7 @@ export function PatternDetail({
               onPick={onOpenPattern}
             />
             <RelatedRow
-              label={t('detail.same_region', { region: region?.short ?? pattern.region })}
+              label={t('detail.same_region', { region: region ? localizedRegion(region, lang).short : pattern.region })}
               items={related.region}
               onPick={onOpenPattern}
             />

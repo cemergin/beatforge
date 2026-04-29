@@ -5,7 +5,7 @@ import type { Genre, KitId, Pattern, RegionId } from '../../patterns/types';
 import { PATTERNS, patternById } from '../../patterns/seed';
 import { listUserPatterns } from '../../lib/db';
 import { getHighlights, getRecent, toggleHighlight } from '../../lib/storage';
-import { useT } from '../../i18n';
+import { useT, useLang } from '../../i18n';
 import { readUrlState } from '../../lib/urlState';
 import { Filters } from './Filters';
 import { applyFilters, DEFAULT_FILTERS, type FilterState } from './filterState';
@@ -14,7 +14,7 @@ import { REGION_BY_ID } from './regions';
 import { StarterPaths } from './StarterPaths';
 import { PatternCard } from './PatternCard';
 import { PatternDetail } from './PatternDetail';
-import type { StarterPath } from './paths';
+import { localizedPath, type StarterPath } from './paths';
 
 interface Props {
   engine: SoundEngine;
@@ -60,6 +60,7 @@ function readDetailParam(): string | null {
 
 export function Library({ engine, onLoadInPractice, onOpenInStudio }: Props) {
   const t = useT();
+  const { lang } = useLang();
   const [query, setQuery] = useState('');
   const [filters, setFilters] = useState<FilterState>(DEFAULT_FILTERS);
   const [detailId, setDetailId] = useState<string | null>(() => readDetailParam());
@@ -384,8 +385,8 @@ export function Library({ engine, onLoadInPractice, onOpenInStudio }: Props) {
                 <div className="bf-path-kicker">
                   <span className="bf-mini-label">{t('library.path_starter')}</span>
                 </div>
-                <h2 className="bf-path-title">{activePath.title}</h2>
-                <p className="bf-path-subtitle">{activePath.subtitle}</p>
+                <h2 className="bf-path-title">{localizedPath(activePath, lang).title}</h2>
+                <p className="bf-path-subtitle">{localizedPath(activePath, lang).subtitle}</p>
               </div>
               <button
                 className="bf-chip on"
@@ -396,7 +397,7 @@ export function Library({ engine, onLoadInPractice, onOpenInStudio }: Props) {
                 {t('library.path_start')}
               </button>
             </div>
-            <p className="bf-path-context">{activePath.context}</p>
+            <p className="bf-path-context">{localizedPath(activePath, lang).context}</p>
             <div className="bf-zone-head">
               <h3 className="bf-zone-subtitle">
                 {t(filtered.length === 1 ? 'library.path_count_one' : 'library.path_count_many', { n: filtered.length })}

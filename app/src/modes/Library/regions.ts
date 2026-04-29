@@ -3,6 +3,7 @@
 // don't introduce any new tokens.
 
 import { GROUP_COLORS } from '../../components/visual-helpers';
+import type { Lang } from '../../i18n';
 import type { RegionId } from '../../patterns/types';
 
 export interface RegionMeta {
@@ -175,4 +176,217 @@ export const REGION_BY_ID: Record<RegionId, RegionMeta> = REGIONS.reduce(
 
 export function regionLabel(id: RegionId): string {
   return REGION_BY_ID[id]?.label ?? id;
+}
+
+// ── Translations ────────────────────────────────────────────────────
+//
+// Region `intro` paragraphs stay English on purpose — translating
+// 16 long musicology paragraphs into 6 locales is a separate per-PR
+// content pass, not blocking i18n shipping. `instruments` and
+// `keyRhythms` arrays also stay English: they're proper nouns
+// (darbuka, tabla, surdo) that read better untranslated.
+//
+// Only `short` (filter chip + abbreviated badges) and `label` (full
+// region name in modal headers) are translated here, because those
+// are everywhere in the chrome.
+
+type RegionLabels = { short: string; label: string };
+type RegionTranslations = Partial<Record<Exclude<Lang, 'en'>, RegionLabels>>;
+
+const REGION_I18N: Record<RegionId, RegionTranslations> = {
+  'turkey-ottoman': {
+    tr: { short: 'Türkiye', label: 'Türkiye / Osmanlı' },
+    es: { short: 'Turquía', label: 'Turquía / Otomano' },
+    zh: { short: '土耳其', label: '土耳其 / 奥斯曼' },
+    fr: { short: 'Turquie', label: 'Turquie / Ottoman' },
+    hi: { short: 'तुर्की', label: 'तुर्की / ओस्मानी' },
+    ru: { short: 'Турция', label: 'Турция / Османы' },
+  },
+  'arabic-swana': {
+    tr: { short: 'SWANA', label: 'Arap / SWANA' },
+    es: { short: 'SWANA', label: 'Árabe / SWANA' },
+    zh: { short: 'SWANA', label: '阿拉伯 / SWANA' },
+    fr: { short: 'SWANA', label: 'Arabe / SWANA' },
+    hi: { short: 'SWANA', label: 'अरब / SWANA' },
+    ru: { short: 'SWANA', label: 'Арабский / SWANA' },
+  },
+  'persia': {
+    tr: { short: 'İran', label: 'İran' },
+    es: { short: 'Persia', label: 'Persia' },
+    zh: { short: '波斯', label: '波斯' },
+    fr: { short: 'Perse', label: 'Perse' },
+    hi: { short: 'पर्शिया', label: 'पर्शिया' },
+    ru: { short: 'Персия', label: 'Персия' },
+  },
+  'india': {
+    tr: { short: 'Hindistan', label: 'Hindistan' },
+    es: { short: 'India', label: 'India' },
+    zh: { short: '印度', label: '印度' },
+    fr: { short: 'Inde', label: 'Inde' },
+    hi: { short: 'भारत', label: 'भारत' },
+    ru: { short: 'Индия', label: 'Индия' },
+  },
+  'gamelan-southeast-asia': {
+    tr: { short: 'Gamelan', label: 'Gamelan / GD Asya' },
+    es: { short: 'Gamelán', label: 'Gamelán / SE Asia' },
+    zh: { short: '甘美兰', label: '甘美兰 / 东南亚' },
+    fr: { short: 'Gamelan', label: 'Gamelan / Asie du SE' },
+    hi: { short: 'गमेलान', label: 'गमेलान / द.पू. एशिया' },
+    ru: { short: 'Гамелан', label: 'Гамелан / ЮВ Азия' },
+  },
+  'east-asia': {
+    tr: { short: 'D. Asya', label: 'Doğu Asya' },
+    es: { short: 'E. Asia', label: 'Asia Oriental' },
+    zh: { short: '东亚', label: '东亚' },
+    fr: { short: 'Asie de l\'E.', label: 'Asie de l\'Est' },
+    hi: { short: 'पू. एशिया', label: 'पूर्वी एशिया' },
+    ru: { short: 'В. Азия', label: 'Восточная Азия' },
+  },
+  'west-africa': {
+    tr: { short: 'Batı Afrika', label: 'Batı Afrika' },
+    es: { short: 'África O.', label: 'África Occidental' },
+    zh: { short: '西非', label: '西非' },
+    fr: { short: 'Afr. de l\'O.', label: 'Afrique de l\'Ouest' },
+    hi: { short: 'प. अफ्रीका', label: 'पश्चिम अफ्रीका' },
+    ru: { short: 'З. Африка', label: 'Западная Африка' },
+  },
+  'cuba-afrocaribbean': {
+    tr: { short: 'Küba', label: 'Küba / Afro-Karayip' },
+    es: { short: 'Cuba', label: 'Cuba / Afrocaribeño' },
+    zh: { short: '古巴', label: '古巴 / 非洲-加勒比' },
+    fr: { short: 'Cuba', label: 'Cuba / Afro-Caraïbe' },
+    hi: { short: 'क्यूबा', label: 'क्यूबा / अफ़्रो-कैरेबियन' },
+    ru: { short: 'Куба', label: 'Куба / Афро-Карибы' },
+  },
+  'caribbean': {
+    tr: { short: 'Karayip', label: 'Karayip' },
+    es: { short: 'Caribe', label: 'Caribe' },
+    zh: { short: '加勒比', label: '加勒比' },
+    fr: { short: 'Caraïbe', label: 'Caraïbes' },
+    hi: { short: 'कैरेबियन', label: 'कैरेबियन' },
+    ru: { short: 'Карибы', label: 'Карибы' },
+  },
+  'brazil': {
+    tr: { short: 'Brezilya', label: 'Brezilya' },
+    es: { short: 'Brasil', label: 'Brasil' },
+    zh: { short: '巴西', label: '巴西' },
+    fr: { short: 'Brésil', label: 'Brésil' },
+    hi: { short: 'ब्राज़ील', label: 'ब्राज़ील' },
+    ru: { short: 'Бразилия', label: 'Бразилия' },
+  },
+  'andean-south-america': {
+    tr: { short: 'Andlar', label: 'And Güney Amerika' },
+    es: { short: 'Andes', label: 'Sudamérica Andina' },
+    zh: { short: '安第斯', label: '安第斯南美' },
+    fr: { short: 'Andes', label: 'Amérique du Sud andine' },
+    hi: { short: 'एंडीज', label: 'एंडीयन द. अमेरिका' },
+    ru: { short: 'Анды', label: 'Андская Юж. Америка' },
+  },
+  'balkans': {
+    tr: { short: 'Balkanlar', label: 'Balkanlar' },
+    es: { short: 'Balcanes', label: 'Balcanes' },
+    zh: { short: '巴尔干', label: '巴尔干' },
+    fr: { short: 'Balkans', label: 'Balkans' },
+    hi: { short: 'बाल्कन', label: 'बाल्कन' },
+    ru: { short: 'Балканы', label: 'Балканы' },
+  },
+  'iberia-flamenco': {
+    tr: { short: 'İberya', label: 'İberya / Flamenko' },
+    es: { short: 'Iberia', label: 'Iberia / Flamenco' },
+    zh: { short: '伊比利亚', label: '伊比利亚 / 弗拉门戈' },
+    fr: { short: 'Ibérie', label: 'Ibérie / Flamenco' },
+    hi: { short: 'इबेरिया', label: 'इबेरिया / फ्लेमेंको' },
+    ru: { short: 'Иберия', label: 'Иберия / Фламенко' },
+  },
+  'celtic-europe': {
+    tr: { short: 'Kelt', label: 'Kelt / Avrupa' },
+    es: { short: 'Celta', label: 'Celta / Europa' },
+    zh: { short: '凯尔特', label: '凯尔特 / 欧洲' },
+    fr: { short: 'Celte', label: 'Celte / Europe' },
+    hi: { short: 'सेल्टिक', label: 'सेल्टिक / यूरोप' },
+    ru: { short: 'Кельты', label: 'Кельты / Европа' },
+  },
+  'electronic-western': {
+    tr: { short: 'Elektronik', label: 'Elektronik / Batı' },
+    es: { short: 'Electrónica', label: 'Electrónica / Occidental' },
+    zh: { short: '电子', label: '电子 / 西方' },
+    fr: { short: 'Électro', label: 'Électronique / Occidental' },
+    hi: { short: 'इलेक्ट्रॉनिक', label: 'इलेक्ट्रॉनिक / पश्चिमी' },
+    ru: { short: 'Электро', label: 'Электронная / Западная' },
+  },
+  'exercise': {
+    tr: { short: 'Egzersizler', label: 'Polyritmi Egzersizleri' },
+    es: { short: 'Ejercicios', label: 'Ejercicios de Polirritmia' },
+    zh: { short: '练习', label: '复合节奏练习' },
+    fr: { short: 'Exercices', label: 'Exercices de Polyrythmie' },
+    hi: { short: 'अभ्यास', label: 'पॉलीरिदम अभ्यास' },
+    ru: { short: 'Упражнения', label: 'Полиритм. упражнения' },
+  },
+  // RegionIds present in the type union but not in the BASE list yet —
+  // their patterns use these region tags in the seed data, so we still
+  // localize the labels for filter chips even if there's no full region
+  // metadata block.
+  'modern-african': {
+    tr: { short: 'Modern Afrika', label: 'Modern Afrika' },
+    es: { short: 'África Mod.', label: 'África Moderna' },
+    zh: { short: '现代非洲', label: '现代非洲' },
+    fr: { short: 'Afr. moderne', label: 'Afrique moderne' },
+    hi: { short: 'आधुनिक अफ्रीका', label: 'आधुनिक अफ्रीका' },
+    ru: { short: 'Совр. Африка', label: 'Современная Африка' },
+  },
+  'north-east-african': {
+    tr: { short: 'Kuzey-Doğu Afrika', label: 'Kuzey-Doğu Afrika' },
+    es: { short: 'África NE', label: 'África Nororiental' },
+    zh: { short: '东北非', label: '东北非' },
+    fr: { short: 'Afr. NE', label: 'Afrique du Nord-Est' },
+    hi: { short: 'उत्तर-पूर्व अफ्रीका', label: 'उत्तर-पूर्व अफ्रीका' },
+    ru: { short: 'СВ Африка', label: 'Северо-Восточная Африка' },
+  },
+  'caucasus-mediterranean': {
+    tr: { short: 'Kafkaslar/Akdeniz', label: 'Kafkaslar / Akdeniz' },
+    es: { short: 'Cáucaso/Med.', label: 'Cáucaso / Mediterráneo' },
+    zh: { short: '高加索/地中海', label: '高加索 / 地中海' },
+    fr: { short: 'Caucase/Méd.', label: 'Caucase / Méditerranée' },
+    hi: { short: 'कौकेसस/मेड.', label: 'कौकेसस / भूमध्यसागरीय' },
+    ru: { short: 'Кавказ/Средиз.', label: 'Кавказ / Средиземноморье' },
+  },
+  'central-asian-pacific': {
+    tr: { short: 'Orta Asya/Pasifik', label: 'Orta Asya / Pasifik' },
+    es: { short: 'Asia C./Pacífico', label: 'Asia Central / Pacífico' },
+    zh: { short: '中亚/太平洋', label: '中亚 / 太平洋' },
+    fr: { short: 'Asie C./Pacif.', label: 'Asie Centrale / Pacifique' },
+    hi: { short: 'मध्य एशिया/प्रशांत', label: 'मध्य एशिया / प्रशांत' },
+    ru: { short: 'Ср. Азия/Тихий', label: 'Центр. Азия / Тихий океан' },
+  },
+  'global-electronic': {
+    tr: { short: 'Küresel Elektronik', label: 'Küresel Elektronik' },
+    es: { short: 'Electr. Global', label: 'Electrónica Global' },
+    zh: { short: '全球电子', label: '全球电子' },
+    fr: { short: 'Électro globale', label: 'Électronique Globale' },
+    hi: { short: 'वैश्विक इलेक्ट्र.', label: 'वैश्विक इलेक्ट्रॉनिक' },
+    ru: { short: 'Глоб. электро', label: 'Глобальная электроника' },
+  },
+  'underground-electronic': {
+    tr: { short: 'Yeraltı Elektronik', label: 'Yeraltı Elektronik' },
+    es: { short: 'Electr. Underground', label: 'Electrónica Underground' },
+    zh: { short: '地下电子', label: '地下电子' },
+    fr: { short: 'Électro under.', label: 'Électronique Underground' },
+    hi: { short: 'अंडरग्राउंड इलेक्ट्र.', label: 'अंडरग्राउंड इलेक्ट्रॉनिक' },
+    ru: { short: 'Андеграунд электро', label: 'Андеграунд электроника' },
+  },
+  'internet-born': {
+    tr: { short: 'İnternet Doğumlu', label: 'İnternet Doğumlu' },
+    es: { short: 'Nacido en Internet', label: 'Nacido en Internet' },
+    zh: { short: '网生流派', label: '网生流派' },
+    fr: { short: 'Né sur internet', label: 'Né sur Internet' },
+    hi: { short: 'इंटरनेट-जन्मा', label: 'इंटरनेट-जन्मा' },
+    ru: { short: 'Интернет-рождённое', label: 'Рождённое в интернете' },
+  },
+};
+
+/** Resolve a region's user-facing labels for a given locale.
+ *  Falls back to the English `short` / `label` if a locale is missing. */
+export function localizedRegion(region: RegionMeta, lang: Lang): RegionLabels {
+  if (lang === 'en') return { short: region.short, label: region.label };
+  return REGION_I18N[region.id]?.[lang] ?? { short: region.short, label: region.label };
 }
