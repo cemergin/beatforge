@@ -77,10 +77,15 @@
       rel="stylesheet"
     />
     <script>
-      // Apply persisted theme before first paint
+      // Apply persisted theme + language before first paint so the
+      // visible chrome doesn't flash through a default state on mount.
       try {
         const t = localStorage.getItem('bf_theme');
         if (t) document.documentElement.dataset.theme = t;
+      } catch {}
+      try {
+        const l = localStorage.getItem('bf_lang');
+        if (l === 'en' || l === 'tr' || l === 'es') document.documentElement.lang = l;
       } catch {}
     </script>
   </head>

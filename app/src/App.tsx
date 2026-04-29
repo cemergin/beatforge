@@ -1,4 +1,6 @@
 import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { LangPicker } from './components/LangPicker';
+import { useT } from './i18n';
 import { SoundEngine } from './audio/runtime/sound-engine';
 import { Practice } from './modes/Practice/Practice';
 import { ALL_KITS, type KitId, type Pattern } from './patterns/types';
@@ -35,6 +37,7 @@ function readCurrentUrl(): UrlState {
 }
 
 export default function App() {
+  const t = useT();
   // useState lazy initializer creates the engine once. Refs were the
   // older pattern but React 19 lint flags `ref.current` reads during
   // render — a lazy useState is the supported equivalent.
@@ -308,26 +311,27 @@ export default function App() {
             onClick={() => switchTab('practice')}
             type="button"
           >
-            Practice
+            {t('nav.practice')}
           </button>
           <button
             className={`bf-chip ${tab === 'library' ? 'on' : 'ghost'}`}
             onClick={() => switchTab('library')}
             type="button"
           >
-            Library
+            {t('nav.library')}
           </button>
           <button
             className={`bf-chip ${tab === 'studio' ? 'on' : 'ghost'}`}
             onClick={() => switchTab('studio')}
             type="button"
           >
-            Studio
+            {t('nav.studio')}
           </button>
           {/* The MIDI tab is intentionally NOT in the nav. Reachable
               via ?tab=_midi for users who know the URL. */}
         </nav>
         <div className="bf-topright">
+          <LangPicker />
           <div className="bf-theme-seg" role="group" aria-label="theme">
             {THEMES.map((t) => (
               <button
