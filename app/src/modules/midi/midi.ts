@@ -56,7 +56,9 @@ export function makeMidiModule(bus: EventBus): MidiModule {
       | (Navigator & { requestMIDIAccess?: () => Promise<MidiAccessLike> })
       | null;
     if (!navAny || !navAny.requestMIDIAccess) {
-      throw new Error('Web MIDI API not available');
+      throw new Error(
+        'Web MIDI is not available in this browser. Use Chrome, Edge, or Opera over HTTPS.',
+      );
     }
     const a = await navAny.requestMIDIAccess();
     access = a;

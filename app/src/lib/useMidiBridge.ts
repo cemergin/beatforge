@@ -234,17 +234,19 @@ export function useMidiBridge(engine: SoundEngine, channelCount: number): MidiBr
 
   useEffect(() => {
     if (!access || !clockListenEnabled) return;
-    const offs: Array<() => void> = [];
-    for (const input of inputs) {
-      if (!activeInputIds.has(input.id)) continue;
-      offs.push(attachClockListener(input, {
-        onBpm: (bpm) => sessionSetBpmRef.current(bpm),
-        onStart: () => sessionStartRef.current(),
-        onContinue: () => sessionStartRef.current(),
-        onStop: () => sessionStopRef.current(),
-      }));
-    }
-    return () => { for (const off of offs) off(); };
+    // Attach to the FIRST active input only — multiple clock sources
+    // produce flapping BPM (each smooths on its own window) and double
+    // session.start/stop fires per transport message. Most rigs have
+    // a single master; if a user has multiple inputs sending clock
+    // simultaneously they want explicit selection, not auto-merge.
+    const first = inputs.find((input) => activeInputIds.has(input.id));
+    if (!first) return;
+    return attachClockListener(first, {
+      onBpm: (bpm) => sessionSetBpmRef.current(bpm),
+      onStart: () => sessionStartRef.current(),
+      onContinue: () => sessionStartRef.current(),
+      onStop: () => sessionStopRef.current(),
+    });
   }, [access, clockListenEnabled, inputs, activeInputIds]);
 
   // Clock SEND — drives 24 PPQN to the chosen output. Tracks

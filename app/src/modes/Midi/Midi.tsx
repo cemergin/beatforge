@@ -171,7 +171,19 @@ export function Midi({ bridge, channels }: Props) {
   /** Fire one note-on / note-off pair to the row's configured output
    *  using the row's MIDI channel + note + velocityScale, so the user
    *  can verify wiring without playing a full pattern. Velocity baseline
-   *  is 99 (a normal hit) scaled by the row's velocityScale fraction. */
+   *  is 99 (a normal hit) scaled by the row's velocityScale fraction.
+   *
+   *  Pending note-off timers are tracked + cleared on unmount so a fast
+   *  tab switch doesn't leave a stuck note. (Hardware ignores a stale
+   *  note-off; the cleanup is mostly hygiene.) */
+  const pendingNoteOffsRef = useRef(new Set<ReturnType<typeof setTimeout>>());
+  useEffect(() => {
+    const pending = pendingNoteOffsRef.current;
+    return () => {
+      for (const id of pending) clearTimeout(id);
+      pending.clear();
+    };
+  }, []);
   const testChannelOut = useCallback((idx: number) => {
     const cfg = channelOuts[idx];
     if (!cfg || !cfg.outputId) return;
@@ -183,10 +195,12 @@ export function Midi({ bridge, channels }: Props) {
     out.send(onData);
     pushLog({ ts: performance.now(), dir: 'out', source: out.name ?? out.id, raw: onData, decoded: decodeMidi(onData) });
     const offData = [0x80 | (cfg.midiChannel & 0x0f), cfg.note & 0x7f, 0];
-    setTimeout(() => {
+    const id = setTimeout(() => {
+      pendingNoteOffsRef.current.delete(id);
       out.send(offData);
       pushLog({ ts: performance.now(), dir: 'out', source: out.name ?? out.id, raw: offData, decoded: decodeMidi(offData) });
     }, 150);
+    pendingNoteOffsRef.current.add(id);
   }, [channelOuts, outputs, pushLog]);
 
   const clearLog = useCallback(() => setLog([]), []);

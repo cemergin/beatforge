@@ -112,6 +112,11 @@ export class SoundEngine {
   private worker: Worker | null = null;
   private workerFailed = false;
   private timerId: ReturnType<typeof setTimeout> | null = null;
+  /** Bar-listener delivery timers — tracked so stop()/dispose() can
+   *  cancel them. Without this, queued listener callbacks for already-
+   *  scheduled bars fire after stop, and the trainer's BPM ramp could
+   *  nudge BPM after the user has stopped playback. */
+  private barListenerTimers = new Set<ReturnType<typeof setTimeout>>();
 
   // ── Read-only state ────────────────────────────────────────────
   get running(): boolean { return this.sequencer?.running() ?? false; }
@@ -267,11 +272,13 @@ export class SoundEngine {
       if (!this.ctx) return;
       const delayMs = Math.max(0, (event.when - this.ctx.currentTime) * 1000);
       const bar = event.bar;
-      setTimeout(() => {
+      const id = setTimeout(() => {
+        this.barListenerTimers.delete(id);
         for (const fn of [...this.barListeners]) {
           try { fn(bar); } catch { /* isolate handlers */ }
         }
       }, delayMs);
+      this.barListenerTimers.add(id);
     });
 
     // Replay shadow state onto the sequencer so any setBpm / setStepUnit
@@ -622,6 +629,8 @@ export class SoundEngine {
       clearTimeout(this.timerId);
       this.timerId = null;
     }
+    for (const id of this.barListenerTimers) clearTimeout(id);
+    this.barListenerTimers.clear();
     if (this.worker) {
       this.worker.postMessage({ type: 'stop' });
     }

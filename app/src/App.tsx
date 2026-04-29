@@ -1,7 +1,7 @@
 import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { SoundEngine } from './audio/runtime/sound-engine';
 import { Practice } from './modes/Practice/Practice';
-import type { KitId, Pattern } from './patterns/types';
+import { ALL_KITS, type KitId, type Pattern } from './patterns/types';
 import { SessionProvider, useSession } from './modules/session';
 import { PATTERNS } from './patterns/seed';
 import { makeRouter, type Router } from './modules/router';
@@ -19,7 +19,7 @@ import { patternById, registerPatternSource } from './patterns/seed';
 import { deserializePattern } from './patterns/serialize';
 import { loadAllSafe } from './lib/db';
 import { getMasterVolume } from './lib/storage';
-import { logError } from './lib/log';
+import { logError, logWarn } from './lib/log';
 import { readUrlState, type Tab, type UrlState } from './lib/urlState';
 import { UpdateBanner } from './components/UpdateBanner';
 import './styles/app.css';
@@ -196,8 +196,9 @@ export default function App() {
         if (window.location.search === search) return;
         window.history.replaceState(null, '', `${window.location.pathname}${search}${window.location.hash}`);
         lastEncodedRef.current = { tab, patternId };
-      } catch {
+      } catch (err) {
         // Fall back to short-id URL if encoding fails — better than nothing.
+        logWarn(`Pattern URL encoding fell back to short-id · ${err instanceof Error ? err.message : String(err)}`);
         const search = `?tab=practice&pattern=${encodeURIComponent(patternId)}`;
         if (window.location.search !== search) {
           window.history.replaceState(null, '', `${window.location.pathname}${search}${window.location.hash}`);
@@ -221,7 +222,14 @@ export default function App() {
   }, [tab, patternId]);
 
   useEffect(() => {
-    const savedKit = (localStorage.getItem('bf_kit') as KitId) || '808';
+    // Validate against the known kit list — a foreign value (older
+    // kit id, manual edit, future-version persistence) would otherwise
+    // flow into engine.setKit and produce a silent dead kit. Same
+    // pattern as bf_theme validation.
+    const raw = localStorage.getItem('bf_kit');
+    const savedKit: KitId = (raw && (ALL_KITS as readonly string[]).includes(raw))
+      ? (raw as KitId)
+      : '808';
     engine.setKit(savedKit);
     engine.setMasterVolume(getMasterVolume());
     return () => { engine.stop(); };
@@ -243,10 +251,17 @@ export default function App() {
     // in-flight playback so the user starts fresh on the new piece.
     engine.stop();
     // Ensure the cache has this id before Practice reads it (user patterns).
-    refreshUserCache().finally(() => {
-      setPatternId(id);
-      setTab('practice');
-    });
+    refreshUserCache()
+      .catch((err) => {
+        // IDB version mismatch or quota issue — load proceeds with
+        // whatever's already cached, but the user should know rather
+        // than wonder why their saved pattern didn't load.
+        logWarn(`Could not refresh user pattern cache · ${err instanceof Error ? err.message : String(err)}`);
+      })
+      .finally(() => {
+        setPatternId(id);
+        setTab('practice');
+      });
   }, [engine, refreshUserCache]);
 
   // Library → Studio handoff. Drops the pattern into the session
@@ -411,9 +426,14 @@ function ModeShell({
     let active = true;
     let unregisterMaster: (() => void) | null = null;
     const unbind = router.bindBus(engine.getEventBus());
-    void engine.ensureCtx().then(() => {
+    engine.ensureCtx().then(() => {
       if (!active) return;
       unregisterMaster = registerEngineMaster(router, engine);
+    }).catch((err) => {
+      // Rare iOS Safari edge case where AudioContext can't be
+      // created. Without surfacing this, every master-bus knob would
+      // be dead but the UI looks fine.
+      logError('Audio context init failed; master-bus knobs disabled', err);
     });
     return () => {
       active = false;
