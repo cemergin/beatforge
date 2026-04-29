@@ -12,7 +12,7 @@
 // defaults, drops edits. Used by Library's "open here" handoffs.
 
 import { useCallback, useMemo, useState } from 'react';
-import { ALL_VOICES, type KitId, type Pattern } from '../../patterns/types';
+import { ALL_VOICES, trackMeta, type KitId, type Pattern } from '../../patterns/types';
 import type { Channel } from '../../patterns/types-sound';
 import { defaultChannelEffects } from '../../patterns/types-sound';
 import type { SoundEngine } from '../../audio/runtime/sound-engine';
@@ -59,12 +59,28 @@ function channelsForKit(kit: KitId): Channel[] {
   }));
 }
 
+/** Count voices the pattern actually uses (last non-empty voice's
+ *  position + 1). Lets Studio auto-fit to a Practice pattern's real
+ *  voice count instead of always showing the full 5 strips —
+ *  cross-tab handoff produces fewer channels for sparser patterns. */
+function usedVoiceCount(p: Pattern): number {
+  let lastUsed = 0;
+  for (let i = 0; i < ALL_VOICES.length; i++) {
+    const t = p.tracks[ALL_VOICES[i]];
+    if (!t) continue;
+    const meta = trackMeta(t, p.steps);
+    if (meta.pattern && meta.pattern.some((v) => v !== 0)) lastUsed = i + 1;
+  }
+  return Math.max(1, lastUsed);
+}
+
 export function SessionProvider({ engine, initialPattern, initialKit, children }: SessionProviderProps) {
   const [pattern, setPatternState] = useState<Pattern>(initialPattern);
   const [origin, setOriginState] = useState<Pattern>(initialPattern);
   const [kit, setKitState] = useState<KitId>(initialKit ?? initialPattern.defaultKit);
   const [channels, setChannelsState] = useState<Channel[]>(
-    () => channelsForKit(initialKit ?? initialPattern.defaultKit),
+    () => channelsForKit(initialKit ?? initialPattern.defaultKit)
+      .slice(0, usedVoiceCount(initialPattern)),
   );
   const [bpm, setBpmState] = useState<number>(() => naturalBpmForPattern(initialPattern));
   const [swing, setSwingState] = useState<number>(50);
@@ -83,14 +99,19 @@ export function SessionProvider({ engine, initialPattern, initialKit, children }
     setOriginState(next);
     const nextKit = next.defaultKit;
     setKitState(nextKit);
-    const nextChannels = channelsForKit(nextKit);
+    // Trim channels to the pattern's actual voice usage so Studio
+    // doesn't render 2 empty strips for a 3-voice Practice pattern.
+    const fullChannels = channelsForKit(nextKit);
+    const nextChannels = fullChannels.slice(0, usedVoiceCount(next));
     setChannelsState(nextChannels);
     setBpmState(naturalBpmForPattern(next));
     // Engine sync: load pattern first (sets stepUnit/steps), then kit
     // (re-applies machine presets across channels), then bpm. The
     // channels-from-kit reset is what setKit does internally on the
-    // engine; we don't need a separate engine.setChannels call.
+    // engine; ensureStripCount inside the engine grows/shrinks the
+    // strip array to match the trimmed channel list.
     engine.setKit(nextKit);
+    engine.setMachines(nextChannels.map((c) => c.machine));
     engine.loadPattern(next);
     const denom = parseTimeSigDenom(next.timeSig);
     engine.setNaturalBpm(naturalBpmForPattern(next), denom);

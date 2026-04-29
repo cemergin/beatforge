@@ -2208,6 +2208,47 @@ input[type="number"] { font: inherit; color: inherit; }
 .bf-sound-strip-trigger:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
 .bf-sound-strip-trigger:active { transform: scale(0.92); }
 
+/* Per-strip remove (✕) — small icon button next to the trigger.
+   Quiet by default; tints red on hover to flag the destructive
+   action. Disabled state when only one channel is left. */
+.bf-sound-strip-remove {
+  width: 22px; height: 22px; border-radius: var(--r-circle);
+  border: var(--bw-1) solid var(--line); background: transparent;
+  color: var(--muted); cursor: pointer; font-size: var(--fs-mini);
+  display: inline-flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  transition: color var(--t-fast), border-color var(--t-fast);
+}
+.bf-sound-strip-remove:hover:not(:disabled) {
+  color: #d04040; border-color: #d04040;
+}
+.bf-sound-strip-remove:disabled { opacity: 0.35; cursor: not-allowed; }
+
+/* "+ add channel" tile — sits at the end of the channel grid, same
+   grid-cell shape as a strip but content-empty and quiet. Click to
+   append a new channel using the next available voice (KK/SN/HH/OH/CP). */
+.bf-sound-strip-add {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: var(--sp-2);
+  padding: var(--sp-6);
+  border: var(--bw-1) dashed var(--line);
+  border-radius: var(--r-md);
+  background: transparent;
+  color: var(--muted);
+  font-family: var(--mono); font-size: var(--fs-mini);
+  letter-spacing: 0.08em; text-transform: uppercase;
+  cursor: pointer;
+  min-height: 200px;
+  transition: color var(--t-fast), border-color var(--t-fast), background var(--t-fast);
+}
+.bf-sound-strip-add:hover {
+  color: var(--accent); border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 4%, transparent);
+}
+.bf-sound-strip-add-glyph {
+  font-size: var(--fs-xl); line-height: 1;
+}
+
 /* Subdivisions badge — sits in each strip head, opens a small menu of
    subdivision options. Poly state visually distinct so users can scan
    which channels are off-grid at a glance. */

@@ -6,10 +6,11 @@ import { useSession } from './context';
 import type { SoundEngine } from '../../audio/runtime/sound-engine';
 import type { Pattern } from '../../patterns/types';
 
-function fakeEngine(): SoundEngine & { __calls: { loadPattern: ReturnType<typeof vi.fn>; setKit: ReturnType<typeof vi.fn>; setNaturalBpm: ReturnType<typeof vi.fn>; setSwing: ReturnType<typeof vi.fn>; play: ReturnType<typeof vi.fn>; stop: ReturnType<typeof vi.fn> } } {
+function fakeEngine(): SoundEngine & { __calls: { loadPattern: ReturnType<typeof vi.fn>; setKit: ReturnType<typeof vi.fn>; setMachines: ReturnType<typeof vi.fn>; setNaturalBpm: ReturnType<typeof vi.fn>; setSwing: ReturnType<typeof vi.fn>; play: ReturnType<typeof vi.fn>; stop: ReturnType<typeof vi.fn> } } {
   const calls = {
     loadPattern: vi.fn(),
     setKit: vi.fn(),
+    setMachines: vi.fn(),
     setNaturalBpm: vi.fn(),
     setSwing: vi.fn(),
     play: vi.fn(() => Promise.resolve()),
@@ -18,6 +19,7 @@ function fakeEngine(): SoundEngine & { __calls: { loadPattern: ReturnType<typeof
   return {
     loadPattern: calls.loadPattern,
     setKit: calls.setKit,
+    setMachines: calls.setMachines,
     setNaturalBpm: calls.setNaturalBpm,
     setSwing: calls.setSwing,
     play: calls.play,

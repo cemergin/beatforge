@@ -5,7 +5,9 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { SoundEngine, type SoundSequence, type SoundStep } from '../../audio/runtime/sound-engine';
 import { useSession } from '../../modules/session';
-import { trackMeta, ALL_KITS, type KitId } from '../../patterns/types';
+import { trackMeta, ALL_KITS, ALL_VOICES, type KitId } from '../../patterns/types';
+import { buildKitMachine } from '../../audio/runtime/kit-presets';
+import { defaultChannelEffects } from '../../patterns/types-sound';
 import {
   VOICE_MACHINES,
   type VoiceArchetypeId,
@@ -197,6 +199,11 @@ function kebabId(name: string): string {
 }
 
 const NUM_CHANNELS = 5;
+/** Hard cap on Studio channels — Pattern.tracks only carries 5 voice
+ *  keys (KK/SN/HH/OH/CP), so beyond 5 the round-trip with Practice
+ *  would lose channels. Variable below this — user adds/removes via
+ *  the per-strip buttons. */
+const MAX_CHANNELS = 5;
 
 // Local meter list — duplicated from modes/Studio/presets.ts so the
 // Sound page doesn't depend on Studio's module. Will consolidate into
@@ -251,13 +258,16 @@ function meterFromPattern(p: import('../../patterns/types').Pattern): MeterPrese
 }
 
 /** Translate session.pattern.tracks (voice-keyed) into Sound's
- *  positional SoundSequence. Row order matches NUM_CHANNELS — the
- *  classic 5-piece kick/snare/hat/tom/clap layout. Tracks the
- *  pattern doesn't include get an empty row of stepsPerBar zeros. */
-function sequenceFromPattern(p: import('../../patterns/types').Pattern): SoundSequence {
+ *  positional SoundSequence. Produces exactly `count` rows in voice
+ *  order (KK / SN / HH / OH / CP). Channels with no track or with a
+ *  zero-array track get an empty row of stepsPerBar zeros. The count
+ *  comes from session.channels.length — Studio auto-fits to the
+ *  pattern's voice usage on cross-tab handoffs. */
+function sequenceFromPattern(p: import('../../patterns/types').Pattern, count: number): SoundSequence {
   const out: SoundSequence = [];
   const ALL_VOICES_LOCAL: import('../../patterns/types').VoiceId[] = ['KK', 'SN', 'HH', 'OH', 'CP'];
-  for (let i = 0; i < NUM_CHANNELS; i++) {
+  const limit = Math.min(count, ALL_VOICES_LOCAL.length);
+  for (let i = 0; i < limit; i++) {
     const voiceId = ALL_VOICES_LOCAL[i];
     const track = voiceId ? p.tracks[voiceId] : undefined;
     if (!track) {
@@ -351,7 +361,7 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
   // lands on the same beats. Hydration effect below keeps it in
   // sync when session.pattern changes externally.
   const [sequence, setSequence] = useState<SoundSequence>(
-    () => sequenceFromPattern(session.pattern),
+    () => sequenceFromPattern(session.pattern, session.channels.length),
   );
   // BPM flows through the session — natural BPM (denominator-based)
   // is the same convention Practice uses. session.bpm = 276 in
@@ -392,8 +402,8 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
     }
     setMeter(meterFromPattern(session.pattern));
     setGrouping(session.pattern.grouping.slice());
-    setSequence(sequenceFromPattern(session.pattern));
-  }, [session.pattern]);
+    setSequence(sequenceFromPattern(session.pattern, session.channels.length));
+  }, [session.pattern, session.channels.length]);
 
   // Outbound: Sound's local edits to sequence + grouping + meter
   // flow back into session.pattern so other tabs see them. Skips
@@ -1045,6 +1055,30 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
   const setChannelLabel = useCallback((channelIdx: number, label: string) => {
     setChannels((cs) => cs.map((c, i) => (i === channelIdx ? { ...c, label } : c)));
   }, [setChannels]);
+
+  // Channel count is variable (1..MAX_CHANNELS). See module-level
+  // constant for the cap rationale (Pattern.tracks voice-keyed shape).
+  const addChannel = useCallback(() => {
+    const nextIdx = channels.length;
+    if (nextIdx >= MAX_CHANNELS) return;
+    const voice = ALL_VOICES[nextIdx];
+    const labels: Record<string, string> = { KK: 'Kick', SN: 'Snare', HH: 'Hat', OH: 'Open hat', CP: 'Clap' };
+    setChannels((cs) => [
+      ...cs,
+      {
+        label: labels[voice] ?? `Ch ${nextIdx + 1}`,
+        machine: buildKitMachine(session.kit, voice),
+        effects: defaultChannelEffects(),
+      },
+    ]);
+    setSequence((seq) => [...seq, Array<SoundStep>(stepsPerBar).fill(0)]);
+  }, [channels.length, session.kit, setChannels, stepsPerBar]);
+
+  const removeChannel = useCallback((idx: number) => {
+    if (channels.length <= 1) return;
+    setChannels((cs) => cs.filter((_, i) => i !== idx));
+    setSequence((seq) => seq.filter((_, i) => i !== idx));
+  }, [channels.length, setChannels]);
 
   // Per-channel polyrhythm: cycle that row's length through a fixed
   // ladder. n === stepsPerBar means "main rate" (no polyrhythm).
@@ -1743,6 +1777,16 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
                   maxLength={24}
                 />
                 <button
+                  className="bf-sound-strip-remove"
+                  onClick={() => removeChannel(i)}
+                  disabled={channels.length <= 1}
+                  aria-label={`Remove channel ${i + 1}`}
+                  title={channels.length <= 1 ? 'At least one channel required' : 'Remove this channel'}
+                  type="button"
+                >
+                  ✕
+                </button>
+                <button
                   className="bf-sound-strip-trigger"
                   onClick={() => void trigger(i)}
                   aria-label={`Trigger ${c.label}`}
@@ -2022,6 +2066,18 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
             </div>
           );
         })}
+        {channels.length < MAX_CHANNELS && (
+          <button
+            type="button"
+            className="bf-sound-strip-add"
+            onClick={addChannel}
+            title="Add a channel"
+            aria-label="Add a channel"
+          >
+            <span className="bf-sound-strip-add-glyph">+</span>
+            <span>add channel</span>
+          </button>
+        )}
 
       </section>
     </main>
