@@ -1,5 +1,10 @@
 # Celtic, Northern European, Romani & Klezmer Pattern Library
-## Playable Step-Sequencer Patterns for Web Drum Machine
+
+> **TL;DR** — Notated patterns for Irish jigs (6/8) + reels (4/4) + hornpipes + slides + slip jigs (9/8); Scottish strathspeys, Breton, Galician, Welsh; Scandinavian polkas + halling; klezmer freylekhs + bulgar + doina; Romani influences throughout.
+> **Audience:** percussionist, fiddler, dance accompanist, folk-music producer.
+> **Length:** ~820 lines.
+> **Best for:** Irish jig vs. slip-jig (6/8 vs. 9/8), the strathspey's "Scottish snap", klezmer's freylekh foot-pulse.
+> **Skip if:** you want cultural context (→ [`../rhythm-traditions/celtic-european.md`](../rhythm-traditions/celtic-european.md)).
 
 ### How to Read This Document
 

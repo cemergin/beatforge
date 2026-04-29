@@ -1,5 +1,11 @@
 # BeatForge Modular Platform Plan
 
+> **TL;DR** — Vision for v2+: one instrument with multiple lenses (modes), shared engine, "module algebra" for composition, internal modularity that quietly enables future extensibility. Per the synthesis doc: pursue the engineering quietly, never make it user-facing.
+> **Audience:** future contributors thinking about long-term architecture. Not a current spec.
+> **Length:** ~760 lines · ~12 min read.
+> **Best for:** the layered-engine vision, what "platform" means here (internal not external), the module-algebra thought experiment.
+> **Status:** PROPOSAL — engineering hygiene to pursue quietly; user-facing platform talk explicitly shelved.
+
 **Date**: 2026-04-27
 **Status**: Proposal — to be validated by design review before implementation
 **Author**: Iterated from architecture conversation 2026-04-27

@@ -1,5 +1,11 @@
 # BeatForge Content Presentation Design
 
+> **TL;DR** — How 48K+ lines of research become a learning experience inside Library mode. Four-layer depth model (tagline → story card → full article → trails). Hypertext graph principles applied to musicology.
+> **Audience:** content designer, content engineer, anyone wiring research-heavy material into a UX.
+> **Length:** ~510 lines · ~10 min read.
+> **Best for:** the 4-layer depth model (rare in product specs), the related-rhythm graph design, narrative-flow patterns.
+> **Skip if:** you want the engine that plays the patterns (→ [`../architecture/sequencer-and-patterns.md`](../architecture/sequencer-and-patterns.md)) or the research itself (→ [`../topics/`](../topics/)).
+
 ## How 48,000 Lines of Research Become a Learning Experience
 
 **Date:** 2026-03-13

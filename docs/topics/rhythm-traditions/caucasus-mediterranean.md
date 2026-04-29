@@ -1,6 +1,12 @@
 # Caucasus, Mediterranean, Diaspora & Sacred Drumming Traditions
 
-## A Musicological, Historical, and Cultural Research Report
+> **TL;DR** — The crossroads where empires met: Armenia, Georgia, Azerbaijan, southern Italy, Malta, Sephardic Jewish, Romani diaspora, Sufi sacred drumming. Traditions that don't fit cleanly under a single nation-state but have powerful regional identities.
+> **Audience:** musician, music writer, anyone interested in cross-pollinated traditions.
+> **Length:** ~800 lines · ~13 min read.
+> **Best for:** the Sephardic + Romani musical lineages, sacred drumming functions across faiths, southern Italian tarantella context.
+> **Skip if:** you want one specific national tradition (→ [`turkish-anatolian-swana.md`](turkish-anatolian-swana.md), [`balkan.md`](balkan.md), [`persian-iranian.md`](persian-iranian.md)).
+
+
 
 ---
 

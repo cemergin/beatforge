@@ -1,5 +1,10 @@
 # BeatForge — The Living Archive Review
 
+> **TL;DR** — The cultural corrective. Argues against treating world rhythms as museum artifacts ("99% dead") and for treating them as connection-engines ("Dilla / Madlib / Talking Heads energy"). Replaces the ethnomusicologist's preservation framing as the canonical cultural anchor.
+> **Audience:** anyone shaping the product's cultural framing. Read together with `ethnomusicology-curator.md` and `../manifestos/living-archive.md`.
+> **Length:** ~280 lines · ~5 min read.
+> **Best for:** the cousin-finder vs. vitrine distinction, why scenius beats curation, the post-purist cultural argument.
+
 **Reviewer:** A scenius theorist / crate-digger / curatorial recombinator (in the lineage of Eno, J Dilla, Madlib, Gilles Peterson, Bourdain, Hua Hsu, the Avalanches, Damon Albarn's Africa Express, Switched On Pop, Atlas Obscura)
 **Date:** 2026-04-27
 **Subject:** BeatForge as a connection-engine, not a vitrine

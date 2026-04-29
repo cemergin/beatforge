@@ -1,5 +1,10 @@
 # BeatForge — A Practitioner's Review
 
+> **TL;DR** — Daily-practitioner lens. Most directly authoritative review because the founder *is* this user. Names the click-vs-groove distinction as the central UX question and argues BeatForge is always groove, never click. Trainer-recovery and pre-anticipation visuals as missing pieces.
+> **Audience:** anyone designing for actual practice (not just "metronome features").
+> **Length:** ~300 lines · ~5 min read.
+> **Best for:** the click-vs-groove toggle proposal, recovery-pattern design, what makes a metronome a daily companion vs. a tool you abandon.
+
 **Reviewer**: Lifelong percussionist who has practiced under metronomes from a Wittner pendulum to a Boss DB-90, sat under tabla ustads, played frame drum in the Velez tradition, and accompanied baglama, oud, and saz players for years.
 **Date**: 2026-04-27
 **Subject**: BeatForge as a daily practice partner for a self-teaching world-instrument player

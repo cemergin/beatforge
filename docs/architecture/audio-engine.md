@@ -1,5 +1,11 @@
 # Audio Engine (`src/audio/engine.ts` + `src/audio/kits/`)
 
+> **TL;DR** — One TypeScript class with direct Web Audio access. No Tone.js, no worklets. Scheduling + master bus + reverb routing + kit dispatch in `engine.ts` (~360 LOC); per-kit synthesis recipes in `src/audio/kits/` (one file per kit). The single source of truth for timing.
+> **Audience:** anyone touching audio code or porting the engine to another stack.
+> **Length:** ~540 lines · ~10 min read.
+> **Best for:** the kit-dispatch pattern, why no AudioWorklet, the scheduler-tick timing math.
+> **Skip if:** you want the Pattern schema feeding it (→ [`sequencer-and-patterns.md`](sequencer-and-patterns.md)) or the React shell around it (→ [`react-app.md`](react-app.md)).
+
 The audio engine is a single TypeScript class (`AudioEngine`) with direct Web Audio access. No Tone.js, no worklets. ~360 LOC. Scheduling, master bus, reverb routing, and kit dispatch live in `engine.ts`; per-kit synthesis recipes live under `src/audio/kits/` — one file per kit family.
 
 If you only read one source file in this codebase, read `engine.ts`. It is intensively commented and authoritative for timing behavior.

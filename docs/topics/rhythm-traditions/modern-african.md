@@ -1,6 +1,12 @@
 # Modern African Music Genres: From Traditional Foundations to Global Dance Floors
 
-*Compiled for BeatForge -- a drum machine project dedicated to honoring and contextualizing every rhythm it includes.*
+> **TL;DR** — Contemporary African genres tracing from traditional roots to club + global stages: Afrobeat (Fela), Afrobeats (post-2010 Nigerian + Ghanaian pop), Highlife, Soukous (Congolese rumba), Mbalax (Senegalese), Kwaito (South African), Amapiano. How each genre carries its tradition into the present.
+> **Audience:** music writer, producer, world-music dev. The "modern" companion to the deeper-history regional files.
+> **Length:** ~620 lines · ~10 min read.
+> **Best for:** the post-Fela Afrobeat-vs-Afrobeats distinction, why Amapiano broke globally, the production techniques that define each scene.
+> **Skip if:** you want traditional ensembles (→ [`west-african.md`](west-african.md), [`../rhythm-patterns/african-ensembles.md`](../rhythm-patterns/african-ensembles.md)).
+
+
 
 ---
 

@@ -1,5 +1,11 @@
 # BeatForge — World Percussion Sound Design
 
+> **TL;DR** — How world-percussion timbres translate (or don't) to a synthesized 5-voice palette (KK / SN / HH / OH / CP). Which traditions need re-mapping (tabla, gamelan, frame drums, talking drums) and what to do about it. Short but unique — this question isn't covered elsewhere in the corpus.
+> **Audience:** sound designer, audio dev, anyone wiring tradition-specific kits to a generic voice palette.
+> **Length:** ~300 lines · ~5 min read.
+> **Best for:** the "kit ≠ ensemble" cultural argument applied at the synthesis level, kit-remapping per tradition.
+> **Skip if:** you want how-to-build-the-voices itself (→ [`../audio-synthesis/drum-synthesis.md`](../audio-synthesis/drum-synthesis.md)).
+
 ## The Problem
 
 The current spec defines 9 synthesized voices modeled on the 808/909/707 (kick, snare, closed hat, open hat, clap, tom, cowbell, rimshot). This covers Western electronic and pop genres, but the Library now has 600+ patterns from 40+ global traditions. You can't play a Gnawa lila, a flamenco bulería, or an Ewe agbekor with kick and snare.

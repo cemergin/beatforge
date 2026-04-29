@@ -1,5 +1,11 @@
 # BeatForge Architecture — Overview
 
+> **TL;DR** — The 10,000-ft view of the codebase. Three layers (audio engine → sequencer/patterns → React app), one engine per tab, single source of truth for time, IndexedDB for persistence.
+> **Audience:** new contributor or anyone porting the engine.
+> **Length:** ~260 lines · ~5 min read. Start here, then drill in.
+> **Best for:** the layer diagram, the "why a single audio engine ref" choice, the file-tree map.
+> **Skip if:** you came for a specific subsystem — jump straight to [`audio-engine.md`](audio-engine.md), [`sequencer-and-patterns.md`](sequencer-and-patterns.md), or [`react-app.md`](react-app.md).
+
 Read this first. It's the 10,000-ft view. For depth on specific subsystems:
 
 - [audio-engine.md](./audio-engine.md) — how `src/audio/engine.ts` schedules audio

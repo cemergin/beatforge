@@ -1,5 +1,10 @@
 # BeatForge: The Instrument-Maker's Review
 
+> **TL;DR** — Loog / Pocket Operator / Tenori-On lens applied to BeatForge. Asks the 30-second-test-with-a-10-year-old question. Pushes hardest on subtraction-for-joy. Less concerned with producer credibility, more concerned with first-touch delight.
+> **Audience:** anyone designing for joy + learnability rather than expert workflows.
+> **Length:** ~330 lines · ~6 min read.
+> **Best for:** the curious-child test, the "instrument-feel vs. spreadsheet-feel" framing, what a learning toy hides vs. shows.
+
 **Reviewer:** Veteran instrument-maker + learning-toy designer (Loog, Pocket Operator, Tenori-On, Skoog, Toca Band, SongMaker, LittleBits Synth Kit lineage)
 **Date:** 2026-04-27
 **Subject:** BeatForge through the lens of physical instruments + learning toys

@@ -1,5 +1,11 @@
 # React App
 
+> **TL;DR** — How the React tree is shaped: where state lives, why the engine is in a `useRef` (not state), how persistence works (Dexie + localStorage), how tab switching preserves session state.
+> **Audience:** contributor making UI changes or wiring new state into the app.
+> **Length:** ~430 lines · ~8 min read.
+> **Best for:** the engine-in-useRef pattern, session vs. tab-local state, the persistence-layer split.
+> **Skip if:** you want the audio engine class itself (→ [`audio-engine.md`](audio-engine.md)) or the pattern data model (→ [`sequencer-and-patterns.md`](sequencer-and-patterns.md)).
+
 How the React tree is shaped, where state lives, how persistence and tab switching work, and why the engine is stored in a `useRef` rather than state.
 
 See [overview.md](./overview.md) for the 10,000-ft view, [audio-engine.md](./audio-engine.md) for the engine class itself, [sequencer-and-patterns.md](./sequencer-and-patterns.md) for the Pattern schema.

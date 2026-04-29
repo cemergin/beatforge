@@ -1,5 +1,10 @@
 # Internet-Born Genre Drum Patterns
-## For Web Drum Machine Step Sequencer
+
+> **TL;DR** — Notated grooves for genres that exist because of platforms: vaporwave, hyperpop, lo-fi hip-hop, slowed+reverb, plugg, jersey/Philly club, drill (UK + Brooklyn + Chicago), shatta, phonk. The post-platform pattern set.
+> **Audience:** producer, beat-maker, anyone working in current internet-distributed genres.
+> **Length:** ~700 lines.
+> **Best for:** hyperpop's blown-out drum signatures, jersey-club bed-squeak rhythm, drill's regional dialects.
+> **Skip if:** you want cultural context (→ [`../rhythm-traditions/internet-born.md`](../rhythm-traditions/internet-born.md)).
 
 **Notation Key:**
 - `x` = hit

@@ -1,6 +1,12 @@
 # The Econopolitics of Music: How Money, Technology, and Power Shaped Rhythm
 
-## A Research Report for BeatForge — Why Music Sounds the Way It Does
+> **TL;DR** — The political economy reading of music: migration, slavery, colonization, recording technology, copyright, label consolidation, streaming. Why "world music" is a marketing term, why MIDI took over, and how distribution determines aesthetics. Cross-cutting context for everything else in this folder.
+> **Audience:** musician, music writer, designer thinking about cultural representation.
+> **Length:** ~900 lines · ~15 min read. Reads top-to-bottom; the argument compounds.
+> **Best for:** the "music industry as colonial successor" argument, the recording-technology-shapes-form thesis, copyright as a creative constraint.
+> **Skip if:** you want regional cultural history rather than systemic critique (→ siblings in this folder).
+
+
 
 ---
 

@@ -1,5 +1,10 @@
 # Central Asian, Pacific & Native American Drum Pattern Library
-## Playable Step-Sequencer Grid Patterns for Web Drum Machine
+
+> **TL;DR** — Notated patterns for Central Asia (Uzbek, Kazakh, Kyrgyz, Tajik, Turkmen — doira and frame drum), Pacific (Hawaiian, Maori, Polynesian, Micronesian), Indigenous Americas. Patterns commonly omitted from "world rhythm" libraries.
+> **Audience:** producer, percussionist, world-music dev wanting genuine global breadth.
+> **Length:** ~930 lines.
+> **Best for:** doira-style frame-drum grooves, Polynesian polyrhythm, the slow-to-fast structures of Central Asian dance.
+> **Skip if:** you want cultural context (→ [`../rhythm-traditions/central-asian-pacific.md`](../rhythm-traditions/central-asian-pacific.md), [`../rhythm-traditions/mongolian.md`](../rhythm-traditions/mongolian.md)).
 
 ### How to Read This Document
 

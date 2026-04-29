@@ -1,5 +1,11 @@
 # BeatForge Metronome — v1 Design Specification
 
+> **TL;DR** — The authoritative v1 spec. What ships: 5-voice metronome, three modes (Practice / Studio / Library), beat-grouping visualization, speed trainer, ~85+ shipping patterns (grew to 536 in production). Pins React 19 + Vite + TS + GitHub Pages.
+> **Audience:** anyone wanting to know what BeatForge actually is + why these decisions. Read this before opening a PR that changes scope.
+> **Length:** ~800 lines · ~15 min read. The Decisions Table at the top is the fastest orientation.
+> **Best for:** the three-mode rationale, the synthesized-only constraint, the data-pipeline approach.
+> **Skip if:** you want code architecture (→ [`../architecture/overview.md`](../architecture/overview.md)) or research (→ [`../topics/`](../topics/)).
+
 **Version:** 1.0
 **Date:** April 22, 2026
 **Author:** Cem Ergin + Claude

@@ -1,4 +1,9 @@
-# BeatForge Engineering Review — 2026-04-24
+# BeatForge Engineering Review — 2026-04-24 (Pass 1)
+
+> **TL;DR** — First engineering audit pass. Companion to the (now archived) tightening work plan. Surfaces issues the plan didn't cover: PWA dedup, redundant engine loads, style-state mutation, ESLint cleanup.
+> **Audience:** historical record. Items here are mostly resolved — see git log for resolutions.
+> **Length:** ~280 lines · ~5 min read.
+> **Status:** Most items LANDED. Remaining items either superseded or rolled into later passes.
 
 Companion to `WORK_PLAN.md`. Scope: items the work plan does NOT already
 cover. Severity is calibrated to the project's actual constraints (solo

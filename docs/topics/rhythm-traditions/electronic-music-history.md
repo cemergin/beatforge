@@ -1,6 +1,12 @@
 # Electronic Music: A Complete Musicological History
 
-## A Research Report for BeatForge — Instruments, Genres, Movements, Geography, and the Current Landscape
+> **TL;DR** — From musique concrète and early Cologne tape music → Moog era → Detroit techno + Chicago house → UK rave → Berlin minimal → French touch → modern fragmented landscape. The instruments, the cities, the cultural conditions, and how each generation rejected the previous one.
+> **Audience:** music writer, producer, anyone wanting one document covering electronic music's history.
+> **Length:** ~630 lines · ~10 min read.
+> **Best for:** the city-by-city scene map, instrument-as-genre-driver, the "every wave is a reaction" arc.
+> **Skip if:** you want only post-2010 (→ [`internet-born.md`](internet-born.md), [`global-electronic.md`](global-electronic.md)) or underground specifically (→ [`underground-electronic.md`](underground-electronic.md)).
+
+
 
 ---
 

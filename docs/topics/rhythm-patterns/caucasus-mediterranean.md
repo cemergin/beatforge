@@ -1,5 +1,10 @@
 # Caucasus, Mediterranean, Diaspora & Sacred Pattern Library
-## Playable Patterns for Web Drum Machine
+
+> **TL;DR** — Notated patterns from cross-empire crossroads: Armenian dhol, Georgian, Azerbaijani, southern Italian tarantella, Maltese, Sephardic Jewish, Romani diaspora, Sufi sacred drumming (zikr, dhikr).
+> **Audience:** producer, percussionist, world-music dev working with crossroads traditions.
+> **Length:** ~900 lines.
+> **Best for:** Armenian dhol-and-zurna patterns, Sephardic baquet rhythms, Sufi zikr breath-driven grooves.
+> **Skip if:** you want cultural context (→ [`../rhythm-traditions/caucasus-mediterranean.md`](../rhythm-traditions/caucasus-mediterranean.md)).
 
 ### Notation Key
 - Each character = one subdivision position in the cycle

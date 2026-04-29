@@ -1,5 +1,11 @@
 # BeatForge — Tightening Pass Work Plan
 
+> **TL;DR** — 2026-04-24 snapshot of code-tightening priorities before adding more features: CSS tokens, engine cleanup, hook extraction, lazy chunks, testing. Most of these were addressed in subsequent commits.
+> **Audience:** historical only — shipped code supersedes this.
+> **Length:** ~210 lines · ~4 min read.
+> **Best for:** historical context for early-2026-04 tightening choices.
+> **Status:** SUPERSEDED. The shipped code reflects most of these resolutions; check git log for what was implemented.
+
 Snapshot taken **2026-04-24** after the metronome shared-component
 extraction (commit `cadd2fa`). Goal: tighten the codebase before piling
 on more features. Keep changes mechanical where possible, structural

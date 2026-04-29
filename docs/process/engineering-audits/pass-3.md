@@ -1,4 +1,9 @@
-# BeatForge Engineering Review #3 — 2026-04-24
+# BeatForge Engineering Review #3 — 2026-04-24 (Pass 3)
+
+> **TL;DR** — Third-pass audit, spotlight on the Sound page introduction (5 commits, new machine type system, dedicated Sound engine). Catches synth-recipe drift on 808/909/707 — machine configs that don't match the live audio they're claiming to model.
+> **Audience:** historical record. Useful when revisiting the Sound page architecture or machine system.
+> **Length:** ~250 lines · ~4 min read.
+> **Status:** Most items LANDED in subsequent commits.
 
 Spotlight: the 5 commits introducing the Sound page (`1ccd4b6` →
 `f8bf12d`). New machine type system (`audio/machines/`), dedicated

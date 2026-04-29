@@ -1,5 +1,10 @@
-# Global Electronic Scenes -- Step-Sequencer Patterns
-## Playable Patterns for BeatForge Web Drum Machine
+# Global Electronic Scenes — Step-Sequencer Patterns
+
+> **TL;DR** — Notated patterns for the post-2010 global-electronic landscape: Amapiano, gqom, baile funk, kuduro, dembow, drill (UK + Brooklyn + Chicago), shatta. The notation companion to the cultural-history doc.
+> **Audience:** producer, beat-maker, world-music dev wanting current globally-popular grooves.
+> **Length:** ~1.1K lines.
+> **Best for:** the Amapiano log-drum bass pattern, gqom's broken-time feel, drill's regional differences.
+> **Skip if:** you want cultural context (→ [`../rhythm-traditions/global-electronic.md`](../rhythm-traditions/global-electronic.md)) or older electronic (→ [`electronic-history.md`](electronic-history.md)).
 
 ### Notation Key
 - Each character = one subdivision position in the cycle

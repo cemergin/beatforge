@@ -1,6 +1,10 @@
 # Electronic Music History — Step-Sequencer Patterns
-## Patterns for Genres from the Electronic Music History Report
-## Playable Patterns for BeatForge Web Drum Machine
+
+> **TL;DR** — 32 patterns covering electronic music's canonical-sounding eras: synth-pop (Depeche Mode, New Order, Gary Numan), EBM/industrial, Italo, Hi-NRG, deep + garage + French + minimal house, microhouse, ambient house, trip-hop, prog/psy trance, gabber, motorik, Berlin School, melodic techno, organic/Afro house, lo-fi house, electro, Eurodance.
+> **Audience:** producer, beat-maker, anyone wanting one document of canonical electronic grooves.
+> **Length:** ~810 lines. By era, then sub-genre — easy to scan.
+> **Best for:** the synth-pop drum-machine signatures, motorik's hypnotic 4/4, the gabber kick recipe.
+> **Skip if:** you want post-2010 (→ [`global-electronic.md`](global-electronic.md), [`underground-electronic.md`](underground-electronic.md)) or cultural history (→ [`../rhythm-traditions/electronic-music-history.md`](../rhythm-traditions/electronic-music-history.md)).
 
 ### Notation Key
 - Each character = one subdivision position in the cycle

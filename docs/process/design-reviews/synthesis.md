@@ -1,5 +1,11 @@
 # BeatForge Design Synthesis — Six Reviews → One Action Plan
 
+> **TL;DR** — The arbiter document that takes seven contradictory design reviews and maps each finding to a specific product surface. Resolves apparent conflicts by saying "the toy-maker is right *for Library*; the drum-machine designer is right *for Studio*." The canonical recent-decision document.
+> **Audience:** anyone trying to understand why a particular design choice landed where it did. Founder + future contributors.
+> **Length:** ~370 lines · ~7 min read. The lens-to-surface mapping table is the load-bearing artifact.
+> **Best for:** seeing how multiple specialist perspectives reconcile into one product, the cultural-framing redirect that overrode the museum lens.
+> **Skip if:** you want one specific lens (→ siblings in this folder).
+
 **Date**: 2026-04-27 (updated to integrate all seven lenses + founder's redirect on the cultural framing)
 **Inputs**:
 - `docs/2026-04-27-claude-design-review.md` — implementation-aware "close to the code" lens

@@ -1,5 +1,10 @@
 # BeatForge — A Cultural-Curatorial Review
 
+> **TL;DR** — Museum-curator / ethnomusicologist lens (lineage: Folkways, MIM, Horniman). Catches what no other lens does: "kit" is a cultural category mistake — traditions have *named ensemble roles*, not interchangeable parts. Provenance is mandatory. The corrective for "888 = kick" thinking.
+> **Audience:** anyone working on cultural content + cultural representation. Important counterweight (read alongside `living-archive-agent.md` which is its corrective).
+> **Length:** ~350 lines · ~6 min read.
+> **Best for:** the kit-vs-ensemble naming argument, what curatorial provenance looks like in software, instrument-role hierarchy as first-class data.
+
 **Reviewer**: Ethnomusicologist / museum curator / audio storyteller (lineage: Bruno Nettl, Steven Feld, Ali Jihad Racy, Ted Levin; MIM Phoenix, Smithsonian Folkways, the Horniman Music Gallery, the Vienna Phonogrammarchiv)
 **Date**: 2026-04-27
 **Subject**: BeatForge as a presenter of 536 culturally-tagged rhythms across 16+ regions

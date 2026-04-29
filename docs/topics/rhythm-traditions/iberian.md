@@ -1,6 +1,12 @@
 # Iberian Music Traditions: Flamenco, Fado, and the Rhythms of the Peninsula
 
-## A Musicological, Historical, and Cultural Research Report
+> **TL;DR** — Spanish flamenco (cante, baile, toque, palmas) by region and palo (soleá, bulería, alegrías, tangos, fandango), Portuguese fado (Coimbra vs. Lisbon styles), Galician + Basque traditions, the Romani contribution that built flamenco.
+> **Audience:** musician, dancer, music writer working with peninsular traditions.
+> **Length:** ~750 lines · ~12 min read.
+> **Best for:** the compás system (12-beat cycles) explained, why flamenco's palmas are the engine, fado's saudade-as-form.
+> **Skip if:** you want notation (→ [`../rhythm-patterns/iberian-flamenco.md`](../rhythm-patterns/iberian-flamenco.md)).
+
+
 
 ---
 

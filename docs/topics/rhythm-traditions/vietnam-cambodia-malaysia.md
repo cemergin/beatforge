@@ -1,6 +1,12 @@
 # Rhythm and Percussion Traditions of Vietnam, Cambodia, and the Malay Archipelago
 
-## A Musicological, Historical, Sociopolitical, and Cultural Research Report
+> **TL;DR** — Mainland and maritime Southeast Asia: Vietnamese ca trù + nhã nhạc, Cambodian pinpeat ensembles, Khmer classical traditions, Malay/Indonesian drumming beyond gamelan, Thai percussion, the Philippines. The traditions that share a region with gamelan but aren't gamelan.
+> **Audience:** musician, music writer, anyone covering SE Asia comprehensively.
+> **Length:** ~950 lines · ~16 min read.
+> **Best for:** ca trù as a refined Vietnamese chamber tradition, pinpeat ritual functions, post-colonial scene-rebuilding.
+> **Skip if:** you want gamelan specifically (→ [`gamelan-southeast-asian.md`](gamelan-southeast-asian.md)) or broader East Asia (→ [`east-asian.md`](east-asian.md)).
+
+
 
 ---
 

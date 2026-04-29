@@ -1,6 +1,12 @@
-# North & East African Rhythm Traditions: A Musicological, Historical, Sociopolitical, and Cultural Report
+# North & East African Rhythm Traditions
 
-*Compiled for BeatForge -- a drum machine project dedicated to honoring and contextualizing every rhythm it includes.*
+> **TL;DR** — Ethiopian (Coptic Christian + Islamic + indigenous), Eritrean, Sudanese, Somali, plus Maghrebi traditions (Moroccan gnawa, Algerian raï, Tunisian malouf). The traditions Western drum-machine references usually under-cover.
+> **Audience:** musician, music writer, world-music dev. Important for any project claiming "African" coverage to include this swath.
+> **Length:** ~660 lines · ~11 min read.
+> **Best for:** gnawa's spiritual-political role, Ethiopian 6/8 grooves and Coptic chant influence, Sudanese palm-pipe traditions.
+> **Skip if:** you want sub-Saharan ensembles (→ [`west-african.md`](west-african.md)) or notation (→ [`../rhythm-patterns/north-east-african.md`](../rhythm-patterns/north-east-african.md)).
+
+
 
 ---
 

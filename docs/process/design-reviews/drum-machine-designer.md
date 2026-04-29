@@ -1,5 +1,10 @@
 # BeatForge — The Drum-Machine Designer's Review
 
+> **TL;DR** — Roland / Elektron / Volca / Polyend lineage applied to BeatForge. Argues the product is missing 1986-and-later drum-machine performance affordances: mute/solo, fills, p-locks, pattern chains, kit-as-instrument identity. Producer-credibility lens.
+> **Audience:** anyone making the product feel legitimate to people who've used real drum machines.
+> **Length:** ~370 lines · ~7 min read.
+> **Best for:** the "what every drum machine since 1986 has and BeatForge doesn't" inventory, parameter-locks as the Elektron innovation, the kit-as-character argument.
+
 **Reviewer:** Veteran electronic-instrument designer (Roland TR lineage, Elektron parameter-lock ethos, Volca constraint-as-feature, Sonicware weird-beautiful, Teenage Engineering minimalism, Polyend tracker, Maschine/Push pad-drumming, Moog DFAM playable-rhythm)
 **Date:** 2026-04-27
 **Subject:** Performability, direct control, producer-credibility — the parts the toy-maker and senior designer aren't qualified to weigh in on

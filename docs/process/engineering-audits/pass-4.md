@@ -1,4 +1,9 @@
-# BeatForge Engineering Review #4 — 2026-04-24
+# BeatForge Engineering Review #4 — 2026-04-24 (Pass 4)
+
+> **TL;DR** — Fourth-pass audit, spotlight on the 11 voice machines added to the audio/machines/voice/ registry. Catches: chip-voice PWM that doesn't actually modulate pulse width, scheduler tick-accumulation issues, machine-API consistency drift.
+> **Audience:** historical record. Useful when extending the voice-machine registry.
+> **Length:** ~300 lines · ~5 min read.
+> **Status:** Most items LANDED.
 
 Spotlight: 5 commits adding 11 voice machines (clap, tom, cowbell,
 modal, fm, comb-pluck, noise, wavefolder, crackle, chip, formant) to

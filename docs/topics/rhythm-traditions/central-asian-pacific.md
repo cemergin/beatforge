@@ -1,6 +1,12 @@
-# Central Asian, Pacific/Oceanian & Native American Rhythm Traditions: A Musicological, Historical, Sociopolitical, and Cultural Report
+# Central Asian, Pacific/Oceanian & Native American Rhythm Traditions
 
-*Compiled for BeatForge -- a drum machine project dedicated to honoring and contextualizing every rhythm it includes.*
+> **TL;DR** — Three under-represented swaths: Central Asia (Uzbek, Kazakh, Kyrgyz, Tajik, Turkmen — including doira frame drums and the Silk Road inheritance), Pacific (Hawaiian, Maori, Polynesian, Melanesian, Micronesian), and Indigenous North + South American traditions. Often skipped in "world music" surveys.
+> **Audience:** musician, music writer, anyone wanting genuine global breadth.
+> **Length:** ~530 lines · ~9 min read.
+> **Best for:** Central Asian frame drums + doira technique, Polynesian polyrhythm, Indigenous American cultural-protocol notes.
+> **Skip if:** you want Mongolian specifically (→ [`mongolian.md`](mongolian.md)) or notation (→ [`../rhythm-patterns/central-asian-pacific.md`](../rhythm-patterns/central-asian-pacific.md)).
+
+
 
 ---
 

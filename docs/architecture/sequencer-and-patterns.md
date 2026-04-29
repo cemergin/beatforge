@@ -1,5 +1,11 @@
 # Sequencer & Patterns
 
+> **TL;DR** — The `Pattern` data model + how a Pattern becomes scheduled audio. Schema covers timeSig, stepUnit, grouping, swing, per-track subdivisions; the schema invariant test enforces consistency. 536 patterns ship in `src/patterns/seed/` as JSON.
+> **Audience:** anyone touching patterns, the sequencer, or pattern-authoring tools.
+> **Length:** ~510 lines · ~10 min read.
+> **Best for:** the schema invariant rule, per-track subdivisions for polyrhythm, the seed-pattern build pipeline.
+> **Skip if:** you want the audio engine internals (→ [`audio-engine.md`](audio-engine.md)) or higher-level architecture (→ [`overview.md`](overview.md)).
+
 This doc covers the `Pattern` schema (`src/patterns/types.ts`), the seed pattern library (`src/patterns/seed/`), and how a `Pattern` maps onto the engine's scheduler. Read [audio-engine.md](./audio-engine.md) first if you haven't — the scheduler behavior described here is implemented there.
 
 ---

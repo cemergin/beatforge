@@ -1,4 +1,9 @@
-# BeatForge Engineering Review #2 — 2026-04-24
+# BeatForge Engineering Review #2 — 2026-04-24 (Pass 2)
+
+> **TL;DR** — Second-pass audit after Pass-1 fixes landed. Catches items the prior pass missed or that surfaced because of the changes: pre-commit hook breakage, engine state paths, ESLint unused-directives, the post-refactor cleanup tail.
+> **Audience:** historical record.
+> **Length:** ~320 lines · ~5 min read.
+> **Status:** Most items LANDED.
 
 Second-pass review after the tightening session that landed P1 (CSS
 tokens), P2 (engine cleanup), P3 (`useMetronome`), P4 (lazy chunks),

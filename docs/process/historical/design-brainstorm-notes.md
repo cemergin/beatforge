@@ -1,5 +1,11 @@
 # BeatForge — Brainstorm Interview Notes
 
+> **TL;DR** — The original design-brainstorm interview transcript with the founder. Captures the early thinking that became the March product spec. Most-quoted lines now show up across the manifestos and the synthesis doc.
+> **Audience:** historical only — useful for tracing where ideas originated.
+> **Length:** ~310 lines · ~5 min read.
+> **Best for:** the founder's own words on personality, the original killer-feature framing, what got dropped vs. kept.
+> **Status:** HISTORICAL. The product has evolved past most specifics here.
+
 **Date:** March 12, 2026
 **Interviewer:** Claude (CPO/Design Lead mode)
 **Interviewee:** Cem

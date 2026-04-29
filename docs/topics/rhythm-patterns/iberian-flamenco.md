@@ -1,5 +1,10 @@
 # Iberian & Flamenco Pattern Library
-## Comprehensive Playable Patterns for Web Drum Machine
+
+> **TL;DR** — Flamenco compás for soleá (12), bulería (12), alegrías (12), tangos (4), tientos, fandango, sevillanas — plus Portuguese fado, Galician, Basque, and other peninsular traditions. The 12-beat cycles are the load-bearing knowledge here.
+> **Audience:** producer, percussionist, world-music dev. Bookmark this if you ever need to program flamenco.
+> **Length:** ~980 lines.
+> **Best for:** the 12-beat cycle accents (different per palo), palmas + cajón patterns, fado's clean 4/4 feel.
+> **Skip if:** you want cultural context (→ [`../rhythm-traditions/iberian.md`](../rhythm-traditions/iberian.md)).
 
 ### Notation Key
 - Each character = one subdivision position in the cycle

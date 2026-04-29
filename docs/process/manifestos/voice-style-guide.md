@@ -1,5 +1,10 @@
 # BeatForge — Voice & Vocabulary
 
+> **TL;DR** — Brand voice + product vocabulary in one tight field guide. Personality (playful, direct, no jargon), forbidden words, tone examples for empty states + errors + onboarding. Lock this before adding any surface text.
+> **Audience:** anyone writing copy, error messages, onboarding strings, or doc text.
+> **Length:** ~180 lines · ~3 min read.
+> **Best for:** the personality definition, the don't-say-X / do-say-Y tables, the tone-example pairs.
+
 A short field guide so the copy across Practice / Studio / Library
 sounds like one app made by one person. Lock this before adding any
 new surface text.

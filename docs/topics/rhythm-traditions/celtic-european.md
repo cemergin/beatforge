@@ -1,6 +1,12 @@
-# Celtic, Northern European, Romani & Klezmer Traditions: Rhythm, Percussion, and Dance
+# Celtic, Northern European, Romani & Klezmer Traditions
 
-## A Musicological, Historical, Sociopolitical, and Cultural Research Report
+> **TL;DR** — Irish + Scottish + Breton + Galician + Welsh dance traditions (jigs, reels, hornpipes, strathspeys), Scandinavian polkas + halling, klezmer doinas + freylekhs, the Romani influence that links half of these. Less percussion-centric than other traditions but rhythmically rich.
+> **Audience:** musician, music writer, anyone working with northern + central European folk material.
+> **Length:** ~650 lines · ~11 min read.
+> **Best for:** the dance-determines-rhythm thesis, klezmer's modal + rhythmic lineage, the Romani thread through European folk.
+> **Skip if:** you want notation (→ [`../rhythm-patterns/celtic-european.md`](../rhythm-patterns/celtic-european.md)).
+
+
 
 ---
 

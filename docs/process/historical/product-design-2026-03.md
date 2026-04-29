@@ -1,4 +1,10 @@
-# BeatForge — Product Design Specification
+# BeatForge — Product Design Specification (Original, March 2026)
+
+> **TL;DR** — The original product vision. Broader than what shipped — assumed SvelteKit, Tone.js, a full drum machine, and 650+ patterns. Now superseded on tech + scope by [`../../spec/metronome.md`](../../spec/metronome.md), but kept for the personality framing ("Friendly Playground"), the practice-vs-studio rationale, and the cultural-presentation framing.
+> **Audience:** historical context. Useful for understanding "where did we start, what changed".
+> **Length:** ~670 lines · ~12 min read.
+> **Best for:** the "Friendly Playground" personality, the original three-mode rationale, the Phase 0.5 → Phase 4 roadmap.
+> **Status:** SUPERSEDED on tech stack + scope. Personality + framing still authoritative.
 
 **Version:** 1.0
 **Date:** March 12, 2026

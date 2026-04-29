@@ -1,5 +1,11 @@
 # The Living Archive — BeatForge's Guiding Lens
 
+> **TL;DR** — The cultural-positioning manifesto. BeatForge as a connection-engine in the lineage of Brian Eno, Talking Heads, Madlib, J Dilla, Vampire Weekend, Os Mutantes, Khaled, Rachid Taha, Bourdain, Atlas Obscura. "Connection as generation." Sets the spirit level for every product decision.
+> **Audience:** founder + anyone making cultural-framing or content decisions. Short, dense, important.
+> **Length:** ~220 lines · ~5 min read. Read it twice.
+> **Best for:** the lineage list as a manifesto, "scenius over genius", why this isn't a museum.
+> **Pair with:** [`../design-reviews/living-archive-agent.md`](../design-reviews/living-archive-agent.md) for the agent's take that builds on this.
+
 **Date**: 2026-04-27
 **Status**: The corrective lens — replaces the museum framing of the prior ethnomusicology review as the primary cultural-identity anchor for BeatForge.
 **Source**: Articulated from the founder's direction ("museum = 99% dead; keep the fire alive by connecting; new music and energy from unexpected corners; the Angine de Poitrine of microtonal music"). To be augmented by an independent agent's take currently in flight.

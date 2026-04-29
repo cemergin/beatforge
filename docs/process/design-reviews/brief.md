@@ -1,5 +1,10 @@
 # BeatForge — Design Review Brief
 
+> **TL;DR** — Self-contained orientation document for the seven design reviews that follow. What BeatForge is, the three modes, key cultural tensions, what feedback would be most valuable. Written so a reviewer can give useful input without reading any other repo file.
+> **Audience:** anyone reviewing the seven 2026-04-27 design reviews. Read before any individual review.
+> **Length:** ~430 lines · ~7 min read.
+> **Best for:** the cultural-positioning argument (§1a), the persona priority order, the key tensions called out for review.
+
 **Date**: 2026-04-27
 **Audience**: Senior product designer (human or AI agent)
 **Author**: Cem (with Claude as scribe)

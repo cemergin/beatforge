@@ -1,7 +1,10 @@
 # Sound Page — Design Plan
 
-Working title: **Sound page** (might also call the section "Synth"
-internally; user-facing label TBD). Companion to Practice + Studio.
+> **TL;DR** — Original plan for an in-app drum-synth lab (kits + machines + presets + per-channel sound design). Now split off as a separate v2 project. Useful as design reference if the Drum Synth project resumes; otherwise archive.
+> **Audience:** anyone resuming the Drum Synth v2 project.
+> **Length:** ~1.2K lines · ~20 min read.
+> **Best for:** the machine/archetype/preset/channel/kit vocabulary, the 8-channel design rationale.
+> **Status:** SUPERSEDED. The metronome ships with a simpler Studio mode; full sound-design is deferred. **Do not** use this as a current implementation guide.
 
 ## Goal
 

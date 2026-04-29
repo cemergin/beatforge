@@ -1,5 +1,11 @@
 # Underground & Regional Electronic Movements
 
+> **TL;DR** — The electronic scenes that don't show up in Spotify's algorithm: footwork (160 BPM Chicago), jungle (170 BPM Amen breaks), regional drum'n'bass, microhouse, gqom, kuduro, dembow, baile funk, gabber, hardcore breakbeat, IDM. Where they came from and who's keeping them alive.
+> **Audience:** music writer, deep-cut producer, anyone tired of the same five Spotify electronic playlists.
+> **Length:** ~1.1K lines · ~18 min read.
+> **Best for:** the geography of underground scenes, why footwork's 160 BPM is non-negotiable, the SoundCloud era's role.
+> **Skip if:** you want notation (→ [`../rhythm-patterns/underground-electronic.md`](../rhythm-patterns/underground-electronic.md)) or pop-electronic history (→ [`electronic-music-history.md`](electronic-music-history.md)).
+
 > Comprehensive guide to underground, regional, and emerging electronic music scenes
 > that most Western-centric music databases miss. These are the scenes that exist on
 > SoundCloud, local radio, street parties, and regional streaming platforms.

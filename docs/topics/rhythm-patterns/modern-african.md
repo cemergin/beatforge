@@ -1,5 +1,10 @@
-# Modern African Music -- Step-Sequencer Patterns
-## Playable Patterns for BeatForge Web Drum Machine
+# Modern African Music — Step-Sequencer Patterns
+
+> **TL;DR** — Notated grooves for the contemporary African scene: Afrobeat (Fela's broken-up bell-into-kit), Afrobeats (post-2010 Nigerian + Ghanaian pop), Highlife, Soukous, Mbalax, Kwaito, Amapiano. The "modern" companion to traditional ensemble notation.
+> **Audience:** producer, beat-maker, anyone making contemporary African-influenced music.
+> **Length:** ~860 lines.
+> **Best for:** the Afrobeat-vs-Afrobeats production differences, Soukous guitar-and-drum interlock, Amapiano's signature log-drum bass.
+> **Skip if:** you want traditional ensemble notation (→ [`african-ensembles.md`](african-ensembles.md)) or cultural background (→ [`../rhythm-traditions/modern-african.md`](../rhythm-traditions/modern-african.md)).
 
 ### Notation Key
 - Each character = one subdivision position in the cycle

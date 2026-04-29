@@ -1,5 +1,10 @@
 # BeatForge Design Review
 
+> **TL;DR** — Independent senior-designer perspective on Sound page density, Practice mode integrity, and the platform-vision sanity check. Echoes Claude's bloat diagnosis but from a clean-eyes industry-standard angle. Voice palette is named as the highest-leverage change.
+> **Audience:** anyone wanting an industry-standard outside take on the product.
+> **Length:** ~340 lines · ~6 min read.
+> **Best for:** the focus-mode-during-play idea, the voice-palette-as-lever argument, third-party validation of the subtraction call.
+
 **Reviewer:** Senior Product Designer (10+ years, music tech)
 **Date:** 2026-04-27
 **Subject:** Sound page density, Practice mode integrity, platform vision sanity check

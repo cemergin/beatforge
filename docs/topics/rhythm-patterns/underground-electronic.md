@@ -1,5 +1,11 @@
 # Underground Electronic Step-Sequencer Patterns
 
+> **TL;DR** — Notated grooves for footwork (160 BPM Chicago), jungle (170 BPM Amen breaks), drum'n'bass, hardcore breakbeat, IDM, microhouse, regional underground. The patterns Western drum-machine reference docs usually leave out.
+> **Audience:** producer, dev wanting authentic underground reference.
+> **Length:** ~990 lines.
+> **Best for:** footwork's rolling triplet kicks, the Amen break with its actual ghost notes, microhouse's micro-perforations.
+> **Skip if:** you want cultural history (→ [`../rhythm-traditions/underground-electronic.md`](../rhythm-traditions/underground-electronic.md)) or Western pop (→ [`western-genres.md`](western-genres.md)).
+
 > Patterns for underground, regional, and emerging electronic movements.
 > Each position = one 16th note step. | = bar line.
 

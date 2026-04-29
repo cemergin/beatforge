@@ -1,6 +1,12 @@
 # The Rhythm of Modernity: A Musicological History of Funk, Hip-Hop, Electronic Music, and Reggae
 
-## A Research Report for BeatForge — Contextualizing the Drum Machine
+> **TL;DR** — How four genres made the drum machine itself the protagonist: James Brown's break, the Bronx and the breakbeat, Jamaica's dub, Detroit techno, the 808 lineage. The cultural arc behind almost every electronic sub-genre.
+> **Audience:** music writer, producer, anyone tracing where modern beats came from.
+> **Length:** ~900 lines · ~15 min read.
+> **Best for:** the funk-to-hip-hop pipeline, dub's outsized influence, why the 808 became cultural shorthand.
+> **Skip if:** you want only post-2010 internet genres (→ [`internet-born.md`](internet-born.md)) or underground scenes (→ [`underground-electronic.md`](underground-electronic.md)).
+
+
 
 ---
 

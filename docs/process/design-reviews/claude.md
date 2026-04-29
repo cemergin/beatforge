@@ -1,5 +1,10 @@
 # BeatForge Design Review — Claude (in-line)
 
+> **TL;DR** — The implementation-aware "I've been close to the bloat creeping in" review. Argues for subtraction over addition: drag horizontal bars off Sound's first paint, treat Practice as the crown jewel, position the platform-vision as engineering hygiene only.
+> **Audience:** founder + future maintainers. Useful for understanding "why did we cut X" decisions.
+> **Length:** ~420 lines · ~8 min read.
+> **Best for:** the specific cuts to Sound page, the trainer-as-a-sentence proposal, the world-rhythm-native gap analysis.
+
 **Date**: 2026-04-27
 **Reviewer**: Claude (the assistant who's been close to the implementation)
 **Status**: Independent take, written *before* seeing the senior-designer agent's

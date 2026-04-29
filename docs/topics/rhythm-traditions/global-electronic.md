@@ -1,6 +1,12 @@
 # Global Electronic Scenes: The World's Underground Beat Cultures
 
-## A Research Report for BeatForge -- Deep Dives into Electronic Music Beyond the Western Canon
+> **TL;DR** — Electronic music *not* from Berlin, Detroit, or London: Amapiano (South Africa), gqom (Durban), baile funk (Brazil), kuduro (Angola), shatta (Caribbean), drill scenes (UK + Brooklyn + Chicago), regional EDM. The post-2010 picture of who's actually making electronic music globally.
+> **Audience:** music writer, producer, anyone wanting context outside the Western EDM canon.
+> **Length:** ~880 lines · ~15 min read.
+> **Best for:** the geographic spread of post-2010 electronic, why Amapiano broke containment, drill's regional dialects.
+> **Skip if:** you want internet-platform-driven genres (→ [`internet-born.md`](internet-born.md)) or pre-2010 history (→ [`electronic-music-history.md`](electronic-music-history.md)).
+
+
 
 ---
 
