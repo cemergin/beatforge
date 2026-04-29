@@ -366,6 +366,20 @@ export default function App() {
       </SessionProvider>
       <footer className="bf-footer">
         <LangPicker />
+        <div className="bf-theme-seg" role="group" aria-label={t('theme.label')}>
+          {THEMES.map((themeName) => (
+            <button
+              key={themeName}
+              className={`bf-theme-btn bf-theme-${themeName} ${theme === themeName ? 'on' : ''}`}
+              onClick={() => setTheme(themeName)}
+              title={t(`theme.${themeName}` as const)}
+              aria-label={t(`theme.${themeName}` as const)}
+              type="button"
+            >
+              <span className="bf-theme-swatch" />
+            </button>
+          ))}
+        </div>
       </footer>
       <UpdateBanner />
     </div>

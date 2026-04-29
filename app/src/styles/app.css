@@ -620,12 +620,21 @@ input[type="number"] { font: inherit; color: inherit; }
   .bf-theme-btn { padding: var(--sp-1); }
   .bf-theme-name { display: none; }
 
-  /* Move the language picker out of the cramped top-right and into
-     a dedicated footer row. Both instances mount; CSS picks one. */
-  .bf-topright .bf-langpick { display: none; }
+  /* Move both meta-pickers (language + theme) out of the cramped
+     top-right and into a dedicated footer row. Both instances mount;
+     CSS picks one. The header collapses to brand + nav only. */
+  .bf-topright { display: none; }
+  .bf-top {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+  }
+  .bf-brand { grid-column: 1; grid-row: 1; }
+  .bf-topnav { grid-column: 1; grid-row: 2; justify-content: flex-start; }
   .bf-footer {
     display: flex;
     justify-content: center;
+    align-items: center;
+    gap: var(--sp-5);
     padding: var(--sp-5) var(--sp-6) calc(var(--sp-6) + env(safe-area-inset-bottom, 0px));
     border-top: var(--bw-1) solid var(--line);
     background: var(--bg-2);
