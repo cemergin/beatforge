@@ -16,20 +16,22 @@ import {
 import {
   type Channel,
   type ColorFx,
-  type SoundPattern,
   type SoundKit,
 } from '../../patterns/types-sound';
 import {
-  saveSoundPattern,
-  listSoundPatterns,
-  deleteSoundPattern,
   saveSoundKit,
   listSoundKits,
   deleteSoundKit,
-  saveUserPattern,
-  getUserPattern,
-  type UserPattern,
 } from '../../lib/db';
+import {
+  saveStudioPattern,
+  loadStudioPattern,
+  listStudioPatterns,
+  deleteStudioPattern,
+  defaultMetadata,
+  nextPatternName,
+} from '../../modules/pattern-store';
+import type { StudioPattern, StudioPatternListItem } from '../../modules/pattern-store';
 import type { Genre, RegionId } from '../../patterns/types';
 import { getMasterVolume, setMasterVolume as persistMasterVolume } from '../../lib/storage';
 import { SpectrumAnalyzer } from './SpectrumAnalyzer';
@@ -48,57 +50,6 @@ const COLOR_FX_TYPES: ColorFx['type'][] = ['none', 'overdrive', 'bitcrush', 'fil
  *  list. Voice-keyed tracks come from the positional sequence rows
  *  (KK / SN / HH / OH / CP); BPM converts from quarter to step BPM
  *  (UserPattern uses step-BPM convention to match seeds). */
-function buildUserPatternFromStudio(args: {
-  id: string;
-  name: string;
-  meter: { stepUnit: 2 | 4 | 8 | 16; label: string };
-  grouping: number[];
-  sequence: SoundSequence;
-  bpm: number;
-  defaultKit: import('../../patterns/types').KitId;
-  region: RegionId;
-  genre: Genre;
-  tags: string[];
-  story: string;
-  swingable: boolean;
-  existingCreatedAt: number;
-  now: number;
-}): UserPattern {
-  const stepsPerBar = args.grouping.reduce((a, b) => a + b, 0);
-  const tracks = tracksFromSequence(args.sequence);
-  // SoundPattern.bpm is quarter-BPM; UserPattern.bpm.default is the
-  // step-BPM convention seeds use.
-  const stepBpm = Math.round(args.bpm * args.meter.stepUnit / 4);
-  return {
-    id: args.id,
-    name: args.name,
-    origin: 'You',
-    tradition: 'user',
-    genre: args.genre,
-    timeSig: args.meter.label.includes('/')
-      ? args.meter.label
-      : `${stepsPerBar}/${args.meter.stepUnit}`,
-    grouping: [...args.grouping],
-    steps: stepsPerBar,
-    stepUnit: args.meter.stepUnit,
-    bpm: {
-      default: stepBpm,
-      min: Math.max(30, Math.round(stepBpm * 0.5)),
-      max: Math.round(stepBpm * 2),
-    },
-    tracks,
-    defaultKit: args.defaultKit,
-    region: args.region,
-    difficulty: 'beginner',
-    tags: args.tags,
-    swingable: args.swingable,
-    story: args.story || undefined,
-    user: true,
-    createdAt: args.existingCreatedAt,
-    updatedAt: args.now,
-  };
-}
-
 /** Region + genre option lists for the metadata <select>s. Kept
  *  as a literal here so we don't add a runtime export to types.ts;
  *  TS catches drift via the satisfies clause. */
@@ -346,20 +297,6 @@ function shortFor(label: string): string {
   return label.trim().slice(0, 3) || '·';
 }
 
-/** Next default name for a fresh pattern. Returns "Pattern #N" where N
- *  is one past the highest existing 'Pattern #X' ordinal in the saved
- *  list (or list.length+1 when no ordinals are present). Avoids
- *  "Untitled" collisions and gives each save a distinct, sortable name
- *  without typing. */
-function nextPatternName(savedList: { name: string }[]): string {
-  let maxOrdinal = 0;
-  for (const p of savedList) {
-    const m = /^Pattern #(\d+)$/.exec(p.name);
-    if (m) maxOrdinal = Math.max(maxOrdinal, parseInt(m[1], 10));
-  }
-  return `Pattern #${Math.max(maxOrdinal + 1, savedList.length + 1)}`;
-}
-
 interface SoundProps {
   /** Shared engine from App.tsx — must be the same instance every
    *  other mode uses so cross-tab session state stays consistent. */
@@ -505,7 +442,7 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
   // re-derived after savedList loads + on every onNewBlank.
   const [name, setName] = useState('Pattern #1');
   const [savedId, setSavedId] = useState<string | null>(null);
-  const [savedList, setSavedList] = useState<SoundPattern[]>([]);
+  const [savedList, setSavedList] = useState<StudioPatternListItem[]>([]);
   const [toast, setToast] = useState<string | null>(null);
   // Pattern-shape metadata that ships with each save into IDB so the
   // pattern shows up in Library alongside seeds. Defaults are
@@ -572,7 +509,7 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
   // still call refresh* directly — that runs outside an effect.
   const refreshSavedList = useCallback(async () => {
     try {
-      const list = await listSoundPatterns();
+      const list = await listStudioPatterns();
       setSavedList(list);
     } catch { /* IDB unavailable — keep silent, list stays empty */ }
   }, []);
@@ -584,7 +521,7 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
   }, []);
   useEffect(() => {
     let active = true;
-    listSoundPatterns()
+    listStudioPatterns()
       .then((list) => {
         if (!active) return;
         setSavedList(list);
@@ -595,7 +532,7 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
         setName((prev) => {
           if (savedId) return prev;
           if (!/^Pattern #\d+$/.test(prev)) return prev;
-          return nextPatternName(list);
+          return nextPatternName(list.map((p) => p.name));
         });
       })
       .catch(() => { /* IDB unavailable */ });
@@ -813,63 +750,36 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
   // createdAt). loadSavedPattern fully replaces editor state — name,
   // bpm, meter, channels, sequence — and resets the playhead.
   const onSave = useCallback(async () => {
-    const trimmed = name.trim() || 'Untitled';
+    const trimmed = name.trim() || nextPatternName(savedList.map((p) => p.name));
     const now = Date.now();
     const id = savedId ?? kebabId(trimmed);
     const existing = savedId ? savedList.find((p) => p.id === savedId) : undefined;
-    const pattern: SoundPattern = {
+    const studio: StudioPattern = {
       id,
       name: trimmed,
       bpm,
-      grouping: [...grouping],
       stepUnit: meter.stepUnit,
+      grouping: [...grouping],
       sequence: sequence.map((row) => [...row]),
       channels: channels.map((c) => ({
         label: c.label,
         machine: { ...c.machine },
         effects: { ...c.effects, colorFx: { ...c.effects.colorFx } },
       })),
-      countInBars,
-      swing,
-      strongAmp,
-      weakAmp,
-      reverbWet,
-      reverbSize,
-      reverbDecay,
-      delayWet,
-      delayTime,
-      delayFeedback,
+      countInBars, swing, strongAmp, weakAmp,
+      reverbWet, reverbSize, reverbDecay,
+      delayWet, delayTime, delayFeedback,
+      region: patternRegion,
+      genre: patternGenre,
+      tags: [...patternTags],
+      story: patternStory,
+      defaultKit,
+      swingable,
       createdAt: existing?.createdAt ?? now,
       updatedAt: now,
     };
     try {
-      // Save BOTH a SoundPattern (channels + sequence + FX state)
-      // and a UserPattern (voice-keyed tracks + metadata) so the
-      // pattern shows up in Library alongside seeds. Same id +
-      // updatedAt so the two records pair cleanly. Library reads
-      // the UserPattern; loading a saved pattern in Studio
-      // restores the SoundPattern flavour with full sound design.
-      await saveSoundPattern(pattern);
-      const userPattern = buildUserPatternFromStudio({
-        id,
-        name: trimmed,
-        meter,
-        grouping,
-        sequence,
-        bpm,
-        defaultKit,
-        region: patternRegion,
-        genre: patternGenre,
-        tags: patternTags,
-        story: patternStory,
-        swingable,
-        existingCreatedAt: existing?.createdAt ?? now,
-        now,
-      });
-      try { await saveUserPattern(userPattern); } catch {
-        // Library record is best-effort — failure here doesn't
-        // invalidate the SoundPattern that's already on disk.
-      }
+      await saveStudioPattern(studio);
       setSavedId(id);
       setName(trimmed);
       setToast(savedId ? 'Updated' : 'Saved');
@@ -886,73 +796,61 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
     refreshSavedList,
   ]);
 
-  const loadSavedPattern = useCallback((p: SoundPattern) => {
+  const applyStudioPattern = useCallback((s: StudioPattern) => {
     if (isPlaying) {
       engine.stop();
       setIsPlaying(false);
       setCurrentStep(-1);
     }
-    setName(p.name);
-    setSavedId(p.id);
-    setBpm(p.bpm);
+    setName(s.name);
+    setSavedId(s.id);
+    setBpm(s.bpm);
     // Reconstruct meter from the saved grouping + stepUnit. If it
     // matches a built-in preset, use that (so the meter chips show
     // the right one as active); otherwise synthesize an ad-hoc preset.
     const matchedPreset = SOUND_METERS.find(
       (m) =>
-        m.stepUnit === p.stepUnit &&
-        m.grouping.length === p.grouping.length &&
-        m.grouping.every((v, i) => v === p.grouping[i]),
+        m.stepUnit === s.stepUnit &&
+        m.grouping.length === s.grouping.length &&
+        m.grouping.every((v, i) => v === s.grouping[i]),
     );
     setMeter(matchedPreset ?? {
-      label: `${sumGroup(p.grouping) * (p.stepUnit / 4)}/${p.stepUnit}`,
-      grouping: [...p.grouping],
-      stepUnit: p.stepUnit,
+      label: `${sumGroup(s.grouping) * (s.stepUnit / 4)}/${s.stepUnit}`,
+      grouping: [...s.grouping],
+      stepUnit: s.stepUnit,
     });
-    // Restore the SAVED grouping (which may be a permutation of the
-    // canonical) — meter holds the canonical so permutations regenerate;
-    // this keeps the user's chosen ordering.
-    setGrouping([...p.grouping]);
-    setChannels(p.channels.map((c) => ({
+    setGrouping([...s.grouping]);
+    setChannels(s.channels.map((c) => ({
       label: c.label,
       machine: { ...c.machine },
       effects: { ...c.effects, colorFx: { ...c.effects.colorFx } },
     })));
-    // Coerce stored numbers into SoundStep (saved as number[][] for
-    // forward-compat — we may broaden velocity beyond 0/1/2 later).
-    setSequence(p.sequence.map((row) => row.map((v) => (v === 2 ? 2 : v === 1 ? 1 : 0) as SoundStep)));
-    // Feel + master with defaults — patterns saved before these fields
-    // existed should load cleanly to the defaults (no surprise loud
-    // reverb because an old pattern lacked the field).
-    setCountInBars(p.countInBars ?? 0);
-    setSwing(p.swing ?? 0.5);
-    setStrongAmp(p.strongAmp ?? 1.0);
-    setWeakAmp(p.weakAmp ?? 0.55);
-    setReverbWet(p.reverbWet ?? 0.5);
-    setReverbSize(p.reverbSize ?? 1.8);
-    setReverbDecay(p.reverbDecay ?? 2.2);
-    setDelayWet(p.delayWet ?? 0.15);
-    setDelayTime(p.delayTime ?? 0.25);
-    setDelayFeedback(p.delayFeedback ?? 0.35);
-    // Restore metadata too — the bundled save writes both a SoundPattern
-    // (sound design) and a UserPattern (Library record with metadata).
-    // We've loaded the sound design above; fetch the matching UserPattern
-    // by id to repopulate the metadata fields. Best-effort; if the
-    // UserPattern is missing (e.g. created pre-bundling), leave the
-    // current metadata in place rather than wiping to defaults.
-    void getUserPattern(p.id).then((u) => {
-      if (!u) return;
-      setDefaultKitState(u.defaultKit);
-      setPatternRegion(u.region);
-      setPatternGenre(u.genre);
-      setPatternTags(u.tags);
-      setPatternStory(u.story ?? '');
-      setSwingable(u.swingable ?? false);
-    }).catch(() => { /* IDB unavailable */ });
-    setToast(`Loaded ${p.name}`);
+    setSequence(s.sequence.map((row) => row.map((v) => (v === 2 ? 2 : v === 1 ? 1 : 0) as SoundStep)));
+    setCountInBars(s.countInBars);
+    setSwing(s.swing);
+    setStrongAmp(s.strongAmp);
+    setWeakAmp(s.weakAmp);
+    setReverbWet(s.reverbWet);
+    setReverbSize(s.reverbSize);
+    setReverbDecay(s.reverbDecay);
+    setDelayWet(s.delayWet);
+    setDelayTime(s.delayTime);
+    setDelayFeedback(s.delayFeedback);
+    setDefaultKitState(s.defaultKit);
+    setPatternRegion(s.region);
+    setPatternGenre(s.genre);
+    setPatternTags(s.tags);
+    setPatternStory(s.story);
+    setSwingable(s.swingable);
+    setToast(`Loaded ${s.name}`);
     // setBpm + many setters close over engine/session; safe to omit.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [engine, isPlaying]);
+
+  const loadSavedPattern = useCallback(async (p: StudioPatternListItem) => {
+    const studio = await loadStudioPattern(p.id);
+    if (studio) applyStudioPattern(studio);
+  }, [applyStudioPattern]);
 
   // Cross-tab handoff — when Practice (or any other surface) routes
   // here with an `initialSoundPatternId`, fetch + load that pattern
@@ -961,20 +859,19 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
   useEffect(() => {
     if (!initialSoundPatternId) return;
     let active = true;
-    listSoundPatterns()
-      .then((list) => {
+    loadStudioPattern(initialSoundPatternId)
+      .then((studio) => {
         if (!active) return;
-        const p = list.find((sp) => sp.id === initialSoundPatternId);
-        if (p) loadSavedPattern(p);
+        if (studio) applyStudioPattern(studio);
         onConsumedInitial?.();
       })
       .catch(() => { /* IDB unavailable — silent */ });
     return () => { active = false; };
-  }, [initialSoundPatternId, loadSavedPattern, onConsumedInitial]);
+  }, [initialSoundPatternId, applyStudioPattern, onConsumedInitial]);
 
   const onDeleteSaved = useCallback(async (id: string) => {
     try {
-      await deleteSoundPattern(id);
+      await deleteStudioPattern(id);
       if (savedId === id) setSavedId(null);
       await refreshSavedList();
       setToast('Deleted');
@@ -1042,17 +939,18 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
       setIsPlaying(false);
       setCurrentStep(-1);
     }
-    setName(nextPatternName(savedList));
+    setName(nextPatternName(savedList.map((p) => p.name)));
     setSavedId(null);
     setSequence(emptySequence(stepsPerBar));
-    // Reset metadata to sample defaults so each fresh pattern starts
-    // with a Library-ready record. User can still customize before save.
-    setDefaultKitState('808');
-    setPatternRegion('electronic-western');
-    setPatternGenre('popular');
-    setPatternTags(['user-saved']);
-    setPatternStory('');
-    setSwingable(false);
+    // Reset metadata via the shared default — each fresh pattern starts
+    // Library-ready. The user can still customize before save.
+    const md = defaultMetadata();
+    setDefaultKitState(md.defaultKit);
+    setPatternRegion(md.region);
+    setPatternGenre(md.genre);
+    setPatternTags([...md.tags]);
+    setPatternStory(md.story);
+    setSwingable(md.swingable);
   }, [engine, isPlaying, stepsPerBar, savedList]);
 
   // ASDFG → channels 1-5 at amp 1.0; QWERT → same channels at amp 2.0
