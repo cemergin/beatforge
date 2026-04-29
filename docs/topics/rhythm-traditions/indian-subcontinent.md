@@ -1,8 +1,12 @@
 # Rhythm Traditions of the Indian Subcontinent
 
-## A Musicological, Historical, Sociopolitical, and Cultural Research Report
+> **TL;DR** — From Natya Shastra and Vedic chanting → guru-shishya parampara → Hindustani tala (Tintal, Jhaptal, Rupak, Ektaal, Dadra, Keherwa) → tabla bols + technique → Carnatic mridangam + konnakol + solkattu → folk (dhol, dholak) → Bollywood → diaspora. The cultural foundation under any Indian rhythmic study.
+> **Audience:** musician, music writer, world-music producer working with Indian material.
+> **Length:** ~850 lines · ~15 min read.
+> **Best for:** the Hindustani-vs-Carnatic comparison, konnakol as a learnable system, the temple-to-stage migration of percussion.
+> **Skip if:** you want notated talas (→ [`../rhythm-patterns/turkish-arabic-indian.md`](../rhythm-patterns/turkish-arabic-indian.md), [`../rhythm-patterns/south-asian-expanded.md`](../rhythm-patterns/south-asian-expanded.md)).
 
-*Compiled for the BeatForge World Drum Machine Project*
+
 
 ---
 

@@ -1,6 +1,12 @@
 # East Asian Rhythm Traditions: A Musicological, Historical, and Sociopolitical Report
 
-*A comprehensive study of percussion traditions across Korea, Japan, China, and Southeast Asia — prepared for the BeatForge drum machine project.*
+> **TL;DR** — Korea (samulnori, pungmul/nongak, changdan, janggu, court music, shaman drumming, pansori, K-pop), plus shorter coverage of Japan, China, Vietnam, Philippines, Thailand, and gamelan as overview. The Korea sections are the deepest.
+> **Audience:** musician, music writer, world-music dev. Strongest as a Korea reference; for Japan/China see their dedicated files.
+> **Length:** ~1.1K lines · ~18 min read.
+> **Best for:** the changdan rhythmic-cycle system, samulnori as four instruments in dialogue, K-pop's percussion lineage.
+> **Skip if:** you want Japan or China specifically (→ [`japanese.md`](japanese.md), [`chinese.md`](chinese.md)) or notation (→ [`../rhythm-patterns/`](../rhythm-patterns/)).
+
+
 
 ---
 

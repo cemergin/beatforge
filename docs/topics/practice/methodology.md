@@ -1,4 +1,11 @@
 # Drum Machine Practice & Education Methodology
+
+> **TL;DR** — How musicians actually get better. Deliberate-practice theory (Ericsson), speed-training protocols, random-mute exercises, the 40 PAS rudiments, polyrhythm training, odd-meter acclimation, konnakol. The pedagogical foundation under BeatForge's speed trainer.
+> **Audience:** anyone building practice features that should help, not just metronome at people. Educators welcome.
+> **Length:** ~1.3K lines · ~20 min skim. Sections 1.x (theory) and 2.x (protocols) are the substance.
+> **Best for:** the slow-practice principle, konnakol as a practice tool, the 85% rule on optimal difficulty, recovery-pattern design.
+> **Skip if:** you want notated patterns to drill (→ [`../rhythm-patterns/`](../rhythm-patterns/)).
+
 ## A Research-Backed Framework for the Musician's Travel Companion
 
 ---

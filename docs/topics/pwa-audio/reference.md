@@ -1,4 +1,11 @@
 # PWA Design & Implementation for Audio/Music Applications
+
+> **TL;DR** — How to make a Web Audio app installable + offline + well-behaved on iOS/Android/desktop. Manifest, service-worker lifecycle, caching strategies, IndexedDB, Background Sync, Media Session, Wake Lock.
+> **Audience:** dev shipping an audio PWA. Especially useful if you keep getting bitten by service-worker quirks or locked AudioContexts.
+> **Length:** ~3.2K lines · ~40 min skim. Single longest doc in the corpus — sections are independent, jump in.
+> **Best for:** iOS-specific gotchas, Workbox recipes, Wake Lock around play, Media Session for OS-level transport control.
+> **Skip if:** you're not building offline-capable (most of this won't apply).
+
 ## Comprehensive Technical Reference for a Web Drum Machine
 
 ---

@@ -1,5 +1,11 @@
 # Visual Design, Aesthetics, and Design Systems for Music/Audio Applications
 
+> **TL;DR** — The look-and-feel layer: design systems, color theory for time-based media, layout, iconography, motion. How waveforms, spectrograms, beat-dots, and play-heads carry information.
+> **Audience:** designer working on audio/music software (or any content-heavy time-based UI).
+> **Length:** ~1.2K lines · ~15 min skim.
+> **Best for:** color-as-velocity, motion design for play-heads, accessibility for color-coded structures, type for music software.
+> **Skip if:** you want interaction-pattern depth (→ [`software-music.md`](software-music.md)) or hardware-feeling controls (→ [`hardware-instruments.md`](hardware-instruments.md)).
+
 > Comprehensive reference document covering the look-and-feel layer of music software design -- visual craft, design systems, color theory, layout, iconography, motion design, and references.
 
 ---

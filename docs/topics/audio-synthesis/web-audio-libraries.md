@@ -1,5 +1,11 @@
 # Web Audio Technical Reference for Professional Drum Machine Development
 
+> **TL;DR** — When (and whether) to layer something on top of bare Web Audio. Deep dive on WAM 2.0 (the plugin standard) and Tone.js internals (Transport, MembraneSynth, MetalSynth, Player, Sequence). Decision matrix at the top.
+> **Audience:** dev choosing between bare Web Audio, Tone.js, or WAM. Or building a WAM plugin.
+> **Length:** ~2.6K lines · ~30 min skim. WAM and Tone are independent — read the half you care about.
+> **Best for:** WamNode/WamProcessor lifecycle, Tone.js's scheduling model, real-world WAM hosts.
+> **Skip if:** you're staying on bare Web Audio (→ [`web-audio-dsp.md`](web-audio-dsp.md)) or just want drum recipes (→ [`drum-synthesis.md`](drum-synthesis.md)).
+
 > Comprehensive developer reference covering WAM 2.0, Tone.js internals, and the broader web audio ecosystem.
 
 ---

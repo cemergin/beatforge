@@ -1,6 +1,12 @@
-# Gamelan and Southeast Asian Music Traditions: A Musicological, Historical, Sociopolitical, and Cultural Research Report
+# Gamelan and Southeast Asian Music Traditions
 
-*Prepared for BeatForge -- a web drum machine that honors every culture it represents.*
+> **TL;DR** — Javanese gamelan in cultural depth: sacred origins, kraton (court) tradition, halus / kasar aesthetics, wayang kulit shadow theater. Plus Balinese gamelan, Thai music, Myanmar, Vietnam, Philippines, Indonesia beyond gamelan.
+> **Audience:** musician, music writer, world-music dev. Cultural companion to the patterns file.
+> **Length:** ~720 lines · ~12 min read.
+> **Best for:** the kraton aesthetic, why halus/kasar shapes performance, the wayang-kulit ensemble.
+> **Skip if:** you want notation (→ [`../rhythm-patterns/gamelan-southeast-asian.md`](../rhythm-patterns/gamelan-southeast-asian.md)).
+
+
 
 ---
 

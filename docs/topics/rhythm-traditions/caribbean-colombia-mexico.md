@@ -1,6 +1,12 @@
 # Rhythm Nations: A Musicological Study of Caribbean, Colombian, and Mexican Music Traditions
 
-## A Deep Research Report on the Rhythmic Foundations of the Americas
+> **TL;DR** — Cuba in deep dive (bata for orishas, rumba, son, timba), Jamaica, Trinidad, Haiti, Colombia (cumbia, vallenato, champeta, currulao), Mexico (son jarocho, huapango, norteño, banda). The most detailed pan-region cultural file in the corpus.
+> **Audience:** musician, music writer, anyone working across Caribbean + Colombian + Mexican traditions.
+> **Length:** ~1.7K lines · ~28 min read. Country-by-country structure — pick yours.
+> **Best for:** the Cuban deep-dive, why Colombia's currulao matters, the Mexican regional taxonomy beyond mariachi.
+> **Skip if:** you want pan-Latin foundational arc (→ [`afro-cuban-caribbean-latin.md`](afro-cuban-caribbean-latin.md)) or notated patterns (→ [`../rhythm-patterns/latin-caribbean.md`](../rhythm-patterns/latin-caribbean.md)).
+
+
 
 ---
 

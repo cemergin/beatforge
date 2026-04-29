@@ -1,4 +1,11 @@
 # SWANA & Indian Drum Pattern Library
+
+> **TL;DR** — ~70 patterns from Turkey (Düyek, Çiftetelli, Karşılama, Aksak, Sofyan, Türk Aksağı, Yürük Semai, Halay, Zeybek, Curcuna), Arabic (Maqsoum, Baladi, Saidi, Masmoudi, Fallahi, Zaffa, Shaabi, Ayoub, Malfuf, Wahda, Dabke), and Indian (Tintal, Dadra, Keherwa, Rupak, Jhaptal, Ektaal). All notated on a 16th-note grid for direct step-sequencer use.
+> **Audience:** producer or programmer adapting these traditions to a drum machine.
+> **Length:** ~2.2K lines. Each pattern has its own section — jump to the one you need.
+> **Best for:** the 16th-note grid notation, Roman Havası groove, the SWANA family's odd-meter coverage.
+> **Skip if:** you want deeper Indian variations (→ [`south-asian-expanded.md`](south-asian-expanded.md)) or the additive-meter theory (→ [`../rhythm-engine/turkish-usul.md`](../rhythm-engine/turkish-usul.md)).
+
 ## Playable 16th-Note Grid Patterns for Web Drum Machine
 
 ### How to Read This Document

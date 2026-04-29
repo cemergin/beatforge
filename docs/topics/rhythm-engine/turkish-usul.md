@@ -1,5 +1,11 @@
 # Turkish Rhythmic Systems (Usul): A Comprehensive Musicological Reference
 
+> **TL;DR** — Ottoman additive meter, in depth. The Düm/Tek/Ka stroke vocabulary, every small usul (2 → 15 beats), the aksak family, and how usul *isn't* Western meter even when the numerator matches. The most rigorous treatment of additive grouping in the corpus.
+> **Audience:** rhythm-engine designers, musicologists, anyone struggling with "what does 9/8 actually mean here".
+> **Length:** ~1.5K lines · ~25 min skim. The 9/8-variants comparison table on its own justifies the doc.
+> **Best for:** the stroke vocabulary, comparison of all 9/8 patterns side-by-side, the deep aksak analysis.
+> **Skip if:** you want shipping engine architecture (→ [`polyrhythmic-architecture.md`](polyrhythmic-architecture.md)) or cultural history (→ [`../rhythm-traditions/turkish-anatolian-swana.md`](../rhythm-traditions/turkish-anatolian-swana.md)).
+
 ## Ottoman Classical & Anatolian Folk Traditions
 
 ---

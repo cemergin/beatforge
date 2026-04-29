@@ -1,5 +1,11 @@
 # Musical Instrument Hardware UI/UX Design Principles
 
+> **TL;DR** — What makes a hardware instrument *feel* like an instrument: knob feel, encoder grammar, RGB pad design, multi-function controls, page-and-mode systems. Drawn from TR-808, MPC, OP-1, Polyend Tracker, Elektron Digitakt.
+> **Audience:** designer or dev wanting their software to feel like a physical thing.
+> **Length:** ~800 lines · ~10 min skim.
+> **Best for:** the grammar of step-sequencer hardware, why color encoding matters, when to use a knob vs. a button.
+> **Skip if:** you're working in pure software UI conventions (→ [`software-music.md`](software-music.md)).
+
 ## A Design Reference for Web Drum Machine Development
 
 *Research compiled March 2026*

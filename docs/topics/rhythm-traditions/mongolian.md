@@ -1,5 +1,11 @@
 # The Steppe Soundscape: A Musicological Study of Mongolian Rhythm and Percussion Traditions
 
+> **TL;DR** — How nomadic life shaped Mongolian music: horse gaits as rhythmic source, the morin khuur, tsam Buddhist dance ensembles, shamanic drum lineages, throat singing (khoomii), modern bands like The HU and Hanggai. Largest single-region cultural doc in the corpus.
+> **Audience:** musician, ethnomusicologist, world-music writer.
+> **Length:** ~1.5K lines · ~25 min read. Sections are independent — start with whatever instrument or context interests you.
+> **Best for:** the five-animals rhythmic associations, Tengrism-and-the-shaman's-drum, throat singing as overtone-driven rhythm.
+> **Skip if:** you want notated patterns (most of this is cultural; patterns are in [`../rhythm-patterns/central-asian-pacific.md`](../rhythm-patterns/central-asian-pacific.md)).
+
 ## A Deep Research Report Covering Mongolia and Inner Mongolia (China)
 
 ---

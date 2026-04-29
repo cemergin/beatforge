@@ -1,4 +1,11 @@
 # Japanese Rhythm and Percussion Traditions
+
+> **TL;DR** — Gagaku (the oldest continuous orchestral tradition still performed), the jo-ha-kyū aesthetic, Noh + kabuki theater percussion, taiko (full history including Sukeroku-daiko + kumi-daiko), folk min'yō, Okinawan music. Includes notated taiko patterns (jiuchi, don-doko, oroshi).
+> **Audience:** musician, percussionist, music writer working with Japanese material.
+> **Length:** ~1.1K lines · ~18 min read. Cultural sections + a notation section near the end.
+> **Best for:** jo-ha-kyū as a structural principle, taiko's modern renaissance, the hayashi ensemble in Noh.
+> **Skip if:** you want broader East Asian context (→ [`east-asian.md`](east-asian.md), [`chinese.md`](chinese.md)).
+
 ## A Comprehensive Musicological, Historical, Sociopolitical, and Cultural Research Report
 
 *For BeatForge: A Web Drum Machine Honoring Every Culture*

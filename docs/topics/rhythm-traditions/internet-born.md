@@ -1,6 +1,12 @@
 # Born on the Internet: A Musicological History of Genres Inseparable from Digital Culture
 
-## A Research Report for BeatForge — Rhythms That Could Not Exist Without the Internet
+> **TL;DR** — The genres that needed YouTube, SoundCloud, TikTok, or torrents to exist: vaporwave, hyperpop, lo-fi hip-hop, slowed+reverb, plugg, jersey/Philly club, drill (UK + Brooklyn + Chicago), shatta, phonk. How distribution shaped the music.
+> **Audience:** music writer, producer, anyone tracing post-2010 genre evolution.
+> **Length:** ~1.2K lines · ~20 min read.
+> **Best for:** distribution-as-aesthetic, why "genre" still matters in the meme era, regional drill scenes side-by-side.
+> **Skip if:** you want notation (→ [`../rhythm-patterns/internet-born.md`](../rhythm-patterns/internet-born.md)) or older electronic history (→ [`electronic-music-history.md`](electronic-music-history.md)).
+
+
 
 ---
 

@@ -1,5 +1,11 @@
 # Brazilian Music Traditions: Rhythm, Percussion, and the African Diaspora
 
+> **TL;DR** — Brazil's rhythm tree, root to canopy: African roots (Yoruba/Fon/Bantu) → Candomblé sacred drums + capoeira → samba (de roda → enredo → pagode) → bossa nova → baião/forró → maracatu → frevo → coco → jongo → funk carioca. The escola de samba bateria gets its own deep dive.
+> **Audience:** musician, producer, writer working with Brazilian material.
+> **Length:** ~2K lines · ~30 min read. Chapters are roughly chronological — earliest tradition forward.
+> **Best for:** the chapter on Tia Ciata's house and samba's birth, the bateria sub-genres, the African-religion-to-secular-music arc.
+> **Skip if:** you want notated grooves (→ [`../rhythm-patterns/latin-caribbean.md`](../rhythm-patterns/latin-caribbean.md)) or pan-Latin context (→ [`afro-cuban-caribbean-latin.md`](afro-cuban-caribbean-latin.md)).
+
 ## A Deep Musicological, Historical, Sociopolitical, and Cultural Research Report
 
 ---

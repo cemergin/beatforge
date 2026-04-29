@@ -1,5 +1,11 @@
 # Turkish, Anatolian, and SWANA Music Traditions: A Musicological Research Report
 
+> **TL;DR** — From Central Asian Turkic shamanic drumming → Seljuk mehter → Ottoman classical (usul + fasıl) → Mevlevi Sufi → Republican-era reforms → Arabesk → Anatolian Rock → Kurdish dengbêj. Plus the shared Armenian / Greek / Kurdish / Assyrian / Jewish musical ecosystem under Ottoman borders.
+> **Audience:** musician, music writer, world-music dev working in the Eastern Mediterranean / SWANA space.
+> **Length:** ~1.3K lines · ~20 min read.
+> **Best for:** the political history of music reform in Turkey, the multi-ethnic Ottoman musical ecosystem, the Arabesk-as-resistance argument.
+> **Skip if:** you want the rhythmic theory specifically (→ [`../rhythm-engine/turkish-usul.md`](../rhythm-engine/turkish-usul.md)) or notated patterns (→ [`../rhythm-patterns/turkish-arabic-indian.md`](../rhythm-patterns/turkish-arabic-indian.md)).
+
 ## Purpose and Scope
 
 This report serves as the cultural and historical foundation for a web drum machine project that seeks to honor every musical tradition it represents. Rather than reducing complex living traditions to mere "world music" samples, this document provides the deep context necessary for respectful, informed representation. Every rhythm pattern in the application carries centuries of spiritual practice, political resistance, community identity, and artistic innovation.

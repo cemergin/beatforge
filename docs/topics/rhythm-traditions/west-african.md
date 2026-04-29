@@ -1,6 +1,12 @@
 # West African Rhythm Traditions: A Musicological, Historical, Sociopolitical, and Cultural Report
 
-*Compiled for BeatForge -- a drum machine project dedicated to honoring and contextualizing every rhythm it includes.*
+> **TL;DR** — The cultural foundation under most of the African diaspora: griot tradition, Ewe / Ashanti / Yoruba drumming, timeline + bell patterns, the Ghana / Nigeria / Senegal / Guinea / Mali ensembles. The "why" behind the bell-pattern grammar that runs through Cuban, Brazilian, Caribbean, and modern American music.
+> **Audience:** musician, producer, music writer. Essential reading for anyone working with diaspora rhythms.
+> **Length:** ~600 lines · ~10 min read. Concise compared to other tradition files — easy to read end-to-end.
+> **Best for:** the griot lineage, why the timeline pattern is the load-bearing element, ensemble-role hierarchy.
+> **Skip if:** you want the notated patterns (→ [`../rhythm-patterns/african-ensembles.md`](../rhythm-patterns/african-ensembles.md)).
+
+
 
 ---
 

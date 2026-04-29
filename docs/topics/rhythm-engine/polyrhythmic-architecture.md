@@ -1,5 +1,11 @@
 # Polyrhythmic Sequencer Architecture
 
+> **TL;DR** — A universal rhythm engine that handles any meter, any subdivision, any grouping, plus stacked polyrhythm and song-mode chains — all from two operators. Written before BeatForge was coded; the shipping engine is more pragmatic but follows the same bones.
+> **Audience:** engineer designing rhythm software. Assumes you've built at least a basic step sequencer.
+> **Length:** ~900 lines · ~15 min skim. Sections 2–3 (data model + the two operators) are the load-bearing ones.
+> **Best for:** the atomic-pattern data model, stack vs. chain operators, LCM super-cycle reasoning, beat-grouping as first-class data.
+> **Skip if:** you want the additive-meter case study (→ [`turkish-usul.md`](turkish-usul.md)) or the shipped engine (→ [`../../architecture/audio-engine.md`](../../architecture/audio-engine.md)).
+
 ## Technical Design for BeatForge's Universal Rhythm Engine
 
 ---

@@ -1,5 +1,11 @@
 # Drum & Percussion Synthesis — Engineering Reference
 
+> **TL;DR** — How to build kicks, snares, hats, claps, toms, cymbals from oscillators + noise + envelopes. No samples needed.
+> **Audience:** intermediate JS devs (no DSP background assumed).
+> **Length:** ~1.2K lines · ~15 min skim, 60 min deep with code-along.
+> **Best for:** voice-by-voice recipes, the synth-vs-sample tradeoff, why analog drum machines sound the way they do.
+> **Skip if:** you want bare Web Audio API surface (→ [`web-audio-dsp.md`](web-audio-dsp.md)) or library comparisons (→ [`web-audio-libraries.md`](web-audio-libraries.md)).
+
 A working reference for the future BeatForge Drum Synth project. Assumes
 an intermediate Web Audio developer with no formal DSP training who is
 choosing a synthesis technique for a given drum.

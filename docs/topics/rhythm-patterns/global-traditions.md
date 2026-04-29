@@ -1,4 +1,11 @@
 # Global Traditions Rhythm Library
+
+> **TL;DR** — Patterns for traditions not covered by the region-specific files: cross-regional fusions, lesser-documented folk patterns, educational reductions across cultures. Functions as a fill-the-gaps companion to the region-specific pattern files.
+> **Audience:** educator, producer wanting one-stop cross-tradition coverage, dev looking for diversity beyond the headline regions.
+> **Length:** ~1.9K lines. Browse the section headers as a TOC.
+> **Best for:** unusual traditions, cross-cultural comparisons, educational reductions.
+> **Skip if:** you have a specific region in mind (→ siblings in this folder are deeper for any single tradition).
+
 ## Patterns from Missing Regions and Traditions
 
 > Step-sequencer patterns for regions not yet covered in the BeatForge library.

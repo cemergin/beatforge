@@ -1,4 +1,11 @@
 # Web Audio API & DSP Technical Reference
+
+> **TL;DR** — Every Web Audio API surface you need (AudioContext, AudioParam, AudioWorklet) plus the DSP primitives that go inside (filters, envelopes, oscillators, noise, distortion, compression, reverb, delay). Worked recipes for 808 kick, 909 snare, FM bell, Karplus-Strong pluck.
+> **Audience:** dev who's outgrown "wire up a few oscillators" and needs to engineer the sound.
+> **Length:** ~2.6K lines · ~25 min skim, much more if you build along.
+> **Best for:** AudioParam scheduling, AudioWorklet patterns, OfflineAudioContext for export, classic synth recipes.
+> **Skip if:** you want library wrappers (→ [`web-audio-libraries.md`](web-audio-libraries.md)) or per-drum design philosophy (→ [`drum-synthesis.md`](drum-synthesis.md)).
+
 ## For Professional Browser-Based Drum Machine Development
 
 ---

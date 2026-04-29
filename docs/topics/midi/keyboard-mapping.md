@@ -1,5 +1,11 @@
 # Web-Based Drum Machine: Keyboard Control Reference
 
+> **TL;DR** — Mapping QWERTY to drum pads + production shortcuts that feel right. Compares Ableton, FL Studio, MPC, and custom layouts; shows how to handle keydown/keyup, velocity layers, focus management, accessibility.
+> **Audience:** product designer or dev building a hardware-feeling browser instrument.
+> **Length:** ~1.9K lines · ~20 min skim. Keybinding tables + JS examples are the most cited sections.
+> **Best for:** comparing keyboard conventions, the "16-step + transport row" layout, focus/blur handling.
+> **Skip if:** you're after the MIDI protocol itself (→ [`reference.md`](reference.md)) or visual UI design (→ [`../interface/software-music.md`](../interface/software-music.md)).
+
 A comprehensive product design reference for making a web-based drum machine fully playable and controllable via computer keyboard.
 
 ---

@@ -1,5 +1,10 @@
 # North & East African Drum Pattern Library
-## Comprehensive Playable Patterns for Web Drum Machine
+
+> **TL;DR** — Notated patterns for North Africa (Morocco, Egypt, Tunisia, Algeria — gnawa, chaabi, raï) and East Africa (Ethiopian chiqchiqa, Eritrean, Sudanese, Somali). Includes traditions usually under-represented in Western drum-machine references.
+> **Audience:** producer, percussionist, world-music dev working with NE African material.
+> **Length:** ~1.1K lines.
+> **Best for:** gnawa's krakebs + sintir, Ethiopian 6/8 grooves, Sudanese songs of the bashraf.
+> **Skip if:** you want sub-Saharan ensembles (→ [`african-ensembles.md`](african-ensembles.md)) or modern African (→ [`modern-african.md`](modern-african.md)).
 
 ### Notation Key
 - Each character = one subdivision position in the cycle

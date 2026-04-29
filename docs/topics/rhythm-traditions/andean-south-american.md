@@ -1,5 +1,10 @@
-# Andean & South American Music Traditions: A Deep Musicological, Historical, and Sociopolitical Study
-## (Excluding Brazil)
+# Andean & South American Music Traditions
+
+> **TL;DR** — Pre-Columbian Inca music + the quipu + tinkuy (dualism) → Peru (festejo, lando, marinera) → Bolivia (tinku, morenada, diablada) → Argentina (tango, milonga, chacarera, zamba) → Chile (cueca) → Uruguay (candombe, murga) → Venezuela (joropo, gaita, tambor) → Ecuador → Paraguay. Brazil deliberately excluded (it has its own file).
+> **Audience:** musician, music writer, world-music producer.
+> **Length:** ~2.1K lines · ~30 min read. Country-by-country — pick your countries.
+> **Best for:** Argentine tango's sociopolitical history, Uruguayan candombe's three-drum dialogue, the pre-Columbian percussive instrument inventory.
+> **Skip if:** you want only Brazil (→ [`brazilian.md`](brazilian.md)) or the cross-Atlantic lineage (→ [`afro-cuban-caribbean-latin.md`](afro-cuban-caribbean-latin.md)).
 
 *Focus: Rhythm, Percussion, and the Cultural Matrix of Sound*
 

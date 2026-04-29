@@ -1,4 +1,10 @@
-# Chinese Rhythm and Percussion Traditions: A Musicological, Historical, Sociopolitical, and Cultural Research Report
+# Chinese Rhythm and Percussion Traditions
+
+> **TL;DR** — Shijing (Book of Songs), Confucian music philosophy, Yuefu bureau, bianzhong bells, the Chinese percussion taxonomy, opera percussion (luogu jing), folk + ritual percussion, Uyghur traditions, lion + dragon dance drumming.
+> **Audience:** musician, music writer, world-music dev working with Chinese material.
+> **Length:** ~1K lines · ~17 min read.
+> **Best for:** the bianzhong bell-set significance, luogu jing as a notation system, the ethnic-minorities (Uyghur) coverage.
+> **Skip if:** you want broader East Asian context (→ [`east-asian.md`](east-asian.md)).
 
 ---
 

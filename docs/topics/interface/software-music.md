@@ -1,5 +1,11 @@
 # Music Software UI/UX Design Reference
 
+> **TL;DR** — How the DAWs and drum-machine plugins solved their UI problems, and why most converge on similar patterns. Piano-roll vs step-grid vs tracker, automation lanes, the zoom problem, MIDI clip editing, mobile-music UX.
+> **Audience:** designer or design-aware dev building any music interface.
+> **Length:** ~1.4K lines · ~20 min skim. Strongest as a checklist when evaluating your own choices.
+> **Best for:** comparing piano-roll/step/tracker tradeoffs, the "zoom is everything" problem, conventions you break at your peril.
+> **Skip if:** you're focused on hardware-instrument feel (→ [`hardware-instruments.md`](hardware-instruments.md)) or visualization specifically (→ [`visual-design.md`](visual-design.md)).
+
 > Comprehensive design research covering DAW paradigms, drum machine plugins, web/mobile audio apps, interaction patterns, color systems, animation, responsive design, typography, and onboarding strategies.
 
 ---

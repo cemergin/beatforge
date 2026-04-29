@@ -1,4 +1,11 @@
 # Gamelan & Southeast Asian Percussion Traditions
+
+> **TL;DR** — Javanese gamelan from origins through court traditions, with full notation for lancaran, ketawang, ladrang, merong/gendhing, srepegan, sampak, ayak-ayakan. Plus Balinese kotekan interlocking + kendang patterns. Hybrid musicology + notation: cultural context + playable parts side-by-side.
+> **Audience:** musician, producer, world-music dev working with Indonesian material.
+> **Length:** ~2.1K lines. Sections 1–4 are cultural; section 5+ is notation. Skip ahead if you only want patterns.
+> **Best for:** the colotomic structure explained, kotekan as call-and-response between two players, irama (tempo/density levels).
+> **Skip if:** you want only cultural context (→ [`../rhythm-traditions/gamelan-southeast-asian.md`](../rhythm-traditions/gamelan-southeast-asian.md)).
+
 ## A Comprehensive Musicological & Pattern Reference for Drum Machine Adaptation
 
 ---

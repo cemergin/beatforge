@@ -1,5 +1,11 @@
 # Balkan Music Traditions: Rhythm, Percussion, and the World's Most Complex Folk Meters
 
+> **TL;DR** — Bulgaria's odd meters (7/8 → 22/16), Romanian lăutari, Serbian kolo + brass, Greek rebetiko / kalamatianos / zebekiko, Macedonian / Albanian / Bosnian traditions, and the Romani musicians who kept it all alive. Brailoiu's "bichronic" theory of aksak gets its own treatment.
+> **Audience:** musician, music writer, world-music producer. Critical reading if you're working in odd meters.
+> **Length:** ~1.6K lines · ~25 min read.
+> **Best for:** the bichronicity argument, country-by-country meter inventory, Romani contribution that history often erases.
+> **Skip if:** you want the additive-meter theory directly applicable to a sequencer (→ [`../rhythm-engine/turkish-usul.md`](../rhythm-engine/turkish-usul.md)).
+
 ## A Musicological, Historical, Sociopolitical, and Cultural Research Report
 
 ---

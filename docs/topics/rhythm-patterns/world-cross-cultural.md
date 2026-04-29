@@ -1,4 +1,11 @@
 # World Rhythm Library
+
+> **TL;DR** — 50+ patterns chosen to span the African diaspora arc: West African bells (Agbekor, Bembé, Kpanlogo) → Afro-Cuban (son clave, rumba clave, tresillo, cascara, Mozambique, songo, full salsa ensemble) → Caribbean → Brazilian. Cross-references between traditions are first-class.
+> **Audience:** anyone tracing rhythmic lineage across the Atlantic, or wanting a single doc covering multiple traditions.
+> **Length:** ~1.9K lines. Strongest as comparative reading — see how the same bell pattern appears across traditions.
+> **Best for:** the cross-Atlantic rhythm-DNA argument, full salsa ensemble notation, the standard pattern (Bembé) and its cousins.
+> **Skip if:** you want one specific region in depth (→ siblings in this folder).
+
 ## Comprehensive Global Percussion Patterns for Web Drum Machine
 
 > A built-in rhythm library covering traditions from every inhabited continent.

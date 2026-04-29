@@ -1,4 +1,11 @@
 # Afro-Cuban, Caribbean, and Latin American Rhythm Traditions
+
+> **TL;DR** — The Atlantic slave trade as the root of New World rhythm: Cuba (cabildos, Santeria/bata, Abakua, rumba, son, clave), Jamaica (mento → ska → rocksteady → reggae → dancehall → dub), Trinidad (calypso, steelpan, soca), Haiti (vodou), Puerto Rico. The cultural arc behind the patterns.
+> **Audience:** musician, music writer, world-music dev. Essential context for anything diaspora-related.
+> **Length:** ~700 lines · ~12 min read.
+> **Best for:** the cabildo-to-rumba lineage, why the clave is sacred, dub's place in the lineage.
+> **Skip if:** you want the patterns themselves (→ [`../rhythm-patterns/latin-caribbean.md`](../rhythm-patterns/latin-caribbean.md)).
+
 ## A Musicological, Historical, Sociopolitical, and Cultural Research Report
 
 *Prepared for BeatForge — a drum machine that honors the cultural roots of every rhythm.*

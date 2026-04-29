@@ -1,4 +1,11 @@
 # African Drum Pattern Library
+
+> **TL;DR** — Full ensemble notation for 30+ traditions: Ewe (Agbekor, Gahu, Kpanlogo, Atsiagbekor, Gadzo, Tokoe), Mande/djembe (Kuku, Soli, Dununba, Tiriba, Yankadi, Makru, Djansa, Sunu), Yoruba (Bata/Shango, Dùndún), Senegalese (Sabar). Each pattern shows bell + shaker + multiple drums in parallel + a kit adaptation.
+> **Audience:** percussionist, music director, drum-machine programmer working with West African material.
+> **Length:** ~2.5K lines. Patterns are independent — open the section you need.
+> **Best for:** the bell-pattern foundation under each ensemble, kit adaptations of djembe parts, the 12/8-vs-6/8 reasoning.
+> **Skip if:** you want cultural context (→ [`../rhythm-traditions/west-african.md`](../rhythm-traditions/west-african.md), [`../rhythm-traditions/modern-african.md`](../rhythm-traditions/modern-african.md)).
+
 ## Comprehensive Playable Patterns for Web Drum Machine
 
 ### Notation Key

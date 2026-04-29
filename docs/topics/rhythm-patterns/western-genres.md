@@ -1,5 +1,10 @@
-# Comprehensive Drum Pattern Library
-## For Web Drum Machine Step Sequencer
+# Comprehensive Drum Pattern Library — Western Genres
+
+> **TL;DR** — 211 notated step-grid patterns across rock, pop, blues, country, reggae, ska, punk, metal, funk, jazz, R&B, gospel, prog rock, disco, fusion, Afrobeat, math rock, djent, J Dilla, house, techno, DnB, hip-hop, UK garage, dubstep, Afrobeats, Amapiano, reggaeton, breakbeats. Plus fills, build-ups, breakdowns.
+> **Audience:** producers + drum-machine devs who want a reference groove for any genre.
+> **Length:** ~2.9K lines · longest pattern file in the corpus. Use the section headings as a TOC — don't read top-to-bottom.
+> **Best for:** programmed-classics section (808-era hip-hop, 909 house), J Dilla shuffle, UK garage skip, fills.
+> **Skip if:** you want non-Western traditions (→ siblings in this folder).
 
 **Notation Key:**
 - `x` = hit

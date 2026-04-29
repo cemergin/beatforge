@@ -1,5 +1,11 @@
 # MIDI Technical Reference for Browser-Based Drum Machines
 
+> **TL;DR** — Everything from "what's a status byte" to "how do I generate a downloadable .mid file in the browser". Protocol, GM drum map, velocity, CC table, MIDI clock, MIDI 2.0, Web MIDI API, .mid file format.
+> **Audience:** web dev adding MIDI to an app. Useful even if you've shipped MIDI before — Web MIDI has subtle quirks.
+> **Length:** ~2.3K lines · ~30 min skim. Sections are independent — jump to "Web MIDI API" or "Standard MIDI File" if that's all you need.
+> **Best for:** byte-level protocol clarity, tested JS code samples, hot-unplug handling, the GM drum-map (notes 27–81).
+> **Skip if:** you want keyboard-as-MIDI-controller UX (→ [`keyboard-mapping.md`](keyboard-mapping.md)).
+
 > Comprehensive developer reference covering the MIDI 1.0 protocol, General MIDI drum mapping, Web MIDI API, and Standard MIDI File format. All code examples are in JavaScript.
 
 ---

@@ -1,4 +1,11 @@
 # South & Southeast Asian Expanded Patterns
+
+> **TL;DR** — Detailed theka variations for all major Hindustani talas (Tintal, Jhaptal, Rupak, Ektaal, Dadra, Keherwa, Deepchandi, Dhamar, Sultaal), plus Carnatic, regional folk, Bollywood film variations. The deeper-dive companion to `turkish-arabic-indian.md`.
+> **Audience:** tabla / mridangam players, world-music producers, devs working with Indian rhythm material.
+> **Length:** ~2.4K lines. Each tala has its own section with multiple variations — pick a tala and start there.
+> **Best for:** layakari (rhythmic groupings), film-vs-classical variations of the same tala, the 14-beat Deepchandi family.
+> **Skip if:** you want the 70-pattern summary across SWANA + India (→ [`turkish-arabic-indian.md`](turkish-arabic-indian.md)) or cultural context (→ [`../rhythm-traditions/indian-subcontinent.md`](../rhythm-traditions/indian-subcontinent.md)).
+
 ## Deep Dive: Hindustani, Carnatic, Regional Folk, Film, and Southeast Asian Traditions
 
 ---

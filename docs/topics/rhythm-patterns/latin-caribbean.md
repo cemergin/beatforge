@@ -1,4 +1,11 @@
 # Latin American & Caribbean Rhythm Library
+
+> **TL;DR** — 43+ patterns covering Cuban (Mambo, Cha-Cha-Chá, Guaguancó, Yambú, Columbia, Timba, Comparsa, Pilón, Changüí), Puerto Rican (Bomba, Plena), Dominican (Merengue, Bachata), Colombian (Cumbia, Vallenato), Mexican, Haitian, Trinidadian, Brazilian. Pan-Latin hybrids included.
+> **Audience:** producer, percussionist, world-music dev needing the salsa/bomba/cumbia toolkit.
+> **Length:** ~1.9K lines. Patterns by country, then sub-genre — the Cuban section is the deepest.
+> **Best for:** full ensemble parts (not just the clave), the 6/8 rumba columbia, comparsa carnival, son clave variations.
+> **Skip if:** you want the cross-Atlantic cultural lineage (→ [`world-cross-cultural.md`](world-cross-cultural.md)) or country histories (→ [`../rhythm-traditions/`](../rhythm-traditions/)).
+
 ## Comprehensive Percussion Patterns for Web Drum Machine
 
 > 43 patterns covering Cuban, Puerto Rican, Dominican, Colombian, Mexican,

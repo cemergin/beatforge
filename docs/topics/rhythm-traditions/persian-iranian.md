@@ -1,5 +1,11 @@
 # Persian and Iranian Music Traditions: A Musicological, Historical, Sociopolitical, and Cultural Research Report
 
+> **TL;DR** — 2,500 years of Persian rhythm: Zoroastrian roots, Achaemenid + Sassanid eras (Barbad as the legendary court musician), the Arab conquest's effect on the dastgah system, the radif as the canon, the tombak technique, daf (Sufi frame drum), and how the 1979 revolution reshaped the entire scene.
+> **Audience:** musician, percussionist, world-music writer working with Persian material.
+> **Length:** ~1.3K lines · ~20 min read. Sections progress chronologically — read top-to-bottom or jump to the era you need.
+> **Best for:** how Persian rhythmic modes (vazn) differ from Arabic iqa'at and Turkish usul, the tombak deep-dive, post-1979 underground music.
+> **Skip if:** you want only the engine-relevant rhythmic theory (→ [`../rhythm-engine/turkish-usul.md`](../rhythm-engine/turkish-usul.md) for comparison).
+
 ## Focus: Rhythm, Percussion, and the Living Traditions of Iran
 
 ---
