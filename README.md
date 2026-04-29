@@ -1,89 +1,85 @@
 # BeatForge
 
-A browser-based world-rhythm metronome. 536 rhythms across 23 regions, 7 synthesized kits, polyrhythm overlay, per-track subdivisions. Works offline. No install, no signup, no backend. Open source.
+> Browser-based world-rhythm metronome + drum machine. 536 patterns across 23 regions. Polyrhythm. Speed trainer. Step sequencer. Web MIDI. PWA. Free + open source.
 
-**Live:** [cemergin.github.io/beatforge](https://cemergin.github.io/beatforge/)
+**[▶ Try it now](https://cemergin.github.io/beatforge/)** &nbsp;·&nbsp; No install, no signup, works offline.
 
-BeatForge is two projects:
-
-| Project | Status | Where |
-|---|---|---|
-| **BeatForge Metronome** | v1 shipped | `app/` — React + Vite + TS PWA |
-| **BeatForge Drum Synth** | Next | Separate project (hasn't started) |
-
-The metronome is for daily practice — odd meters, beat grouping, polyrhythm, speed trainer, world rhythms. The synth (future) is the real sound-design playground built on the learnings from the metronome.
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![PWA](https://img.shields.io/badge/PWA-installable-5b6bbf.svg)](https://cemergin.github.io/beatforge/)
+[![Stack](https://img.shields.io/badge/stack-React%2019%20·%20Vite%20·%20TS%20·%20Bun-e17055.svg)](#tech-stack)
 
 ---
 
-## Quick tour
+## What it is
 
-| What you want | Where to go |
+A practice tool for musicians who want to feel rhythms beyond 4/4. Built around three ideas:
+
+- **Beat grouping is the killer feature.** 9/8 isn't just nine eighths — it's `2+2+2+3` (or `2+2+3+2`). The visualization makes the additive structure obvious; the engine plays it correctly.
+- **World rhythms are first-class.** 536 curated patterns across 23 regions — Turkish karşılama, Cuban son clave, Indian tintal, Indonesian gamelan, Brazilian samba, electronic four-on-floor — each with cultural context.
+- **Practice over polish.** The metronome is the daily driver. Speed trainer ramps BPM over bars or seconds. Polyrhythm with per-track subdivisions. Tap tempo, count-in, accents, swing.
+
+## Quick start
+
+```bash
+git clone https://github.com/cemergin/beatforge.git
+cd beatforge/app
+bun install
+bun dev
+```
+
+Open `http://localhost:5173`. That's it — no backend, no env vars, no setup.
+
+To build for production: `bun run build`. To run tests: `bun run test`.
+
+## What's inside
+
+Three modes share one Web Audio engine:
+
+| Mode | What it's for |
 |---|---|
-| Try the app | [cemergin.github.io/beatforge](https://cemergin.github.io/beatforge/) |
-| Run the app locally | `cd app && bun install && bun dev` |
-| Understand the code | [`docs/architecture/overview.md`](docs/architecture/overview.md) (human-readable arch) |
-| Navigate every folder | [`INDEX.yaml`](INDEX.yaml) (machine-readable index) |
-| Read the design spec | [`docs/superpowers/specs/2026-04-22-beatforge-metronome-design.md`](docs/superpowers/specs/2026-04-22-beatforge-metronome-design.md) |
-| Browse the research corpus | [`research/INDEX.yaml`](research/INDEX.yaml) → 27 musicology MDs, 650+ notated patterns |
+| **Practice** | Daily metronome. Pick a pattern, set BPM, hit play. Speed trainer + tap tempo + count-in. |
+| **Studio** | Step sequencer for sketching your own patterns. 14 voice machines (kick / snare / modal / FM / formant / …) + master FX with damped reverb + delay. Save to IndexedDB → appears in your Library. |
+| **Library** | Browse all 536 rhythms by region / meter / genre / kit. Search, world map, starter paths, share-link any pattern by URL. |
 
----
+Plus a **hidden MIDI tab** at `?tab=_midi` — bind any controller's CC or notes to any internal address, route each audio channel to a MIDI output device + channel + note, MIDI clock I/O, live monitor.
 
-## The app (`app/`)
+## Tech stack
 
-Built with React 19, Vite, TypeScript, Bun. PWA via `vite-plugin-pwa` + Workbox. Dexie for user-saved patterns, Fuse.js for fuzzy search, localStorage for UI state. Deploys to GitHub Pages via `.github/workflows/deploy.yml` on push to `main`.
+- **React 19** + **TypeScript** + **Vite 8**
+- **Bun** (package manager + test runner)
+- **Web Audio API** — pure, no Tone.js. Per-track scheduler in a Web Worker for rock-solid timing.
+- **Web MIDI API** — secret tab (no nav chip, ungated by URL).
+- **Dexie / IndexedDB** for user-saved patterns + ensembles.
+- **Workbox** + `vite-plugin-pwa` — installable, works offline.
+- **Vitest** — 328 tests covering pattern schema, sequencer, MIDI bridge, audio adapters.
 
-Three modes, one audio engine:
+Auto-deploys to GitHub Pages on push to `main` via `.github/workflows/deploy.yml`.
 
-- **Practice** — daily driver. BPM, grouping, speed trainer, tap-tempo, count-in, stop-after, polyrhythm overlay, per-group accents, all 7 kits, 3 view modes (circular / linear / pill).
-- **Studio** — step sequencer for sketching patterns. Full Practice-parity controls + per-track subdivisions editor. Save to IndexedDB, export/import JSON.
-- **Library** — zoned-scroll browse surface for all 536 patterns. Search, filter chips, world map, starter paths, grouping browser, related-rhythm algorithm.
+## Repo layout
 
-The audio engine is pure Web Audio (no Tone.js). Per-track independent scheduler for true polyrhythm. Scheduler tick runs on a dedicated Web Worker (300ms lookahead) so audio timing stays rock-solid across React renders, devtools activity, and background-tab throttling. 7 kits: 808/909/707/727 (drum machine family) + frameDrum (SWANA/Balkans) + tabla (Indian) + gamelan (Indonesian metal percussion). See [`docs/architecture/audio-engine.md`](docs/architecture/audio-engine.md) for the deep dive.
+```
+beatforge/
+├── app/                       The shipping React app
+│   ├── src/
+│   │   ├── App.tsx            Root: tabs, session, router
+│   │   ├── audio/             Engine + voice/FX machines + adapters
+│   │   ├── modes/             Practice, Sound (Studio), Library, Midi
+│   │   ├── modules/           Bus, router, sequencer, session, midi
+│   │   ├── components/        Shared visualizations + transport
+│   │   ├── lib/               db, storage, urlState, MIDI bridge
+│   │   └── patterns/          Schema + 536 seed patterns by region
+│   └── INDEX.yaml             Machine-readable codebase index
+├── docs/                      Specs, architecture notes, review notes
+├── research/                  ~50K lines of musicology + pattern research
+└── INDEX.yaml                 Top-level repo map
+```
 
----
+Every meaningful directory has its own `INDEX.yaml` describing purpose, contents, invariants, and cross-references. Useful for both humans and AI agents navigating the code — start at `INDEX.yaml` and follow the chain.
 
-## The research corpus (`research/`)
+## Contributing
 
-Built up over many sessions — 50,000+ lines across 27 musicology files, 19 pattern files, 8 technical references, 5 design references. The app's 536 seed patterns are a curated subset; the corpus goes much deeper.
-
-Navigate via:
-
-- [`research/INDEX.yaml`](research/INDEX.yaml) — machine index
-- [`research/INDEX.md`](research/INDEX.md) — prose catalog (pre-YAML)
-- [`research/TOPIC-INDEX.md`](research/TOPIC-INDEX.md) — concept → file cross-ref
-- [`research/PATTERN-INDEX.md`](research/PATTERN-INDEX.md) — every notated pattern, searchable
-
-The corpus is the source of truth when extending the seed library. The extraction pipeline at [`app/scripts/extract-patterns.ts`](app/scripts/extract-patterns.ts) + dev-only sandbox at `/_patterns` walks drafts from `research/patterns/*.md` → JSON → proof-hearing → promotion to `app/src/patterns/seed/<region>.ts`.
-
----
-
-## Docs (`docs/`)
-
-| File | What |
-|---|---|
-| [`docs/architecture/overview.md`](docs/architecture/overview.md) | How the metronome works at a glance |
-| [`docs/architecture/audio-engine.md`](docs/architecture/audio-engine.md) | Scheduler, kits, synthesis |
-| [`docs/architecture/sequencer-and-patterns.md`](docs/architecture/sequencer-and-patterns.md) | Pattern schema, subdivisions, polyrhythm |
-| [`docs/architecture/react-app.md`](docs/architecture/react-app.md) | Component tree, state, persistence |
-| [`docs/superpowers/specs/2026-04-22-beatforge-metronome-design.md`](docs/superpowers/specs/2026-04-22-beatforge-metronome-design.md) | Original design spec |
-| [`docs/superpowers/specs/2026-03-13-content-presentation-design.md`](docs/superpowers/specs/2026-03-13-content-presentation-design.md) | Content presentation spec |
-| [`docs/2026-03-12-beatforge-product-design.md`](docs/2026-03-12-beatforge-product-design.md) | First product design (partially superseded) |
-
----
-
-## The prototype (`design/`)
-
-Early React prototype authored before the port to a real Vite app. Kept for reference — the visualizations (`views.jsx`) and engine (`engine.js`) were the basis of what's in `app/`. Do not use for development; use `app/`.
-
----
-
-## What's next
-
-- **Metronome v1.x** — grow library toward 650+ patterns via `scripts/extract-patterns.ts`. Accessibility pass. Mobile polish. Real-use bug fixes.
-- **BeatForge Drum Synth** — separate project, not started. Real sound design surface (AudioWorklets, modulation, FX, routing). Will reuse the engine scheduler + pattern schema from the metronome via shared packages. See the spec's §9 v2.0 for the outline.
-
----
+Issues, PRs, and pattern submissions all welcome. **Pattern contributions** are especially valuable — if a rhythm in your tradition is missing, mislabeled, or culturally miscontextualized, please open a PR or issue. See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the dev workflow + pattern-authoring guide.
 
 ## License
 
-MIT. Patterns and cultural stories are drawn from research and tradition; contributions welcome. If a rhythm notation is wrong or missing context, open an issue or PR.
+MIT — see [`LICENSE`](LICENSE). Cultural stories and pattern transcriptions draw from public musicology research; corrections and additions from practitioners are very welcome.

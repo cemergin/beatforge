@@ -9,14 +9,17 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-title" content="BeatForge" />
-    <title>BeatForge — World-rhythm metronome</title>
-    <meta name="description" content="Browser-based world-rhythm metronome. 294 rhythms across 16 traditions, 7 synthesized kits, polyrhythm overlay, per-group accents. Works offline. No install, no backend." />
+    <title>BeatForge — World-rhythm metronome + drum machine</title>
+    <meta name="description" content="Browser-based world-rhythm metronome + drum machine. 536 patterns across 23 regions. Polyrhythm, odd meters (9/8, 7/8, 11/8), speed trainer, step sequencer, Web MIDI. Works offline. No signup, no install. Open source." />
+    <meta name="keywords" content="metronome, world rhythms, polyrhythm, odd meter, 9/8, 7/8, 11/8, speed trainer, drum machine, step sequencer, Web MIDI, tabla, gamelan, karşılama, samba, son clave, free metronome, browser metronome, PWA, open source" />
+    <meta name="author" content="Cem Ergin" />
+    <link rel="canonical" href="https://cemergin.github.io/beatforge/" />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="BeatForge" />
-    <meta property="og:title" content="BeatForge — World-rhythm metronome" />
-    <meta property="og:description" content="294 rhythms across 16 traditions. 7 synthesized kits. Polyrhythm overlay. Plays 9/8 as 2+2+2+3. Works offline." />
+    <meta property="og:title" content="BeatForge — World-rhythm metronome + drum machine" />
+    <meta property="og:description" content="Browser-based metronome + drum machine. 536 rhythms across 23 regions. Polyrhythm. Odd meters. Speed trainer. Web MIDI. Works offline. Free + open source." />
     <meta property="og:url" content="https://cemergin.github.io/beatforge/" />
     <meta property="og:image" content="https://cemergin.github.io/beatforge/og-image.svg" />
     <meta property="og:image:type" content="image/svg+xml" />
@@ -27,10 +30,46 @@
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="BeatForge — World-rhythm metronome" />
-    <meta name="twitter:description" content="294 rhythms. 7 kits. Polyrhythm overlay. Works offline." />
+    <meta name="twitter:title" content="BeatForge — World-rhythm metronome + drum machine" />
+    <meta name="twitter:description" content="Browser-based metronome + drum machine. 536 world rhythms. Polyrhythm. Odd meters. Speed trainer. Free + open source." />
     <meta name="twitter:image" content="https://cemergin.github.io/beatforge/og-image.svg" />
     <meta name="twitter:image:alt" content="BeatForge logo with rhythm traditions tagline" />
+
+    <!-- Structured data — WebApplication schema for rich results in
+         search + sharing surfaces. -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "BeatForge",
+        "url": "https://cemergin.github.io/beatforge/",
+        "applicationCategory": "MusicApplication",
+        "operatingSystem": "Any (browser-based)",
+        "browserRequirements": "Requires JavaScript and Web Audio API support.",
+        "description": "Browser-based world-rhythm metronome + drum machine. 536 patterns across 23 regions, polyrhythm, speed trainer, step sequencer, and Web MIDI.",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "softwareVersion": "1.0",
+        "license": "https://opensource.org/licenses/MIT",
+        "isAccessibleForFree": true,
+        "inLanguage": "en",
+        "image": "https://cemergin.github.io/beatforge/og-image.svg",
+        "creator": {
+          "@type": "Person",
+          "name": "Cem Ergin",
+          "url": "https://github.com/cemergin"
+        },
+        "codeRepository": "https://github.com/cemergin/beatforge",
+        "featureList": [
+          "536 world-rhythm patterns across 23 regions",
+          "Polyrhythm with per-track subdivisions",
+          "Speed trainer (bars or seconds)",
+          "Step sequencer with 14 voice machines",
+          "Web MIDI input + output + clock",
+          "Beat-grouping visualization (additive meter)",
+          "Offline-capable PWA"
+        ]
+      }
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link

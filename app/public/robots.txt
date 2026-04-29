@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://cemergin.github.io/beatforge/sitemap.xml
