@@ -22,8 +22,10 @@ import { logWarn } from '../../lib/log';
 
 export interface ChannelOutConfig {
   enabled: boolean;
-  /** Output id from MIDIAccess.outputs. Empty string = unset. */
-  outputId: string;
+  /** Output id from MIDIAccess.outputs. `null` = unconfigured.
+   *  Persisted form historically used `''` for unset; loaders
+   *  normalise that to null on read. */
+  outputId: string | null;
   /** 0..15 (the on-the-wire channel; UI shows 1..16). */
   midiChannel: number;
   /** 0..127. */
@@ -35,7 +37,7 @@ export interface ChannelOutConfig {
 
 export const DEFAULT_CHANNEL_OUT: ChannelOutConfig = {
   enabled: false,
-  outputId: '',
+  outputId: null,
   midiChannel: 0,
   note: 36,
   velocityScale: 1,
@@ -71,24 +73,28 @@ export function attachMidiSink(bus: EventBus, spec: SinkSpec): Unsubscribe {
 
     const cfg = spec.getConfigs()[idx];
     if (!cfg || !cfg.enabled || !cfg.outputId) return;
+    // Pin outputId as a string for the closure below — the property
+    // type is string | null but the truthy check above guarantees it
+    // here. Closures can't see the narrowing, so we capture explicitly.
+    const outputId: string = cfg.outputId;
 
-    const out = spec.resolveOutput(cfg.outputId);
+    const out = spec.resolveOutput(outputId);
     if (!out) return;
 
     const velByte = clamp(Math.round((event.velocity ?? 1) * cfg.velocityScale * 127), 1, 127);
     const status = 0x90 | (cfg.midiChannel & 0x0f);
     const onData = [status, cfg.note & 0x7f, velByte];
-    if (!safeSend(out, onData, cfg.outputId)) return;
-    spec.onSent?.({ outputId: cfg.outputId, data: onData });
+    if (!safeSend(out, onData, outputId)) return;
+    spec.onSent?.({ outputId, data: onData });
 
     const offData = [0x80 | (cfg.midiChannel & 0x0f), cfg.note & 0x7f, 0];
     const dur = Math.max(10, spec.getStepDurationMs());
     const timer = setTimeout(() => {
       pendingTimers.delete(timer);
-      const stillThere = spec.resolveOutput(cfg.outputId);
+      const stillThere = spec.resolveOutput(outputId);
       if (!stillThere) return;
-      if (!safeSend(stillThere, offData, cfg.outputId)) return;
-      spec.onSent?.({ outputId: cfg.outputId, data: offData });
+      if (!safeSend(stillThere, offData, outputId)) return;
+      spec.onSent?.({ outputId, data: offData });
     }, dur);
     pendingTimers.add(timer);
   };

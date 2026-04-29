@@ -44,6 +44,25 @@ export interface MidiAccessLike {
   outputs: { values(): IterableIterator<MidiOutputLike> };
 }
 
+/** A MIDI channel — 0..15 on the wire, 1..16 in user-facing UI.
+ *  clampMidiChannel coerces unbounded numbers (corrupt persisted
+ *  state, manual config edits) into the legal range so a stray 99
+ *  doesn't end up bit-shifted into a status byte that misroutes. */
+export type MidiChannel = number & { readonly __midiChannelBrand: unique symbol };
+export function clampMidiChannel(n: number): MidiChannel {
+  if (!Number.isFinite(n)) return 0 as MidiChannel;
+  return Math.max(0, Math.min(15, Math.round(n))) as MidiChannel;
+}
+
+/** A MIDI data byte — 0..127. clampMidiByte rejects garbage at the
+ *  boundary instead of relying on `& 0x7f` further down (which
+ *  silently wraps 128 → 0, 200 → 72, etc.). */
+export type MidiByte = number & { readonly __midiByteBrand: unique symbol };
+export function clampMidiByte(n: number): MidiByte {
+  if (!Number.isFinite(n)) return 0 as MidiByte;
+  return Math.max(0, Math.min(127, Math.round(n))) as MidiByte;
+}
+
 /** A single mapping entry. `match` describes which MIDI message
  *  triggers this rule; `to` is the address + event shape we emit
  *  on the bus. */

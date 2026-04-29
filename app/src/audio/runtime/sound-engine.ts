@@ -443,6 +443,25 @@ export class SoundEngine {
   getReverbFx(): ControllableModule | null { return this.reverbFx; }
   getDelayFx(): ControllableModule | null  { return this.delayFx; }
 
+  /** Consolidated mix-module accessor. Returns null until ensureCtx
+   *  has run; otherwise returns all four modules at once so callers
+   *  handle the not-ready case once instead of four times. The four
+   *  individual getters above remain for fine-grained access. */
+  getMixModules(): {
+    master: ControllableModule | null;
+    dry: ControllableModule | null;
+    reverb: ControllableModule | null;
+    delay: ControllableModule | null;
+  } | null {
+    if (!this.masterGainModule) return null;
+    return {
+      master: this.masterGainModule,
+      dry: this.dryModule,
+      reverb: this.reverbFx,
+      delay: this.delayFx,
+    };
+  }
+
   // ── Audible-state proxies (forward to sequencer) ───────────────
 
   audibleBar(): number { return this.sequencer?.audibleBar() ?? 0; }

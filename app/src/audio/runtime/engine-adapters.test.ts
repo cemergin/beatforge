@@ -84,6 +84,12 @@ function fakeEngine() {
     getDry: () => dryModule,
     getReverbFx: () => reverbFx,
     getDelayFx: () => delayFx,
+    getMixModules: () => ({
+      master: masterGainModule,
+      dry: dryModule,
+      reverb: reverbFx,
+      delay: delayFx,
+    }),
     applyChannelParams: calls.applyChannelParams,
     applyChannelColorFx: calls.applyChannelColorFx,
     applyChannelMachine: calls.applyChannelMachine,
@@ -134,12 +140,13 @@ describe('registerEngineMaster — direct module wiring', () => {
     expect(calls.delaySet).not.toHaveBeenCalled();
   });
 
-  it('skips registration when getMasterGain / getReverbFx / getDelayFx return null', () => {
+  it('skips registration when getMixModules returns null', () => {
     const engine = {
       getMasterGain: () => null,
       getDry: () => null,
       getReverbFx: () => null,
       getDelayFx: () => null,
+      getMixModules: () => null,
     } as unknown as SoundEngine;
     const router = makeRouter();
     const bus = makeEventBus();

@@ -63,7 +63,7 @@ export function Midi({ bridge, channels }: Props) {
   const {
     access, enable, enableError,
     inputs, outputs,
-    channelOuts, setChannelOuts,
+    channelOuts, updateChannelOut,
     inputMappings, setInputMappings,
     activeInputIds, setActiveInputIds,
     subscribeSent,
@@ -163,10 +163,6 @@ export function Midi({ bridge, channels }: Props) {
   const removeMapping = useCallback((idx: number) => {
     setInputMappings(inputMappings.filter((_, i) => i !== idx));
   }, [inputMappings, setInputMappings]);
-
-  const updateChannelOut = useCallback((idx: number, patch: Partial<ChannelOutConfig>) => {
-    setChannelOuts(channelOuts.map((c, i) => (i === idx ? { ...c, ...patch } : c)));
-  }, [channelOuts, setChannelOuts]);
 
   /** Fire one note-on / note-off pair to the row's configured output
    *  using the row's MIDI channel + note + velocityScale, so the user
@@ -536,7 +532,7 @@ interface ChannelOutRowProps {
 }
 
 function ChannelOutRow({ idx, label, cfg, outputs, onChange, onTest }: ChannelOutRowProps) {
-  const canTest = cfg.outputId !== '';
+  const canTest = cfg.outputId !== null;
   return (
     <div className="bf-midi-map-row">
       <span className="bf-midi-kind">ch{idx + 1}</span>
@@ -552,8 +548,8 @@ function ChannelOutRow({ idx, label, cfg, outputs, onChange, onTest }: ChannelOu
       <label className="bf-midi-field grow">
         out
         <select
-          value={cfg.outputId}
-          onChange={(e) => onChange({ outputId: e.target.value })}
+          value={cfg.outputId ?? ''}
+          onChange={(e) => onChange({ outputId: e.target.value === '' ? null : e.target.value })}
           className="bf-midi-input"
         >
           <option value="">— none —</option>

@@ -398,23 +398,37 @@ function ModeShell({
   // navigation (Library card, URL change, browser back) wants to load
   // a different pattern, prompt before discarding. Cancel reverts
   // patternId so the URL/state stays consistent.
+  //
+  // Re-entry guard: setPatternId(session.pattern.id) on Cancel re-fires
+  // this effect synchronously. Without the in-flight ref, double-clicks
+  // on Library cards while the confirm dialog is open compound state
+  // (multiple confirms stack, prior cancellations get clobbered).
+  const dirtyGuardInFlightRef = useRef(false);
+  const sessionPatternId = session.pattern.id;
+  const sessionDirty = session.dirty;
+  const sessionPatternName = session.pattern.name;
+  const sessionLoadPattern = session.loadPattern;
   useEffect(() => {
-    if (session.pattern.id === patternId) return;
+    if (dirtyGuardInFlightRef.current) return;
+    if (sessionPatternId === patternId) return;
     const p = patternById(patternId);
     if (!p) return;
-    if (session.dirty) {
-      const ok = window.confirm(
-        `You have unsaved changes to "${session.pattern.name}". Discard them and load ${p.name}?`,
-      );
-      if (!ok) {
-        // Revert the external patternId back to what's actually loaded
-        // so the URL + Library highlights line up with reality.
-        setPatternId(session.pattern.id);
-        return;
+    if (sessionDirty) {
+      dirtyGuardInFlightRef.current = true;
+      try {
+        const ok = window.confirm(
+          `You have unsaved changes to "${sessionPatternName}". Discard them and load ${p.name}?`,
+        );
+        if (!ok) {
+          setPatternId(sessionPatternId);
+          return;
+        }
+      } finally {
+        dirtyGuardInFlightRef.current = false;
       }
     }
-    session.loadPattern(p);
-  }, [patternId, session, setPatternId]);
+    sessionLoadPattern(p);
+  }, [patternId, sessionPatternId, sessionDirty, sessionPatternName, sessionLoadPattern, setPatternId]);
 
   // Modular control plane lives at the shell level so input-mapped
   // ParamEvents (from the secret MIDI tab) drive audio regardless of

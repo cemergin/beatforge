@@ -2,6 +2,16 @@
 // New kits (727/frameDrum/tabla/gamelan) ship as part of batch 1.
 
 export type VoiceId = 'KK' | 'SN' | 'HH' | 'OH' | 'CP';
+
+/** Step subdivision denominator. The valid set is fixed by the
+ *  schema invariant on every Pattern; out-of-set values are corrupt
+ *  data and should be rejected at the boundary, not laundered into
+ *  the literal union via a cast. */
+export type StepUnit = 2 | 4 | 8 | 16;
+const STEP_UNITS: readonly StepUnit[] = [2, 4, 8, 16] as const;
+export function parseStepUnit(n: number): StepUnit | null {
+  return (STEP_UNITS as readonly number[]).includes(n) ? (n as StepUnit) : null;
+}
 export type Velocity = 0 | 1 | 2;   // 0 = off, 1 = ghost, 2 = accent
 
 export type KitId =
@@ -85,7 +95,7 @@ export interface Pattern {
   timeSig: string;
   grouping: number[];
   steps: number;
-  stepUnit: 2 | 4 | 8 | 16;
+  stepUnit: StepUnit;
   poly?: boolean;
 
   // Tempo

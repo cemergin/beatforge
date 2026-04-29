@@ -5,6 +5,7 @@ import type { Genre, KitId, Pattern, RegionId } from '../../patterns/types';
 import { PATTERNS, patternById } from '../../patterns/seed';
 import { listUserPatterns } from '../../lib/db';
 import { getHighlights, getRecent, toggleHighlight } from '../../lib/storage';
+import { readUrlState } from '../../lib/urlState';
 import { Filters } from './Filters';
 import { applyFilters, DEFAULT_FILTERS, type FilterState } from './filterState';
 import { WorldMap } from './WorldMap';
@@ -47,13 +48,13 @@ function normalize(s: string): string {
   return s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 }
 
-/** Pull `?detail=<id>` straight off window.location. The parser in
- *  lib/urlState.ts canonically owns this, but Library needs the value
- *  on every render path (mount, popstate) so a tiny inline read
- *  beats threading state through App. */
+/** Pull `?detail=<id>` off window.location via the canonical parser
+ *  in lib/urlState.ts. Library needs this on every render path
+ *  (mount, popstate) since detailId is local Library state, not
+ *  threaded through App. */
 function readDetailParam(): string | null {
   if (typeof window === 'undefined') return null;
-  return new URLSearchParams(window.location.search).get('detail') || null;
+  return readUrlState(window.location.search, { seedExists: () => true }).detail;
 }
 
 export function Library({ engine, onLoadInPractice, onOpenInStudio }: Props) {

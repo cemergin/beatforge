@@ -97,7 +97,13 @@ export interface ClockSenderHandle {
 }
 
 /** Drive 24 PPQN clock to a Web MIDI output. The sender owns its own
- *  setInterval; the caller is responsible for start/stop and BPM. */
+ *  setInterval; the caller is responsible for start/stop and BPM.
+ *
+ *  Lifecycle: 'idle' → 'running' → ('idle' | 'disposed'). Once
+ *  'disposed' the handle is dead — start/stop/setBpm are no-ops, no
+ *  timer can be re-armed, no further bytes are sent. Without this
+ *  invariant a stray start() after dispose would re-arm a setInterval
+ *  on an output reference the caller has already released. */
 export function makeClockSender(
   output: MidiOutputLike,
   initialBpm: number,
@@ -105,7 +111,7 @@ export function makeClockSender(
 ): ClockSenderHandle {
   let bpm = Math.max(1, initialBpm);
   let timer: ReturnType<typeof setInterval> | null = null;
-  let running = false;
+  let state: 'idle' | 'running' | 'disposed' = 'idle';
 
   const tickIntervalMs = (): number => 60_000 / (bpm * 24);
 
@@ -129,7 +135,7 @@ export function makeClockSender(
   const sendTick = (): void => {
     if (!safeSend([CLOCK_TICK])) {
       // Output is dead — stop the interval so we don't spam errors
-      // 24 times a second. running stays true so a re-attached
+      // 24 times a second. State stays 'running' so a re-attached
       // device can resume via setBpm/start.
       stopInterval();
       return;
@@ -144,27 +150,31 @@ export function makeClockSender(
 
   return {
     start: () => {
+      if (state === 'disposed') return;
       if (safeSend([CLOCK_START])) onSent?.([CLOCK_START]);
-      running = true;
+      state = 'running';
       arm();
     },
     stop: () => {
+      if (state === 'disposed') return;
       stopInterval();
       if (safeSend([CLOCK_STOP])) onSent?.([CLOCK_STOP]);
-      running = false;
+      state = 'idle';
     },
     setBpm: (next) => {
+      if (state === 'disposed') return;
       bpm = Math.max(1, next);
-      if (running) arm();
+      if (state === 'running') arm();
     },
     dispose: () => {
+      if (state === 'disposed') return;
       stopInterval();
       // Tell the downstream rig to stop too. Without 0xFC the synth
       // / DAW thinks playback is still running and may keep its
       // arpeggiator / transport going after we've torn down. Send is
       // wrapped — output may already be closed, and that's fine.
-      if (running && safeSend([CLOCK_STOP])) onSent?.([CLOCK_STOP]);
-      running = false;
+      if (state === 'running' && safeSend([CLOCK_STOP])) onSent?.([CLOCK_STOP]);
+      state = 'disposed';
     },
   };
 }

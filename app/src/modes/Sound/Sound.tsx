@@ -5,7 +5,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { SoundEngine, type SoundSequence, type SoundStep } from '../../audio/runtime/sound-engine';
 import { useSession } from '../../modules/session';
-import { trackMeta, ALL_KITS, ALL_VOICES, type KitId } from '../../patterns/types';
+import { trackMeta, ALL_KITS, ALL_VOICES, parseStepUnit, type KitId, type StepUnit } from '../../patterns/types';
 import { buildKitMachine } from '../../audio/runtime/kit-presets';
 import { defaultChannelEffects } from '../../patterns/types-sound';
 import {
@@ -208,10 +208,12 @@ const MAX_CHANNELS = 5;
 // Local meter list — duplicated from modes/Studio/presets.ts so the
 // Sound page doesn't depend on Studio's module. Will consolidate into
 // patterns/meter-presets.ts when we unify the two pages.
+// MeterPreset's stepUnit reuses the Pattern's StepUnit type so the
+// parseStepUnit guard at the boundary is the single source of truth.
 interface MeterPreset {
   label: string;
   grouping: number[];
-  stepUnit: 2 | 4 | 8 | 16;
+  stepUnit: StepUnit;
 }
 const SOUND_METERS: MeterPreset[] = [
   { label: '4/4',  grouping: [4, 4, 4, 4],    stepUnit: 16 },
@@ -244,7 +246,10 @@ function resizeSequence(seq: SoundSequence, newSteps: number): SoundSequence {
 
 /** Translate session.pattern into the MeterPreset shape Sound's UI
  *  uses. Falls back to a synthesized preset when the pattern's
- *  grouping doesn't match any built-in. */
+ *  grouping doesn't match any built-in. parseStepUnit guards against
+ *  corrupt persisted data — anything outside {2,4,8,16} reverts to
+ *  16 (the most common default) rather than being laundered through
+ *  a cast. */
 function meterFromPattern(p: import('../../patterns/types').Pattern): MeterPreset {
   const match = SOUND_METERS.find(
     (m) => m.stepUnit === p.stepUnit && m.grouping.join(',') === p.grouping.join(','),
@@ -253,7 +258,7 @@ function meterFromPattern(p: import('../../patterns/types').Pattern): MeterPrese
   return {
     label: p.timeSig,
     grouping: p.grouping.slice(),
-    stepUnit: p.stepUnit as 2 | 4 | 8 | 16,
+    stepUnit: parseStepUnit(p.stepUnit) ?? 16,
   };
 }
 
@@ -1264,8 +1269,8 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
               <select
                 value={meter.stepUnit}
                 onChange={(e) => {
-                  const denom = parseInt(e.target.value, 10) as 2 | 4 | 8 | 16;
-                  if (denom !== 2 && denom !== 4 && denom !== 8 && denom !== 16) return;
+                  const denom = parseStepUnit(parseInt(e.target.value, 10));
+                  if (!denom) return;
                   const num = sumGroup(meter.grouping);
                   onMeterChange({ label: `${num}/${denom}`, grouping: meter.grouping, stepUnit: denom });
                 }}

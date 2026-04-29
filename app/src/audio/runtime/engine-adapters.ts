@@ -25,6 +25,7 @@
 
 import type { ControllableModule, ParamSpec } from '../../modules/audio-graph';
 import type { SoundEngine } from './sound-engine';
+import { channelAddress, channelSubAddress, masterAddress } from '../../modules/router/types';
 import type { ChannelEffects, ColorFx } from '../../patterns/types-sound';
 import type { MachineConfig } from '../machines/types';
 import { makeVoiceController } from '../machines/voice-controller';
@@ -53,14 +54,13 @@ export function registerEngineMaster(
   engine: SoundEngine,
 ): () => void {
   const offs: Array<() => void> = [];
-  const masterGain = engine.getMasterGain();
-  if (masterGain) offs.push(router.registerModule('master.gain', masterGain));
-  const dry = engine.getDry();
-  if (dry)        offs.push(router.registerModule('master.dry', dry));
-  const reverb = engine.getReverbFx();
-  if (reverb)     offs.push(router.registerModule('master.reverb', reverb));
-  const delay = engine.getDelayFx();
-  if (delay)      offs.push(router.registerModule('master.delay', delay));
+  const mix = engine.getMixModules();
+  if (mix) {
+    if (mix.master) offs.push(router.registerModule(masterAddress('gain'),   mix.master));
+    if (mix.dry)    offs.push(router.registerModule(masterAddress('dry'),    mix.dry));
+    if (mix.reverb) offs.push(router.registerModule(masterAddress('reverb'), mix.reverb));
+    if (mix.delay)  offs.push(router.registerModule(masterAddress('delay'),  mix.delay));
+  }
   return () => { for (const off of offs) off(); };
 }
 
@@ -213,8 +213,8 @@ export function registerEngineChannel(
   channelIdx: number,
   initial: { effects: ChannelEffects; machine: MachineConfig },
 ): () => void {
-  const offMix    = router.registerModule(`channel.${channelIdx}`,         engineChannelMixer(engine, channelIdx, initial.effects));
-  const offColor  = router.registerModule(`channel.${channelIdx}.color`,   engineChannelColor(engine, channelIdx, initial.effects.colorFx));
-  const offMach   = router.registerModule(`channel.${channelIdx}.machine`, engineChannelMachine(engine, channelIdx, initial.machine));
+  const offMix   = router.registerModule(channelAddress(channelIdx),                  engineChannelMixer(engine, channelIdx, initial.effects));
+  const offColor = router.registerModule(channelSubAddress(channelIdx, 'color'),      engineChannelColor(engine, channelIdx, initial.effects.colorFx));
+  const offMach  = router.registerModule(channelSubAddress(channelIdx, 'machine'),    engineChannelMachine(engine, channelIdx, initial.machine));
   return () => { offMach(); offColor(); offMix(); };
 }

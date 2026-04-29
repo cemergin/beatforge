@@ -44,7 +44,9 @@ export interface MidiBridge {
 
   /** Per-channel out routing (length matches engine channel count). */
   channelOuts: ChannelOutConfig[];
-  setChannelOuts: (next: ChannelOutConfig[]) => void;
+  /** Patch one row in place. Length-safe — callers can't accidentally
+   *  shorten the array or pass a wrong-shape replacement. */
+  updateChannelOut: (idx: number, patch: Partial<ChannelOutConfig>) => void;
 
   inputMappings: MidiInputMap[];
   setInputMappings: (next: MidiInputMap[]) => void;
@@ -91,6 +93,9 @@ export function useMidiBridge(engine: SoundEngine, channelCount: number): MidiBr
   const [channelOuts, setChannelOuts] = useState<ChannelOutConfig[]>(
     () => loadChannelOuts(channelCount),
   );
+  const updateChannelOut = useCallback((idx: number, patch: Partial<ChannelOutConfig>) => {
+    setChannelOuts((prev) => prev.map((row, i) => (i === idx ? { ...row, ...patch } : row)));
+  }, []);
   const [inputMappings, setInputMappings] = useState<MidiInputMap[]>(() => loadMidiMappings());
   const [activeInputIds, setActiveInputIds] = useState<Set<string>>(
     () => new Set(loadStringArray('bf_midi_active_inputs')),
@@ -126,7 +131,7 @@ export function useMidiBridge(engine: SoundEngine, channelCount: number): MidiBr
       if (prev.length === channelCount) return prev;
       const next = prev.slice(0, channelCount);
       while (next.length < channelCount) {
-        next.push({ enabled: false, outputId: '', midiChannel: 0, note: 36, velocityScale: 1 });
+        next.push({ enabled: false, outputId: null, midiChannel: 0, note: 36, velocityScale: 1 });
       }
       return next;
     });
@@ -312,7 +317,7 @@ export function useMidiBridge(engine: SoundEngine, channelCount: number): MidiBr
   return {
     midi, access, enable, enableError,
     inputs, outputs,
-    channelOuts, setChannelOuts,
+    channelOuts, updateChannelOut,
     inputMappings, setInputMappings,
     activeInputIds, setActiveInputIds,
     subscribeSent,
