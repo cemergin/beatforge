@@ -5,6 +5,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { SoundEngine, type SoundSequence, type SoundStep } from '../../audio/runtime/sound-engine';
 import { useSession } from '../../modules/session';
+import { findGrouping } from './grouping';
 import { trackMeta, ALL_KITS, ALL_VOICES, parseStepUnit, type KitId, type StepUnit } from '../../patterns/types';
 import { buildKitMachine } from '../../audio/runtime/kit-presets';
 import { defaultChannelEffects } from '../../patterns/types-sound';
@@ -1256,10 +1257,18 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
               </select>
               <NumberInput
                 min={1}
-                max={64}
+                max={32}
                 value={sumGroup(meter.grouping)}
                 onChange={(n) => {
-                  onMeterChange({ label: `${n}/${meter.stepUnit}`, grouping: [n], stepUnit: meter.stepUnit });
+                  // Preserve the existing additive grouping when it
+                  // still sums to the new numerator; extend or trim
+                  // from the end when the user is growing/shrinking
+                  // the meter; pick a playful 2/3/4 grouping when
+                  // nothing useful carries over (e.g. brand-new 9
+                  // gets one of [2,2,2,3], [3,3,3], [2,3,2,2], …
+                  // each of which is a real world-rhythm cycle).
+                  const grouping = findGrouping(n, meter.grouping);
+                  onMeterChange({ label: `${n}/${meter.stepUnit}`, grouping, stepUnit: meter.stepUnit });
                 }}
                 className="bf-sound-meter-num"
                 ariaLabel="Time signature numerator"
