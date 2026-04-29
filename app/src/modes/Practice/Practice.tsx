@@ -28,6 +28,7 @@ import { AccentsPanel } from '../../components/metronome/AccentsPanel';
 import { SwingPanel } from '../../components/metronome/SwingPanel';
 import { KitPanel } from '../../components/metronome/KitPanel';
 import { Trainer } from './Trainer';
+import { useT } from '../../i18n';
 import { listSoundPatterns, listSoundKits } from '../../lib/db';
 import { loadStudioPattern, buildUserPatternView } from '../../modules/pattern-store';
 import type { SoundPattern, SoundKit } from '../../patterns/types-sound';
@@ -74,6 +75,7 @@ interface Props {
 }
 
 export function Practice({ engine, patternId, onPatternChange }: Props) {
+  const t = useT();
   const setPatternId = onPatternChange;
   const session = useSession();
   // The seed pattern (read-only; Library + Practice's reset path).
@@ -448,12 +450,12 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
         (id) => untouched && id === seedMatch!.id,
       );
       await navigator.clipboard.writeText(url);
-      setShareToast('Share link copied');
+      setShareToast(t('practice.share_copied'));
     } catch {
-      setShareToast('Copy failed');
+      setShareToast(t('practice.share_failed'));
     }
     window.setTimeout(() => setShareToast(null), 1800);
-  }, [pattern, grouping, hasEdits]);
+  }, [pattern, grouping, hasEdits, t]);
 
   return (
     <main className="bf-main">
@@ -509,8 +511,8 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
               {session.dirty && (
                 <span
                   className="bf-pattern-dirty"
-                  title="You've tweaked this pattern from the original"
-                  aria-label="Pattern has unsaved edits"
+                  title={t('practice.pattern_dirty_title')}
+                  aria-label={t('practice.pattern_dirty')}
                 >*</span>
               )}
             </div>
@@ -518,8 +520,8 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
               <button
                 className="bf-share-btn"
                 onClick={shareCurrent}
-                title="Copy a share link for this exact pattern (including your edits)"
-                aria-label="Share pattern"
+                title={t('practice.share_title')}
+                aria-label={t('practice.share_pattern')}
                 type="button"
               >
                 ↗
@@ -527,8 +529,8 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
               <button
                 className={`bf-star ${starred ? 'on' : ''}`}
                 onClick={starToggle}
-                title={starred ? 'Unstar' : 'Star'}
-                aria-label={starred ? 'Unstar pattern' : 'Star pattern'}
+                title={starred ? t('practice.unstar_title') : t('practice.star_title')}
+                aria-label={starred ? t('practice.unstar_label') : t('practice.star_label')}
               >
                 {starred ? '★' : '☆'}
               </button>
@@ -564,7 +566,7 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
         <div
           className="bf-focus-toggle"
           role="radiogroup"
-          aria-label="Practice focus"
+          aria-label={t('practice.focus_label')}
         >
           <button
             type="button"
@@ -572,9 +574,9 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
             aria-checked={focus === 'groove'}
             className={`bf-focus-pill ${focus === 'groove' ? 'on' : ''}`}
             onClick={() => setFocus('groove')}
-            title="Play the full pattern voices"
+            title={t('practice.groove_title')}
           >
-            groove
+            {t('practice.groove_button')}
           </button>
           <button
             type="button"
@@ -582,14 +584,14 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
             aria-checked={focus === 'click'}
             className={`bf-focus-pill ${focus === 'click' ? 'on' : ''}`}
             onClick={() => setFocus('click')}
-            title="Bare meter — kick on group downbeats"
+            title={t('practice.click_title')}
           >
-            click only
+            {t('practice.click_button')}
           </button>
         </div>
 
         {pattern.story && (
-          <Disclosure className="bf-story" summary="about this rhythm">
+          <Disclosure className="bf-story" summary={t('practice.story_disclosure')}>
             <p>{pattern.story}</p>
           </Disclosure>
         )}
@@ -600,7 +602,7 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
             summaryClassName="bf-panel-head"
             summary={
               <>
-                <span>local patterns</span>
+                <span>{t('practice.local_patterns')}</span>
                 <span className="bf-pattern-list-count">{savedSoundPatterns.length}</span>
               </>
             }
@@ -647,7 +649,7 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
           summaryClassName="bf-panel-head"
           summary={
             <>
-              <span>patterns</span>
+              <span>{t('practice.patterns_title')}</span>
               <span className="bf-pattern-list-count">
                 {patternQuery ? `${filteredPatterns.length}/${PATTERNS.length}` : PATTERNS.length}
               </span>
@@ -659,12 +661,12 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
             type="search"
             value={patternQuery}
             onChange={(e) => setPatternQuery(e.target.value)}
-            placeholder="search by name, tradition, region…"
-            aria-label="Search patterns"
+            placeholder={t('practice.pattern_search')}
+            aria-label={t('practice.search_label')}
           />
           <div className="bf-pattern-list">
             {filteredPatterns.length === 0 && (
-              <div className="bf-pattern-empty">no matches — try a region or tradition</div>
+              <div className="bf-pattern-empty">{t('practice.no_matches')}</div>
             )}
             {filteredPatterns.map((p) => (
               <button
@@ -717,9 +719,9 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
               type="button"
               className="bf-reset-edits"
               onClick={() => session.loadPattern(seedPattern)}
-              title="Revert your tweaks and restore the original rhythm"
+              title={t('practice.reset_title')}
             >
-              ↺ reset to original
+              {t('practice.reset_button')}
             </button>
           )}
         </div>

@@ -5,6 +5,7 @@ import type { Genre, KitId, Pattern, RegionId } from '../../patterns/types';
 import { PATTERNS, patternById } from '../../patterns/seed';
 import { listUserPatterns } from '../../lib/db';
 import { getHighlights, getRecent, toggleHighlight } from '../../lib/storage';
+import { useT } from '../../i18n';
 import { readUrlState } from '../../lib/urlState';
 import { Filters } from './Filters';
 import { applyFilters, DEFAULT_FILTERS, type FilterState } from './filterState';
@@ -58,6 +59,7 @@ function readDetailParam(): string | null {
 }
 
 export function Library({ engine, onLoadInPractice, onOpenInStudio }: Props) {
+  const t = useT();
   const [query, setQuery] = useState('');
   const [filters, setFilters] = useState<FilterState>(DEFAULT_FILTERS);
   const [detailId, setDetailId] = useState<string | null>(() => readDetailParam());
@@ -271,14 +273,15 @@ export function Library({ engine, onLoadInPractice, onOpenInStudio }: Props) {
     <main className="bf-lib-page">
       <header className="bf-lib-hero">
         <div>
-          <h1 className="bf-lib-title">Library</h1>
+          <h1 className="bf-lib-title">{t('library.title')}</h1>
           <p className="bf-lib-sub">
-            {PATTERNS.length} world rhythms{userPatterns.length > 0 && <> + {userPatterns.length} of yours</>}. Search,
-            browse the map, or follow a starter path.
+            {t('library.subtitle_base', { count: PATTERNS.length })}
+            {userPatterns.length > 0 && t('library.subtitle_with_user', { n: userPatterns.length })}
+            {t('library.subtitle_tail')}
           </p>
           <div className="bf-lib-hero-actions">
             <button className="bf-chip on" onClick={surprise} type="button">
-              🎲 Surprise me
+              {t('library.surprise')}
             </button>
           </div>
         </div>
@@ -288,7 +291,7 @@ export function Library({ engine, onLoadInPractice, onOpenInStudio }: Props) {
       {highlights.length > 0 && (
         <section className="bf-lib-zone">
           <div className="bf-strip">
-            <div className="bf-strip-label">⭐ highlights</div>
+            <div className="bf-strip-label">{t('library.highlights')}</div>
             <div className="bf-strip-chips">
               {highlights.map((id) => {
                 const p = patternById(id);
@@ -313,7 +316,7 @@ export function Library({ engine, onLoadInPractice, onOpenInStudio }: Props) {
       {recent.length >= 2 && (
         <section className="bf-lib-zone">
           <div className="bf-strip">
-            <div className="bf-strip-label">recent</div>
+            <div className="bf-strip-label">{t('library.recent')}</div>
             <div className="bf-strip-chips">
               {recent.slice(0, 10).map((id) => {
                 const p = patternById(id);
@@ -338,8 +341,8 @@ export function Library({ engine, onLoadInPractice, onOpenInStudio }: Props) {
           the grid without scrolling past discovery widgets. */}
       <section className="bf-lib-zone">
         <div className="bf-zone-head">
-          <h2 className="bf-zone-title">Filter</h2>
-          <span className="bf-zone-sub">Multi-select inside a row (OR); across rows (AND).</span>
+          <h2 className="bf-zone-title">{t('library.filter_title')}</h2>
+          <span className="bf-zone-sub">{t('library.filter_mode')}</span>
         </div>
         <Filters
           filters={filters}
@@ -355,7 +358,7 @@ export function Library({ engine, onLoadInPractice, onOpenInStudio }: Props) {
         <input
           ref={searchRef}
           className="bf-search-input"
-          placeholder="Search rhythms, origins, tags…  ( / )"
+          placeholder={t('library.search_placeholder')}
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           type="search"
@@ -370,8 +373,8 @@ export function Library({ engine, onLoadInPractice, onOpenInStudio }: Props) {
             <button
               className="bf-path-close"
               onClick={clearActivePath}
-              aria-label="Close starter path"
-              title="Close starter path"
+              aria-label={t('library.path_close')}
+              title={t('library.path_close')}
               type="button"
             >
               ×
@@ -379,7 +382,7 @@ export function Library({ engine, onLoadInPractice, onOpenInStudio }: Props) {
             <div className="bf-path-head">
               <div>
                 <div className="bf-path-kicker">
-                  <span className="bf-mini-label">Starter path</span>
+                  <span className="bf-mini-label">{t('library.path_starter')}</span>
                 </div>
                 <h2 className="bf-path-title">{activePath.title}</h2>
                 <p className="bf-path-subtitle">{activePath.subtitle}</p>
@@ -390,18 +393,18 @@ export function Library({ engine, onLoadInPractice, onOpenInStudio }: Props) {
                 type="button"
                 disabled={filtered.length === 0}
               >
-                ▶ start from first
+                {t('library.path_start')}
               </button>
             </div>
             <p className="bf-path-context">{activePath.context}</p>
             <div className="bf-zone-head">
               <h3 className="bf-zone-subtitle">
-                {filtered.length} pattern{filtered.length === 1 ? '' : 's'} in this path
+                {t(filtered.length === 1 ? 'library.path_count_one' : 'library.path_count_many', { n: filtered.length })}
               </h3>
             </div>
             {filtered.length === 0 ? (
               <div className="bf-lib-empty">
-                None of this path's patterns are in the library yet.
+                {t('library.path_empty')}
               </div>
             ) : (
               <div className="bf-lib-full-grid">
@@ -457,7 +460,7 @@ export function Library({ engine, onLoadInPractice, onOpenInStudio }: Props) {
                             setRegionPreview(null);
                             setFilters((prev) => ({ ...prev, regions: [] }));
                           }}
-                          aria-label="Dismiss region intro and clear region filter"
+                          aria-label={t('library.region_dismiss')}
                           type="button"
                         >
                           ×
@@ -483,16 +486,16 @@ export function Library({ engine, onLoadInPractice, onOpenInStudio }: Props) {
                     </aside>
                   )}
                   <div className="bf-zone-head">
-                    <h2 className="bf-zone-title">Results</h2>
+                    <h2 className="bf-zone-title">{t('library.results_title')}</h2>
                     <span className="bf-zone-sub">
                       {filtered.length === 0
-                        ? `0 of ${allPatterns.length}`
-                        : `${start + 1}–${end} of ${filtered.length}`}
+                        ? t('library.results_count_zero', { total: allPatterns.length })
+                        : t('library.results_count_some', { start: start + 1, end, total: filtered.length })}
                     </span>
                   </div>
                   {filtered.length === 0 ? (
                     <div className="bf-lib-empty">
-                      Nothing matches these filters. <button className="bf-linkbtn" onClick={() => { setFilters(DEFAULT_FILTERS); setQuery(''); setRegionPreview(null); }} type="button">reset</button>
+                      {t('library.no_results')} <button className="bf-linkbtn" onClick={() => { setFilters(DEFAULT_FILTERS); setQuery(''); setRegionPreview(null); }} type="button">{t('library.reset')}</button>
                     </div>
                   ) : (
                     <>
@@ -514,21 +517,21 @@ export function Library({ engine, onLoadInPractice, onOpenInStudio }: Props) {
                             onClick={() => goPage(safePage - 1)}
                             disabled={safePage === 1}
                             type="button"
-                            aria-label="Previous page"
+                            aria-label={t('library.page_prev')}
                           >
-                            ‹ prev
+                            {t('library.pagination_prev')}
                           </button>
                           <span className="bf-page-info">
-                            page {safePage} / {totalPages}
+                            {t('library.pagination_info', { page: safePage, total: totalPages })}
                           </span>
                           <button
                             className="bf-page-btn"
                             onClick={() => goPage(safePage + 1)}
                             disabled={safePage === totalPages}
                             type="button"
-                            aria-label="Next page"
+                            aria-label={t('library.page_next')}
                           >
-                            next ›
+                            {t('library.pagination_next')}
                           </button>
                         </nav>
                       )}
@@ -545,8 +548,8 @@ export function Library({ engine, onLoadInPractice, onOpenInStudio }: Props) {
           but don't gate the patterns on landing. */}
       <section className="bf-lib-zone">
         <div className="bf-zone-head">
-          <h2 className="bf-zone-title">World Map</h2>
-          <span className="bf-zone-sub">Tap a region to filter the results.</span>
+          <h2 className="bf-zone-title">{t('library.world_map_title')}</h2>
+          <span className="bf-zone-sub">{t('library.world_map_sub')}</span>
         </div>
         <WorldMap
           patterns={PATTERNS}
@@ -559,8 +562,8 @@ export function Library({ engine, onLoadInPractice, onOpenInStudio }: Props) {
 
       <section className="bf-lib-zone">
         <div className="bf-zone-head">
-          <h2 className="bf-zone-title">Starter Paths</h2>
-          <span className="bf-zone-sub">Curated sequences — click to load the first pattern.</span>
+          <h2 className="bf-zone-title">{t('library.starter_paths_title')}</h2>
+          <span className="bf-zone-sub">{t('library.starter_paths_sub')}</span>
         </div>
         <StarterPaths
           patterns={PATTERNS}

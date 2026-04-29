@@ -137,6 +137,7 @@ export default function App() {
       // propagates — we don't rewrite the URL here to avoid a flicker.
     })();
     return () => { cancelled = true; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- one-shot ?p= decode at mount; t reference is intentionally captured once.
   }, []);
 
   useEffect(() => {

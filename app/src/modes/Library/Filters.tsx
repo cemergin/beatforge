@@ -1,4 +1,5 @@
 import type { Genre, KitId, RegionId } from '../../patterns/types';
+import { useT } from '../../i18n';
 import { REGIONS } from './regions';
 import type { FilterState } from './filterState';
 
@@ -21,45 +22,46 @@ function toggle<T>(arr: T[], v: T): T[] {
 export function Filters({
   filters, setFilters, allMeters, allGenres, allKits, localCount = 0,
 }: Props) {
+  const t = useT();
   return (
     <div className="bf-lib-filters-block">
       {localCount > 0 && (
         <div className="bf-filter-row-wrap">
-          <span className="bf-filter-label">source</span>
+          <span className="bf-filter-label">{t('library.source_filter')}</span>
           <div className="bf-chip-row">
             <button
               className={`bf-chip sm ${filters.source === 'all' ? 'on' : 'ghost'}`}
               onClick={() => setFilters({ ...filters, source: 'all' })}
               type="button"
             >
-              all
+              {t('library.source_all')}
             </button>
             <button
               className={`bf-chip sm ${filters.source === 'seed' ? 'on' : 'ghost'}`}
               onClick={() => setFilters({ ...filters, source: 'seed' })}
               type="button"
             >
-              seed
+              {t('library.source_seed')}
             </button>
             <button
               className={`bf-chip sm ${filters.source === 'local' ? 'on' : 'ghost'}`}
               onClick={() => setFilters({ ...filters, source: 'local' })}
               type="button"
             >
-              local ({localCount})
+              {t('library.source_local', { n: localCount })}
             </button>
           </div>
         </div>
       )}
       <FilterRow
-        label="meter"
+        label={t('library.meter_filter')}
         values={allMeters}
         selected={filters.meters}
         onToggle={(v) => setFilters({ ...filters, meters: toggle(filters.meters, v) })}
         onClear={() => setFilters({ ...filters, meters: [] })}
       />
       <FilterRow
-        label="region"
+        label={t('library.region_filter')}
         values={REGIONS.map((r) => r.id)}
         selected={filters.regions}
         renderLabel={(v) => REGIONS.find((r) => r.id === v)?.short ?? v}
@@ -67,14 +69,14 @@ export function Filters({
         onClear={() => setFilters({ ...filters, regions: [] })}
       />
       <FilterRow
-        label="genre"
+        label={t('library.genre_filter')}
         values={allGenres}
         selected={filters.genres}
         onToggle={(v) => setFilters({ ...filters, genres: toggle(filters.genres, v as Genre) })}
         onClear={() => setFilters({ ...filters, genres: [] })}
       />
       <FilterRow
-        label="ensemble"
+        label={t('library.ensemble_filter')}
         values={allKits}
         selected={filters.kits}
         renderLabel={(v) => (v === 'frameDrum' ? 'frame' : v)}
@@ -97,6 +99,7 @@ interface RowProps<T extends string> {
 function FilterRow<T extends string>({
   label, values, selected, onToggle, onClear, renderLabel,
 }: RowProps<T>) {
+  const t = useT();
   return (
     <div className="bf-filter-row-wrap">
       <span className="bf-filter-label">{label}</span>
@@ -106,7 +109,7 @@ function FilterRow<T extends string>({
           onClick={onClear}
           type="button"
         >
-          all
+          {t('library.filter_all')}
         </button>
         {values.map((v) => (
           <button

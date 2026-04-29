@@ -4,6 +4,7 @@ import type { Pattern } from '../../patterns/types';
 import { naturalTempo } from '../../audio/tempo';
 import { PATTERNS, patternById } from '../../patterns/seed';
 import { BeatDots } from '../../components/BeatDots';
+import { useT } from '../../i18n';
 import { isHighlighted, toggleHighlight } from '../../lib/storage';
 import { REGION_BY_ID } from './regions';
 import { sameGrouping, sameRegion, similarGroove } from './relatedRhythms';
@@ -20,6 +21,7 @@ interface Props {
 export function PatternDetail({
   pattern, engine, onClose, onOpenPattern, onLoadInPractice, onOpenInStudio,
 }: Props) {
+  const t = useT();
   const [starred, setStarred] = useState<boolean>(() => isHighlighted(pattern.id));
   const [previewing, setPreviewing] = useState(false);
   const [shareToast, setShareToast] = useState<string | null>(null);
@@ -32,12 +34,12 @@ export function PatternDetail({
       const seedIds = new Set(PATTERNS.map((p) => p.id));
       const url = await buildSmartShareUrl(pattern, (id) => seedIds.has(id));
       await navigator.clipboard.writeText(url);
-      setShareToast('Link copied');
+      setShareToast(t('detail.link_copied'));
     } catch {
-      setShareToast('Copy failed');
+      setShareToast(t('detail.copy_failed'));
     }
     window.setTimeout(() => setShareToast(null), 1500);
-  }, [pattern]);
+  }, [pattern, t]);
 
   const related = useMemo(() => ({
     grouping: sameGrouping(pattern, PATTERNS).slice(0, 6),
@@ -108,8 +110,8 @@ export function PatternDetail({
                 className={`bf-star ${starred ? 'on' : ''}`}
                 onClick={toggleStar}
                 type="button"
-                title={starred ? 'Unstar' : 'Star'}
-                aria-label={starred ? 'Unstar pattern' : 'Star pattern'}
+                title={starred ? t('practice.unstar_title') : t('practice.star_title')}
+                aria-label={starred ? t('practice.unstar_label') : t('practice.star_label')}
               >
                 {starred ? '★' : '☆'}
               </button>
@@ -122,7 +124,7 @@ export function PatternDetail({
             className="bf-modal-x"
             onClick={onClose}
             type="button"
-            aria-label="Close"
+            aria-label={t('common.close')}
           >
             ×
           </button>
@@ -136,9 +138,9 @@ export function PatternDetail({
               type="button"
             >
               {previewing ? (
-                <span><span className="bf-stop-ico" /> stop preview</span>
+                <span><span className="bf-stop-ico" /> {t('detail.stop_preview')}</span>
               ) : (
-                <span><span className="bf-play-ico" /> preview</span>
+                <span><span className="bf-play-ico" /> {t('detail.play_preview')}</span>
               )}
             </button>
             <BeatDots grouping={pattern.grouping} currentStep={-1} size={14} />
@@ -148,8 +150,8 @@ export function PatternDetail({
             <span className="bf-meta-badge">{pattern.timeSig}</span>
             <span className="bf-meta-badge alt">{pattern.grouping.join('+')}</span>
             {(() => {
-              const t = naturalTempo(pattern.bpm.default, pattern.stepUnit, pattern.timeSig);
-              return <span className="bf-meta-badge alt">{t.glyph}={t.value}</span>;
+              const tempo = naturalTempo(pattern.bpm.default, pattern.stepUnit, pattern.timeSig);
+              return <span className="bf-meta-badge alt">{tempo.glyph}={tempo.value}</span>;
             })()}
             <span className="bf-meta-badge alt">{pattern.defaultKit}</span>
             {region && (
@@ -162,22 +164,22 @@ export function PatternDetail({
 
           {pattern.tags.length > 0 && (
             <div className="bf-detail-tags">
-              {pattern.tags.map((t) => (
-                <span key={t} className="bf-tag-chip">#{t}</span>
+              {pattern.tags.map((tag) => (
+                <span key={tag} className="bf-tag-chip">#{tag}</span>
               ))}
             </div>
           )}
 
           {pattern.story && (
             <section className="bf-detail-section">
-              <h3 className="bf-detail-h">Story</h3>
+              <h3 className="bf-detail-h">{t('practice.story_heading')}</h3>
               <p className="bf-detail-story">{pattern.story}</p>
             </section>
           )}
 
           {pattern.instruments && pattern.instruments.length > 0 && (
             <section className="bf-detail-section">
-              <h3 className="bf-detail-h">Instruments</h3>
+              <h3 className="bf-detail-h">{t('detail.instruments_title')}</h3>
               <div className="bf-detail-tags">
                 {pattern.instruments.map((ins) => (
                   <span key={ins} className="bf-tag-chip">{ins}</span>
@@ -188,7 +190,7 @@ export function PatternDetail({
 
           {pattern.sources && pattern.sources.length > 0 && (
             <section className="bf-detail-section">
-              <h3 className="bf-detail-h">Sources</h3>
+              <h3 className="bf-detail-h">{t('detail.sources_title')}</h3>
               <ul className="bf-detail-sources">
                 {pattern.sources.map((src) => (
                   <li key={src}>{src}</li>
@@ -198,25 +200,25 @@ export function PatternDetail({
           )}
 
           <section className="bf-detail-section">
-            <h3 className="bf-detail-h">Related</h3>
+            <h3 className="bf-detail-h">{t('detail.related_title')}</h3>
             <RelatedRow
-              label={`Same grouping (${pattern.grouping.join('+')})`}
+              label={t('detail.same_grouping', { grouping: pattern.grouping.join('+') })}
               items={related.grouping}
               onPick={onOpenPattern}
             />
             <RelatedRow
-              label={`Same region (${region?.short ?? pattern.region})`}
+              label={t('detail.same_region', { region: region?.short ?? pattern.region })}
               items={related.region}
               onPick={onOpenPattern}
             />
             <RelatedRow
-              label="Similar groove"
+              label={t('detail.similar_groove')}
               items={related.groove}
               onPick={onOpenPattern}
             />
             {pattern.relatedIds && pattern.relatedIds.length > 0 && (
               <RelatedRow
-                label="Hand-curated"
+                label={t('detail.hand_curated')}
                 items={pattern.relatedIds.map(patternById).filter((p): p is Pattern => !!p)}
                 onPick={onOpenPattern}
               />
@@ -230,24 +232,24 @@ export function PatternDetail({
             onClick={() => loadHere(pattern.id)}
             type="button"
           >
-            Load in Practice
+            {t('detail.load_practice')}
           </button>
           <button
             className="bf-chip ghost"
             onClick={copyShareLink}
             type="button"
-            title="Copy shareable link — works anywhere"
+            title={t('detail.share_title')}
           >
-            Share link
+            {t('detail.share_link')}
           </button>
           <button
             className="bf-chip ghost"
             onClick={onOpenInStudio ? () => onOpenInStudio(pattern) : undefined}
             disabled={!onOpenInStudio}
-            title={onOpenInStudio ? 'Open a remix in Studio' : 'Studio unavailable'}
+            title={onOpenInStudio ? t('detail.studio_hint') : t('detail.studio_disabled')}
             type="button"
           >
-            Open in Studio
+            {t('detail.open_studio')}
           </button>
         </div>
       </div>
