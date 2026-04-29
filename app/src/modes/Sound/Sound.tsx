@@ -950,7 +950,9 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
       setIsPlaying(false);
       setCurrentStep(-1);
     }
-    setName(nextPatternName(savedList.map((p) => p.name)));
+    const freshName = nextPatternName(savedList.map((p) => p.name));
+    const freshId = kebabId(freshName);
+    setName(freshName);
     setSavedId(null);
     setSequence(emptySequence(stepsPerBar));
     // Reset metadata via the shared default — each fresh pattern starts
@@ -962,7 +964,28 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
     setPatternTags([...md.tags]);
     setPatternStory(md.story);
     setSwingable(md.swingable);
-  }, [engine, isPlaying, stepsPerBar, savedList]);
+    // Mirror the fresh identity into session.pattern so Practice +
+    // Library + the Library 'local' filter see "this is a new pattern,
+    // nothing to play yet" instead of the previous pattern's name +
+    // hits. setPattern (not loadPattern) preserves the user's
+    // current channels/bpm/swing — the sequence-outbound effect will
+    // immediately push the empty tracks once the local sequence state
+    // commits on the next render.
+    session.setPattern((prev) => ({
+      ...prev,
+      id: freshId,
+      name: freshName,
+      origin: 'You',
+      tradition: 'user',
+      genre: md.genre,
+      region: md.region,
+      tags: [...md.tags],
+      story: undefined,
+      defaultKit: md.defaultKit,
+      swingable: md.swingable,
+      tracks: {},
+    }));
+  }, [engine, isPlaying, stepsPerBar, savedList, session]);
 
   // ASDFG → channels 1-5 at amp 1.0; QWERT → same channels at amp 2.0
   // (accent). Numeric 1-5 also accepted.
