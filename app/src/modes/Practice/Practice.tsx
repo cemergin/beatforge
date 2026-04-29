@@ -282,14 +282,21 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
   // EXPLICIT kit changes (user picked a different kit). Routing through
   // session.setKit instead of engine.setKit keeps session.channels +
   // engine in lockstep so a Practice→Studio handoff sees the same state.
+  //
+  // session is read through a ref so this effect only depends on
+  // activeKit — adding session to deps would loop because session.setKit
+  // changes the session reference, which would re-fire the effect, which
+  // would call setKit again, etc.
+  const sessionRef = useRef(session);
+  useEffect(() => { sessionRef.current = session; }, [session]);
   const kitMountedRef = useRef(false);
   useEffect(() => {
     if (!kitMountedRef.current) {
       kitMountedRef.current = true;
       return;
     }
-    session.setKit(activeKit);
-  }, [session, activeKit]);
+    sessionRef.current.setKit(activeKit);
+  }, [activeKit]);
   useEffect(() => { localStorage.setItem('bf_view', view); }, [view]);
 
   const toggle = useCallback(async () => {

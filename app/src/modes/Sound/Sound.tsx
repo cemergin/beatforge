@@ -27,6 +27,7 @@ import {
   listSoundKits,
   deleteSoundKit,
   saveUserPattern,
+  getUserPattern,
   type UserPattern,
 } from '../../lib/db';
 import type { Genre, RegionId } from '../../patterns/types';
@@ -345,6 +346,20 @@ function shortFor(label: string): string {
   return label.trim().slice(0, 3) || '·';
 }
 
+/** Next default name for a fresh pattern. Returns "Pattern #N" where N
+ *  is one past the highest existing 'Pattern #X' ordinal in the saved
+ *  list (or list.length+1 when no ordinals are present). Avoids
+ *  "Untitled" collisions and gives each save a distinct, sortable name
+ *  without typing. */
+function nextPatternName(savedList: { name: string }[]): string {
+  let maxOrdinal = 0;
+  for (const p of savedList) {
+    const m = /^Pattern #(\d+)$/.exec(p.name);
+    if (m) maxOrdinal = Math.max(maxOrdinal, parseInt(m[1], 10));
+  }
+  return `Pattern #${Math.max(maxOrdinal + 1, savedList.length + 1)}`;
+}
+
 interface SoundProps {
   /** Shared engine from App.tsx — must be the same instance every
    *  other mode uses so cross-tab session state stays consistent. */
@@ -485,8 +500,10 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
 
   // Pattern persistence — name + last-saved id (`null` until first save).
   // savedId is preserved across edits so a re-Save updates in place
-  // rather than creating a duplicate.
-  const [name, setName] = useState('Untitled');
+  // rather than creating a duplicate. Default name is "Pattern #N"
+  // where N is the next-available ordinal across savedList — gets
+  // re-derived after savedList loads + on every onNewBlank.
+  const [name, setName] = useState('Pattern #1');
   const [savedId, setSavedId] = useState<string | null>(null);
   const [savedList, setSavedList] = useState<SoundPattern[]>([]);
   const [toast, setToast] = useState<string | null>(null);
@@ -568,12 +585,26 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
   useEffect(() => {
     let active = true;
     listSoundPatterns()
-      .then((list) => { if (active) setSavedList(list); })
+      .then((list) => {
+        if (!active) return;
+        setSavedList(list);
+        // Bump the default name AFTER savedList loads so a fresh editor
+        // starts at Pattern #N+1 instead of #1 when the user already
+        // has saves. Only nudge if the user hasn't typed yet (still
+        // showing a stock 'Pattern #N' default + no savedId).
+        setName((prev) => {
+          if (savedId) return prev;
+          if (!/^Pattern #\d+$/.test(prev)) return prev;
+          return nextPatternName(list);
+        });
+      })
       .catch(() => { /* IDB unavailable */ });
     listSoundKits()
       .then((list) => { if (active) setSavedKitList(list); })
       .catch(() => { /* IDB unavailable */ });
     return () => { active = false; };
+    // savedId / setName intentionally omitted — this effect runs once.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Auto-clear toasts after 1.8s. The toast value drives the effect so
@@ -903,6 +934,21 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
     setDelayWet(p.delayWet ?? 0.15);
     setDelayTime(p.delayTime ?? 0.25);
     setDelayFeedback(p.delayFeedback ?? 0.35);
+    // Restore metadata too — the bundled save writes both a SoundPattern
+    // (sound design) and a UserPattern (Library record with metadata).
+    // We've loaded the sound design above; fetch the matching UserPattern
+    // by id to repopulate the metadata fields. Best-effort; if the
+    // UserPattern is missing (e.g. created pre-bundling), leave the
+    // current metadata in place rather than wiping to defaults.
+    void getUserPattern(p.id).then((u) => {
+      if (!u) return;
+      setDefaultKitState(u.defaultKit);
+      setPatternRegion(u.region);
+      setPatternGenre(u.genre);
+      setPatternTags(u.tags);
+      setPatternStory(u.story ?? '');
+      setSwingable(u.swingable ?? false);
+    }).catch(() => { /* IDB unavailable */ });
     setToast(`Loaded ${p.name}`);
     // setBpm + many setters close over engine/session; safe to omit.
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -996,10 +1042,18 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
       setIsPlaying(false);
       setCurrentStep(-1);
     }
-    setName('Untitled');
+    setName(nextPatternName(savedList));
     setSavedId(null);
     setSequence(emptySequence(stepsPerBar));
-  }, [engine, isPlaying, stepsPerBar]);
+    // Reset metadata to sample defaults so each fresh pattern starts
+    // with a Library-ready record. User can still customize before save.
+    setDefaultKitState('808');
+    setPatternRegion('electronic-western');
+    setPatternGenre('popular');
+    setPatternTags(['user-saved']);
+    setPatternStory('');
+    setSwingable(false);
+  }, [engine, isPlaying, stepsPerBar, savedList]);
 
   // ASDFG → channels 1-5 at amp 1.0; QWERT → same channels at amp 2.0
   // (accent). Numeric 1-5 also accepted.

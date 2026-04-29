@@ -65,6 +65,15 @@ export async function listUserPatterns(): Promise<UserPattern[]> {
   return all.sort((a, b) => b.updatedAt - a.updatedAt);
 }
 
+/** Look up one UserPattern by id. Used by Studio to repopulate
+ *  metadata fields (region/genre/tags/story/etc) when loading a
+ *  SoundPattern — same id, separate IDB record per the bundled-save
+ *  design. */
+export async function getUserPattern(id: string): Promise<UserPattern | null> {
+  const row = await db.userPatterns.get(id);
+  return row ?? null;
+}
+
 export async function bulkImport(patterns: UserPattern[]): Promise<void> {
   await db.userPatterns.bulkPut(patterns);
 }
