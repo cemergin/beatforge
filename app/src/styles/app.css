@@ -121,6 +121,17 @@ input[type="number"] { font: inherit; color: inherit; }
   background: var(--bg-2);
 }
 .bf-brand { display: flex; align-items: baseline; gap: var(--sp-4); }
+/* Logo + wordmark are a link to the repo; the /tab segment stays
+   non-interactive. Inherit color/font so the styled brand looks
+   identical to the pre-link version. */
+.bf-brand-link {
+  display: inline-flex; align-items: baseline; gap: var(--sp-4);
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  transition: opacity var(--t-fast);
+}
+.bf-brand-link:hover { opacity: 0.75; }
 .bf-logo {
   width: 14px; height: 14px; border-radius: var(--r-xs);
   background: conic-gradient(from 90deg, var(--grp-1), var(--grp-2), var(--grp-3), var(--grp-4), var(--grp-1));

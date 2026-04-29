@@ -275,8 +275,16 @@ export default function App() {
     <div className="bf-root" data-theme={theme}>
       <header className="bf-top">
         <div className="bf-brand">
-          <span className="bf-logo" />
-          <span className="bf-wordmark">BeatForge</span>
+          <a
+            className="bf-brand-link"
+            href="https://github.com/cemergin/beatforge"
+            target="_blank"
+            rel="noopener noreferrer"
+            title="BeatForge on GitHub — source, issues, contributions"
+          >
+            <span className="bf-logo" />
+            <span className="bf-wordmark">BeatForge</span>
+          </a>
           <span className="bf-tag">/{tab}</span>
         </div>
         <nav className="bf-topnav">
