@@ -13,6 +13,7 @@
 // a sample-aligned scheduler hook.
 
 import type { MidiInputLike, MidiOutputLike } from './types';
+import { logWarn } from '../../lib/log';
 
 export const CLOCK_TICK = 0xf8;
 export const CLOCK_START = 0xfa;
@@ -108,27 +109,48 @@ export function makeClockSender(
 
   const tickIntervalMs = (): number => 60_000 / (bpm * 24);
 
+  /** Wrap output.send so a hot-unplug doesn't crash the setInterval
+   *  callback (Web MIDI throws InvalidStateError synchronously when
+   *  the output is closed). Returns true on success — callers stop
+   *  the sender when send fails so we don't keep firing into the
+   *  void at 24 PPQN. */
+  const safeSend = (data: number[]): boolean => {
+    try { output.send(data); return true; }
+    catch (err) {
+      logWarn(`MIDI clock send failed (output disconnected?) — ${err instanceof Error ? err.message : String(err)}`);
+      return false;
+    }
+  };
+
+  const stopInterval = (): void => {
+    if (timer) { clearInterval(timer); timer = null; }
+  };
+
   const sendTick = (): void => {
-    output.send([CLOCK_TICK]);
+    if (!safeSend([CLOCK_TICK])) {
+      // Output is dead — stop the interval so we don't spam errors
+      // 24 times a second. running stays true so a re-attached
+      // device can resume via setBpm/start.
+      stopInterval();
+      return;
+    }
     onSent?.([CLOCK_TICK]);
   };
 
   const arm = (): void => {
-    if (timer) clearInterval(timer);
+    stopInterval();
     timer = setInterval(sendTick, tickIntervalMs());
   };
 
   return {
     start: () => {
-      output.send([CLOCK_START]);
-      onSent?.([CLOCK_START]);
+      if (safeSend([CLOCK_START])) onSent?.([CLOCK_START]);
       running = true;
       arm();
     },
     stop: () => {
-      if (timer) { clearInterval(timer); timer = null; }
-      output.send([CLOCK_STOP]);
-      onSent?.([CLOCK_STOP]);
+      stopInterval();
+      if (safeSend([CLOCK_STOP])) onSent?.([CLOCK_STOP]);
       running = false;
     },
     setBpm: (next) => {
@@ -136,14 +158,12 @@ export function makeClockSender(
       if (running) arm();
     },
     dispose: () => {
-      if (timer) { clearInterval(timer); timer = null; }
+      stopInterval();
       // Tell the downstream rig to stop too. Without 0xFC the synth
       // / DAW thinks playback is still running and may keep its
-      // arpeggiator / transport going after we've torn down.
-      if (running) {
-        try { output.send([CLOCK_STOP]); onSent?.([CLOCK_STOP]); }
-        catch { /* output may already be closed; nothing to do */ }
-      }
+      // arpeggiator / transport going after we've torn down. Send is
+      // wrapped — output may already be closed, and that's fine.
+      if (running && safeSend([CLOCK_STOP])) onSent?.([CLOCK_STOP]);
       running = false;
     },
   };

@@ -121,4 +121,47 @@ describe('attachMidiSink', () => {
     expect(sent.map((e) => e.data[0])).toEqual([0x90, 0x80]);
     off();
   });
+
+  it('survives a hot-unplugged output (send throws) without breaking the bus', () => {
+    const bus = makeEventBus();
+    const dead: MidiOutputLike = {
+      id: 'dead', name: 'dead',
+      send: () => { throw new Error('InvalidStateError'); },
+    };
+    let otherCalls = 0;
+    bus.on('trigger', () => { otherCalls++; });
+
+    const off = attachMidiSink(bus, {
+      getConfigs: () => [cfg()],
+      resolveOutput: () => dead,
+      getStepDurationMs: () => 50,
+    });
+    expect(() =>
+      bus.emit({ type: 'trigger', target: 'channel.0', velocity: 1, when: 0 }),
+    ).not.toThrow();
+    // Other subscribers on the bus still received the event.
+    expect(otherCalls).toBe(1);
+    // Note-off scheduled but should also fail-safe when it fires.
+    expect(() => vi.advanceTimersByTime(60)).not.toThrow();
+    off();
+  });
+
+  it('does not call onSent for the dropped message on send failure', () => {
+    const bus = makeEventBus();
+    const dead: MidiOutputLike = {
+      id: 'dead', name: 'dead',
+      send: () => { throw new Error('InvalidStateError'); },
+    };
+    const sent: Array<{ outputId: string; data: number[] }> = [];
+    const off = attachMidiSink(bus, {
+      getConfigs: () => [cfg()],
+      resolveOutput: () => dead,
+      getStepDurationMs: () => 50,
+      onSent: (e) => sent.push(e),
+    });
+    bus.emit({ type: 'trigger', target: 'channel.0', velocity: 1, when: 0 });
+    vi.advanceTimersByTime(60);
+    expect(sent).toEqual([]);
+    off();
+  });
 });

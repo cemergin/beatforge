@@ -153,4 +153,19 @@ describe('makeClockSender', () => {
     handle.dispose();
     expect(out.sent).toEqual([]);
   });
+
+  it('survives a hot-unplugged output and stops the interval', () => {
+    const dead: MidiOutputLike = {
+      id: 'd', name: 'd',
+      send: () => { throw new Error('InvalidStateError'); },
+    };
+    const handle = makeClockSender(dead, 120);
+    expect(() => handle.start()).not.toThrow();
+    // Tick interval is armed but subsequent ticks throw — the safeSend
+    // wrapper logs + clears the interval. Advancing time should not
+    // accumulate uncaught throws.
+    expect(() => vi.advanceTimersByTime(500)).not.toThrow();
+    expect(() => handle.stop()).not.toThrow();
+    expect(() => handle.dispose()).not.toThrow();
+  });
 });

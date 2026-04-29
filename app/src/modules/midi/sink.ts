@@ -18,6 +18,7 @@
 
 import type { EventBus, TriggerEvent, Unsubscribe } from '../events';
 import type { MidiOutputLike } from './types';
+import { logWarn } from '../../lib/log';
 
 export interface ChannelOutConfig {
   enabled: boolean;
@@ -77,7 +78,7 @@ export function attachMidiSink(bus: EventBus, spec: SinkSpec): Unsubscribe {
     const velByte = clamp(Math.round((event.velocity ?? 1) * cfg.velocityScale * 127), 1, 127);
     const status = 0x90 | (cfg.midiChannel & 0x0f);
     const onData = [status, cfg.note & 0x7f, velByte];
-    out.send(onData);
+    if (!safeSend(out, onData, cfg.outputId)) return;
     spec.onSent?.({ outputId: cfg.outputId, data: onData });
 
     const offData = [0x80 | (cfg.midiChannel & 0x0f), cfg.note & 0x7f, 0];
@@ -86,7 +87,7 @@ export function attachMidiSink(bus: EventBus, spec: SinkSpec): Unsubscribe {
       pendingTimers.delete(timer);
       const stillThere = spec.resolveOutput(cfg.outputId);
       if (!stillThere) return;
-      stillThere.send(offData);
+      if (!safeSend(stillThere, offData, cfg.outputId)) return;
       spec.onSent?.({ outputId: cfg.outputId, data: offData });
     }, dur);
     pendingTimers.add(timer);
@@ -118,4 +119,20 @@ function parseChannelIndex(target: string): number | null {
 
 function clamp(n: number, lo: number, hi: number): number {
   return Math.max(lo, Math.min(hi, n));
+}
+
+/** Wrap output.send() so a hot-unplugged device (Web MIDI throws
+ *  InvalidStateError synchronously) doesn't unwind the bus listener
+ *  chain and break every downstream subscriber. Returns true on
+ *  success, false on a swallowed error. The user gets a single warn
+ *  in the toast layer; subsequent triggers to the same output keep
+ *  retrying — if it was a one-off blip the next message succeeds. */
+function safeSend(out: MidiOutputLike, data: number[], outputId: string): boolean {
+  try {
+    out.send(data);
+    return true;
+  } catch (err) {
+    logWarn(`MIDI send failed (output ${outputId} disconnected?) — ${err instanceof Error ? err.message : String(err)}`);
+    return false;
+  }
 }
