@@ -224,13 +224,25 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
   }, []);
   useEffect(() => clearCountInTimer, [clearCountInTimer]);
 
-  /* eslint-disable react-hooks/set-state-in-effect -- legitimate sync of UI state when the user picks a new pattern. */
   // Pattern-change reset. Resets UI state (bpm, swing, grouping, kit) +
   // stops playback. The engine.loadPattern call lives in the dependent
   // effect below — pattern object identity changes when patternId
   // changes, so the [pattern, grouping] effect re-fires once and we
   // don't need a redundant load here.
+  //
+  // Initial-mount guard: when Practice mounts after Studio (same
+  // patternId, no external nav), the session already carries the
+  // user's edits (grouping, bpm, swing, channels). Resetting to the
+  // seed pattern's defaults here would silently undo those edits —
+  // a user-visible bug. Skip the very first run; subsequent
+  // patternId changes (Library card click, ?pattern= URL nav) are
+  // legitimate "user picked something new" resets.
+  const patternResetMountedRef = useRef(false);
   useEffect(() => {
+    if (!patternResetMountedRef.current) {
+      patternResetMountedRef.current = true;
+      return;
+    }
     engine.stop();
     setPlaying(false);
     setCountingIn(false);
@@ -248,7 +260,6 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
     setRecent(pushRecent(seedPattern.id));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [patternId]);
-  /* eslint-enable react-hooks/set-state-in-effect */
 
   // Track the previous focus so we can detect a groove ↔ click toggle
   // and restart the grid in unison. Cell edits (pattern alone changes)
@@ -265,7 +276,20 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
     if (focusChanged) engine.restartFromNextBar();
   }, [engine, pattern, grouping, focus]);
 
-  useEffect(() => { engine.setKit(activeKit); }, [engine, activeKit]);
+  // Kit application — same initial-mount guard as the patternId reset
+  // above. On mount the session already has the right channels (carried
+  // from Studio or from the previous Practice session). Only fire on
+  // EXPLICIT kit changes (user picked a different kit). Routing through
+  // session.setKit instead of engine.setKit keeps session.channels +
+  // engine in lockstep so a Practice→Studio handoff sees the same state.
+  const kitMountedRef = useRef(false);
+  useEffect(() => {
+    if (!kitMountedRef.current) {
+      kitMountedRef.current = true;
+      return;
+    }
+    session.setKit(activeKit);
+  }, [session, activeKit]);
   useEffect(() => { localStorage.setItem('bf_view', view); }, [view]);
 
   const toggle = useCallback(async () => {

@@ -34,6 +34,7 @@ import { getMasterVolume, setMasterVolume as persistMasterVolume } from '../../l
 import { SpectrumAnalyzer } from './SpectrumAnalyzer';
 import { Knob } from './Knob';
 import { StepGrid } from '../../components/StepGrid';
+import { BpmInput } from '../../components/BpmInput';
 import { Disclosure } from '../../components/Disclosure';
 import { BeatDots } from '../../components/BeatDots';
 import { CircularGrid } from '../../components/CircularGrid';
@@ -1215,17 +1216,7 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
           <div className="bf-feel-control">
             <span className="bf-feel-label">bpm</span>
             <div className="bf-sound-bpm-row">
-              <input
-                id="bf-sound-bpm"
-                type="number" inputMode="numeric"
-                min={30} max={300}
-                value={bpm}
-                onChange={(e) => {
-                  const n = Number(e.target.value);
-                  if (Number.isFinite(n)) setBpm(Math.max(30, Math.min(300, Math.round(n))));
-                }}
-                className="bf-sound-bpm-input"
-              />
+              <BpmInput bpm={bpm} setBpm={setBpm} className="bf-sound-bpm-input" />
               <button type="button" className="bf-transport-tap" onClick={onTap} title="Tap tempo (T)">tap</button>
             </div>
           </div>
