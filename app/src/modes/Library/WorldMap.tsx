@@ -1,5 +1,6 @@
 import type { Pattern, RegionId } from '../../patterns/types';
-import { REGIONS } from './regions';
+import { useLang } from '../../i18n';
+import { REGIONS, localizedRegion } from './regions';
 
 interface Props {
   patterns: Pattern[];
@@ -10,6 +11,7 @@ interface Props {
 }
 
 export function WorldMap({ patterns, previewId, setPreviewId, onPickRegion, compact }: Props) {
+  const { lang } = useLang();
   const counts = patterns.reduce<Record<string, number>>((acc, p) => {
     acc[p.region] = (acc[p.region] ?? 0) + 1;
     return acc;
@@ -27,6 +29,7 @@ export function WorldMap({ patterns, previewId, setPreviewId, onPickRegion, comp
           const count = counts[r.id] ?? 0;
           const disabled = count === 0;
           const active = previewId === r.id;
+          const labels = localizedRegion(r, lang);
           return (
             <button
               key={r.id}
@@ -37,11 +40,11 @@ export function WorldMap({ patterns, previewId, setPreviewId, onPickRegion, comp
               }}
               disabled={disabled}
               onClick={() => handlePick(r.id)}
-              title={disabled ? `${r.label} — no patterns yet` : `${r.label}: ${count} patterns`}
+              title={disabled ? `${labels.label} — no patterns yet` : `${labels.label}: ${count} patterns`}
               type="button"
             >
               <span className="bf-wm-name" style={{ color: r.color }}>
-                {r.label}
+                {labels.label}
               </span>
               <span className="bf-wm-count">{count}</span>
             </button>

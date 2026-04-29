@@ -6,6 +6,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { SoundEngine, type SoundSequence, type SoundStep } from '../../audio/runtime/sound-engine';
 import { useSession } from '../../modules/session';
 import { findGrouping } from './grouping';
+import { useT } from '../../i18n';
 import { trackMeta, ALL_KITS, ALL_VOICES, parseStepUnit, type KitId, type StepUnit } from '../../patterns/types';
 import { buildKitMachine } from '../../audio/runtime/kit-presets';
 import { defaultChannelEffects } from '../../patterns/types-sound';
@@ -328,6 +329,7 @@ interface SoundProps {
 }
 
 export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: SoundProps) {
+  const t = useT();
   // App.tsx owns engine lifecycle; Sound is a viewer/editor of the
   // shared engine state. Disposal happens at App unmount.
   const session = useSession();
@@ -1219,11 +1221,7 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
           </button>
         </div>
 
-        <p className="bf-sound-sub">
-          Lay it down: sequence the steps, shape each voice. <kbd>Space</kbd>
-          plays. <kbd>A</kbd>–<kbd>G</kbd> auditions (<kbd>Q</kbd>–<kbd>T</kbd>
-          accent). Click any cell to cycle off → on → accent.
-        </p>
+        <p className="bf-sound-sub">{t('studio.intro')}</p>
 
         {/* Top control bar — most-touched controls live here so they're
             always reachable without scrolling: BPM, meter, grouping,

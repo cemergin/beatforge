@@ -117,6 +117,12 @@ const EN = {
   'difficulty.intermediate': 'intermediate',
   'difficulty.advanced':     'advanced',
 
+  // ── Studio (Sound) intro ──────────────────────────────────────────
+  // Prose around keyboard shortcuts. Keyboard keys (Space, A-G, Q-T)
+  // and synth-state names (off, on, accent) stay English in every
+  // locale — they're universal music-software vocabulary.
+  'studio.intro': 'Lay it down: sequence the steps, shape each voice. Space plays. A–G auditions (Q–T accent). Click any cell to cycle off → on → accent.',
+
   // ── Dirty-guard confirm dialog (interpolated) ────────────────────
   'dirty_guard.confirm': 'You have unsaved changes to "{name}". Discard them and load {next}?',
 
@@ -390,6 +396,8 @@ const TR: Partial<Record<Key, string>> = {
   'difficulty.intermediate': 'orta',
   'difficulty.advanced':     'ileri',
 
+  'studio.intro': 'Yatır: adımları dizin, her sesi şekillendirin. Space çalar. A–G dinletir (Q–T accent). Herhangi bir hücreye tıklayın: off → on → accent.',
+
   'dirty_guard.confirm': '"{name}" üzerinde kaydedilmemiş değişiklikleriniz var. Bunları atıp {next} desenini yükleyelim mi?',
 
   'errors.render_crash':         'Bir şey çöktü',
@@ -646,6 +654,8 @@ const ES: Partial<Record<Key, string>> = {
   'difficulty.beginner':     'principiante',
   'difficulty.intermediate': 'intermedio',
   'difficulty.advanced':     'avanzado',
+
+  'studio.intro': 'Plántalo: secuencia los pasos, esculpe cada voz. Space toca. A–G prueban voces (Q–T accent). Haz clic en cualquier celda para ciclar off → on → accent.',
 
   'dirty_guard.confirm': 'Tienes cambios sin guardar en "{name}". ¿Descartarlos y cargar {next}?',
 
@@ -906,6 +916,8 @@ const ZH: Partial<Record<Key, string>> = {
   'difficulty.intermediate': '中级',
   'difficulty.advanced':     '高级',
 
+  'studio.intro': '放下来:为步骤排序,雕刻每个声音。Space 播放。A–G 试听(Q–T accent)。点击任意格子可在 off → on → accent 间循环。',
+
   'dirty_guard.confirm': '"{name}" 有未保存的更改。是否舍弃并加载 {next}？',
 
   'errors.render_crash':         '出现崩溃',
@@ -1162,6 +1174,8 @@ const FR: Partial<Record<Key, string>> = {
   'difficulty.beginner':     'débutant',
   'difficulty.intermediate': 'intermédiaire',
   'difficulty.advanced':     'avancé',
+
+  'studio.intro': 'Pose-le : séquence les pas, sculpte chaque voix. Space joue. A–G auditionnent (Q–T accent). Clique sur une cellule pour cycler off → on → accent.',
 
   'dirty_guard.confirm': 'Vous avez des modifications non enregistrées sur "{name}". Les abandonner et charger {next} ?',
 
@@ -1421,6 +1435,8 @@ const HI: Partial<Record<Key, string>> = {
   'difficulty.intermediate': 'मध्यम',
   'difficulty.advanced':     'उन्नत',
 
+  'studio.intro': 'बिछा दें: स्टेप्स को क्रम दें, हर voice को आकार दें। Space बजाता है। A–G ऑडिशन कराते हैं (Q–T accent)। किसी भी सेल पर क्लिक करें: off → on → accent।',
+
   'dirty_guard.confirm': '"{name}" में सहेजे न गए बदलाव हैं। उन्हें छोड़ें और {next} लोड करें?',
 
   'errors.render_crash':         'कुछ क्रैश हुआ',
@@ -1678,6 +1694,8 @@ const RU: Partial<Record<Key, string>> = {
   'difficulty.beginner':     'начальный',
   'difficulty.intermediate': 'средний',
   'difficulty.advanced':     'продвинутый',
+
+  'studio.intro': 'Выложи: упорядочь шаги, оформи каждый голос. Space играет. A–G прослушивают (Q–T accent). Кликни по любой ячейке: off → on → accent.',
 
   'dirty_guard.confirm': 'Есть несохранённые изменения в "{name}". Отменить и загрузить {next}?',
 
