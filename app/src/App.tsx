@@ -343,7 +343,6 @@ export default function App() {
                 type="button"
               >
                 <span className="bf-theme-swatch" />
-                <span className="bf-theme-name">{t}</span>
               </button>
             ))}
           </div>

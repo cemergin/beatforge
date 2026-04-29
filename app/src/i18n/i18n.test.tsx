@@ -45,13 +45,49 @@ describe('i18n — provider + useT', () => {
   });
 
   it('falls back to Spanish for unsupported browser locales', () => {
-    Object.defineProperty(navigator, 'language', { value: 'fr-FR', configurable: true });
+    // Use a locale we don't support (German). The supported set is
+    // EN/TR/ES/ZH/FR — so de-DE should fall through to the cold default.
+    Object.defineProperty(navigator, 'language', { value: 'de-DE', configurable: true });
     render(
       <LangProvider>
         <Consumer k="nav.practice" />
       </LangProvider>,
     );
     expect(screen.getByTestId('out').textContent).toBe('Práctica');
+  });
+
+  it('detects Chinese from a zh-CN browser', () => {
+    Object.defineProperty(navigator, 'language', { value: 'zh-CN', configurable: true });
+    render(
+      <LangProvider>
+        <Consumer k="nav.practice" />
+      </LangProvider>,
+    );
+    expect(screen.getByTestId('out').textContent).toBe('练习');
+  });
+
+  it('detects French from a fr-FR browser', () => {
+    Object.defineProperty(navigator, 'language', { value: 'fr-FR', configurable: true });
+    render(
+      <LangProvider>
+        <Consumer k="nav.practice" />
+      </LangProvider>,
+    );
+    expect(screen.getByTestId('out').textContent).toBe('Pratique');
+  });
+
+  it('interpolates {var} placeholders when vars are provided', () => {
+    function ConfirmConsumer() {
+      const t = useT();
+      return <span data-testid="out">{t('dirty_guard.confirm', { name: 'Karşılama', next: 'Bulería' })}</span>;
+    }
+    render(
+      <LangProvider>
+        <ConfirmConsumer />
+      </LangProvider>,
+    );
+    expect(screen.getByTestId('out').textContent).toContain('Karşılama');
+    expect(screen.getByTestId('out').textContent).toContain('Bulería');
   });
 
   it('respects localStorage.bf_lang on first mount', () => {

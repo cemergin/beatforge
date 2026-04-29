@@ -155,31 +155,30 @@ input[type="number"] { font: inherit; color: inherit; }
 .bf-chip.ghost { background: transparent; color: var(--muted); border-color: var(--line); }
 .bf-chip.ghost:hover { color: var(--fg); border-color: var(--fg); }
 
-/* Language picker — pill-segmented EN / TR / ES. Visually parallel
-   to .bf-chip but tighter, since the labels are 2 chars. */
+/* Language picker — flag-emoji segmented control. Compact across 7
+   locales; tooltips carry the full language name for screen readers
+   and ambiguous flags. */
 .bf-langpick {
   display: inline-flex;
-  gap: 2px;
+  gap: 1px;
   padding: 2px;
   border-radius: var(--r-pill);
   background: var(--bg-sunk);
   border: var(--bw-1) solid var(--line);
 }
 .bf-langpick-btn {
-  padding: 4px 8px;
+  padding: 2px 5px;
   border: 0;
   background: transparent;
-  color: var(--muted);
-  font-family: var(--mono);
-  font-size: var(--fs-xs);
-  font-weight: 600;
-  letter-spacing: 0.04em;
+  font-size: 14px;       /* emoji size */
+  line-height: 1.2;
   border-radius: var(--r-pill);
   cursor: pointer;
-  transition: all 0.15s;
+  opacity: 0.55;         /* dim non-active so the chosen flag pops */
+  transition: opacity 0.15s, background 0.15s;
 }
-.bf-langpick-btn:hover { color: var(--fg); }
-.bf-langpick-btn.on { background: var(--fg); color: var(--bg); }
+.bf-langpick-btn:hover { opacity: 0.85; }
+.bf-langpick-btn.on { opacity: 1; background: var(--bg-2); }
 
 .bf-main {
   display: grid;
@@ -1210,26 +1209,21 @@ input[type="number"] { font: inherit; color: inherit; }
   border-radius: var(--r-pill); margin-left: 8px;
 }
 .bf-theme-btn {
-  display: inline-flex; align-items: center; gap: var(--sp-2);
-  padding: 4px 8px 4px 5px; border: none; background: transparent; cursor: pointer;
-  border-radius: var(--r-pill); color: var(--muted);
-  font-family: var(--mono); font-size: var(--fs-mini); letter-spacing: 0.1em; text-transform: uppercase;
+  display: inline-flex; align-items: center;
+  padding: 3px; border: none; background: transparent; cursor: pointer;
+  border-radius: var(--r-circle); color: var(--muted);
   transition: color var(--t-fast), background var(--t-fast);
 }
-.bf-theme-btn:hover { color: var(--fg); }
-.bf-theme-btn.on { color: var(--fg); background: var(--bg-sunk); }
+.bf-theme-btn:hover .bf-theme-swatch { transform: scale(1.08); }
+.bf-theme-btn.on .bf-theme-swatch { box-shadow: 0 0 0 2px var(--fg); }
 .bf-theme-swatch {
-  width: 14px; height: 14px; border-radius: var(--r-circle); border: 1.5px solid var(--line);
+  width: 16px; height: 16px; border-radius: var(--r-circle); border: 1.5px solid var(--line);
   display: inline-block; flex-shrink: 0;
+  transition: transform var(--t-fast), box-shadow var(--t-fast);
 }
 .bf-theme-warm .bf-theme-swatch { background: linear-gradient(135deg, #f6f2eb 50%, #e17055 50%); border-color: #e17055; }
 .bf-theme-noir .bf-theme-swatch { background: linear-gradient(135deg, #1b1b22 50%, #f4c542 50%); border-color: #f4c542; }
 .bf-theme-paper .bf-theme-swatch { background: linear-gradient(135deg, #ffffff 50%, #6c5ce7 50%); border-color: #6c5ce7; }
-
-@media (max-width: 860px) {
-  .bf-theme-name { display: none; }
-  .bf-theme-btn { padding: var(--sp-1); }
-}
 
 /* ── Kit grid (7 kits, 2-column layout) ── */
 .bf-kit-grid {
