@@ -1,0 +1,114 @@
+# INDEX.yaml — src/audio/machines/voice
+# Per-archetype voice synthesis recipes.
+
+path: app/src/audio/machines/voice
+purpose: >
+  One file per voice archetype. Each exports a VoiceMachine — a
+  ParamSpec list (knobs the UI exposes) plus a render function that
+  schedules nodes for one trigger event. Stateless: each trigger
+  creates a fresh tiny graph that gets connected to a destination
+  AudioNode and decays out on its own. The catalog in
+  audio/machines/registry.ts maps archetype id → VoiceMachine.
+
+last_indexed: 2026-04-29
+
+contents:
+  - name: kick.ts
+    summary: >
+      Pitched sine sweep + amp envelope. Matches the 808 / 909 / 707
+      kicks but parameterized — pitch / pitchEnd / pitchDecay /
+      decay / click / drive. Presets: 707 / 808 / 909 / sub /
+      punch / doum / surdo / bayan / acoustic.
+
+  - name: snare.ts
+    summary: >
+      Two-component synthesis — a tone (oscillator) + a noise burst.
+      Pitch / snap / decay / tone / noiseDecay knobs. Presets cover
+      707 / 808 / 909 / rim / brush / tek / dayan / caixa / frame.
+
+  - name: hat.ts
+    summary: >
+      Filtered noise (HP-only or HP→BP cascade via 'character'
+      discrete selector). Cutoff / Q / decay / pitch knobs. Closed /
+      open / pedal / ride / shaker / sizzle / riq / caxixi / maraca
+      presets.
+
+  - name: clap.ts
+    summary: >
+      Multiple noise bursts at small offsets — the 808-style
+      'ensemble' feel + a long final tail. Bursts / spread / decay /
+      cutoff / tone knobs.
+
+  - name: tom.ts
+    summary: >
+      Pitched body + noise tail. Pitch / pitchDecay / body / decay
+      knobs.
+
+  - name: cowbell.ts
+    summary: >
+      Two-oscillator inharmonic ringing — drum-machine territory
+      (TR-808/909/727 cowbells were all this). Two pitches + ratio.
+
+  - name: modal.ts
+    summary: >
+      THE most musically generative voice. Inharmonic modal-resonator
+      with envelope-decayed partials (high partials decay faster than
+      low — like real bells). Pitch / partials / damping / decay /
+      inharmonic. Covers bell, frame, bayan, gong, tank, pot, log,
+      bowl, tabla, kalimba, hangdrum, daf.
+
+  - name: fm.ts
+    summary: >
+      Two-operator FM. carrier + modulator frequency / index / ratio.
+      Small integer ratios → clean (kalimba/bell); non-integer →
+      clangy/inharmonic.
+
+  - name: formant.ts
+    summary: >
+      Vocal stab. 'vowel' knob morphs through a/e/i/o/u space.
+
+  - name: noise.ts
+    summary: >
+      Pure noise voice — shakers, white noise hits.
+
+  - name: chip.ts
+    summary: >
+      Classic 8-bit chip "phasing" sound — beating oscillators.
+
+  - name: crackle.ts
+    summary: >
+      Per-event tiny exponential-decay noise hits through a shared
+      bandpass. Vinyl, fire, rain, lo-fi atmosphere, percussive
+      stutter.
+
+  - name: phase-distort.ts
+    summary: Phase distortion (CZ-style) for arcade game blip sounds.
+
+  - name: wavefolder.ts
+    summary: >
+      Wavefolder voice — low-fundamental sine through a wavefolder
+      for growly bass / arcade timbres.
+
+  - name: kick.test.ts
+    summary: >
+      Schema + preset round-trip + structural render checks for the
+      kick voice. (No real AudioContext — uses the same stub
+      pattern as fx.test.ts.)
+
+invariants:
+  - "Voice files use a Zod-style schema for config validation —
+    every preset must round-trip. See kick.test.ts for the shape."
+  - "All voices share the helpers in ../_shared/audio.ts (createOsc /
+    createGain / ampEnvelope) so the synthesis idioms stay
+    consistent across archetypes."
+  - "A trigger renders into a one-shot graph that decays on its own
+    — no per-voice state survives between triggers. The registry
+    + UI store config; the render function reads it."
+
+related_indexes:
+  - path: ../../INDEX.yaml
+    why: Audio runtime parent.
+  - path: ../registry.ts
+    why: VOICE_MACHINES catalog the UI consumes.
+  - path: ../voice-controller.ts
+    why: triggerVoice dispatches to the right voice handler.

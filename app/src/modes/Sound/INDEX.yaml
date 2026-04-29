@@ -1,0 +1,96 @@
+# INDEX.yaml — src/modes/Sound
+# The renamed Studio. Step-sequencer authoring + per-channel sound
+# design.
+
+path: app/src/modes/Sound
+purpose: >
+  Studio is in this folder under the legacy name 'Sound' (the original
+  Studio tab was deleted; Sound was renamed to Studio in product). One
+  big Sound.tsx (~2050 lines) holds the page, with Knob.tsx and
+  SpectrumAnalyzer.tsx extracted as helpers. The page edits a 5-channel
+  SoundPattern + SoundKit shape (in patterns/types-sound) and persists
+  via lib/db. Saving a pattern ALSO writes a UserPattern record so the
+  pattern shows up in Library's 'local' filter.
+
+last_indexed: 2026-04-28
+
+contents:
+  - name: Sound.tsx
+    kind: file
+    lines: ~2050
+    summary: >
+      The Studio page. Top to bottom:
+        - Title row + master volume + Play/Stop + bar counter +
+          Spectrum toggle
+        - Subtitle ('Lay it down: …')
+        - Top control bar (BPM + TAP + meter preset dropdown + custom
+          A/B time-sig inputs + grouping picker + count-in pills +
+          swing slider + clear)
+        - Ensemble row (load preset / save sounds / saved-list)
+        - Pattern row (name / save pattern / new / saved-list, primary
+          accent CTA)
+        - Metadata disclosure (region / genre / default kit / swingable
+          / tags / story — flat row style matching count-in)
+        - Master mix strip (STRONG / WEAK / DRY / REV / DLY)
+        - FX details disclosure (reverb size + decay, delay time + fb)
+        - View tabs (linear / pill / circular)
+        - Step grid (5 voices)
+        - 5 channel strips (each with machine combo + presets + synth
+          knobs + COLOR + MIX disclosures)
+
+      Save behavior: pattern saves write BOTH a SoundPattern (full
+      sound design) and a UserPattern (Library record). The bundled
+      save makes the pattern visible in Library's 'local' filter.
+
+      Keyboard shortcuts: Space (play), A-G (audition), Q-T (accent
+      audition), click any cell for off → on → accent.
+
+  - name: Knob.tsx
+    kind: file
+    summary: >
+      Continuous knob control with drag + scroll + double-click reset.
+      Used for synth params on every channel strip.
+
+  - name: SpectrumAnalyzer.tsx
+    kind: file
+    summary: >
+      Real-time spectrum + waveform display fed by engine.getAnalyser().
+      88px tall band at the top of the page, toggleable via the title-
+      row 'show spectrum' button (persists to bf_sound_spectrum).
+      Reads the analyser via requestAnimationFrame; ResizeObserver
+      keeps the canvas at devicePixelRatio.
+
+design_notes:
+  - "Master strip is DRY/REV/DLY (master.dry, master.reverb.wet,
+    master.delay.wet). Master VOLUME (master.gain.value) lives in the
+    title row, Practice-style — separate from the wet/dry mix sliders
+    so the user can adjust output level without touching the mix
+    balance. masterVolume persists via lib/storage.getMasterVolume."
+
+  - "Custom A/B time signature: the meter row exposes both a preset
+    dropdown AND raw A/B inputs. stepUnit (denominator) supports
+    2 | 4 | 8 | 16. Numerator change rebuilds grouping as [n]
+    (single big group) — this is silent data loss for users who had
+    a custom multi-cell grouping; flagged in the engineering review
+    notes as a MEDIUM follow-up."
+
+invariants:
+  - "Every UI knob emits a ParamEvent on engine.getEventBus() — never
+    calls engine.setX directly. Route addresses live in
+    audio/runtime/engine-adapters.ts."
+  - "Channel adapter REGISTRATION lives in App.tsx ModeShell, not
+    here. Studio just edits state; the address tree was lifted up to
+    survive tab switches (so MIDI mappings keep working from
+    Practice / Library)."
+
+related_indexes:
+  - path: ../INDEX.yaml
+    why: Per-mode breakdown.
+  - path: ../../audio/INDEX.yaml
+    why: The engine + machines Studio drives.
+  - path: ../../patterns/INDEX.yaml
+    why: types-sound + UserPattern shapes Studio reads/writes.
+  - path: ../../lib/INDEX.yaml
+    why: db (Sound* CRUD) + storage (master volume).
+  - path: ../../../docs/2026-04-28-engineering-review-notes.md
+    why: Open follow-ups on the numerator-grouping silent loss.

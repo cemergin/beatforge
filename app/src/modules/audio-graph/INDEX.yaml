@@ -1,0 +1,69 @@
+# INDEX.yaml — src/modules/audio-graph
+# The ControllableModule contract + composition helpers.
+
+path: app/src/modules/audio-graph
+purpose: >
+  Defines the small interface every voice + every FX in audio/
+  machines/ implements: input AudioNode / output AudioNode / params
+  (ParamSpec[]) / set(name, value, opts) / dispose. The router calls
+  .set() with a ramp shape every subscriber sees. compose.ts has
+  chain() + tap() helpers for stitching modules into a pipeline.
+  primitives.ts is the lower-level WebAudio building blocks.
+
+last_indexed: 2026-04-28
+
+contents:
+  - name: types.ts
+    kind: file
+    lines: 88
+    summary: >
+      ControllableModule interface — input + output + params + set +
+      dispose. ParamSpec is { name, kind: 'continuous' | 'discrete' |
+      'structural', min?, max?, default, unit?, options? }. SetOpts
+      carries when (audio time) + ramp (seconds).
+
+  - name: compose.ts
+    kind: file
+    lines: 113
+    summary: >
+      chain(modules) — connects output of [i] to input of [i+1] and
+      returns a composite ControllableModule. tap(module, sink) —
+      forks a copy of the signal to a sink (used for sends).
+    exports:
+      - chain
+      - tap
+
+  - name: primitives.ts
+    kind: file
+    lines: 224
+    summary: >
+      Context-agnostic factories — createOsc / createGain / createBiquad
+      / createNoise / createDelay / createConvolver. Used by every voice
+      + FX module so they don't have to repeat AudioContext-handling
+      boilerplate.
+
+  - name: index.ts
+    kind: file
+    summary: Barrel.
+
+  - name: tests
+    kind: files
+    contents:
+      - compose.test.ts
+      - primitives.test.ts
+
+invariants:
+  - "Every ControllableModule.set() must ramp via setValueAtTime +
+    linearRampToValueAtTime — never bare AudioParam.value writes.
+    The router relies on consistent ramp shape across all modules."
+  - "params is the source of truth — UI / automation / MIDI all
+    discover what knobs a module has from this list."
+
+related_indexes:
+  - path: ../INDEX.yaml
+    why: Modular control plane.
+  - path: ../router/INDEX.yaml
+    why: The router calls .set() on these modules.
+  - path: ../../audio/INDEX.yaml
+    why: machines/ is the catalog of ControllableModule
+      implementations (voice + FX).

@@ -1,0 +1,97 @@
+# INDEX.yaml — src/audio/runtime
+# The instantiated audio runtime.
+
+path: app/src/audio/runtime
+purpose: >
+  SoundEngine class (the singleton in App.tsx), per-channel
+  ChannelStrip, kit presets, and engine-adapters that register the
+  engine's mutable state with the router as ControllableModules.
+
+last_indexed: 2026-04-29
+
+contents:
+  - name: sound-engine.ts
+    kind: file
+    lines: ~720
+    summary: >
+      SoundEngine class. Single audio runtime. Owns:
+        - master GainNode (post-everything output)
+        - dryGain (channels feed it; wet returns are added separately
+          in master) — registered at master.dry
+        - analyser node (88px spectrum / waveform readout)
+        - reverbFx + delayFx (ControllableModules from machines/fx)
+          with HF (16 kHz, -8 dB) and LF (30 Hz, -12 dB) shelves on
+          the wet returns
+        - 5 ChannelStrips (per-channel mixer + color FX slot)
+        - sequencer driver delegated to modules/sequencer
+      Exposes a typed EventBus via getEventBus() that everything
+      downstream subscribes to.
+
+  - name: engine-adapters.ts
+    kind: file
+    lines: 220
+    summary: >
+      Translates engine state slots into ControllableModules
+      registered with the router. Public registrations:
+        - master.gain  → engine.getMasterGain()
+        - master.dry   → engine.getDry()
+        - master.reverb → engine.getReverbFx()
+        - master.delay  → engine.getDelayFx()
+        - channel.<n>            → engineChannelMixer
+        - channel.<n>.color      → engineChannelColor
+        - channel.<n>.machine    → engineChannelMachine
+      After registration, ParamEvents at those addresses dispatch
+      directly into the engine without callsite knowledge of the
+      engine setter.
+
+  - name: ChannelStrip.ts
+    kind: file
+    lines: 204
+    summary: >
+      Per-channel mixer + color FX slot. Voice → input → color FX (if
+      any) → level + pan → dryBus + reverbSend tap + delaySend tap.
+      Color FX slot is rebuilt structurally when ColorFx.type flips.
+
+  - name: kit-presets.ts
+    kind: file
+    lines: 136
+    summary: >
+      The 9 kit presets — 808 / 909 / 707 / 727 / frame / tabla /
+      gamelan / congas / latin. Each kit is a 5-channel mapping of
+      (label, machine archetype, machine config). Used by Practice
+      + Studio when loading a kit by id.
+
+  - name: engine-adapters.test.ts
+    kind: file
+    summary: >
+      registerEngineMaster routes master.gain / master.dry /
+      master.reverb / master.delay correctly. registerEngineChannel
+      routes per-channel addresses. Teardown unregisters every
+      module.
+
+  - name: sound-engine-bus.test.ts
+    kind: file
+    summary: >
+      Bus-level integration — emit a ParamEvent, observe the
+      engine state changes correctly via the registered adapter
+      chain.
+
+invariants:
+  - "Master-bus topology: channels → dry → master; reverbReturn →
+    master; delayReturn → master; master → analyser → destination.
+    Wet returns run through HF + LF shelves first."
+  - "ChannelStrip count is mutable via setChannels — engine grows /
+    shrinks strip array + sequencer rows in lockstep."
+  - "All scheduling lives in modules/sequencer. SoundEngine
+    delegates start / stop / setBpm / setStepUnit / setSwing /
+    setAccents / setSequence to it."
+
+related_indexes:
+  - path: ../INDEX.yaml
+    why: Audio parent.
+  - path: ../machines/INDEX.yaml
+    why: The voice + FX modules the engine instantiates.
+  - path: ../../modules/sequencer/INDEX.yaml
+    why: The scheduler the engine delegates to.
+  - path: ../../modules/router/INDEX.yaml
+    why: The dispatch layer engine-adapters registers with.

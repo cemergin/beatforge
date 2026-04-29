@@ -1,0 +1,63 @@
+# INDEX.yaml — src/modules/sequencer
+# Engine-agnostic step scheduler.
+
+path: app/src/modules/sequencer
+purpose: >
+  Takes a clock + bus + sequence and emits BarEvent + StepEvent +
+  TriggerEvent at the right times. Per-track subdivisions support
+  polyrhythm (each row can have its own stepsPerBar and cycle
+  length). SoundEngine delegates ALL scheduling to this module — the
+  engine no longer schedules anything itself. Pure TypeScript; a
+  fake clock makes it deterministic in tests.
+
+last_indexed: 2026-04-28
+
+contents:
+  - name: sequencer.ts
+    kind: file
+    lines: 309
+    summary: >
+      makeSequencer({ bus, clock }) factory. Configurable: setBpm,
+      setStepUnit, setStepsPerBar, setSwing, setAccents, setSequence,
+      setRowCount, setSubdivisions, start, stop. Internally maintains
+      per-row nextNoteTimes + nextIdx so each track's subdivisions
+      and cycle advance independently — this is how polyrhythm is
+      realised.
+
+      Lookahead pattern: scheduleAhead seconds of events get queued at
+      every tick (driven by the engine's worker timer in production,
+      a fake clock in tests).
+
+  - name: types.ts
+    kind: file
+    lines: 96
+    summary: >
+      Sequencer interface, SequencerOpts, RowConfig (per-track
+      subdivisions + cycle).
+
+  - name: index.ts
+    kind: file
+    summary: Barrel.
+
+  - name: sequencer.test.ts
+    kind: file
+    lines: 296
+    summary: >
+      Bar / step / trigger emission timing, swing skew, accent
+      amplitude, polyrhythmic per-track subdivisions, locate-to-bar
+      behavior. All driven by a fake clock — no real audio.
+
+invariants:
+  - "stepUnit is 2 | 4 | 8 | 16 (recently widened from 4 | 8 | 16
+    on 2026-04-28 to support custom A/B time signatures)."
+  - "Per-track subdivisions: a row can have its OWN stepsPerBar and
+    cycle that differs from the canonical bar. This is the
+    polyrhythm primitive — Sound's '÷9' badge per channel sets it."
+
+related_indexes:
+  - path: ../INDEX.yaml
+    why: Modular control plane.
+  - path: ../events/INDEX.yaml
+    why: The bus the sequencer emits to.
+  - path: ../../audio/INDEX.yaml
+    why: SoundEngine delegates to this module.

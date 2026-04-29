@@ -1,0 +1,124 @@
+# INDEX.yaml — src/modes/Library
+# Discovery surface for the 536-pattern catalog.
+
+path: app/src/modes/Library
+purpose: >
+  Browse / search / filter the seed corpus + user-saved patterns.
+  Library.tsx is the page shell with search box, facet filters,
+  results pagination, world map, starter paths, and the pattern
+  detail modal. PatternCard / PatternDetail render rows + modal.
+  Filters.tsx + filterState.ts drive the chip-based facet filtering;
+  starter paths + world map are the discovery aids.
+
+last_indexed: 2026-04-28
+
+contents:
+  - name: Library.tsx
+    kind: file
+    lines: 589
+    summary: >
+      Page shell. Owns query / filters / activePath / detailId /
+      regionPreview / page state. Composes seeds + userPatterns
+      (loaded from IDB on mount + on focus) into one allPatterns
+      memo so search / filters / cards run over the union. Detail
+      modal uses ?detail=<id> URL state for share-linkability.
+
+  - name: PatternCard.tsx
+    kind: file
+    lines: 82
+    summary: >
+      Single-pattern card with name / region / meter / kit / tags +
+      a star toggle. Memoized — typing in search no longer re-renders
+      every card.
+
+  - name: PatternDetail.tsx
+    kind: file
+    lines: 279
+    summary: >
+      Full-screen modal — pattern preview (with engine playback),
+      cultural story, tag list, related rhythms, action bar (Load in
+      Practice / Open in Studio / Copy share link). Esc + backdrop
+      click close. Modal state syncs to ?detail=<id> via Library's
+      URL effect.
+
+  - name: Filters.tsx
+    kind: file
+    lines: 124
+    summary: >
+      Facet chip rows — meter / region / genre / kit / source. The
+      'source' chip (all / seed / local) is hidden until the user has
+      saved at least one local pattern, so first-run users never see
+      a chip pointing at nothing.
+
+  - name: filterState.ts
+    kind: file
+    lines: 45
+    summary: >
+      FilterState shape + applyFilters pure function. AND-across-rows,
+      OR-within-row combinator. isUserPattern() helper checks the
+      Pattern object's structural .user flag.
+
+  - name: filterState.test.ts
+    kind: file
+    summary: applyFilters test coverage — meter / region / genre /
+      kit / source / AND-OR-AND combos.
+
+  - name: StarterPaths.tsx
+    kind: file
+    lines: 135
+    summary: >
+      Curated entry-point sequences (e.g. 'Beginner west-african
+      tour'). Click → Library opens the path's filtered view; from
+      there the user clicks a card to play.
+
+  - name: WorldMap.tsx
+    kind: file
+    lines: 53
+    summary: >
+      Static world-map SVG with region labels. Click a region →
+      filters narrow to that region. Compact mode for sidebar.
+
+  - name: GroupingBrowser.tsx
+    kind: file
+    lines: 48
+    summary: >
+      Browse-by-grouping helper — groups patterns by their additive
+      partition (2+2+2+3, 3+3+3+3, etc).
+
+  - name: regions.ts
+    kind: file
+    lines: 178
+    summary: >
+      Static region metadata — color, label, intro paragraph,
+      signature rhythms, characteristic instruments. REGION_BY_ID
+      lookup powers PatternDetail's region intro card.
+
+  - name: paths.ts
+    kind: file
+    lines: 220
+    summary: >
+      The starter path catalog. Each path has id / title / subtitle /
+      context paragraph / patternIds list.
+
+  - name: relatedRhythms.ts
+    kind: file
+    lines: 60
+    summary: >
+      Static cross-references for the 'related rhythms' section in
+      PatternDetail.
+
+invariants:
+  - "Library.tsx looks up the detail pattern from allPatterns first
+    (seed + userPatterns) and only falls back to App's patternById.
+    User patterns can otherwise miss the cache when the modal opens."
+  - "?detail=<id> is unvalidated by the URL parser — Library checks
+    membership against its own loaded corpus, so unknown ids fall
+    through silently rather than throwing."
+
+related_indexes:
+  - path: ../INDEX.yaml
+    why: Per-mode breakdown.
+  - path: ../../patterns/INDEX.yaml
+    why: Pattern schema + the catalog Library exposes.
+  - path: ../../lib/INDEX.yaml
+    why: db.listUserPatterns + urlState.detail.

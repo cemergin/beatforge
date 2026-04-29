@@ -1,0 +1,62 @@
+# INDEX.yaml — src/modes/Midi
+# The hidden secret-tab UI for Web MIDI.
+
+path: app/src/modes/Midi
+purpose: >
+  Reachable via ?tab=_midi from any build (no nav chip in the UI —
+  the tab is for users who know the URL). Single Midi.tsx file
+  composes UI for the bridge in lib/useMidiBridge.ts. State +
+  lifecycle are NOT here — they're owned by the bridge so MIDI
+  survives tab switches.
+
+last_indexed: 2026-04-28
+
+contents:
+  - name: Midi.tsx
+    kind: file
+    lines: ~480
+    summary: >
+      Five sections, top to bottom:
+        - Header: Enable Web MIDI button (auto-fires on subsequent
+          loads via bf_midi_auto_enable flag) + 'reset settings'
+          button that wipes every bf_midi_* localStorage key
+        - Inputs: device chip toggles
+        - Input mappings: editable rows of (kind, channel?, cc / note,
+          → bus address) with a datalist of common addresses. Saved
+          to localStorage via lib/midiMappings.
+        - Channel outputs: 5 rows, one per audio channel (Kick / Snare
+          / Hat / Open hat / Clap by default). Each row: enable / out
+          device / midi channel (1-16) / note (0-127 + name like 'C2')
+          / vel scale (0..1 fraction) / test button. Saved via
+          lib/midiChannelOut.
+        - Clock I/O: listen-in toggle (BPM smoothed over 24 ticks +
+          start/stop sync) + send-out toggle (24 PPQN to chosen
+          output). Off by default per spec.
+        - Test send: pick output + ch + note + vel for one-off note-
+          on/off + cc messages. Default vel 99.
+        - Monitor: live byte log with hex + decoded form, dir-↓ for
+          incoming + dir-↑ for outgoing (sequencer sink + test
+          buttons). Pause/resume + clear.
+
+design_notes:
+  - "The page is purely UI — no Web MIDI access lifecycle here. State
+    flows down from useMidiBridge (channelOuts / inputMappings /
+    activeInputIds / clockListenEnabled / etc). Setters flow back up.
+    This is what lets MIDI keep running while the user is in
+    Practice / Studio / Library."
+
+  - "Address strings in the input-mapping datalist are hard-coded
+    (master.gain.value, master.dry.value, master.reverb.wet, etc).
+    A future audit may want to move this list to share with the
+    router's registered addresses. See review notes."
+
+related_indexes:
+  - path: ../INDEX.yaml
+    why: Per-mode breakdown.
+  - path: ../../lib/INDEX.yaml
+    why: useMidiBridge — the React lifecycle owner.
+  - path: ../../modules/midi/INDEX.yaml
+    why: The pure MIDI bridge / sink / clock the UI exposes.
+  - path: ../../../docs/2026-04-28-engineering-review-notes.md
+    why: Open audit items (auto-enable error surfacing, hot-unplug,
+      branded BusAddress).

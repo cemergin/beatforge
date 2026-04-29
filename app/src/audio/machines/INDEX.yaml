@@ -1,0 +1,73 @@
+# INDEX.yaml — src/audio/machines
+# The modular voice + FX library.
+
+path: app/src/audio/machines
+purpose: >
+  Declarative library of ControllableModules. voice/ is the per-voice
+  archetypes (kick / snare / hat / clap / tom / cowbell / modal / fm
+  / formant / noise / chip / crackle / phase-distort / wavefolder).
+  fx/ is the master + per-channel effects. registry.ts is the
+  VOICE_MACHINES catalog the Studio UI consumes. types.ts has the
+  shared ParamSpec / KnobSpec / VoiceCtx / VoiceMachine types.
+
+last_indexed: 2026-04-29
+
+contents:
+  - name: registry.ts
+    summary: >
+      VOICE_MACHINES — id → (label, init function, default config).
+      Source of truth for the Studio UI's machine selector. Categories
+      (kick / snare / perc / melodic / etc) drive grouping in the
+      dropdown via MACHINE_CATEGORY + MACHINE_CATEGORY_ORDER.
+
+  - name: types.ts
+    summary: >
+      Shared types: VoiceMachine (the per-archetype interface), KnobSpec
+      / DiscreteSpec (UI-driving param shapes), VoiceCtx (ctx +
+      destination), MachineConfig (the persisted per-channel config),
+      ModValues (modulation runtime values).
+
+  - name: voice-controller.ts
+    summary: >
+      triggerVoice(cfg, vc, when, amp) — dispatches to the right
+      voice/<arch>'s render function based on cfg.archetype. Called
+      by SoundEngine's TriggerEvent handler.
+
+  - name: voice/
+    kind: folder
+    summary: 14 voice-archetype files. See voice/INDEX.yaml.
+    related: [voice/INDEX.yaml]
+
+  - name: fx/
+    kind: folder
+    summary: 5 FX modules + shared helpers. See fx/INDEX.yaml.
+    related: [fx/INDEX.yaml]
+
+  - name: _shared/
+    kind: folder
+    summary: >
+      Lower-level shared audio helpers (audio.ts) — context-agnostic
+      oscillator / noise / amp envelope / filter constructors. Used
+      by every voice and most FX.
+
+  - name: voice-controller.test.ts
+    summary: Trigger dispatch + edge cases (unknown archetype,
+      missing config).
+
+invariants:
+  - "Voice render functions are stateless — fresh graph per trigger,
+    decays on its own. State lives in MachineConfig (persisted),
+    not in the voice file."
+  - "Every voice + FX module exposes a ControllableModule via
+    modules/audio-graph. UI knobs / MIDI CCs / automation drive
+    them through the bus + router, never via direct method calls."
+
+related_indexes:
+  - path: ../INDEX.yaml
+    why: Audio runtime parent.
+  - path: voice/INDEX.yaml
+    why: Voice archetype reference.
+  - path: fx/INDEX.yaml
+    why: FX module reference.
+  - path: ../../modules/audio-graph/INDEX.yaml
+    why: ControllableModule contract these modules implement.

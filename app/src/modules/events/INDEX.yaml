@@ -1,0 +1,63 @@
+# INDEX.yaml — src/modules/events
+# The typed pub/sub bus.
+
+path: app/src/modules/events
+purpose: >
+  Single source of truth for 'things that happened' in the app —
+  TriggerEvent / ParamEvent / BarEvent / StepEvent / TransportEvent /
+  ClockEvent / PatternEvent / ReleaseEvent. Every producer (engine
+  scheduler, UI knobs, MIDI bridge, automation) emits into one
+  EventBus; every consumer (router, UI cursors, MIDI sink, recorder)
+  subscribes from there.
+
+last_indexed: 2026-04-28
+
+contents:
+  - name: bus.ts
+    kind: file
+    lines: 78
+    summary: >
+      makeEventBus() factory — returns { emit, on, onAny }. on takes
+      a typed event name and a narrowed handler; onAny gets every
+      event for loggers / recorders. Listeners are isolated by
+      try/catch so a buggy subscriber can't break the chain.
+    exports:
+      - makeEventBus
+      - type EventBus
+
+  - name: types.ts
+    kind: file
+    lines: 127
+    summary: >
+      The Event union and per-type interfaces:
+        - TriggerEvent (target / velocity / when)
+        - ReleaseEvent (target / when)
+        - ParamEvent (target / value / ramp? / when?)
+        - BarEvent (bar / when)
+        - StepEvent (channel / step / when)
+        - TransportEvent (action: 'play'/'stop'/'locate' / when / bar?)
+        - ClockEvent (tick / when) — defined but no producer yet
+        - PatternEvent (action / payload / when)
+
+  - name: index.ts
+    kind: file
+    summary: Barrel — types + makeEventBus.
+
+  - name: bus.test.ts
+    kind: file
+    summary: >
+      Subscribe / emit / onAny / unsubscribe round-trips + handler
+      isolation when one throws.
+
+invariants:
+  - "Bus listeners are isolated — a throw in one listener doesn't
+    break others. Don't remove the try/catch in dispatch."
+  - "ClockEvent is defined but no producer emits one. The MIDI
+    clock listener uses callbacks (not bus events) so multi-source
+    clock can be filtered upstream."
+
+related_indexes:
+  - path: ../INDEX.yaml
+    why: Modular control plane.
+  - path: ../router/INDEX.yaml
+    why: The primary consumer (dispatches param + trigger events).

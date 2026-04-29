@@ -1,0 +1,67 @@
+# INDEX.yaml — src/modules/session
+# Cross-mode shared React state.
+
+path: app/src/modules/session
+purpose: >
+  Single React context that survives tab switches. SessionProvider
+  wraps the route tree in App.tsx; useSession() inside any mode
+  reads / writes the cross-tab session. Tab switches stop playback
+  but leave session state alive — pattern + sticky edits + kit +
+  channels + bpm carry across.
+
+last_indexed: 2026-04-28
+
+contents:
+  - name: session.tsx
+    kind: file
+    summary: >
+      SessionProvider component + useSession hook. Owns: pattern
+      (with sticky edits applied), origin (the last loaded pattern —
+      dirty = pattern !== origin), kit, channels, bpm, swing,
+      playing flag.
+
+      loadPattern(p) is the explicit reset — replaces sticky state.
+      setPattern(updater) is the sticky edit — patches in place
+      without touching origin. setKit / setChannels / setChannel /
+      setBpm / setSwing / start / stop round out the API.
+
+  - name: context.ts
+    kind: file
+    lines: 20
+    summary: React context object — split from session.tsx so a
+      consumer can import the type without pulling in the Provider.
+
+  - name: types.ts
+    kind: file
+    lines: 85
+    summary: >
+      SessionState interface — the shape useSession returns. dirty
+      flag is a derived value, not stored.
+
+  - name: index.ts
+    kind: file
+    summary: Barrel — Provider + hook + types.
+
+  - name: session.test.tsx
+    kind: file
+    summary: >
+      loadPattern resets sticky / setPattern preserves origin /
+      tab-switch doesn't reset state / dirty flag flips correctly.
+
+invariants:
+  - "dirty = pattern !== origin (reference compare). Editing the
+    pattern via setPattern(updater) returns a new object reference
+    even for trivial patches; loadPattern resets origin + pattern
+    to the same reference so dirty drops back to false."
+  - "Tab switches DO NOT call session.stop or session.loadPattern.
+    The engine stops on tab change (App.tsx switchTab) but session
+    state is preserved."
+  - "App.tsx ModeShell guards external pattern handoffs (Library
+    card click, ?pattern= URL nav) with a confirm dialog when
+    session.dirty — see App.tsx:373."
+
+related_indexes:
+  - path: ../INDEX.yaml
+    why: Modular control plane.
+  - path: ../../App.tsx
+    why: SessionProvider mount + the dirty guard.

@@ -1,0 +1,57 @@
+# INDEX.yaml — src/modes/Practice
+# The metronome + speed trainer.
+
+path: app/src/modes/Practice
+purpose: >
+  The daily-use page. Practice.tsx owns BPM / swing / volume / kit /
+  mute / count-in, three step-grid views (linear / pill / circular),
+  audible cursors fed by the engine, and the trainer subscription to
+  bar events. Trainer.tsx is the speed-trainer widget — repeat-for-N-
+  bars, increase-BPM-by-N — that the spec calls THE #1 practice
+  feature.
+
+last_indexed: 2026-04-28
+
+contents:
+  - name: Practice.tsx
+    kind: file
+    lines: 790
+    summary: >
+      Page layout + every interactive control on the metronome page.
+      Reads pattern from session, mirrors session.dirty in a small
+      indicator, listens to the engine bus for BarEvents (the trainer
+      subscribes here) and StepEvents (cursor positioning). Keyboard
+      shortcuts: space (play), [/] (BPM down/up by trainer step,
+      respects trainer.from clamp), T (tap), A-G + Q-T (audition).
+    depends_on:
+      - audio/runtime/sound-engine
+      - modules/session
+      - components/* (BeatDots / LinearGrid / PillGrid / CircularGrid)
+      - components/metronome/* (BpmHero / KitPanel / PlayVolume /
+        SwingPanel / AccentsPanel / CountInPanel)
+      - lib/storage (highlights / recents / kit / volume)
+
+  - name: Trainer.tsx
+    kind: file
+    lines: 111
+    summary: >
+      Speed-trainer widget. Config: from (start BPM) / to (target) /
+      step (BPM increment) / bars (bars per step). Subscribes to
+      engine bar events; on the Nth bar, ramps BPM by `step`. Stops
+      at `to`. Recovery shortcut: [ steps BPM down by trainer.step
+      without disabling the trainer.
+
+invariants:
+  - "Trainer reads BPM via session.bpm and writes through session.setBpm
+    so the change rides across tab switches."
+  - "Practice never calls engine.setX directly for parameters that have
+    an address — sliders emit ParamEvents on engine.getEventBus() and
+    the router (App.tsx ModeShell) dispatches them."
+
+related_indexes:
+  - path: ../INDEX.yaml
+    why: Per-mode breakdown.
+  - path: ../../components/INDEX.yaml
+    why: BpmHero / KitPanel / PlayVolume / etc.
+  - path: ../../audio/INDEX.yaml
+    why: SoundEngine + bar / step events the trainer + cursors consume.

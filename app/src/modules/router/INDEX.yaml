@@ -1,0 +1,67 @@
+# INDEX.yaml — src/modules/router
+# Address-keyed dispatch from the EventBus into ControllableModules.
+
+path: app/src/modules/router
+purpose: >
+  Subscribes to ParamEvent + TriggerEvent on a bus and routes each
+  to the right ControllableModule (registered at an address) or
+  voice handler. This is the layer that lets UI knobs, MIDI CCs,
+  automation lanes, and saved-state hydration all drive audio
+  through the same code path.
+
+last_indexed: 2026-04-28
+
+contents:
+  - name: router.ts
+    kind: file
+    lines: 83
+    summary: >
+      makeRouter() factory. Owns two registries: modules (address →
+      ControllableModule) and voices (address → VoiceHandler).
+
+      Address resolution is greedy longest-prefix: target like
+      'channel.0.color.cutoff' first tries the exact path, then
+      strips trailing segments looking for a registered module,
+      treating remaining segments as the param name. So registering
+      at 'channel.0.color' with param 'cutoff' matches a target of
+      'channel.0.color.cutoff'.
+
+      Voice triggers go to exact-match registrations only — voices
+      live at well-known addresses ('channel.<n>').
+    exports:
+      - makeRouter
+      - type Router
+      - type VoiceHandler
+
+  - name: types.ts
+    kind: file
+    lines: 35
+    summary: Router interface + VoiceHandler signature.
+
+  - name: index.ts
+    kind: file
+    summary: Barrel.
+
+  - name: router.test.ts
+    kind: file
+    summary: >
+      Address resolution (exact + nested), unsubscribe behavior
+      (unsubscribe-after-replacement protection), bindBus dispatch
+      for both event types.
+
+invariants:
+  - "Unsubscribe is protected against re-registration: calling the
+    returned off() after a different module replaced the address
+    is a no-op (only removes if the recorded module is still the
+    one at the address)."
+  - "Dispatch silently drops unknown targets — no warn, no throw.
+    This is by design — the bus is sparse, the router is the matcher.
+    A logWarn would be very chatty during normal operation."
+
+related_indexes:
+  - path: ../INDEX.yaml
+    why: Modular control plane.
+  - path: ../events/INDEX.yaml
+    why: The bus the router subscribes to.
+  - path: ../audio-graph/INDEX.yaml
+    why: ControllableModule contract the router calls .set() on.

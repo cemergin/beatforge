@@ -1,0 +1,73 @@
+# INDEX.yaml — src/audio/machines/fx
+# Master + per-channel FX modules.
+
+path: app/src/audio/machines/fx
+purpose: >
+  Each FX is a tiny module that exposes a ControllableModule — input
+  AudioNode (the "send" or insert in") + output AudioNode + ParamSpec
+  list + .set() that ramps params. Master FX (reverb, delay) live on
+  the master bus; per-channel FX (overdrive, bitcrush, filter) slot
+  into ChannelStrip's color FX bay (audio/runtime/ChannelStrip).
+
+last_indexed: 2026-04-29
+
+contents:
+  - name: reverb.ts
+    summary: >
+      Convolver with a synthesized noise-burst impulse. wet is the
+      master-wet gain (continuous); size + decay are structural —
+      changing them rebuilds the impulse buffer. Live during
+      playback: tails already scheduled finish under the old buffer,
+      so a swap doesn't click.
+
+  - name: delay.ts
+    summary: >
+      Stereo (currently mono) feedback delay with continuous wet /
+      time / feedback knobs. Used as a master FX; could be slotted
+      per-channel in future.
+
+  - name: filter.ts
+    summary: >
+      Per-channel filter color FX — type (lowpass / bandpass /
+      highpass) + cutoff + Q + drive.
+
+  - name: overdrive.ts
+    summary: >
+      Per-channel overdrive color FX. Drive amount + tone shaping.
+
+  - name: bitcrush.ts
+    summary: >
+      Per-channel bitcrush color FX — bit depth + sample rate
+      reduction. The 'lo-fi' button.
+
+  - name: _shared.ts
+    summary: >
+      Shared helpers — rampParam (the .set() ramp shape every module
+      uses), makeReverbImpulse (noise-burst impulse synthesis used by
+      reverb.ts).
+
+  - name: index.ts
+    summary: Barrel — every FX factory + types.
+
+  - name: fx.test.ts
+    summary: >
+      Structural tests against a stub AudioContext. Each FX's set()
+      is exercised through every ParamSpec; round-trip preserves
+      the wet / size / decay shape.
+
+invariants:
+  - "Master FX wet returns flow through HF (16 kHz, -8 dB) and LF
+    (30 Hz, -12 dB) shelves before joining the master bus. The
+    shelves are inserted in audio/runtime/sound-engine.ts, NOT
+    here — these modules just produce the wet signal."
+  - "Structural params (reverb size/decay) rebuild the impulse
+    buffer mid-playback. Live tails finish under the old buffer to
+    avoid clicks."
+
+related_indexes:
+  - path: ../../INDEX.yaml
+    why: Audio runtime parent.
+  - path: ../../runtime/sound-engine.ts
+    why: Where master FX are instantiated + dampened.
+  - path: ../../runtime/ChannelStrip.ts
+    why: Per-channel color FX slot consumer.
