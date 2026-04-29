@@ -180,143 +180,274 @@ export function regionLabel(id: RegionId): string {
 
 // ── Translations ────────────────────────────────────────────────────
 //
-// Region `intro` paragraphs stay English on purpose — translating
-// 16 long musicology paragraphs into 6 locales is a separate per-PR
-// content pass, not blocking i18n shipping. `instruments` and
-// `keyRhythms` arrays also stay English: they're proper nouns
-// (darbuka, tabla, surdo) that read better untranslated.
+// `short` + `label` translate into all 6 non-EN locales for the
+// chrome (filter chips, world-map blobs, modal headers).
 //
-// Only `short` (filter chip + abbreviated badges) and `label` (full
-// region name in modal headers) are translated here, because those
-// are everywhere in the chrome.
+// `intro` translates only into TR + ES (BeatForge's launch locales
+// outside English). The other 4 locales (ZH/FR/HI/RU) intentionally
+// fall through to the EN intro — translating 16 long musicology
+// paragraphs into every locale is a per-PR contribution flow, not
+// infra-blocking. Native speakers welcome to add their locale's
+// intro in regional PRs.
+//
+// `instruments` and `keyRhythms` arrays stay EN-only: they're proper
+// nouns (darbuka, tabla, surdo, clave) that read better untranslated.
 
-type RegionLabels = { short: string; label: string };
+type RegionLabels = { short: string; label: string; intro?: string };
 type RegionTranslations = Partial<Record<Exclude<Lang, 'en'>, RegionLabels>>;
 
 const REGION_I18N: Record<RegionId, RegionTranslations> = {
   'turkey-ottoman': {
-    tr: { short: 'Türkiye', label: 'Türkiye / Osmanlı' },
-    es: { short: 'Turquía', label: 'Turquía / Otomano' },
+    tr: {
+      short: 'Türkiye',
+      label: 'Türkiye / Osmanlı',
+      intro: `Türk ritmi usul üzerine kuruludur — düm (derin) ve tek (keskin) vuruşlardan oluşan, 2'den 120'ye kadar uzanabilen döngüler. Davul-zurna ikilisi köy düğünlerine ve sünnet törenlerine eşlik eder; hafif, gümüş tınılı darbuka şehir meyhanelerini ve düğün salonlarını sürükler. 9/8 (2+2+2+3) gibi aksak döngüler, atın yürüyüş arasında tavır değiştirmesi gibi hissedilir; Osmanlı sarayı bunları olağanüstü derinlikte bestelere işledi. Anadolu halk müziği bendir ve kaşığı katar; çağdaş arabesk ve pop hâlâ darbukayı baş ses olarak öne çıkarır.`,
+    },
+    es: {
+      short: 'Turquía',
+      label: 'Turquía / Otomano',
+      intro: `El ritmo turco se construye sobre el usul — ciclos de düm (graves) y tek (agudos) que pueden ir de 2 a 120 pulsos. La pareja davul-zurna lidera bodas y circuncisiones rurales, mientras que la darbuka, ligera y de tono plateado, mueve las tabernas urbanas y los salones de boda. Ciclos aksak como 9/8 (2+2+2+3) se sienten como un caballo cambiando de paso, y la corte otomana los refinó hasta composiciones de extraordinaria profundidad. El folk anatolio suma el bendir y las kaşık (cucharas de madera); el arabesk y el pop contemporáneos siguen poniendo la darbuka al frente, no como acompañante.`,
+    },
     zh: { short: '土耳其', label: '土耳其 / 奥斯曼' },
     fr: { short: 'Turquie', label: 'Turquie / Ottoman' },
     hi: { short: 'तुर्की', label: 'तुर्की / ओस्मानी' },
     ru: { short: 'Турция', label: 'Турция / Османы' },
   },
   'arabic-swana': {
-    tr: { short: 'SWANA', label: 'Arap / SWANA' },
-    es: { short: 'SWANA', label: 'Árabe / SWANA' },
+    tr: {
+      short: 'SWANA',
+      label: 'Arap / SWANA',
+      intro: `Arapça konuşulan dünya boyunca iqa'at sistemi zamanı dum ve tak döngüleri olarak örer; Mısır ve Levant pop'unun dört vuruşluk varsayılanı maqsum, ortak dile en yakın olanıdır. Kadeh biçimli darbuka (tabla ya da doumbek olarak da bilinir) topluluğun merkezidir; yanında ince işçilik için riq (zilli def) ve daha derin trans müziği için bendir çerçeve davulu yer alır. 10 vuruşluk samai thaqil, 8 vuruşluk masmoudi ve 4 vuruşluk malfuf gibi ağır iqa'at sırasıyla Sufi zikr törenlerini, Mısır film orkestralarını ve Körfez khaleeji'sini taşır. Bu ritimler İslam'dan eskidir — klasik Arap şiirinin vezninden gelir.`,
+    },
+    es: {
+      short: 'SWANA',
+      label: 'Árabe / SWANA',
+      intro: `En el mundo de habla árabe, el sistema iqa'at organiza el tiempo en ciclos de dum y tak; el maqsum — el patrón de cuatro pulsos del pop egipcio y levantino — funciona como lengua franca. La darbuka con forma de copa (también llamada tabla o doumbek) ocupa el centro del ensamble, flanqueada por el riq (pandero con címbalos) para filigranas delicadas y el bendir para la música de trance más profunda. Iqa'at más pesados como el samai thaqil de 10 tiempos, el masmoudi de 8 y el malfuf de 4 sostienen, respectivamente, las ceremonias sufíes de dhikr, las orquestas de cine egipcio y el khaleeji del Golfo. Los ritmos preceden al Islam — vienen de la métrica de la poesía árabe clásica.`,
+    },
     zh: { short: 'SWANA', label: '阿拉伯 / SWANA' },
     fr: { short: 'SWANA', label: 'Arabe / SWANA' },
     hi: { short: 'SWANA', label: 'अरब / SWANA' },
     ru: { short: 'SWANA', label: 'Арабский / SWANA' },
   },
   'persia': {
-    tr: { short: 'İran', label: 'İran' },
-    es: { short: 'Persia', label: 'Persia' },
+    tr: {
+      short: 'İran',
+      label: 'İran',
+      intro: `İran müziği uzun nefeslerle düşünür. Tombak — oyma dut ağacından bir kadeh davul — on parmakla aynı anda çalınır; aynı tümce içinde fısıldayabilir ya da silah patlaması gibi çatlayabilir. Daf, halka asılı dev bir çerçeve davul, Sufi semâ törenlerinin sesidir; istikrarlı bir hızlanmayla dinleyiciyi transa iter. Pers ritmik döngüleri (usul-e iqa'i) Sasani sarayında yazıya geçirildi ve doğrudan dastgah modal geleneğine besler. Bölgesel gelenekler kendi vurgularını ekler: Horasanlı dotar ritimleri, Afrika etkili Bandari kıyı groove'ları ve saatlerce uzayan Kürt daf törenleri.`,
+    },
+    es: {
+      short: 'Persia',
+      label: 'Persia',
+      intro: `La música persa piensa en respiraciones largas. El tombak — un tambor con forma de cáliz tallado en morera — se toca con los diez dedos a la vez; produce una paleta capaz de susurrar o de estallar como un disparo dentro de una misma frase. El daf, un enorme tambor de marco con anillos colgantes, es la voz de las ceremonias sufíes samā: empuja al oyente al trance mediante una aceleración constante. Los ciclos rítmicos persas (usul-e iqa'i) se codificaron en la corte sasánida y alimentan directamente la tradición modal del dastgah. Las tradiciones regionales añaden sus acentos: ritmos del dotar de Khorasan, grooves costeros bandari con influencias africanas, y ceremonias kurdas de daf que duran horas.`,
+    },
     zh: { short: '波斯', label: '波斯' },
     fr: { short: 'Perse', label: 'Perse' },
     hi: { short: 'पर्शिया', label: 'पर्शिया' },
     ru: { short: 'Персия', label: 'Персия' },
   },
   'india': {
-    tr: { short: 'Hindistan', label: 'Hindistan' },
-    es: { short: 'India', label: 'India' },
+    tr: {
+      short: 'Hindistan',
+      label: 'Hindistan',
+      intro: `Hint klasik ritmi tāla halinde örgütlenir — el üzerinde sayılan uzun döngüsel çerçeveler; tali (alkış) ve khali (dalga) güçlü ve boş vuruşları işaretler. Hindustani tabla kuzeye hâkimdir; 16 vuruşluk Teental ve 10 vuruşluk Jhaptal kathak dansından kavvalîye kadar her şeyi çerçeveler. Carnatic güney ise zamanı varil biçimli mridangam ve kanjira çerçeve davulu üzerinde tutar. Hint ritmini ayırt eden konuşma sözcüğüdür: her davul vuruşunun bir hecesi (bol) vardır; usta çalgıcılar tek nota bile çalmadan kelimelerle bütün doğaçlamalar besteleyebilir. Halk ve Bollywood, dholak ile kum saati biçimli khol'a yaslanır; bhangra için devasa dhol vardır.`,
+    },
+    es: {
+      short: 'India',
+      label: 'India',
+      intro: `El ritmo clásico indio se organiza en tāla — marcos cíclicos largos contados sobre la mano, con palmas (tali) y ondas (khali) que marcan pulsos fuertes y vacíos. La tabla hindustaní domina el norte: el Teental de 16 pulsos y el Jhaptal de 10 enmarcan desde la danza kathak hasta el qawwali; el sur carnático lleva el tiempo sobre el mridangam (tambor de barril) y el kanjira (pandero). Lo que hace distinto al ritmo indio es el vocabulario hablado: cada golpe tiene su sílaba (bol), y los maestros componen improvisaciones enteras en palabras antes de tocar una sola nota. El folk y Bollywood se apoyan en el dholak y el khol con forma de reloj de arena, más el dhol descomunal del bhangra.`,
+    },
     zh: { short: '印度', label: '印度' },
     fr: { short: 'Inde', label: 'Inde' },
     hi: { short: 'भारत', label: 'भारत' },
     ru: { short: 'Индия', label: 'Индия' },
   },
   'gamelan-southeast-asia': {
-    tr: { short: 'Gamelan', label: 'Gamelan / GD Asya' },
-    es: { short: 'Gamelán', label: 'Gamelán / SE Asia' },
+    tr: {
+      short: 'Gamelan',
+      label: 'Gamelan / GD Asya',
+      intro: `Bir Cava ya da Bali gamelanı bir çalgılar topluluğu değildir — tek bir varlık olarak anlaşılır; ruhunu büyük gong ageng tutar. Zaman kolotomik biçimde örgütlenir: uzun yapısal gonglar tümcelerin sonunu işaret eder, daha kısa kenong ve kempul vuruşları onları böler, kendang el davulu ise tempoyu canlı yönetir. Cava gamelanı yavaş, meditatif rafine (halus) tercih eder; Bali gong kebyar, bir titreşim için hafif farklı akortlanmış çalgı çiftleri arasında çalınan iç içe geçen kotekan örüntülerinde patlar. Tay piphat, Filipin kulintang ve Vietnam saray toplulukları aynı kolotomik mantığı paylaşır — zaman, vuruş değil, çanlarla işaretlenir.`,
+    },
+    es: {
+      short: 'Gamelán',
+      label: 'Gamelán / SE Asia',
+      intro: `Un gamelán javanés o balinés no es una colección de instrumentos: se entiende como un solo ser, con el gran gong ageng sosteniendo su alma. El tiempo se organiza colotómicamente: los gongs estructurales largos cierran las frases, los kenong y kempul más cortos las subdividen, y el tambor de mano kendang dirige el tempo en vivo. El gamelán javanés cultiva el refinamiento lento y meditativo (halus); el gong kebyar balinés explota en patrones kotekan entrelazados, ejecutados entre instrumentos pareados afinados ligeramente distintos para producir un latido tornasolado. El piphat tailandés, el kulintang filipino y los ensambles cortesanos vietnamitas comparten la misma lógica colotómica — tiempo marcado por campanas, no por backbeat.`,
+    },
     zh: { short: '甘美兰', label: '甘美兰 / 东南亚' },
     fr: { short: 'Gamelan', label: 'Gamelan / Asie du SE' },
     hi: { short: 'गमेलान', label: 'गमेलान / द.पू. एशिया' },
     ru: { short: 'Гамелан', label: 'Гамелан / ЮВ Азия' },
   },
   'east-asia': {
-    tr: { short: 'D. Asya', label: 'Doğu Asya' },
-    es: { short: 'E. Asia', label: 'Asia Oriental' },
+    tr: {
+      short: 'D. Asya',
+      label: 'Doğu Asya',
+      intro: `Doğu Asya perküsyon gelenekleri, devasa davullar ve hassas, törensel zamanlama zevkini paylaşır. Kore samulnori, yüzyıllarca açık havada çiftçi müziğini (nongak) dört çalgıya damıttı — kum saati biçimli janggu, küçük gong kkwaenggwari, büyük gong jing, varil davulu buk — coşkulu ivmelenmeye doğru hızlanan changdan döngülerine kilitlenmiş. Japon kumi-daiko toplulukları odayı sallayan ō-daiko etrafında merkezlenir ve don-don-ka gibi jiuchi temel örüntülerini üstte her şeyi sabitlemek için kullanır. Çin aslan ve ejder dansı vurmalı çalgıları derin tanggu üzerine kuruludur; opera perküsyonu küçük bangu tahta blokunu şefin asası olarak kullanır. Bölge boyunca daha yüksek ses neredeyse her zaman daha kutsal anlamına gelir.`,
+    },
+    es: {
+      short: 'E. Asia',
+      label: 'Asia Oriental',
+      intro: `Las tradiciones percusivas de Asia Oriental comparten gusto por tambores enormes y un timing ceremonial preciso. El samulnori coreano destiló siglos de música campesina al aire libre (nongak) en cuatro instrumentos — janggu (tambor de reloj de arena), kkwaenggwari (gong pequeño), jing (gong grande), buk (tambor de barril) — encajados en ciclos changdan que aceleran hacia el éxtasis. Los ensambles japoneses kumi-daiko se centran en el ō-daiko que hace temblar la sala y usan patrones jiuchi como don-don-ka para anclar todo lo demás. La percusión china de danzas del león y el dragón se construye en torno al cavernoso tanggu; la percusión de ópera usa el pequeño bangu como batuta del director. En toda la región, más fuerte casi siempre significa más sagrado.`,
+    },
     zh: { short: '东亚', label: '东亚' },
     fr: { short: 'Asie de l\'E.', label: 'Asie de l\'Est' },
     hi: { short: 'पू. एशिया', label: 'पूर्वी एशिया' },
     ru: { short: 'В. Азия', label: 'Восточная Азия' },
   },
   'west-africa': {
-    tr: { short: 'Batı Afrika', label: 'Batı Afrika' },
-    es: { short: 'África O.', label: 'África Occidental' },
+    tr: {
+      short: 'Batı Afrika',
+      label: 'Batı Afrika',
+      intro: `Batı Afrika toplulukları ritmi süslemeli bir nabız değil, iç içe geçmiş bir konuşma olarak düşünür. Bir Ewe davul çemberi gankogui çan zaman çizgisini, axatse su kabağı çıngırağını, iki ya da üç destek davulunu ve tüm bunlara karşı doğaçlama yapan bir master atsimevu'yu üst üste yığar — polyritmi müziğin kendisidir. Mande djembe gelenekleri Gine ve Mali'den aynı mantığı taşır: hasat için kassa, güçlü erkekler için dununba, kutlama için sunu — her birinin lider tarafından verilen kendi sinyali (kırılması) vardır. Konuşan davul (Yoruba dilinde dundun, Dagomba'da lunga) tonal dili tam anlamıyla konuşur; kilometrelerce isimleri, atasözlerini ve övgüleri taşır. Atlas geçişinin Atlantik'in karşısına taşıdığı ritmik DNA budur.`,
+    },
+    es: {
+      short: 'África O.',
+      label: 'África Occidental',
+      intro: `Los ensambles de África Occidental conciben el ritmo como una conversación entrelazada, no como un pulso con adornos. Un círculo de tambores ewe superpone una línea temporal en la campana gankogui, una maraca-calabaza axatse, dos o tres tambores de apoyo y un master atsimevu que improvisa contra todo lo demás — la polirritmia ES la música. Las tradiciones mandé del djembe en Guinea y Malí cargan la misma lógica: kassa para la cosecha, dununba para los hombres fuertes, sunu para la celebración — cada una con su patrón de ruptura (señal) lanzado por el líder. El tambor parlante (dundun en yoruba, lunga en dagomba) literalmente habla la lengua tonal: lleva nombres, proverbios y alabanzas a kilómetros. Este es el ADN rítmico que el Pasaje del Medio cargó a través del Atlántico.`,
+    },
     zh: { short: '西非', label: '西非' },
     fr: { short: 'Afr. de l\'O.', label: 'Afrique de l\'Ouest' },
     hi: { short: 'प. अफ्रीका', label: 'पश्चिम अफ्रीका' },
     ru: { short: 'З. Африка', label: 'Западная Африка' },
   },
   'cuba-afrocaribbean': {
-    tr: { short: 'Küba', label: 'Küba / Afro-Karayip' },
-    es: { short: 'Cuba', label: 'Cuba / Afrocaribeño' },
+    tr: {
+      short: 'Küba',
+      label: 'Küba / Afro-Karayip',
+      intro: `Küba, Yoruba, Fon, Kongo ve İspanyol müziklerinin Amerika kıtasındaki en yoğun Afrika kurumsal varlığıyla — cabildos de nación — buluştuğu yerdir; sonuçta tüm dünyanın artık konuştuğu bir ritmik söz dağarcığı doğdu. Beş vuruşlu clave (3-2 ya da 2-3) Rosetta Taşı'dır: her son, mambo, salsa ve timba ona göre yönlenir. Kutsal bata davulları (iyá, itótele, okónkolo) santería törenlerinde Orisha'lara hâlâ Yoruba konuşur; seküler rumba — guaguancó, yambú, columbia — tumbadora ve cajón üzerinde gecekondu avlularında oynanır. Konga, bongo ve son cáscara'nın çan örüntüsü hep buraya kadar uzanır.`,
+    },
+    es: {
+      short: 'Cuba',
+      label: 'Cuba / Afrocaribeño',
+      intro: `Cuba es donde las músicas yoruba, fon, kongo e hispana se encontraron con la presencia institucional africana más densa de las Américas — los cabildos de nación — y produjeron un vocabulario rítmico que el mundo entero habla ahora. La clave de cinco golpes (3-2 o 2-3) es la piedra de Rosetta: cada son, mambo, salsa y timba se orienta a su alrededor. Los batá sagrados (iyá, itótele, okónkolo) todavía hablan yoruba a los orishas en ceremonias santeras, mientras la rumba secular — guaguancó, yambú, columbia — se desarrolla sobre tumbadoras y cajones en patios de tenement. La conga, el bongó y el patrón de cencerro del son cáscara remontan todos hasta aquí.`,
+    },
     zh: { short: '古巴', label: '古巴 / 非洲-加勒比' },
     fr: { short: 'Cuba', label: 'Cuba / Afro-Caraïbe' },
     hi: { short: 'क्यूबा', label: 'क्यूबा / अफ़्रो-कैरेबियन' },
     ru: { short: 'Куба', label: 'Куба / Афро-Карибы' },
   },
   'caribbean': {
-    tr: { short: 'Karayip', label: 'Karayip' },
-    es: { short: 'Caribe', label: 'Caribe' },
+    tr: {
+      short: 'Karayip',
+      label: 'Karayip',
+      intro: `Küba'nın ötesinde Karayipler ayrı ritmik ulusların takımyıldızıdır. Jamaika müziği kendini one-drop etrafında kurdu — snare ve kick 1'in değil 3'ün üstüne düşer — ve reggae'ye yüzen ağırlığını verdi. Trinidad calypso ve soca sıkı 2 ölçülük bir motor odası deseni üzerine oturur; çelik tencereler İkinci Dünya Savaşı sonrası geride bırakılan petrol varillerinden doğdu. Haiti vodou davulu Fon ve Kongo repertuvarlarını üç rada davulu üzerinde korur; méringue ve kompa pisti hareketli tutar. Porto Riko bomba ve plena'sında dansçı çalgıcının vurgularını çağırır, tersi değil. Dominik merengue ve bachata kazıyan güira ile tambora'yı ekler.`,
+    },
+    es: {
+      short: 'Caribe',
+      label: 'Caribe',
+      intro: `Más allá de Cuba, el Caribe es una constelación de naciones rítmicas distintas. La música jamaicana se construyó sobre el one-drop — caja y bombo cayendo en el 3, no en el 1 — que le dio al reggae su peso flotante. El calypso y la soca trinitenses se asientan sobre un patrón compacto de "engine room" en 2 compases; las steel pans nacieron de los bidones de petróleo dejados tras la Segunda Guerra. La percusión vodou haitiana preserva los repertorios fon y kongo en los tres rada drums, mientras méringue y kompa mueven la pista. La bomba y la plena puertorriqueñas son tradiciones de percusión-y-voz donde la bailarina llama los acentos del percusionista, no al revés. El merengue y la bachata dominicanos suman la güira que rasca y la tambora.`,
+    },
     zh: { short: '加勒比', label: '加勒比' },
     fr: { short: 'Caraïbe', label: 'Caraïbes' },
     hi: { short: 'कैरेबियन', label: 'कैरेबियन' },
     ru: { short: 'Карибы', label: 'Карибы' },
   },
   'brazil': {
-    tr: { short: 'Brezilya', label: 'Brezilya' },
-    es: { short: 'Brasil', label: 'Brasil' },
+    tr: {
+      short: 'Brezilya',
+      label: 'Brezilya',
+      intro: `Brezilya yaklaşık 4,9 milyon köleleştirilmiş Afrikalıyı aldı — Kuzey Amerika'ya getirilenin on katı — ve yarımkürenin en derin Afrika ritim havzası oldu. Samba ulusal nabızdır; 2/4'lük bir hücre üzerine kuruludur: surdo derin bir vuruşla downbeat'i işaretler, üstte tamborim senkoplu bir 16'lık deseni keser, cuíca sürtme davulu bir ses gibi konuşur. Bahia'nın candomblé törenleri rum-rumpi-lé atabaque üçlüsünde hâlâ Yoruba toques'leri çalar. Capoeira berimbau'nun yay-tel tıkırtısı altında 6/8'de yuvarlanır; maracatu Recife karnavalında alfaia bas davulu ile gürler; bossa nova ise samba'yı sessizce tekrar katlayıp fısıltılı bir caza dönüştürür.`,
+    },
+    es: {
+      short: 'Brasil',
+      label: 'Brasil',
+      intro: `Brasil recibió aproximadamente 4,9 millones de africanos esclavizados — diez veces los que llegaron a Norteamérica — y se convirtió en el reservorio más profundo de ritmo africano del hemisferio. La samba es el pulso nacional, construida sobre una célula de 2/4: el surdo marca el downbeat con un golpe grave, el tamborim corta una frase sincopada en semicorcheas encima, y la cuíca de fricción habla como una voz. Las ceremonias candomblé de Bahía aún tocan toques yoruba en la trinidad de atabaques rum-rumpi-lé. La capoeira gira en 6/8 bajo el tañido del berimbau, el maracatu retumba con el alfaia en el carnaval de Recife, y la bossa nova vuelve a plegar la samba en susurro de jazz.`,
+    },
     zh: { short: '巴西', label: '巴西' },
     fr: { short: 'Brésil', label: 'Brésil' },
     hi: { short: 'ब्राज़ील', label: 'ब्राज़ील' },
     ru: { short: 'Бразилия', label: 'Бразилия' },
   },
   'andean-south-america': {
-    tr: { short: 'Andlar', label: 'And Güney Amerika' },
-    es: { short: 'Andes', label: 'Sudamérica Andina' },
+    tr: {
+      short: 'Andlar',
+      label: 'And Güney Amerika',
+      intro: `Kolomb öncesi And müziği, iç içe çiftler halinde çalınan üflemeli çalgılar etrafında merkezlenirdi — siku panpipeleri ve quena çentikli flüt — ve perküsyon olarak wankara bas davulu ve kadınlar tarafından çalınan küçük tinya el davulu. Sömürgeleştirme sonrası huayno (senkoplu çift ölçülü şarkı-dans) Peru'dan Bolivya'ya yaylaların popüler sesi oldu; kıyı Peru'su Afro-Peru türlerini geliştirdi: festejo ve landó, sonradan Paco de Lucía'nın flamenkoya soktuğu ahşap cajón kutu davulu üzerinde. Arjantin tango ile zamba, Şili cueca'sı, Uruguay candombe (üç davullu chico-repique-piano dizilimi) bölgeyi tamamlar. Dağ müziği havadar ve sade hissedilir; kıyı müziği ise sallanır.`,
+    },
+    es: {
+      short: 'Andes',
+      label: 'Sudamérica Andina',
+      intro: `La música andina precolombina giraba en torno a instrumentos de viento tocados en parejas entrelazadas — los sikus de panpipe y la quena con muesca — más la percusión del wankara (bombo grave) y la pequeña tinya (tambor de mano que tocaban las mujeres). Tras la colonización, el huayno (canción-danza sincopada en compás binario) se volvió la voz popular del altiplano, de Perú a Bolivia, mientras la costa peruana desarrollaba géneros afroperuanos: festejo y landó sobre el cajón de madera que Paco de Lucía importó después al flamenco. El tango y la zamba argentinos, la cueca chilena y el candombe uruguayo (con su trío chico-repique-piano) cierran la región. La música de montaña tiende a sentirse aireada y austera; la costa, en cambio, oscila.`,
+    },
     zh: { short: '安第斯', label: '安第斯南美' },
     fr: { short: 'Andes', label: 'Amérique du Sud andine' },
     hi: { short: 'एंडीज', label: 'एंडीयन द. अमेरिका' },
     ru: { short: 'Анды', label: 'Андская Юж. Америка' },
   },
   'balkans': {
-    tr: { short: 'Balkanlar', label: 'Balkanlar' },
-    es: { short: 'Balcanes', label: 'Balcanes' },
+    tr: {
+      short: 'Balkanlar',
+      label: 'Balkanlar',
+      intro: `Balkanlar gezegendeki tek-sayılı ölçülerin en yoğun konsantrasyonudur. Sadece Bulgar halk müziği bile düzenli 2/4'ten 22/16'ya kadar ölçüleri belgeler; 7/8 (ruchenitsa) ve 11/16 (kopanitsa) köy halay danslarını döndürür. Osmanlı aksak kavramı — eşit olmayan 2 ve 3 hücreleri — köktedir: "bir-iki-üç-dört" saymazsın, "kısa-uzun" ya da "uzun-kısa-kısa" sayarsın. Çift kafalı bas davul tapan ile tarabuka dans müziğini sürer; Sırbistan ve Makedonya'nın Roman bando takımları bu asimetrik groove'ları öfkeli, virtüöz patlamalara çevirir. Yunan rebetiko (bouzouki üzerinde) ve Romen lăutar (keman ve cimbalom) gelenekleri aynı ritmik DNA'yı paylaşır.`,
+    },
+    es: {
+      short: 'Balcanes',
+      label: 'Balcanes',
+      intro: `Los Balcanes son la concentración más densa de compases impares del planeta. Solo el folk búlgaro documenta métricas que van de un 2/4 regular a un asombroso 22/16, con 7/8 (ruchenitsa) y 11/16 (kopanitsa) hilando danzas circulares de aldea. El concepto otomano del aksak — células desiguales de 2 y 3 — está en la raíz: no cuentas "uno-y-dos-y," cuentas "corto-largo" o "largo-corto-corto." El tapan (bombo de doble parche) y la tarabuka mueven la música de baile, mientras las brass bands romaníes de Serbia y Macedonia convierten estos grooves asimétricos en estallidos virtuosos furiosos. El rebétiko griego sobre bouzouki y la tradición lăutar rumana de violín y cimbalom comparten el mismo ADN rítmico.`,
+    },
     zh: { short: '巴尔干', label: '巴尔干' },
     fr: { short: 'Balkans', label: 'Balkans' },
     hi: { short: 'बाल्कन', label: 'बाल्कन' },
     ru: { short: 'Балканы', label: 'Балканы' },
   },
   'iberia-flamenco': {
-    tr: { short: 'İberya', label: 'İberya / Flamenko' },
-    es: { short: 'Iberia', label: 'Iberia / Flamenco' },
+    tr: {
+      short: 'İberya',
+      label: 'İberya / Flamenko',
+      intro: `Flamenkonun kalbi compás'tır — 3, 6, 8, 10 ve 12'de düşen vurgularla 12 vuruşluk bir döngü; aynı anda hem 3/4 hem 6/8 olarak duyulabilir. Bütün bedeni gerektiren bir ritmik histir: palmas (iki tonda perküsif el çırpmalar — sordas ve claras), zapateado (dansçının çekiçli topuk-burun karşı sesi) ve cajón (Paco de Lucía'nın 1977'de flamenkoya soktuğu ve tüm geleneği yeniden bağlayan Peru ahşap kutusu). Palolar — bulerías, soleá, alegrías, siguiriya — her biri kendi compás'ı ve duygusal kayıtlarıyla. Endülüs dışında Galiçya ve Asturya gaita gayda gelenekleri daha eski bir Kelt-Atlantik nabzı taşır; Bask txalaparta tek bir tahta üstündeki iki çalıcıdır.`,
+    },
+    es: {
+      short: 'Iberia',
+      label: 'Iberia / Flamenco',
+      intro: `El corazón del flamenco es el compás — un ciclo de 12 pulsos con acentos en 3, 6, 8, 10 y 12 que puede sonar simultáneamente en 3/4 y 6/8. Es una sensación rítmica que pide todo el cuerpo: palmas (palmas percutivas en dos tonos — sordas y claras), zapateado (el contrapunto de tacón y punta de la bailaora) y cajón (la caja peruana que Paco de Lucía introdujo en el flamenco en 1977 y que recableó la tradición entera). Los palos — bulerías, soleá, alegrías, siguiriya — cada uno con su compás y registro emocional. Fuera de Andalucía, las tradiciones gallegas y asturianas de gaita llevan un pulso celta-atlántico más antiguo, y la txalaparta vasca son dos tocadores sobre una sola tabla de madera.`,
+    },
     zh: { short: '伊比利亚', label: '伊比利亚 / 弗拉门戈' },
     fr: { short: 'Ibérie', label: 'Ibérie / Flamenco' },
     hi: { short: 'इबेरिया', label: 'इबेरिया / फ्लेमेंको' },
     ru: { short: 'Иберия', label: 'Иберия / Фламенко' },
   },
   'celtic-europe': {
-    tr: { short: 'Kelt', label: 'Kelt / Avrupa' },
-    es: { short: 'Celta', label: 'Celta / Europa' },
+    tr: {
+      short: 'Kelt',
+      label: 'Kelt / Avrupa',
+      intro: `İrlanda geleneksel müziği parça türüne göre örgütlenir — reel (4/4, sürükleyici), jig (6/8, ezgili), slip jig (9/8, yuvarlanan), hornpipe (noktalı 4/4, swing'li) — ve her biri dansçılar için kendi bedensel hissini taşır. Bodhrán çerçeve davulu, 1960'larda Seán Ó Riada tarafından kırsal yenilikten konser çalgısına yükseltildi; ahşap bir tipper ve perde büken arka el kullanır. İskoç pipe band'leri snare ve bas davulu Highland gaydaları altında katmanlar; İskandinav polskaları (polka değil) ikinci vuruşun diğerlerinden kısa olduğu eşit olmayan üçlü ölçüde sallanır; klezmer ise karakteristik bir 8/8 vurgu örüntüsü üzerinde freylekhs ve bulgar dokur. Ortak iplik: salonlar için değil odalardaki dansçılar için yapılan müzik.`,
+    },
+    es: {
+      short: 'Celta',
+      label: 'Celta / Europa',
+      intro: `La música tradicional irlandesa se organiza por tipo de tonada — reel (4/4, lanzado), jig (6/8, cantarín), slip jig (9/8, rodante), hornpipe (4/4 con puntillo, balanceado) — y cada uno carga su propio sentir corporal para los bailarines. El bodhrán (tambor de marco), promovido de novedad rural a instrumento de concierto por Seán Ó Riada en los 60, usa un tipper de madera y una mano trasera que dobla el tono. Las pipe bands escocesas apilan cajas y bombo bajo las gaitas Highland; las polskas escandinavas (no polkas) oscilan en un compás ternario desigual donde el segundo pulso es más corto que los demás; y el klezmer teje freylekhs y bulgars sobre un patrón característico de acentos en 8/8. El hilo común: música hecha para bailarines en habitaciones, no para salas de concierto.`,
+    },
     zh: { short: '凯尔特', label: '凯尔特 / 欧洲' },
     fr: { short: 'Celte', label: 'Celte / Europe' },
     hi: { short: 'सेल्टिक', label: 'सेल्टिक / यूरोप' },
     ru: { short: 'Кельты', label: 'Кельты / Европа' },
   },
   'electronic-western': {
-    tr: { short: 'Elektronik', label: 'Elektronik / Batı' },
-    es: { short: 'Electrónica', label: 'Electrónica / Occidental' },
+    tr: {
+      short: 'Elektronik',
+      label: 'Elektronik / Batı',
+      intro: `Modern Batı vuruşu kademeli olarak inşa edildi: James Brown'un 1965'te "The One"a kilitli düz 16'lıklara geçişi funk'a ızgarasını verdi; Clyde Stubblefield'ın "Funky Drummer"ı ve Winstons'ın "Amen" break'i tarihin en çok örneklenen ölçüleri oldu. Roland TR-808 (1980) ve TR-909 (1983) bu örüntüleri hip-hop, house ve techno'ya kabloladı — 808'in sub-kick'i modern pop'un bas tarafıdır; 909'un sıkı kick-and-hat örüntüsü techno'nun motorudur. House, techno, jungle, drum & bass, trap ve footwork — hepsi bu iki makinenin, Dilla'nın ızgara dışı hissinin ve disco'nun motorik krautrock'tan miras aldığı four-on-the-floor kick'in etrafında döner. Bu, küresel halk dili olarak sentezlenmiş ritimdir.`,
+    },
+    es: {
+      short: 'Electrónica',
+      label: 'Electrónica / Occidental',
+      intro: `El beat occidental moderno se construyó por capas: el viraje de James Brown en 1965 a semicorcheas rectas trabadas en "The One" le dio al funk su grilla; el "Funky Drummer" de Clyde Stubblefield y el break "Amen" de los Winstons se volvieron los compases más sampleados de la historia. La Roland TR-808 (1980) y la TR-909 (1983) cablearon esos patrones al hip-hop, el house y el techno — el sub-kick del 808 es el bajo del pop moderno, y el patrón de kick y hat del 909 es el motor del techno. House, techno, jungle, drum & bass, trap y footwork orbitan estas dos máquinas, el feel fuera-de-grilla de Dilla, y el bombo en cuatro que el disco heredó del krautrock motorik. Esto es ritmo sintetizado como lengua vernácula global.`,
+    },
     zh: { short: '电子', label: '电子 / 西方' },
     fr: { short: 'Électro', label: 'Électronique / Occidental' },
     hi: { short: 'इलेक्ट्रॉनिक', label: 'इलेक्ट्रॉनिक / पश्चिमी' },
     ru: { short: 'Электро', label: 'Электронная / Западная' },
   },
   'exercise': {
-    tr: { short: 'Egzersizler', label: 'Polyritmi Egzersizleri' },
-    es: { short: 'Ejercicios', label: 'Ejercicios de Polirritmia' },
+    tr: {
+      short: 'Egzersizler',
+      label: 'Polyritmi Egzersizleri',
+      intro: `3:2 ve 4:3 gibi yaygın oranları içselleştirmek için faydalı polyritmi pratik desenleri.`,
+    },
+    es: {
+      short: 'Ejercicios',
+      label: 'Ejercicios de Polirritmia',
+      intro: `Patrones de práctica de polirritmia — útiles para internalizar relaciones comunes como 3:2 y 4:3.`,
+    },
     zh: { short: '练习', label: '复合节奏练习' },
     fr: { short: 'Exercices', label: 'Exercices de Polyrythmie' },
     hi: { short: 'अभ्यास', label: 'पॉलीरिदम अभ्यास' },
@@ -384,9 +515,20 @@ const REGION_I18N: Record<RegionId, RegionTranslations> = {
   },
 };
 
-/** Resolve a region's user-facing labels for a given locale.
- *  Falls back to the English `short` / `label` if a locale is missing. */
-export function localizedRegion(region: RegionMeta, lang: Lang): RegionLabels {
-  if (lang === 'en') return { short: region.short, label: region.label };
-  return REGION_I18N[region.id]?.[lang] ?? { short: region.short, label: region.label };
+/** Resolve a region's user-facing labels + intro for a given locale.
+ *  Falls back to the English values per-field — a locale can supply
+ *  short + label without an intro and the intro renders English. */
+export function localizedRegion(
+  region: RegionMeta,
+  lang: Lang,
+): { short: string; label: string; intro: string } {
+  const en = { short: region.short, label: region.label, intro: region.intro };
+  if (lang === 'en') return en;
+  const o = REGION_I18N[region.id]?.[lang];
+  if (!o) return en;
+  return {
+    short: o.short ?? en.short,
+    label: o.label ?? en.label,
+    intro: o.intro ?? en.intro,
+  };
 }

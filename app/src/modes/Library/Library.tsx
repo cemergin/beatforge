@@ -10,7 +10,7 @@ import { readUrlState } from '../../lib/urlState';
 import { Filters } from './Filters';
 import { applyFilters, DEFAULT_FILTERS, type FilterState } from './filterState';
 import { WorldMap } from './WorldMap';
-import { REGION_BY_ID } from './regions';
+import { REGION_BY_ID, localizedRegion } from './regions';
 import { StarterPaths } from './StarterPaths';
 import { PatternCard } from './PatternCard';
 import { PatternDetail } from './PatternDetail';
@@ -439,10 +439,11 @@ export function Library({ engine, onLoadInPractice, onOpenInStudio }: Props) {
               };
 
               const regionIntro = regionPreview ? REGION_BY_ID[regionPreview] : null;
+              const regionIntroLoc = regionIntro ? localizedRegion(regionIntro, lang) : null;
 
               return (
                 <>
-                  {regionIntro && (
+                  {regionIntro && regionIntroLoc && (
                     <aside
                       className="bf-region-intro-card"
                       style={{ borderColor: regionIntro.color }}
@@ -453,7 +454,7 @@ export function Library({ engine, onLoadInPractice, onOpenInStudio }: Props) {
                           className="bf-region-intro-title"
                           style={{ color: regionIntro.color }}
                         >
-                          {regionIntro.label}
+                          {regionIntroLoc.label}
                         </h3>
                         <button
                           className="bf-region-intro-close"
@@ -467,7 +468,7 @@ export function Library({ engine, onLoadInPractice, onOpenInStudio }: Props) {
                           ×
                         </button>
                       </div>
-                      <p className="bf-region-intro-body">{regionIntro.intro}</p>
+                      <p className="bf-region-intro-body">{regionIntroLoc.intro}</p>
                       {(regionIntro.keyRhythms?.length || regionIntro.instruments?.length) && (
                         <dl className="bf-region-intro-meta">
                           {regionIntro.keyRhythms && regionIntro.keyRhythms.length > 0 && (
