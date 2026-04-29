@@ -18,7 +18,7 @@
 
 BeatForge splits into two projects:
 
-- **BeatForge Metronome** (this spec) — world-rhythm metronome. Ships first. Scope is the existing React prototype in `design/`, productionized for daily use.
+- **BeatForge Metronome** (this spec) — world-rhythm metronome. Ships first. Scope is the existing React prototype (formerly under `design/`, now removed; see git history at ~commit `ecaaec9`), productionized for daily use.
 - **BeatForge Drum Synth** (future, separate project) — full drum synthesizer with deep sound-design capabilities. Does not yet exist in any form. Shared components (design system, rhythm visualizations) extracted into a library *when* that project begins, not before.
 
 "Studio" in the current prototype is a simple step-sequencer that ships with the metronome. It is not the future Drum Synth. Possible rename later so the "serious studio" name stays free.
@@ -100,7 +100,6 @@ beatforge/
 │   ├── vite.config.ts
 │   ├── tsconfig.json
 │   └── package.json
-├── design/                     ← existing prototype — read-only reference
 ├── docs/                       ← specs + architecture + topical reference + process archive
 │   ├── spec/                   ← (this file lives here)
 │   ├── architecture/

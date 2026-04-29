@@ -37,16 +37,6 @@ contents:
       seed corpus. All code destined for production lives here.
     related: [app/INDEX.yaml]
 
-  - name: design
-    kind: folder
-    path: design
-    stability: deprecated
-    summary: >
-      Pre-port React prototype (plain JSX + CSS, no build). The reference
-      implementation the app was translated from. Useful for comparing
-      behavior when something in the ported app seems off.
-    related: [design/INDEX.yaml]
-
   - name: docs
     kind: folder
     path: docs
