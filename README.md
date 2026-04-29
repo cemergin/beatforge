@@ -69,8 +69,13 @@ beatforge/
 │   │   ├── lib/               db, storage, urlState, MIDI bridge
 │   │   └── patterns/          Schema + 536 seed patterns by region
 │   └── INDEX.yaml             Machine-readable codebase index
-├── docs/                      Specs, architecture notes, review notes
-├── research/                  ~50K lines of musicology + pattern research
+├── docs/                      Specs, architecture, topical reference + process archive
+│   ├── spec/                  What BeatForge does — metronome.md + library-content.md
+│   ├── architecture/          Current code architecture (audio, sequencer, React)
+│   ├── topics/                ~64K lines of reference: synthesis, MIDI, PWA,
+│   │                          rhythm traditions (28 regions), patterns (600+),
+│   │                          rhythm engine, interface design, practice pedagogy
+│   └── process/               Design reviews, manifestos, engineering audits
 └── INDEX.yaml                 Top-level repo map
 ```
 

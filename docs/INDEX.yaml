@@ -1,57 +1,66 @@
 # INDEX.yaml — /docs
-# Product + design specifications.
+# Specs + architecture + topical reference + process archive.
 
 path: docs
 purpose: >
-  Specifications that define BeatForge's intent. The 2026-04-22
-  metronome-design spec is the authoritative scope for the shipping
-  v1. Older specs are retained for historical context — they describe
-  a broader vision (SvelteKit, full drum machine) that was split into
-  two projects.
+  Documentation for BeatForge, in four sections: specs (what BeatForge is),
+  architecture (current code), topics (subject-organized reference material
+  that grew out of building it), and process (historical design + engineering
+  artifacts). Each subdirectory has its own README that maps the chunks
+  inside.
 
-last_indexed: 2026-04-23
+last_indexed: 2026-04-29
 
 contents:
-  - name: superpowers/specs/2026-04-22-beatforge-metronome-design.md
+  - name: README.md
     kind: file
-    path: superpowers/specs/2026-04-22-beatforge-metronome-design.md
-    lines: 790
+    path: README.md
+    summary: >
+      Master entry point. Explains the four sections and provides quick
+      paths for common questions.
+
+  - name: spec
+    kind: folder
+    path: spec
     stability: stable
     summary: >
-      Authoritative v1 spec for BeatForge Metronome. Partially
-      supersedes the March 12 product-design spec. Pins the stack
-      (React + Vite + TypeScript, GitHub Pages), the 85-pattern v1.0
-      goal (grown to 294 at ship), 5 voices, 7 kits, and the mode
-      split (Practice/Studio/Library). Decisions table at the top is
-      the fastest orientation.
+      Shipping product specs. metronome.md is the authoritative v1 scope
+      (React + Vite + TS, GitHub Pages, 5 voices, 7 kits, three modes).
+      library-content.md is the design for how the rhythm-traditions
+      research surfaces inside Library mode (four-layer depth model).
 
-  - name: superpowers/specs/2026-03-13-content-presentation-design.md
-    kind: file
-    path: superpowers/specs/2026-03-13-content-presentation-design.md
-    lines: 508
+  - name: architecture
+    kind: folder
+    path: architecture
     stability: stable
     summary: >
-      Content-presentation design — how the 48K-line research corpus
-      becomes a learning experience inside Library mode. Principles,
-      information architecture, surface designs for cultural stories,
-      related-rhythms graph, and narrative flow.
+      Current code architecture. overview.md is the 10,000ft view;
+      audio-engine.md, sequencer-and-patterns.md, and react-app.md are
+      the three layered deep-dives. Kept current with the shipping code.
 
-  - name: 2026-03-12-beatforge-product-design.md
-    kind: file
-    path: 2026-03-12-beatforge-product-design.md
-    lines: 670
-    stability: deprecated
+  - name: topics
+    kind: folder
+    path: topics
+    stability: stable
     summary: >
-      Original product vision. Broader than what shipped — assumes
-      SvelteKit, Tone.js, a full drum machine, and 650+ patterns. Kept
-      for its framing of Practice vs Studio and the Friendly Playground
-      personality, but the metronome spec overrides tech + scope
-      choices.
+      Subject-organized reference material — ~64K lines across 8 topic
+      folders. Each folder is a curated set of chunks with its own README
+      gateway. Topics: audio-synthesis, midi, pwa-audio, rhythm-traditions
+      (28 region files), rhythm-patterns (20 pattern files, 600+ patterns),
+      rhythm-engine, interface (UI/UX research), practice (pedagogy).
+
+  - name: process
+    kind: folder
+    path: process
+    stability: archived
+    summary: >
+      Historical artifacts kept for reasoning, not for "what's shipping
+      today." Design reviews (7 personas + synthesis), manifestos (living
+      archive + voice guide), engineering audit passes (4 + notes),
+      superseded plans, and the original March product spec.
 
 related_indexes:
   - path: ../INDEX.yaml
-    why: Where these specs fit in the repo.
+    why: Repo root — where docs/ fits in the project.
   - path: ../app/INDEX.yaml
-    why: The code that implements the authoritative spec.
-  - path: ../research/INDEX.yaml
-    why: Source material the specs draw on.
+    why: Code that implements the specs.

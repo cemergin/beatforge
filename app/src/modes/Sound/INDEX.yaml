@@ -92,5 +92,5 @@ related_indexes:
     why: types-sound + UserPattern shapes Studio reads/writes.
   - path: ../../lib/INDEX.yaml
     why: db (Sound* CRUD) + storage (master volume).
-  - path: ../../../docs/2026-04-28-engineering-review-notes.md
+  - path: ../../../docs/process/engineering-audits/notes-2026-04-28.md
     why: Open follow-ups on the numerator-grouping silent loss.

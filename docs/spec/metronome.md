@@ -4,7 +4,7 @@
 **Date:** April 22, 2026
 **Author:** Cem Ergin + Claude
 **Status:** Approved for implementation planning
-**Supersedes (partially):** `docs/2026-03-12-beatforge-product-design.md` — amendments at end of this spec
+**Supersedes (partially):** `docs/process/historical/product-design-2026-03.md` — amendments at end of this spec
 
 ---
 
@@ -95,8 +95,14 @@ beatforge/
 │   ├── tsconfig.json
 │   └── package.json
 ├── design/                     ← existing prototype — read-only reference
-├── research/                   ← existing corpus — source of truth for patterns & stories
-├── docs/                       ← specs (this file lives here)
+├── docs/                       ← specs + architecture + topical reference + process archive
+│   ├── spec/                   ← (this file lives here)
+│   ├── architecture/
+│   ├── topics/                 ← research corpus — source of truth for patterns & stories
+│   │   ├── rhythm-patterns/    ← notated patterns (formerly research/patterns)
+│   │   ├── rhythm-traditions/  ← cultural musicology (formerly research/musicology)
+│   │   └── …
+│   └── process/                ← design reviews + engineering audits
 └── README.md
 ```
 
@@ -376,7 +382,7 @@ Total: 85 patterns at v1.0 launch.
 
 ### 5.4 Data pipeline — Markdown research → JSON
 
-Research corpus (`research/patterns/*.md`) is prose + notation. Migration is the most underestimated work in this project.
+Research corpus (`docs/topics/rhythm-patterns/*.md`) is prose + notation. Migration is the most underestimated work in this project.
 
 **Per-batch workflow:**
 
@@ -520,7 +526,7 @@ Same region (Turkey):
 Similar groove:
   Daichovo (Bulgaria · 9/8 · 2+2+2+3)
 
-Source: research/patterns/turkish-arabic-…
+Source: docs/topics/rhythm-patterns/turkish-arabic-…
 
 [ Load in Practice ] [ Open in Studio ]
 ```
@@ -758,7 +764,7 @@ Under 300KB gzipped for a full offline-capable PWA with 85 patterns and 7 kits.
 
 ## 10. Amendments to the Original Product Spec
 
-This spec supersedes parts of `docs/2026-03-12-beatforge-product-design.md`:
+This spec supersedes parts of `docs/process/historical/product-design-2026-03.md`:
 
 | Original spec says | Amended to |
 |---|---|

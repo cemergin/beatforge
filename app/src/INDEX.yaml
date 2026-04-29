@@ -129,5 +129,5 @@ related_indexes:
     why: Parent app/ map.
   - path: ../../INDEX.yaml
     why: Repo-root.
-  - path: ../../docs/2026-04-28-engineering-review-notes.md
+  - path: ../../docs/process/engineering-audits/notes-2026-04-28.md
     why: Known issues + design follow-ups from the most recent review.

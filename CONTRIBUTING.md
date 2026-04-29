@@ -135,7 +135,7 @@ The high-traffic spots:
 
 ### Bigger changes
 
-If you're proposing something architectural (new module, schema migration, audio-engine refactor), open an issue first to talk through the approach. The [`docs/`](docs/) folder has the design specs + architecture notes — worth a skim before a big PR.
+If you're proposing something architectural (new module, schema migration, audio-engine refactor), open an issue first to talk through the approach. The [`docs/`](docs/) folder has the design specs, code architecture, and topical reference material (audio synthesis, MIDI, rhythm engine, etc.) — worth a skim before a big PR. Start at [`docs/README.md`](docs/README.md).
 
 ---
 

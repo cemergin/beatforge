@@ -114,7 +114,7 @@ describe('registerPatternSource', () => {
 // (denom) for BPM display conversion (audio/tempo.ts:29). When the
 // two disagree, the user sees a wrong displayed BPM + a label that
 // doesn't match the visible dot count. See
-// docs/2026-04-28-engineering-review-notes.md for the original audit.
+// docs/process/engineering-audits/notes-2026-04-28.md for the original audit.
 //
 // The invariant: numerator(timeSig) === sum(grouping) × (denom / stepUnit).
 // Derivation: every step is 1/stepUnit of a whole note. A bar of

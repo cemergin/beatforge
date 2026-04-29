@@ -10,7 +10,7 @@ purpose: >
   src/patterns/seed/.
 
 last_indexed: 2026-04-28
-recent_review: ../docs/2026-04-28-engineering-review-notes.md
+recent_review: ../docs/process/engineering-audits/notes-2026-04-28.md
 
 tech_stack:
   runtime: React 19, TypeScript 6
@@ -192,5 +192,5 @@ related_indexes:
     why: Framework-adjacent utilities.
   - path: src/components/INDEX.yaml
     why: Shared presentational pieces.
-  - path: ../docs/2026-04-28-engineering-review-notes.md
+  - path: ../docs/process/engineering-audits/notes-2026-04-28.md
     why: Known-but-unfixed concerns from the most recent review.

@@ -116,5 +116,5 @@ related_indexes:
     why: useMidiBridge — the React lifecycle owner.
   - path: ../../modes/Midi/Midi.tsx
     why: The UI surface the bridge powers.
-  - path: ../../../docs/2026-04-28-engineering-review-notes.md
+  - path: ../../../docs/process/engineering-audits/notes-2026-04-28.md
     why: Open MIDI concerns (auto-enable error, hot-unplug, branded addresses).

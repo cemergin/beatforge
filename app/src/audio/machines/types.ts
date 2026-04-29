@@ -9,7 +9,7 @@
 // out, addressable by the router, and don't need the voice machine's
 // trigger/render contract. See machines/fx/index.ts.
 //
-// See docs/SOUND_PAGE_PLAN.md for the design rationale.
+// See docs/process/plans/sound-page.md for the design rationale.
 
 import type { ZodType } from 'zod';
 

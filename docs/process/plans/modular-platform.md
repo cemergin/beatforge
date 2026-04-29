@@ -34,7 +34,7 @@ itself but:
 ## 0a. Product positioning anchors
 
 The engineering plan below is shaped by these non-negotiable product framings
-(detailed in `docs/2026-04-27-design-review-brief.md` §1a):
+(detailed in `docs/process/design-reviews/brief.md` §1a):
 
 1. **World-rhythm native, not Western-pop with workarounds**: additive
    grouping, non-Western voices, cultural pattern libraries are first-class.

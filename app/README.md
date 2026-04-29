@@ -63,4 +63,4 @@ See [`CONTRIBUTING.md`](../CONTRIBUTING.md) at the repo root for the full patter
 
 ## Engineering review notes
 
-[`docs/2026-04-28-engineering-review-notes.md`](../docs/2026-04-28-engineering-review-notes.md) at the repo root captures findings from the most recent code review (silent failures, type design, code quality). Items marked ✅ are landed; bare bullets are open follow-ups. Read it before touching the MIDI or audio modules.
+[`docs/process/engineering-audits/notes-2026-04-28.md`](../docs/process/engineering-audits/notes-2026-04-28.md) captures findings from the most recent code review (silent failures, type design, code quality). Items marked ✅ are landed; bare bullets are open follow-ups. Read it before touching the MIDI or audio modules.

@@ -84,7 +84,7 @@ contents:
     notes: >
       Production users never see this tab unless they know the URL.
       Engineering audit notes for the MIDI module live in
-      docs/2026-04-28-engineering-review-notes.md (hot-unplug
+      docs/process/engineering-audits/notes-2026-04-28.md (hot-unplug
       handling, auto-enable error surfacing, branded BusAddress).
 
 invariants:
@@ -104,5 +104,5 @@ related_indexes:
     why: Pattern schema + catalog Library exposes.
   - path: ../lib/INDEX.yaml
     why: useMidiBridge + db + storage + urlState.
-  - path: ../../docs/2026-04-28-engineering-review-notes.md
+  - path: ../../docs/process/engineering-audits/notes-2026-04-28.md
     why: Open concerns for Sound + Midi modules.

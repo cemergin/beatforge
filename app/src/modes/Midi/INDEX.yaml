@@ -57,6 +57,6 @@ related_indexes:
     why: useMidiBridge — the React lifecycle owner.
   - path: ../../modules/midi/INDEX.yaml
     why: The pure MIDI bridge / sink / clock the UI exposes.
-  - path: ../../../docs/2026-04-28-engineering-review-notes.md
+  - path: ../../../docs/process/engineering-audits/notes-2026-04-28.md
     why: Open audit items (auto-enable error surfacing, hot-unplug,
       branded BusAddress).

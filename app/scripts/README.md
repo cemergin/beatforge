@@ -54,7 +54,7 @@ conversion to fleshed-out `tracks` / `story` happens downstream.
 
 ```bash
 # from app/
-bun scripts/extract-patterns.ts ../research/patterns/turkish-arabic-indian.md --region turkey-ottoman
+bun scripts/extract-patterns.ts ../docs/topics/rhythm-patterns/turkish-arabic-indian.md --region turkey-ottoman
 ```
 
 Arguments:

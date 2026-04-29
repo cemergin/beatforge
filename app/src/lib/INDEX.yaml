@@ -147,5 +147,5 @@ related_indexes:
     why: Parent src/ map.
   - path: ../modules/midi/INDEX.yaml
     why: The pure MIDI module the bridge consumes.
-  - path: ../../docs/2026-04-28-engineering-review-notes.md
+  - path: ../../docs/process/engineering-audits/notes-2026-04-28.md
     why: Open silent-failure concerns around MIDI auto-enable + bare catches.

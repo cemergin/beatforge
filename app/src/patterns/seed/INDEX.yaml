@@ -379,7 +379,7 @@ related_indexes:
     why: Pattern schema and type definitions.
   - path: ../../audio/INDEX.yaml
     why: The engine that plays these patterns.
-  - path: ../../../../research/patterns/INDEX.yaml
+  - path: ../../../../docs/topics/rhythm-patterns/README.md
     why: The raw pattern corpus these seeds were drawn from.
-  - path: ../../../../research/musicology/INDEX.yaml
+  - path: ../../../../docs/topics/rhythm-traditions/README.md
     why: Cultural context for the traditions each region covers.

@@ -11,7 +11,7 @@
 //   bun scripts/extract-patterns.ts <markdown-path> [--region <regionId>]
 //
 // Example:
-//   bun scripts/extract-patterns.ts ../research/patterns/turkish-arabic-indian.md \
+//   bun scripts/extract-patterns.ts ../docs/topics/rhythm-patterns/turkish-arabic-indian.md \
 //     --region turkey-ottoman
 //
 // Output:
@@ -410,7 +410,7 @@ function toDraft(sec: Section): DraftPattern | null {
     instruments: [],
     swingable: stepUnit === 16 && timeSig === '4/4',
     story: extractDescription(sec.body) || 'TBD',
-    sources: [`research/patterns/${basename(inputPath)}`],
+    sources: [`docs/topics/rhythm-patterns/${basename(inputPath)}`],
     _draft: {
       rawBlocks,
       rawProse: sec.body.slice(0, 2000),
