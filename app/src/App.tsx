@@ -364,6 +364,9 @@ export default function App() {
           refreshUserCache={refreshUserCache}
         />
       </SessionProvider>
+      <footer className="bf-footer">
+        <LangPicker />
+      </footer>
       <UpdateBanner />
     </div>
   );

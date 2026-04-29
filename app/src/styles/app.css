@@ -143,6 +143,11 @@ input[type="number"] { font: inherit; color: inherit; }
 .bf-topnav { display: flex; gap: var(--sp-2); justify-content: center; }
 .bf-topright { display: flex; justify-content: flex-end; gap: var(--sp-2); }
 
+/* Footer slot for the language picker. Hidden on desktop — the
+   header version owns it there. Shown on narrow screens to keep the
+   header from getting crowded (see @media block below). */
+.bf-footer { display: none; }
+
 .bf-chip {
   padding: 6px 12px;
   border-radius: var(--r-pill);
@@ -614,6 +619,17 @@ input[type="number"] { font: inherit; color: inherit; }
   }
   .bf-theme-btn { padding: var(--sp-1); }
   .bf-theme-name { display: none; }
+
+  /* Move the language picker out of the cramped top-right and into
+     a dedicated footer row. Both instances mount; CSS picks one. */
+  .bf-topright .bf-langpick { display: none; }
+  .bf-footer {
+    display: flex;
+    justify-content: center;
+    padding: var(--sp-5) var(--sp-6) calc(var(--sp-6) + env(safe-area-inset-bottom, 0px));
+    border-top: var(--bw-1) solid var(--line);
+    background: var(--bg-2);
+  }
 
   /* Big numbers clamp for small screens */
   .bf-bpm-num { font-size: clamp(48px, 12vw, 62px); }
