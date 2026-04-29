@@ -1293,8 +1293,8 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
             </div>
           </div>
           <div className="bf-feel-control">
-            <span className="bf-feel-label">grouping</span>
-            <div className="bf-sound-grouping-picker" role="toolbar" aria-label="Grouping">
+            <span className="bf-feel-label">{t('meter.grouping')}</span>
+            <div className="bf-sound-grouping-picker" role="toolbar" aria-label={t('meter.grouping')}>
               {groupingOptions.length > 1 && (
                 <div className="bf-feel-pills">
                   {groupingOptions.map((g, i) => {

@@ -117,6 +117,9 @@ const EN = {
   'difficulty.intermediate': 'intermediate',
   'difficulty.advanced':     'advanced',
 
+  // ── Meter / grouping vocabulary ──────────────────────────────────
+  'meter.grouping': 'grouping',
+
   // ── Studio (Sound) intro ──────────────────────────────────────────
   // Prose around keyboard shortcuts. Keyboard keys (Space, A-G, Q-T)
   // and synth-state names (off, on, accent) stay English in every
@@ -396,6 +399,8 @@ const TR: Partial<Record<Key, string>> = {
   'difficulty.intermediate': 'orta',
   'difficulty.advanced':     'ileri',
 
+  'meter.grouping': 'gruplama',
+
   'studio.intro': 'Yatır: adımları dizin, her sesi şekillendirin. Space çalar. A–G dinletir (Q–T accent). Herhangi bir hücreye tıklayın: off → on → accent.',
 
   'dirty_guard.confirm': '"{name}" üzerinde kaydedilmemiş değişiklikleriniz var. Bunları atıp {next} desenini yükleyelim mi?',
@@ -654,6 +659,8 @@ const ES: Partial<Record<Key, string>> = {
   'difficulty.beginner':     'principiante',
   'difficulty.intermediate': 'intermedio',
   'difficulty.advanced':     'avanzado',
+
+  'meter.grouping': 'agrupación',
 
   'studio.intro': 'Plántalo: secuencia los pasos, esculpe cada voz. Space toca. A–G prueban voces (Q–T accent). Haz clic en cualquier celda para ciclar off → on → accent.',
 
@@ -916,6 +923,8 @@ const ZH: Partial<Record<Key, string>> = {
   'difficulty.intermediate': '中级',
   'difficulty.advanced':     '高级',
 
+  'meter.grouping': '分组',
+
   'studio.intro': '放下来:为步骤排序,雕刻每个声音。Space 播放。A–G 试听(Q–T accent)。点击任意格子可在 off → on → accent 间循环。',
 
   'dirty_guard.confirm': '"{name}" 有未保存的更改。是否舍弃并加载 {next}？',
@@ -1174,6 +1183,8 @@ const FR: Partial<Record<Key, string>> = {
   'difficulty.beginner':     'débutant',
   'difficulty.intermediate': 'intermédiaire',
   'difficulty.advanced':     'avancé',
+
+  'meter.grouping': 'groupement',
 
   'studio.intro': 'Pose-le : séquence les pas, sculpte chaque voix. Space joue. A–G auditionnent (Q–T accent). Clique sur une cellule pour cycler off → on → accent.',
 
@@ -1435,6 +1446,8 @@ const HI: Partial<Record<Key, string>> = {
   'difficulty.intermediate': 'मध्यम',
   'difficulty.advanced':     'उन्नत',
 
+  'meter.grouping': 'समूहन',
+
   'studio.intro': 'बिछा दें: स्टेप्स को क्रम दें, हर voice को आकार दें। Space बजाता है। A–G ऑडिशन कराते हैं (Q–T accent)। किसी भी सेल पर क्लिक करें: off → on → accent।',
 
   'dirty_guard.confirm': '"{name}" में सहेजे न गए बदलाव हैं। उन्हें छोड़ें और {next} लोड करें?',
@@ -1694,6 +1707,8 @@ const RU: Partial<Record<Key, string>> = {
   'difficulty.beginner':     'начальный',
   'difficulty.intermediate': 'средний',
   'difficulty.advanced':     'продвинутый',
+
+  'meter.grouping': 'группировка',
 
   'studio.intro': 'Выложи: упорядочь шаги, оформи каждый голос. Space играет. A–G прослушивают (Q–T accent). Кликни по любой ячейке: off → on → accent.',
 

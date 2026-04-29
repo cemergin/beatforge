@@ -696,7 +696,7 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
             ))}
           </div>
           <div className="bf-grouping-switch">
-            <span className="bf-mini-label">grouping</span>
+            <span className="bf-mini-label">{t('meter.grouping')}</span>
             {groupingOptions.map((g, i) => (
               <button
                 key={i}
