@@ -86,12 +86,12 @@
       "bodhran"
     ],
     "instruments": [
-      "bodhr\u00e1n",
+      "bodhrán",
       "fiddle",
       "tin whistle"
     ],
     "swingable": false,
-    "story": "The most common tune type in Irish sessions \u2014 driving eighth notes, strong pulse on 1 and 3, bodhr\u00e1n accenting the main beats with a tipper."
+    "story": "The most common tune type in Irish sessions — driving eighth notes, strong pulse on 1 and 3, bodhrán accenting the main beats with a tipper."
   },
   {
     "id": "jig",
@@ -149,17 +149,17 @@
       "dance"
     ],
     "instruments": [
-      "bodhr\u00e1n",
+      "bodhrán",
       "fiddle",
       "flute"
     ],
     "swingable": false,
-    "story": "Two groups of three \u2014 \"DI-di-di, DI-di-di\" \u2014 the bouncing lilt that fuels half the Irish repertoire after the reel."
+    "story": "Two groups of three — \"DI-di-di, DI-di-di\" — the bouncing lilt that fuels half the Irish repertoire after the reel."
   },
   {
     "id": "scandi-polska",
     "name": "Scandi Polska",
-    "origin": "Sweden \u00b7 Dalarna",
+    "origin": "Sweden · Dalarna",
     "tradition": "Swedish folk couple dance",
     "genre": "folk-dance",
     "timeSig": "3/4",
@@ -234,13 +234,13 @@
       "fiddle"
     ],
     "swingable": true,
-    "story": "A Swedish couple dance in 3 \u2014 but the beats are unequal. Played on nyckelharpa, the beat-2 delay is an intentional feature tied to the dance, not a mistake.",
+    "story": "A Swedish couple dance in 3 — but the beats are unequal. Played on nyckelharpa, the beat-2 delay is an intentional feature tied to the dance, not a mistake.",
     "swingDefault": 0.62
   },
   {
     "id": "hornpipe",
     "name": "Irish Hornpipe",
-    "origin": "Ireland \u00b7 England",
+    "origin": "Ireland · England",
     "tradition": "Hard-shoe dance",
     "genre": "folk-dance",
     "timeSig": "4/4",
@@ -325,12 +325,12 @@
       "hard-shoe"
     ],
     "instruments": [
-      "bodhr\u00e1n",
+      "bodhrán",
       "fiddle",
       "flute"
     ],
     "swingable": true,
-    "story": "A dotted, swaggering 4/4 \u2014 long-short, long-short \u2014 built for the audible clicks of hard-shoe dancing. Apply about 66% swing to hear it breathe.",
+    "story": "A dotted, swaggering 4/4 — long-short, long-short — built for the audible clicks of hard-shoe dancing. Apply about 66% swing to hear it breathe.",
     "relatedIds": [
       "irish-reel"
     ],
@@ -403,12 +403,12 @@
       "graceful"
     ],
     "instruments": [
-      "bodhr\u00e1n",
+      "bodhrán",
       "fiddle",
       "flute"
     ],
     "swingable": false,
-    "story": "The most graceful Irish form \u2014 three threes instead of two, a waltz-lilt with a distinctly Irish roll. Historically a woman's soft-shoe solo.",
+    "story": "The most graceful Irish form — three threes instead of two, a waltz-lilt with a distinctly Irish roll. Historically a woman's soft-shoe solo.",
     "relatedIds": [
       "jig",
       "semachi",
@@ -418,7 +418,7 @@
   {
     "id": "slide",
     "name": "Slide",
-    "origin": "Ireland \u00b7 Sliabh Luachra",
+    "origin": "Ireland · Sliabh Luachra",
     "tradition": "Set dance",
     "genre": "folk-dance",
     "timeSig": "12/8",
@@ -491,12 +491,12 @@
       "sliabh-luachra"
     ],
     "instruments": [
-      "bodhr\u00e1n",
+      "bodhrán",
       "fiddle",
       "accordion"
     ],
     "swingable": false,
-    "story": "The fast 12/8 of Sliabh Luachra \u2014 four compound beats, played in medleys with polkas at dance sets on the Cork-Kerry border.",
+    "story": "The fast 12/8 of Sliabh Luachra — four compound beats, played in medleys with polkas at dance sets on the Cork-Kerry border.",
     "relatedIds": [
       "irish-polka"
     ]
@@ -504,7 +504,7 @@
   {
     "id": "irish-polka",
     "name": "Irish Polka",
-    "origin": "Ireland \u00b7 Sliabh Luachra",
+    "origin": "Ireland · Sliabh Luachra",
     "tradition": "Set dance",
     "genre": "folk-dance",
     "timeSig": "2/4",
@@ -563,12 +563,12 @@
       "party"
     ],
     "instruments": [
-      "bodhr\u00e1n",
+      "bodhrán",
       "fiddle",
       "accordion"
     ],
     "swingable": false,
-    "story": "The party rhythm of the Cork-Kerry borderlands \u2014 brighter and punchier than any reel. Strong on 1, light on 2, usually paired with slides.",
+    "story": "The party rhythm of the Cork-Kerry borderlands — brighter and punchier than any reel. Strong on 1, light on 2, usually paired with slides.",
     "relatedIds": [
       "slide"
     ]
@@ -576,7 +576,7 @@
   {
     "id": "strathspey",
     "name": "Strathspey",
-    "origin": "Scotland \u00b7 Highlands",
+    "origin": "Scotland · Highlands",
     "tradition": "Highland dance",
     "genre": "folk-dance",
     "timeSig": "4/4",
@@ -663,10 +663,10 @@
     "instruments": [
       "fiddle",
       "pipe-band-snare",
-      "bodhr\u00e1n"
+      "bodhrán"
     ],
     "swingable": false,
-    "story": "The Scotch snap \u2014 a short accented note followed by a longer unaccented one, reversing the dotted rhythm. The flamlike snap is Scotland's rhythmic signature."
+    "story": "The Scotch snap — a short accented note followed by a longer unaccented one, reversing the dotted rhythm. The flamlike snap is Scotland's rhythmic signature."
   },
   {
     "id": "waltz",
@@ -747,12 +747,12 @@
       "guitar"
     ],
     "swingable": false,
-    "story": "The universal 3/4 \u2014 one-two-three, one-two-three. Folk waltzes from Scandinavia to Ireland to Bavaria all share the same oom-pah-pah skeleton."
+    "story": "The universal 3/4 — one-two-three, one-two-three. Folk waltzes from Scandinavia to Ireland to Bavaria all share the same oom-pah-pah skeleton."
   },
   {
     "id": "mazurka",
     "name": "Mazurka",
-    "origin": "Poland \u00b7 Mazovia",
+    "origin": "Poland · Mazovia",
     "tradition": "Folk couple dance",
     "genre": "folk-dance",
     "timeSig": "3/4",
@@ -829,7 +829,7 @@
       "frame-drum"
     ],
     "swingable": false,
-    "story": "A 3/4 with the accent on beat 2 or 3, never the downbeat \u2014 the quirk that distinguishes the Mazovian mazur from a waltz. Chopin made it international.",
+    "story": "A 3/4 with the accent on beat 2 or 3, never the downbeat — the quirk that distinguishes the Mazovian mazur from a waltz. Chopin made it international.",
     "relatedIds": [
       "waltz"
     ]
@@ -926,7 +926,7 @@
       "guitar"
     ],
     "swingable": false,
-    "story": "A 19th-century \"Scottish\" dance invented in Bohemia \u2014 bouncy 4/4 with a hop on the fourth beat. Spread through dance halls from Scandinavia to the American frontier.",
+    "story": "A 19th-century \"Scottish\" dance invented in Bohemia — bouncy 4/4 with a hop on the fourth beat. Spread through dance halls from Scandinavia to the American frontier.",
     "relatedIds": [
       "xote",
       "bourree"
@@ -934,7 +934,7 @@
   },
   {
     "id": "czardas",
-    "name": "Cs\u00e1rd\u00e1s",
+    "name": "Csárdás",
     "origin": "Hungary",
     "tradition": "National dance",
     "genre": "folk-dance",
@@ -1025,7 +1025,7 @@
       "bass"
     ],
     "swingable": true,
-    "story": "The Hungarian national dance \u2014 starts slow and stately (lass\u00fa), then explodes into wild accelerando (friss). Built by Romani musicians at Hussar recruiting parties.",
+    "story": "The Hungarian national dance — starts slow and stately (lassú), then explodes into wild accelerando (friss). Built by Romani musicians at Hussar recruiting parties.",
     "relatedIds": [
       "cocek",
       "roman-havasi"
@@ -1034,8 +1034,8 @@
   },
   {
     "id": "bourree",
-    "name": "Bourr\u00e9e",
-    "origin": "France \u00b7 Auvergne \u00b7 Berry",
+    "name": "Bourrée",
+    "origin": "France · Auvergne · Berry",
     "tradition": "Folk dance",
     "genre": "folk-dance",
     "timeSig": "2/4",
@@ -1099,7 +1099,7 @@
       "accordion"
     ],
     "swingable": false,
-    "story": "The village dance of central France \u2014 played on the Auvergnat cabrette bagpipe and the vielle \u00e0 roue hurdy-gurdy. A bright 2/4 under melody built on drones."
+    "story": "The village dance of central France — played on the Auvergnat cabrette bagpipe and the vielle à roue hurdy-gurdy. A bright 2/4 under melody built on drones."
   },
   {
     "id": "pols",
@@ -1180,7 +1180,7 @@
       "fiddle"
     ],
     "swingable": true,
-    "story": "The straighter Swedish cousin of the polska \u2014 still 3/4, still couple-turning, but with more even beats. The bridge between polska asymmetry and plain waltz.",
+    "story": "The straighter Swedish cousin of the polska — still 3/4, still couple-turning, but with more even beats. The bridge between polska asymmetry and plain waltz.",
     "relatedIds": [
       "scandi-polska"
     ],
@@ -1189,7 +1189,7 @@
   {
     "id": "halling",
     "name": "Halling",
-    "origin": "Norway \u00b7 Hallingdal",
+    "origin": "Norway · Hallingdal",
     "tradition": "Men's showcase dance",
     "genre": "folk-dance",
     "timeSig": "2/4",
@@ -1252,7 +1252,7 @@
       "langeleik"
     ],
     "swingable": false,
-    "story": "Norway's acrobatic men's dance \u2014 2/4 for kicks, spins, and the famous hat-knocking high kick. Played on the Hardanger fiddle with its ringing sympathetic strings."
+    "story": "Norway's acrobatic men's dance — 2/4 for kicks, spins, and the famous hat-knocking high kick. Played on the Hardanger fiddle with its ringing sympathetic strings."
   },
   {
     "id": "irish-set-dance",
@@ -1342,12 +1342,12 @@
       "solo"
     ],
     "instruments": [
-      "bodhr\u00e1n",
+      "bodhrán",
       "fiddle",
       "accordion"
     ],
     "swingable": true,
-    "story": "A solo step-dance form with a specific named tune \u2014 \"The Blackbird,\" \"Job of Journeywork,\" \"St. Patrick's Day\" \u2014 each with its own choreography matching the tune's structural quirks.",
+    "story": "A solo step-dance form with a specific named tune — \"The Blackbird,\" \"Job of Journeywork,\" \"St. Patrick's Day\" — each with its own choreography matching the tune's structural quirks.",
     "relatedIds": [
       "hornpipe",
       "irish-reel"
@@ -1415,7 +1415,7 @@
       "fiddle"
     ],
     "swingable": false,
-    "story": "The Scottish 6/8 \u2014 tighter and more martial than its Irish cousin. Played by pipe bands with the snare rudiments driving every other note.",
+    "story": "The Scottish 6/8 — tighter and more martial than its Irish cousin. Played by pipe bands with the snare rudiments driving every other note.",
     "relatedIds": [
       "jig",
       "strathspey"
@@ -1513,7 +1513,7 @@
       "accordion"
     ],
     "swingable": false,
-    "story": "The Scottish reel \u2014 straighter than the Irish version, with the pipe-band snare roll adding rudimental flams that punctuate every other bar.",
+    "story": "The Scottish reel — straighter than the Irish version, with the pipe-band snare roll adding rudimental flams that punctuate every other bar.",
     "relatedIds": [
       "irish-reel",
       "strathspey",
@@ -1612,7 +1612,7 @@
       "fiddle"
     ],
     "swingable": true,
-    "story": "Slate miners in the Welsh valleys made their boots into instruments \u2014 wooden-soled clog dances tracing rhythmic lines the harp couldn't. The footwork IS the drum.",
+    "story": "Slate miners in the Welsh valleys made their boots into instruments — wooden-soled clog dances tracing rhythmic lines the harp couldn't. The footwork IS the drum.",
     "relatedIds": [
       "hornpipe"
     ],
@@ -1621,7 +1621,7 @@
   {
     "id": "breton-gavotte",
     "name": "Breton Gavotte",
-    "origin": "France \u00b7 Brittany",
+    "origin": "France · Brittany",
     "tradition": "Breton chain dance",
     "genre": "folk-dance",
     "timeSig": "4/4",
@@ -1708,10 +1708,10 @@
     "instruments": [
       "bombarde",
       "biniou",
-      "accord\u00e9on diatonique"
+      "accordéon diatonique"
     ],
     "swingable": false,
-    "story": "Not the baroque-court gavotte \u2014 the Breton one, a chain-dance of the fest-noz. The bombarde oboe screams over the biniou bagpipe while the chain of dancers loops through the hall all night.",
+    "story": "Not the baroque-court gavotte — the Breton one, a chain-dance of the fest-noz. The bombarde oboe screams over the biniou bagpipe while the chain of dancers loops through the hall all night.",
     "relatedIds": [
       "breton-an-dro",
       "breton-plinn"
@@ -1720,7 +1720,7 @@
   {
     "id": "breton-an-dro",
     "name": "An Dro",
-    "origin": "France \u00b7 Brittany",
+    "origin": "France · Brittany",
     "tradition": "Breton circle dance",
     "genre": "folk-dance",
     "timeSig": "2/4",
@@ -1781,10 +1781,10 @@
     "instruments": [
       "bombarde",
       "biniou",
-      "accord\u00e9on"
+      "accordéon"
     ],
     "swingable": false,
-    "story": "The \"turning\" dance \u2014 a simple Breton 2/4 where a hand-linked circle steps inward on beat 1 and outward on beat 2 for hours without stopping. The entry point to the fest-noz tradition.",
+    "story": "The \"turning\" dance — a simple Breton 2/4 where a hand-linked circle steps inward on beat 1 and outward on beat 2 for hours without stopping. The entry point to the fest-noz tradition.",
     "relatedIds": [
       "breton-gavotte",
       "breton-plinn"
@@ -1793,7 +1793,7 @@
   {
     "id": "breton-plinn",
     "name": "Plinn",
-    "origin": "France \u00b7 Brittany \u00b7 Tr\u00e9gor",
+    "origin": "France · Brittany · Trégor",
     "tradition": "Breton chain dance",
     "genre": "folk-dance",
     "timeSig": "4/4",
@@ -1883,7 +1883,7 @@
       "kan ha diskan"
     ],
     "swingable": false,
-    "story": "The Plinn of Tr\u00e9gor \u2014 a three-part Breton chain dance with kan-ha-diskan (call-and-response vocal) accompaniment. More driving than the gavotte, with a characteristic stutter before each cadence.",
+    "story": "The Plinn of Trégor — a three-part Breton chain dance with kan-ha-diskan (call-and-response vocal) accompaniment. More driving than the gavotte, with a characteristic stutter before each cadence.",
     "relatedIds": [
       "breton-gavotte",
       "breton-an-dro"
@@ -1891,11 +1891,11 @@
   },
   {
     "id": "bourree-auvergnat",
-    "name": "Bourr\u00e9e Auvergnat (3-temps)",
-    "origin": "France \u00b7 Auvergne",
+    "name": "Bourrée Auvergnat (3-temps)",
+    "origin": "France · Auvergne",
     "tradition": "Central French folk dance",
     "genre": "folk-dance",
-    "timeSig": "3/8",
+    "timeSig": "6/8",
     "grouping": [
       3,
       3
@@ -1946,11 +1946,11 @@
     ],
     "instruments": [
       "cabrette",
-      "vielle \u00e0 roue",
-      "accord\u00e9on"
+      "vielle à roue",
+      "accordéon"
     ],
     "swingable": false,
-    "story": "The three-beat bourr\u00e9e of the Auvergne \u2014 taller and more swaying than the flatter 2/4 bourr\u00e9e. Played at Paris's bal-musette caf\u00e9s by emigrant Auvergnats in the 19th century.",
+    "story": "The three-beat bourrée of the Auvergne — taller and more swaying than the flatter 2/4 bourrée. Played at Paris's bal-musette cafés by emigrant Auvergnats in the 19th century.",
     "relatedIds": [
       "bourree"
     ]
@@ -1958,7 +1958,7 @@
   {
     "id": "schuhplattler",
     "name": "Schuhplattler",
-    "origin": "Germany \u00b7 Austria \u00b7 Bavaria",
+    "origin": "Germany · Austria · Bavaria",
     "tradition": "Alpine men's slap-dance",
     "genre": "folk-dance",
     "timeSig": "3/4",
@@ -2035,7 +2035,7 @@
       "body-percussion"
     ],
     "swingable": false,
-    "story": "The Bavarian-Tyrolean men's showpiece \u2014 slaps on thighs, heels, and soles turn the body into a drum over a brisk 3/4. Lederhosen are the amplifier.",
+    "story": "The Bavarian-Tyrolean men's showpiece — slaps on thighs, heels, and soles turn the body into a drum over a brisk 3/4. Lederhosen are the amplifier.",
     "relatedIds": [
       "landler",
       "waltz"
@@ -2043,8 +2043,8 @@
   },
   {
     "id": "landler",
-    "name": "L\u00e4ndler",
-    "origin": "Austria \u00b7 Alpine regions",
+    "name": "Ländler",
+    "origin": "Austria · Alpine regions",
     "tradition": "Alpine folk couple dance",
     "genre": "folk-dance",
     "timeSig": "3/4",
@@ -2120,7 +2120,7 @@
       "fiddle"
     ],
     "swingable": false,
-    "story": "The rustic alpine ancestor of the waltz \u2014 slower, heavier-footed, with pauses and twirls where the waltz glides. Mahler and Bruckner built symphonies on its skeleton.",
+    "story": "The rustic alpine ancestor of the waltz — slower, heavier-footed, with pauses and twirls where the waltz glides. Mahler and Bruckner built symphonies on its skeleton.",
     "relatedIds": [
       "waltz",
       "schuhplattler"
@@ -2192,7 +2192,7 @@
       "drums"
     ],
     "swingable": false,
-    "story": "Finland's national dance-hall bounce \u2014 a relentless oom-pah 2/4 descended from 1910s one-step. El\u00e4kel\u00e4iset turned it into a punk-tinged export of national humour.",
+    "story": "Finland's national dance-hall bounce — a relentless oom-pah 2/4 descended from 1910s one-step. Eläkeläiset turned it into a punk-tinged export of national humour.",
     "relatedIds": [
       "schottische",
       "bourree"
@@ -2289,7 +2289,7 @@
       "fiddle"
     ],
     "swingable": false,
-    "story": "Finland's schottische \u2014 a 1960s dance-craze staple with a staccato step-step-step-hop pattern. The \"Letkajenkka\" spread the name across Europe in the Beatles era.",
+    "story": "Finland's schottische — a 1960s dance-craze staple with a staccato step-step-step-hop pattern. The \"Letkajenkka\" spread the name across Europe in the Beatles era.",
     "relatedIds": [
       "schottische",
       "humppa"
@@ -2362,6 +2362,6 @@
       "fiddle"
     ],
     "swingable": false,
-    "story": "\"Oat-John\" \u2014 an Estonian line-dance mixer, bouncy and social, sung as much as played. The dancers rotate partners every phrase until nobody remembers who they started with."
+    "story": "\"Oat-John\" — an Estonian line-dance mixer, bouncy and social, sung as much as played. The dancers rotate partners every phrase until nobody remembers who they started with."
   }
 ]

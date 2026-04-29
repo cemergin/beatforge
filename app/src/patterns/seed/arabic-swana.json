@@ -91,7 +91,7 @@
       "tabla baladi"
     ],
     "swingable": false,
-    "story": "Dum-tek-tek, dum-tek. If you've heard any Arabic pop song, you've heard this \u2014 the most ubiquitous rhythm in the SWANA world.",
+    "story": "Dum-tek-tek, dum-tek. If you've heard any Arabic pop song, you've heard this — the most ubiquitous rhythm in the SWANA world.",
     "relatedIds": [
       "mahraganat",
       "rai-electric",
@@ -191,7 +191,7 @@
       "rebaba"
     ],
     "swingable": false,
-    "story": "\"Baladi\" means \"of the country\" \u2014 heavier and earthier than Maqsoum thanks to the double doum at the top of the bar.",
+    "story": "\"Baladi\" means \"of the country\" — heavier and earthier than Maqsoum thanks to the double doum at the top of the bar.",
     "relatedIds": [
       "maqsoum",
       "saidi",
@@ -201,7 +201,7 @@
   {
     "id": "saidi",
     "name": "Saidi",
-    "origin": "Egypt \u00b7 Upper Egypt",
+    "origin": "Egypt · Upper Egypt",
     "tradition": "Stick-dance (tahtib)",
     "genre": "folk-dance",
     "timeSig": "4/4",
@@ -290,12 +290,12 @@
       "rababa"
     ],
     "swingable": false,
-    "story": "The rhythm of the Sa'id region \u2014 Upper Egypt's stick-fighting dance. Heavy and martial, with a double-doum stomp that shakes the floor."
+    "story": "The rhythm of the Sa'id region — Upper Egypt's stick-fighting dance. Heavy and martial, with a double-doum stomp that shakes the floor."
   },
   {
     "id": "masmoudi-kebir",
     "name": "Masmoudi Kebir",
-    "origin": "Egypt \u00b7 Pan-Arab",
+    "origin": "Egypt · Pan-Arab",
     "tradition": "Classical / belly dance entrance",
     "genre": "classical",
     "timeSig": "8/4",
@@ -435,7 +435,7 @@
       "oud"
     ],
     "swingable": false,
-    "story": "\"Grand Masmoudi\" \u2014 a stately 8-beat cycle used for dignified entrances and the openings of belly-dance sets. The spaciousness leaves room for dramatic gestures."
+    "story": "\"Grand Masmoudi\" — a stately 8-beat cycle used for dignified entrances and the openings of belly-dance sets. The spaciousness leaves room for dramatic gestures."
   },
   {
     "id": "wahda",
@@ -528,12 +528,12 @@
       "ney"
     ],
     "swingable": false,
-    "story": "\"Wahda\" means \"one\" \u2014 the rhythm of unity. Slow and spacious, it frames the soloist's taxim improvisation in classical wasla."
+    "story": "\"Wahda\" means \"one\" — the rhythm of unity. Slow and spacious, it frames the soloist's taxim improvisation in classical wasla."
   },
   {
     "id": "ayoub",
     "name": "Ayoub",
-    "origin": "Egypt \u00b7 Levant",
+    "origin": "Egypt · Levant",
     "tradition": "Sufi / zar",
     "genre": "devotional",
     "timeSig": "2/4",
@@ -595,7 +595,7 @@
       "tar"
     ],
     "swingable": false,
-    "story": "One of the oldest rhythms in SWANA \u2014 hypnotic simplicity that drives Sufi dhikr and zar healing ceremonies into trance as the tempo climbs.",
+    "story": "One of the oldest rhythms in SWANA — hypnotic simplicity that drives Sufi dhikr and zar healing ceremonies into trance as the tempo climbs.",
     "relatedIds": [
       "sufi-dhikr-circular",
       "daf-zikr",
@@ -606,7 +606,7 @@
   {
     "id": "samai-thaqil",
     "name": "Samai Thaqil",
-    "origin": "Pan-Arab \u00b7 Ottoman",
+    "origin": "Pan-Arab · Ottoman",
     "tradition": "Classical wasla",
     "genre": "classical",
     "timeSig": "10/8",
@@ -676,7 +676,7 @@
       "ud"
     ],
     "swingable": false,
-    "story": "The grand classical rhythm of the samai compositional form \u2014 stately, slow, and central to the Arabic wasla suite.",
+    "story": "The grand classical rhythm of the samai compositional form — stately, slow, and central to the Arabic wasla suite.",
     "relatedIds": [
       "curcuna-fast",
       "curcuna",
@@ -686,10 +686,10 @@
   {
     "id": "chiftetelli",
     "name": "Chiftetelli",
-    "origin": "Turkey \u00b7 Pan-Ottoman",
+    "origin": "Turkey · Pan-Ottoman",
     "tradition": "Belly dance / Romani",
     "genre": "popular",
-    "timeSig": "8/4",
+    "timeSig": "4/4",
     "grouping": [
       4,
       4,
@@ -775,7 +775,7 @@
       "clarinet"
     ],
     "swingable": false,
-    "story": "The iconic belly-dance rhythm \u2014 \"double-stringed,\" deep in Romani and oriental dance traditions from Istanbul to Athens.",
+    "story": "The iconic belly-dance rhythm — \"double-stringed,\" deep in Romani and oriental dance traditions from Istanbul to Athens.",
     "relatedIds": [
       "tsifteteli",
       "cocek",
@@ -785,7 +785,7 @@
   {
     "id": "malfuf",
     "name": "Malfuf",
-    "origin": "Egypt \u00b7 Pan-Arab",
+    "origin": "Egypt · Pan-Arab",
     "tradition": "Dance finale",
     "genre": "folk-dance",
     "timeSig": "2/4",
@@ -847,12 +847,12 @@
       "riqq"
     ],
     "swingable": false,
-    "story": "\"Wrapped\" or \"rolled\" \u2014 a fast 2/4 that propels dancers forward. Every belly-dance finale, every climactic pop chorus. If the song is about to peak, Malfuf is underneath."
+    "story": "\"Wrapped\" or \"rolled\" — a fast 2/4 that propels dancers forward. Every belly-dance finale, every climactic pop chorus. If the song is about to peak, Malfuf is underneath."
   },
   {
     "id": "fallahi",
     "name": "Fallahi",
-    "origin": "Egypt \u00b7 Nile Delta",
+    "origin": "Egypt · Nile Delta",
     "tradition": "Rural folk",
     "genre": "folk-dance",
     "timeSig": "4/4",
@@ -941,12 +941,12 @@
       "rababa"
     ],
     "swingable": false,
-    "story": "\"Fallahi\" means peasant \u2014 the lively, unadorned rhythm of the Nile Delta. No urban filigree, just clear accents to keep the harvest song moving down the row."
+    "story": "\"Fallahi\" means peasant — the lively, unadorned rhythm of the Nile Delta. No urban filigree, just clear accents to keep the harvest song moving down the row."
   },
   {
     "id": "zaffa",
     "name": "Zaffa",
-    "origin": "Egypt \u00b7 Pan-Arab",
+    "origin": "Egypt · Pan-Arab",
     "tradition": "Wedding procession",
     "genre": "ceremonial",
     "timeSig": "4/4",
@@ -1035,12 +1035,12 @@
       "tar"
     ],
     "swingable": false,
-    "story": "The jubilant procession that walks the bride and groom through the streets \u2014 drums, zaghareet, sometimes fire dancers. Multiple drummers interlock until the whole alley is shaking."
+    "story": "The jubilant procession that walks the bride and groom through the streets — drums, zaghareet, sometimes fire dancers. Multiple drummers interlock until the whole alley is shaking."
   },
   {
     "id": "shaabi-egyptian",
     "name": "Shaabi",
-    "origin": "Egypt \u00b7 Cairo",
+    "origin": "Egypt · Cairo",
     "tradition": "Working-class pop",
     "genre": "popular",
     "timeSig": "4/4",
@@ -1129,7 +1129,7 @@
       "electric organ"
     ],
     "swingable": false,
-    "story": "Cairo's street music \u2014 raw, proud, and unapologetically working-class. Ahmed Adaweyah hollering at a wedding, the tabla busier and more improvisatory than Maqsoum would ever allow.",
+    "story": "Cairo's street music — raw, proud, and unapologetically working-class. Ahmed Adaweyah hollering at a wedding, the tabla busier and more improvisatory than Maqsoum would ever allow.",
     "relatedIds": [
       "maqsoum",
       "mahraganat",
@@ -1139,7 +1139,7 @@
   {
     "id": "dabke",
     "name": "Dabke",
-    "origin": "Levant \u00b7 Lebanon \u00b7 Syria \u00b7 Palestine \u00b7 Jordan",
+    "origin": "Levant · Lebanon · Syria · Palestine · Jordan",
     "tradition": "Levantine line dance",
     "genre": "folk-dance",
     "timeSig": "4/4",
@@ -1227,7 +1227,7 @@
       "bouzouk"
     ],
     "swingable": false,
-    "story": "Linked arms, stomping feet, and a lawweeh waving a handkerchief at the head of the line. The displaced accents dictate exactly where the heel hits the floor \u2014 from Beirut to Amman, the sound of a celebration getting serious.",
+    "story": "Linked arms, stomping feet, and a lawweeh waving a handkerchief at the head of the line. The displaced accents dictate exactly where the heel hits the floor — from Beirut to Amman, the sound of a celebration getting serious.",
     "relatedIds": [
       "dabke-electronic",
       "dabke-shamaliyya",
@@ -1238,7 +1238,7 @@
   {
     "id": "dabke-shamaliyya",
     "name": "Dabke Shamaliyya",
-    "origin": "Lebanon \u00b7 Northern Syria",
+    "origin": "Lebanon · Northern Syria",
     "tradition": "Northern Levantine dance",
     "genre": "folk-dance",
     "timeSig": "4/4",
@@ -1326,7 +1326,7 @@
       "oud"
     ],
     "swingable": false,
-    "story": "The Northern variant \u2014 heavier, faster, more aggressive than the Lebanese-coast Dabke. The feet go harder, the space between accents shrinks, and the line becomes a stomping train.",
+    "story": "The Northern variant — heavier, faster, more aggressive than the Lebanese-coast Dabke. The feet go harder, the space between accents shrinks, and the line becomes a stomping train.",
     "relatedIds": [
       "dabke"
     ]
@@ -1334,7 +1334,7 @@
   {
     "id": "masmoudi-sagheer",
     "name": "Masmoudi Sagheer",
-    "origin": "Egypt \u00b7 Pan-Arab",
+    "origin": "Egypt · Pan-Arab",
     "tradition": "Dance / light classical",
     "genre": "classical",
     "timeSig": "4/4",
@@ -1421,7 +1421,7 @@
       "oud"
     ],
     "swingable": false,
-    "story": "\"Small Masmoudi\" \u2014 the 4/4 distillation of Masmoudi Kebir's stately 8-beat shape. Close cousin of Baladi with a slightly different accent \u2014 the tell of a trained drummer.",
+    "story": "\"Small Masmoudi\" — the 4/4 distillation of Masmoudi Kebir's stately 8-beat shape. Close cousin of Baladi with a slightly different accent — the tell of a trained drummer.",
     "relatedIds": [
       "masmoudi-kebir",
       "baladi"
@@ -1518,7 +1518,7 @@
       "ney"
     ],
     "swingable": false,
-    "story": "\"One and a half\" \u2014 Wahda's cousin leaning into a triplet feel. Languid, swaying, built for the tarab moment when the singer catches the room and everyone exhales together.",
+    "story": "\"One and a half\" — Wahda's cousin leaning into a triplet feel. Languid, swaying, built for the tarab moment when the singer catches the room and everyone exhales together.",
     "relatedIds": [
       "wahda"
     ]
@@ -1526,7 +1526,7 @@
   {
     "id": "khaliji-saudi",
     "name": "Khaliji (Saudi 6/8)",
-    "origin": "Saudi Arabia \u00b7 Gulf",
+    "origin": "Saudi Arabia · Gulf",
     "tradition": "Khaliji foundational",
     "genre": "folk-dance",
     "timeSig": "6/8",
@@ -1583,7 +1583,7 @@
       "oud"
     ],
     "swingable": false,
-    "story": "The compound 6/8 that underlies Gulf music from Riyadh to Manama \u2014 samri, ardha, modern Khaliji pop. Its swaying pulse echoes the maritime trade routes that made the region.",
+    "story": "The compound 6/8 that underlies Gulf music from Riyadh to Manama — samri, ardha, modern Khaliji pop. Its swaying pulse echoes the maritime trade routes that made the region.",
     "relatedIds": [
       "samri",
       "bandari",
@@ -1593,7 +1593,7 @@
   {
     "id": "samri",
     "name": "Samri",
-    "origin": "Saudi Arabia \u00b7 Najd",
+    "origin": "Saudi Arabia · Najd",
     "tradition": "Najdi poetry gathering",
     "genre": "folk-dance",
     "timeSig": "4/4",
@@ -1682,7 +1682,7 @@
       "oud"
     ],
     "swingable": false,
-    "story": "Two rows of seated men facing each other, clapping and swaying to nabati poetry. Gentle, rocking, deeply Najdi \u2014 the sound of a Saudi cultural gathering before the feast."
+    "story": "Two rows of seated men facing each other, clapping and swaying to nabati poetry. Gentle, rocking, deeply Najdi — the sound of a Saudi cultural gathering before the feast."
   },
   {
     "id": "chaabi-algerian",
@@ -1776,7 +1776,7 @@
       "oud"
     ],
     "swingable": false,
-    "story": "Algiers on a Saturday night \u2014 the medina leaking into the casbah, a derbouka driving a circle of clapping hands. Distinct from Egyptian shaabi: more Andalusian sway, less Cairo growl.",
+    "story": "Algiers on a Saturday night — the medina leaking into the casbah, a derbouka driving a circle of clapping hands. Distinct from Egyptian shaabi: more Andalusian sway, less Cairo growl.",
     "relatedIds": [
       "chaabi-moroccan",
       "rai"
@@ -1785,7 +1785,7 @@
   {
     "id": "gnawa",
     "name": "Gnawa",
-    "origin": "Morocco \u00b7 Essaouira \u00b7 Marrakech",
+    "origin": "Morocco · Essaouira · Marrakech",
     "tradition": "Gnawa lila ceremony",
     "genre": "devotional",
     "timeSig": "4/4",
@@ -1875,7 +1875,7 @@
       "guembri"
     ],
     "swingable": false,
-    "story": "Metal qraqeb ringing through a Marrakech night. The lila is a trance \u2014 played until dawn to summon mluk spirits and heal the possessed. Sub-Saharan roots surface through every triplet-leaning kick.",
+    "story": "Metal qraqeb ringing through a Marrakech night. The lila is a trance — played until dawn to summon mluk spirits and heal the possessed. Sub-Saharan roots surface through every triplet-leaning kick.",
     "relatedIds": [
       "gnawa-lila",
       "gnawa-banga",
@@ -1887,7 +1887,7 @@
   {
     "id": "rai",
     "name": "Rai",
-    "origin": "Algeria \u00b7 Oran",
+    "origin": "Algeria · Oran",
     "tradition": "Oran pop",
     "genre": "popular",
     "timeSig": "4/4",
@@ -1976,7 +1976,7 @@
       "synth"
     ],
     "swingable": false,
-    "story": "Cheb Khaled hollering through a drum machine in an Oran cafe. Derbouka patterns captured in an 1980s rhythm box \u2014 the export groove of North African pop, with \"Didi\" and \"Aicha\" carrying it worldwide.",
+    "story": "Cheb Khaled hollering through a drum machine in an Oran cafe. Derbouka patterns captured in an 1980s rhythm box — the export groove of North African pop, with \"Didi\" and \"Aicha\" carrying it worldwide.",
     "relatedIds": [
       "rai-electric",
       "maqsoum",
@@ -2075,7 +2075,7 @@
       "oud"
     ],
     "swingable": false,
-    "story": "The khashaba rattles on wooden sticks while dumbeks snap out a line-dance groove. More fluid than Levantine dabke \u2014 less stomp, more slide \u2014 with its own Mesopotamian accent that betrays Baghdad immediately."
+    "story": "The khashaba rattles on wooden sticks while dumbeks snap out a line-dance groove. More fluid than Levantine dabke — less stomp, more slide — with its own Mesopotamian accent that betrays Baghdad immediately."
   },
   {
     "id": "jurjina",
@@ -2152,7 +2152,7 @@
       "dumbek"
     ],
     "swingable": false,
-    "story": "The signature rhythm of the Iraqi maqam tradition \u2014 10 beats that rock unlike anything in the Arab world. In a Baghdad chaikhana a chalghi ensemble drops into Jurjina and the whole room settles around the vocalist.",
+    "story": "The signature rhythm of the Iraqi maqam tradition — 10 beats that rock unlike anything in the Arab world. In a Baghdad chaikhana a chalghi ensemble drops into Jurjina and the whole room settles around the vocalist.",
     "relatedIds": [
       "samai-thaqil",
       "curcuna",
@@ -2251,7 +2251,7 @@
       "tabla baladi"
     ],
     "swingable": false,
-    "story": "Same bones as the classical maqsoum (see maqsoum) \u2014 doums on 1 and 3, teks filling \u2014 but with an extra tek on the \"a of 4\" that anticipates bar 1. It's the version you hear at weddings and from shaabi drummers more than in the conservatory. The tek acts like a pickup.",
+    "story": "Same bones as the classical maqsoum (see maqsoum) — doums on 1 and 3, teks filling — but with an extra tek on the \"a of 4\" that anticipates bar 1. It's the version you hear at weddings and from shaabi drummers more than in the conservatory. The tek acts like a pickup.",
     "relatedIds": [
       "chiftetelli",
       "mahraganat",

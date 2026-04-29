@@ -107,3 +107,70 @@ describe('registerPatternSource', () => {
     expect(() => { off(); off(); }).not.toThrow();
   });
 });
+
+// ── Schema invariants — fail the build for any seed pattern with an
+// internally inconsistent timeSig / stepUnit / grouping triplet. The
+// runtime reads stepUnit + grouping for playback timing AND timeSig
+// (denom) for BPM display conversion (audio/tempo.ts:29). When the
+// two disagree, the user sees a wrong displayed BPM + a label that
+// doesn't match the visible dot count. See
+// docs/2026-04-28-engineering-review-notes.md for the original audit.
+//
+// The invariant: numerator(timeSig) === sum(grouping) × (denom / stepUnit).
+// Derivation: every step is 1/stepUnit of a whole note. A bar of
+// sum(grouping) steps therefore contains sum/stepUnit whole notes.
+// Time signature N/D says a bar holds N (1/D)-notes, i.e. N/D whole
+// notes. Setting equal: sum/stepUnit = N/D ⇒ N = sum × D / stepUnit.
+//
+// Sanity:
+//   4/4 + grouping[4,4,4,4] sum=16, stepUnit=16 → 16*4/16 = 4 ✓
+//   9/8 + grouping[2,2,2,3] sum=9,  stepUnit=8  → 9*8/8   = 9 ✓
+//   12/8 + grouping[3,3,3,3] sum=12, stepUnit=8 → 12*8/8  = 12 ✓
+//   16/8 + grouping[4,4,4,4] sum=16, stepUnit=8 → 16*8/8  = 16 ✓
+describe('seed schema invariants', () => {
+  function parseTimeSig(ts: string): { num: number; denom: number } | null {
+    const parts = ts.split('/');
+    if (parts.length !== 2) return null;
+    const num = parseInt(parts[0], 10);
+    const denom = parseInt(parts[1], 10);
+    if (!Number.isFinite(num) || !Number.isFinite(denom) || num <= 0 || denom <= 0) return null;
+    return { num, denom };
+  }
+
+  it('timeSig parses cleanly for every pattern', () => {
+    const broken: string[] = [];
+    for (const p of PATTERNS) {
+      if (!parseTimeSig(p.timeSig)) broken.push(`${p.id}: "${p.timeSig}"`);
+    }
+    expect(broken).toEqual([]);
+  });
+
+  it('numerator(timeSig) === sum(grouping) × (stepUnit / denom) for every pattern', () => {
+    const violations: string[] = [];
+    for (const p of PATTERNS) {
+      const ts = parseTimeSig(p.timeSig);
+      if (!ts) continue; // covered by previous test
+      const sum = p.grouping.reduce((a, b) => a + b, 0);
+      const expected = (sum * ts.denom) / p.stepUnit;
+      if (expected !== ts.num) {
+        violations.push(
+          `${p.id}: timeSig="${p.timeSig}" stepUnit=${p.stepUnit} grouping=${JSON.stringify(p.grouping)} (sum=${sum}) — expected numerator ${expected}, got ${ts.num}`,
+        );
+      }
+    }
+    expect(violations).toEqual([]);
+  });
+
+  it('sum(grouping) === steps for every pattern', () => {
+    const violations: string[] = [];
+    for (const p of PATTERNS) {
+      const sum = p.grouping.reduce((a, b) => a + b, 0);
+      if (sum !== p.steps) {
+        violations.push(
+          `${p.id}: grouping=${JSON.stringify(p.grouping)} (sum=${sum}) but steps=${p.steps}`,
+        );
+      }
+    }
+    expect(violations).toEqual([]);
+  });
+});

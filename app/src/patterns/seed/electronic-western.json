@@ -2,7 +2,7 @@
   {
     "id": "boom-bap",
     "name": "Boom Bap",
-    "origin": "USA \u00b7 New York",
+    "origin": "USA · New York",
     "tradition": "Golden-era hip-hop",
     "genre": "hip-hop",
     "timeSig": "4/4",
@@ -91,7 +91,7 @@
       "vinyl"
     ],
     "swingable": true,
-    "story": "The crunchy, sampled drum break of 1990s New York hip-hop \u2014 DJ Premier, Pete Rock, and the SP-1200. Kick, snare, and swung sixteenths on a chopped loop.",
+    "story": "The crunchy, sampled drum break of 1990s New York hip-hop — DJ Premier, Pete Rock, and the SP-1200. Kick, snare, and swung sixteenths on a chopped loop.",
     "relatedIds": [
       "funk-funky-drummer",
       "dnb-amen-break",
@@ -103,7 +103,7 @@
   {
     "id": "four-on-the-floor",
     "name": "Four on the Floor",
-    "origin": "USA \u00b7 Chicago / Detroit",
+    "origin": "USA · Chicago / Detroit",
     "tradition": "House / techno",
     "genre": "electronic",
     "timeSig": "4/4",
@@ -192,7 +192,7 @@
       "hi-hat"
     ],
     "swingable": false,
-    "story": "Every 909 house record ever \u2014 four straight kicks, offbeat hats, clap on 2 and 4. The metronome-to-club pipeline in one bar.",
+    "story": "Every 909 house record ever — four straight kicks, offbeat hats, clap on 2 and 4. The metronome-to-club pipeline in one bar.",
     "relatedIds": [
       "house-classic",
       "disco-classic",
@@ -296,7 +296,7 @@
   {
     "id": "rock-anthemic",
     "name": "Anthemic Rock",
-    "origin": "USA / UK \u00b7 1970s",
+    "origin": "USA / UK · 1970s",
     "tradition": "Arena rock",
     "genre": "popular",
     "timeSig": "4/4",
@@ -383,12 +383,12 @@
       "crash"
     ],
     "swingable": false,
-    "story": "Slow, punishing backbeat with a crash on one \u2014 Queen, Zeppelin, U2. The grammar of the stadium singalong."
+    "story": "Slow, punishing backbeat with a crash on one — Queen, Zeppelin, U2. The grammar of the stadium singalong."
   },
   {
     "id": "pop-clap-beat",
     "name": "Pop Clap Beat",
-    "origin": "USA \u00b7 contemporary pop",
+    "origin": "USA · contemporary pop",
     "tradition": "Top 40",
     "genre": "popular",
     "timeSig": "4/4",
@@ -474,12 +474,12 @@
       "handclap"
     ],
     "swingable": false,
-    "story": "Four-on-the-floor kick, clap on 2 and 4 \u2014 the default grid of modern radio pop from Max Martin to Dua Lipa."
+    "story": "Four-on-the-floor kick, clap on 2 and 4 — the default grid of modern radio pop from Max Martin to Dua Lipa."
   },
   {
     "id": "disco-classic",
     "name": "Classic Disco",
-    "origin": "USA \u00b7 New York \u00b7 1970s",
+    "origin": "USA · New York · 1970s",
     "tradition": "Disco",
     "genre": "popular",
     "timeSig": "4/4",
@@ -584,7 +584,7 @@
       "cowbell"
     ],
     "swingable": false,
-    "story": "Four-on-the-floor kick with pumping offbeat open hats \u2014 the sound of Studio 54, the Bee Gees, and the grandparent of every modern dance beat.",
+    "story": "Four-on-the-floor kick with pumping offbeat open hats — the sound of Studio 54, the Bee Gees, and the grandparent of every modern dance beat.",
     "relatedIds": [
       "house-classic",
       "four-on-the-floor",
@@ -595,7 +595,7 @@
   {
     "id": "country-train-beat",
     "name": "Train Beat",
-    "origin": "USA \u00b7 Nashville",
+    "origin": "USA · Nashville",
     "tradition": "Country",
     "genre": "popular",
     "timeSig": "4/4",
@@ -687,7 +687,7 @@
   {
     "id": "country-two-step",
     "name": "Country Two-Step",
-    "origin": "USA \u00b7 Texas",
+    "origin": "USA · Texas",
     "tradition": "Country",
     "genre": "popular",
     "timeSig": "4/4",
@@ -774,12 +774,12 @@
       "pedal steel"
     ],
     "swingable": false,
-    "story": "Honky-tonk dance floor pulse \u2014 four on the floor with a backbeat and nothing fancy. Built for boots sliding in unison."
+    "story": "Honky-tonk dance floor pulse — four on the floor with a backbeat and nothing fancy. Built for boots sliding in unison."
   },
   {
     "id": "pop-punk",
     "name": "Pop Punk",
-    "origin": "USA \u00b7 California \u00b7 1990s",
+    "origin": "USA · California · 1990s",
     "tradition": "Pop-punk",
     "genre": "popular",
     "timeSig": "4/4",
@@ -866,7 +866,7 @@
       "drum kit"
     ],
     "swingable": false,
-    "story": "Chopping eighth hats, a sprint-tempo backbeat, and kicks snaking between guitar accents \u2014 Green Day, Blink-182, the mall in 2002."
+    "story": "Chopping eighth hats, a sprint-tempo backbeat, and kicks snaking between guitar accents — Green Day, Blink-182, the mall in 2002."
   },
   {
     "id": "metal-double-bass",
@@ -962,7 +962,7 @@
   {
     "id": "funk-funky-drummer",
     "name": "Funky Drummer",
-    "origin": "USA \u00b7 Cincinnati \u00b7 1970",
+    "origin": "USA · Cincinnati · 1970",
     "tradition": "James Brown funk",
     "genre": "popular",
     "timeSig": "4/4",
@@ -1050,7 +1050,7 @@
       "ghost notes"
     ],
     "swingable": true,
-    "story": "Clyde Stubblefield's 1970 two-bar break for James Brown \u2014 the most sampled rhythm in recorded history. Ghost-note lace between the main hits carries the groove.",
+    "story": "Clyde Stubblefield's 1970 two-bar break for James Brown — the most sampled rhythm in recorded history. Ghost-note lace between the main hits carries the groove.",
     "relatedIds": [
       "boom-bap",
       "afrobeat",
@@ -1062,7 +1062,7 @@
   {
     "id": "funk-cissy-strut",
     "name": "Cissy Strut",
-    "origin": "USA \u00b7 New Orleans \u00b7 1969",
+    "origin": "USA · New Orleans · 1969",
     "tradition": "Meters funk",
     "genre": "popular",
     "timeSig": "4/4",
@@ -1149,13 +1149,13 @@
       "drum kit"
     ],
     "swingable": true,
-    "story": "Zigaboo Modeliste with the Meters \u2014 New Orleans funk built out of negative space. Every gap is as composed as every hit.",
+    "story": "Zigaboo Modeliste with the Meters — New Orleans funk built out of negative space. Every gap is as composed as every hit.",
     "swingDefault": 0.55
   },
   {
     "id": "funk-second-line",
     "name": "New Orleans Second Line",
-    "origin": "USA \u00b7 New Orleans",
+    "origin": "USA · New Orleans",
     "tradition": "Brass band / second line",
     "genre": "popular",
     "timeSig": "4/4",
@@ -1244,7 +1244,7 @@
       "brass band"
     ],
     "swingable": true,
-    "story": "The syncopated parade rhythm that follows New Orleans brass bands down the street \u2014 African and Caribbean accents filtered through a marching drum tradition.",
+    "story": "The syncopated parade rhythm that follows New Orleans brass bands down the street — African and Caribbean accents filtered through a marching drum tradition.",
     "relatedIds": [
       "son-clave",
       "bomba-sica",
@@ -1256,7 +1256,7 @@
   {
     "id": "funk-parliament",
     "name": "P-Funk Groove",
-    "origin": "USA \u00b7 Detroit \u00b7 1970s",
+    "origin": "USA · Detroit · 1970s",
     "tradition": "Parliament-Funkadelic",
     "genre": "popular",
     "timeSig": "4/4",
@@ -1362,7 +1362,7 @@
       "clavinet"
     ],
     "swingable": false,
-    "story": "George Clinton's Mothership rhythm \u2014 dense hat subdivisions, open-hat punctuation, kicks weaving around the groove. Afrofuturism in a drum pattern."
+    "story": "George Clinton's Mothership rhythm — dense hat subdivisions, open-hat punctuation, kicks weaving around the groove. Afrofuturism in a drum pattern."
   },
   {
     "id": "rnb-classic",
@@ -1458,7 +1458,7 @@
   {
     "id": "rnb-neo-soul-dilla",
     "name": "Neo-Soul Dilla Feel",
-    "origin": "USA \u00b7 Detroit \u00b7 2000s",
+    "origin": "USA · Detroit · 2000s",
     "tradition": "Neo-soul / J Dilla school",
     "genre": "hip-hop",
     "timeSig": "4/4",
@@ -1547,7 +1547,7 @@
       "bass"
     ],
     "swingable": true,
-    "story": "J Dilla's signature \u2014 kick and snare pushed and dragged off the grid so the beat limps with a human wobble. Questlove built Voodoo around it.",
+    "story": "J Dilla's signature — kick and snare pushed and dragged off the grid so the beat limps with a human wobble. Questlove built Voodoo around it.",
     "relatedIds": [
       "hiphop-lofi",
       "lofi-hiphop-standard",
@@ -1559,7 +1559,7 @@
   {
     "id": "rnb-neo-soul-ghost",
     "name": "Neo-Soul Ghost Groove",
-    "origin": "USA \u00b7 Philadelphia \u00b7 1990s",
+    "origin": "USA · Philadelphia · 1990s",
     "tradition": "Neo-soul",
     "genre": "popular",
     "timeSig": "4/4",
@@ -1646,13 +1646,13 @@
       "Rhodes"
     ],
     "swingable": true,
-    "story": "Ghost notes carpet the space between backbeats \u2014 D'Angelo, Erykah Badu, the Soulquarians crew turning funk into a whispered conversation.",
+    "story": "Ghost notes carpet the space between backbeats — D'Angelo, Erykah Badu, the Soulquarians crew turning funk into a whispered conversation.",
     "swingDefault": 0.58
   },
   {
     "id": "motown-beat",
     "name": "Motown Beat",
-    "origin": "USA \u00b7 Detroit \u00b7 1960s",
+    "origin": "USA · Detroit · 1960s",
     "tradition": "Motown",
     "genre": "popular",
     "timeSig": "4/4",
@@ -1764,7 +1764,7 @@
   {
     "id": "reggae-one-drop",
     "name": "One Drop",
-    "origin": "Jamaica \u00b7 Kingston",
+    "origin": "Jamaica · Kingston",
     "tradition": "Roots reggae",
     "genre": "popular",
     "timeSig": "4/4",
@@ -1852,12 +1852,12 @@
       "cross-stick"
     ],
     "swingable": false,
-    "story": "Carlton Barrett with Bob Marley & the Wailers. Beat 1 is empty \u2014 kick and rim shot both land on beat 3, and the bass plays the ghost of the downbeat."
+    "story": "Carlton Barrett with Bob Marley & the Wailers. Beat 1 is empty — kick and rim shot both land on beat 3, and the bass plays the ghost of the downbeat."
   },
   {
     "id": "reggae-rockers",
     "name": "Rockers",
-    "origin": "Jamaica \u00b7 1970s",
+    "origin": "Jamaica · 1970s",
     "tradition": "Reggae",
     "genre": "popular",
     "timeSig": "4/4",
@@ -1943,7 +1943,7 @@
       "drum kit"
     ],
     "swingable": false,
-    "story": "Sly Dunbar's answer to one-drop \u2014 steady quarter-note kick pulls the groove forward like a march while the snare keeps the reggae accent on beat 3."
+    "story": "Sly Dunbar's answer to one-drop — steady quarter-note kick pulls the groove forward like a march while the snare keeps the reggae accent on beat 3."
   },
   {
     "id": "reggae-steppers",
@@ -2054,12 +2054,12 @@
       "open hat"
     ],
     "swingable": false,
-    "story": "Four-on-the-floor reggae \u2014 the militant, marching style of Burning Spear and Black Uhuru. A Rastafarian drumbeat dressed in dub clothing."
+    "story": "Four-on-the-floor reggae — the militant, marching style of Burning Spear and Black Uhuru. A Rastafarian drumbeat dressed in dub clothing."
   },
   {
     "id": "ska-classic",
     "name": "Classic Ska Offbeat",
-    "origin": "Jamaica \u00b7 1960s",
+    "origin": "Jamaica · 1960s",
     "tradition": "Ska",
     "genre": "popular",
     "timeSig": "4/4",
@@ -2147,12 +2147,12 @@
       "horns"
     ],
     "swingable": false,
-    "story": "The offbeat \"upstroke\" \u2014 hi-hats and guitar stab only on the ands. The pre-reggae sound of Kingston dances in the independence era."
+    "story": "The offbeat \"upstroke\" — hi-hats and guitar stab only on the ands. The pre-reggae sound of Kingston dances in the independence era."
   },
   {
     "id": "hiphop-trap",
     "name": "Trap",
-    "origin": "USA \u00b7 Atlanta \u00b7 2000s",
+    "origin": "USA · Atlanta · 2000s",
     "tradition": "Trap hip-hop",
     "genre": "hip-hop",
     "timeSig": "4/4",
@@ -2242,7 +2242,7 @@
       "clap"
     ],
     "swingable": false,
-    "story": "Half-time feel at 140 \u2014 snare on beat 3 only, 808 sub-kick booming, skittering hi-hats. The Atlanta template that swallowed pop radio in the 2010s.",
+    "story": "Half-time feel at 140 — snare on beat 3 only, 808 sub-kick booming, skittering hi-hats. The Atlanta template that swallowed pop radio in the 2010s.",
     "relatedIds": [
       "hiphop-trap-triplet",
       "trap-edm",
@@ -2253,7 +2253,7 @@
   {
     "id": "hiphop-trap-triplet",
     "name": "Trap Triplet Hats",
-    "origin": "USA \u00b7 Atlanta",
+    "origin": "USA · Atlanta",
     "tradition": "Trap",
     "genre": "hip-hop",
     "timeSig": "4/4",
@@ -2341,7 +2341,7 @@
       "hi-hat"
     ],
     "swingable": false,
-    "story": "Hi-hat triplet rolls fired before beats 2 and 4 \u2014 Lex Luger, Metro Boomin, the stuttering detail that made trap drums feel alive.",
+    "story": "Hi-hat triplet rolls fired before beats 2 and 4 — Lex Luger, Metro Boomin, the stuttering detail that made trap drums feel alive.",
     "relatedIds": [
       "hiphop-trap",
       "hiphop-uk-drill",
@@ -2352,7 +2352,7 @@
   {
     "id": "hiphop-lofi",
     "name": "Lo-Fi Hip-Hop",
-    "origin": "International \u00b7 2010s",
+    "origin": "International · 2010s",
     "tradition": "Lo-fi beats",
     "genre": "hip-hop",
     "timeSig": "4/4",
@@ -2439,7 +2439,7 @@
       "jazz samples"
     ],
     "swingable": true,
-    "story": "Tape-saturated, swung, and deliberately imperfect \u2014 the Nujabes-to-YouTube-radio pipeline that made hip-hop drums into study music.",
+    "story": "Tape-saturated, swung, and deliberately imperfect — the Nujabes-to-YouTube-radio pipeline that made hip-hop drums into study music.",
     "relatedIds": [
       "lofi-hiphop-standard",
       "boom-bap",
@@ -2450,7 +2450,7 @@
   {
     "id": "hiphop-uk-drill",
     "name": "UK Drill",
-    "origin": "UK \u00b7 South London \u00b7 2010s",
+    "origin": "UK · South London · 2010s",
     "tradition": "UK drill",
     "genre": "hip-hop",
     "timeSig": "4/4",
@@ -2537,7 +2537,7 @@
       "hi-hat"
     ],
     "swingable": false,
-    "story": "South London by way of Chicago \u2014 sliding 808 bass, off-kilter kicks, and snare rolls. Drill's syncopation rewrote the hip-hop rulebook in the late 2010s.",
+    "story": "South London by way of Chicago — sliding 808 bass, off-kilter kicks, and snare rolls. Drill's syncopation rewrote the hip-hop rulebook in the late 2010s.",
     "relatedIds": [
       "uk-drill",
       "ny-drill",
@@ -2548,7 +2548,7 @@
   {
     "id": "hiphop-phonk",
     "name": "Phonk",
-    "origin": "USA \u00b7 Memphis / internet \u00b7 2010s",
+    "origin": "USA · Memphis / internet · 2010s",
     "tradition": "Memphis phonk",
     "genre": "hip-hop",
     "timeSig": "4/4",
@@ -2665,7 +2665,7 @@
   {
     "id": "hiphop-jersey-club",
     "name": "Jersey Club Bounce",
-    "origin": "USA \u00b7 Newark \u00b7 2000s",
+    "origin": "USA · Newark · 2000s",
     "tradition": "Jersey club",
     "genre": "electronic",
     "timeSig": "4/4",
@@ -2771,7 +2771,7 @@
       "bed squeak sample"
     ],
     "swingable": false,
-    "story": "Newark club dance music \u2014 triplet kick burst (\"bed-squeak\") detonating on the ands, quintuplet chants on the breaks. Pure choreographed chaos.",
+    "story": "Newark club dance music — triplet kick burst (\"bed-squeak\") detonating on the ands, quintuplet chants on the breaks. Pure choreographed chaos.",
     "relatedIds": [
       "jersey-club",
       "footwork",
@@ -2782,7 +2782,7 @@
   {
     "id": "house-classic",
     "name": "Classic House",
-    "origin": "USA \u00b7 Chicago \u00b7 1980s",
+    "origin": "USA · Chicago · 1980s",
     "tradition": "Chicago house",
     "genre": "electronic",
     "timeSig": "4/4",
@@ -2869,7 +2869,7 @@
       "clap"
     ],
     "swingable": false,
-    "story": "Frankie Knuckles at the Warehouse \u2014 the stripped-down Roland-909 grid that built Chicago house and defined dance music worldwide.",
+    "story": "Frankie Knuckles at the Warehouse — the stripped-down Roland-909 grid that built Chicago house and defined dance music worldwide.",
     "relatedIds": [
       "four-on-the-floor",
       "house-deep",
@@ -2881,7 +2881,7 @@
   {
     "id": "house-deep",
     "name": "Deep House",
-    "origin": "USA \u00b7 New York / Chicago",
+    "origin": "USA · New York / Chicago",
     "tradition": "Deep house",
     "genre": "electronic",
     "timeSig": "4/4",
@@ -2986,12 +2986,12 @@
       "pad"
     ],
     "swingable": false,
-    "story": "Shaker-soft sixteenths under a four-on-the-floor groove. The Larry Heard / Masters at Work lineage \u2014 house music with soul."
+    "story": "Shaker-soft sixteenths under a four-on-the-floor groove. The Larry Heard / Masters at Work lineage — house music with soul."
   },
   {
     "id": "house-acid",
     "name": "Acid House",
-    "origin": "USA \u00b7 Chicago \u00b7 1987",
+    "origin": "USA · Chicago · 1987",
     "tradition": "Acid house",
     "genre": "electronic",
     "timeSig": "4/4",
@@ -3097,12 +3097,12 @@
       "TR-909"
     ],
     "swingable": false,
-    "story": "Phuture's \"Acid Tracks\" \u2014 house drums under a snaking TB-303. The accidental bass synth that sparked the UK rave scene."
+    "story": "Phuture's \"Acid Tracks\" — house drums under a snaking TB-303. The accidental bass synth that sparked the UK rave scene."
   },
   {
     "id": "techno-detroit",
     "name": "Detroit Techno",
-    "origin": "USA \u00b7 Detroit \u00b7 1980s",
+    "origin": "USA · Detroit · 1980s",
     "tradition": "Detroit techno",
     "genre": "electronic",
     "timeSig": "4/4",
@@ -3189,7 +3189,7 @@
       "synth"
     ],
     "swingable": false,
-    "story": "Juan Atkins, Derrick May, Kevin Saunderson \u2014 \"Strings of Life,\" \"Big Fun.\" Detroit techno as Black futurism at the end of Motown.",
+    "story": "Juan Atkins, Derrick May, Kevin Saunderson — \"Strings of Life,\" \"Big Fun.\" Detroit techno as Black futurism at the end of Motown.",
     "relatedIds": [
       "four-on-the-floor",
       "techno-berlin",
@@ -3199,7 +3199,7 @@
   {
     "id": "techno-berlin",
     "name": "Berlin Techno",
-    "origin": "Germany \u00b7 Berlin \u00b7 1990s",
+    "origin": "Germany · Berlin · 1990s",
     "tradition": "Berlin techno",
     "genre": "electronic",
     "timeSig": "4/4",
@@ -3287,12 +3287,12 @@
       "reverb"
     ],
     "swingable": false,
-    "story": "Post-Wall warehouse techno \u2014 driving straight hats under an unrelenting kick. Tresor, Berghain, the sound of the tunnel."
+    "story": "Post-Wall warehouse techno — driving straight hats under an unrelenting kick. Tresor, Berghain, the sound of the tunnel."
   },
   {
     "id": "techno-minimal",
     "name": "Minimal Techno",
-    "origin": "Germany \u00b7 2000s",
+    "origin": "Germany · 2000s",
     "tradition": "Minimal techno",
     "genre": "electronic",
     "timeSig": "4/4",
@@ -3380,12 +3380,12 @@
       "click"
     ],
     "swingable": false,
-    "story": "Villalobos, Hawtin, Kompakt \u2014 techno stripped back to a kick, a rim, and a click. The DJ builds the record."
+    "story": "Villalobos, Hawtin, Kompakt — techno stripped back to a kick, a rim, and a click. The DJ builds the record."
   },
   {
     "id": "uk-garage-2step",
     "name": "UK Garage 2-Step",
-    "origin": "UK \u00b7 London \u00b7 late 1990s",
+    "origin": "UK · London · late 1990s",
     "tradition": "UK garage",
     "genre": "electronic",
     "timeSig": "4/4",
@@ -3479,7 +3479,7 @@
   {
     "id": "dubstep-classic",
     "name": "Classic Dubstep",
-    "origin": "UK \u00b7 Croydon \u00b7 2000s",
+    "origin": "UK · Croydon · 2000s",
     "tradition": "Dubstep",
     "genre": "electronic",
     "timeSig": "4/4",
@@ -3567,7 +3567,7 @@
       "kit"
     ],
     "swingable": false,
-    "story": "140 BPM with a half-time snare on beat 3 \u2014 the South London template behind Skream, Benga, and every wobble bass on earth.",
+    "story": "140 BPM with a half-time snare on beat 3 — the South London template behind Skream, Benga, and every wobble bass on earth.",
     "relatedIds": [
       "uk-garage-2step",
       "hiphop-trap",
@@ -3577,7 +3577,7 @@
   {
     "id": "dnb-amen-break",
     "name": "Amen Break",
-    "origin": "USA \u00b7 1969 / UK \u00b7 1990s",
+    "origin": "USA · 1969 / UK · 1990s",
     "tradition": "Breakbeat / DnB",
     "genre": "electronic",
     "timeSig": "4/4",
@@ -3676,7 +3676,7 @@
   {
     "id": "dnb-jungle",
     "name": "Jungle Break",
-    "origin": "UK \u00b7 early 1990s",
+    "origin": "UK · early 1990s",
     "tradition": "Jungle",
     "genre": "electronic",
     "timeSig": "4/4",
@@ -3764,7 +3764,7 @@
       "sub-bass"
     ],
     "swingable": false,
-    "story": "UK hardcore sped up, dubwise bass dropped in, Amen breaks chopped to ribbons. The 1992\u201395 pirate radio sound that birthed DnB."
+    "story": "UK hardcore sped up, dubwise bass dropped in, Amen breaks chopped to ribbons. The 1992–95 pirate radio sound that birthed DnB."
   },
   {
     "id": "jazz-swing-medium",
@@ -3887,7 +3887,7 @@
   {
     "id": "jazz-bebop",
     "name": "Bebop Fast Ride",
-    "origin": "USA \u00b7 New York \u00b7 1940s",
+    "origin": "USA · New York · 1940s",
     "tradition": "Bebop",
     "genre": "jazz",
     "timeSig": "4/4",
@@ -3975,7 +3975,7 @@
       "hi-hat"
     ],
     "swingable": true,
-    "story": "Max Roach, Kenny Clarke \u2014 the bebop reinvention of time. Ride cymbal carries the swing pulse and the bass drum drops bombs.",
+    "story": "Max Roach, Kenny Clarke — the bebop reinvention of time. Ride cymbal carries the swing pulse and the bass drum drops bombs.",
     "swingDefault": 0.67
   },
   {
@@ -4056,7 +4056,7 @@
       "brushes"
     ],
     "swingable": true,
-    "story": "Ride pattern stretched over three beats. \"My Favorite Things,\" \"Bluesette,\" \"Someday My Prince Will Come\" \u2014 the jazz triple meter.",
+    "story": "Ride pattern stretched over three beats. \"My Favorite Things,\" \"Bluesette,\" \"Someday My Prince Will Come\" — the jazz triple meter.",
     "swingDefault": 0.67
   },
   {
@@ -4065,7 +4065,7 @@
     "origin": "USA",
     "tradition": "Funk / R&B shuffle",
     "genre": "jazz",
-    "timeSig": "4/4",
+    "timeSig": "3/4",
     "grouping": [
       3,
       3,
@@ -4138,13 +4138,13 @@
       "ghost notes"
     ],
     "swingable": true,
-    "story": "Bernard Purdie's half-time triplet shuffle \u2014 \"Babylon Sisters,\" \"Home at Last.\" Ghost-note lace between backbeats, the holy grail of feel.",
+    "story": "Bernard Purdie's half-time triplet shuffle — \"Babylon Sisters,\" \"Home at Last.\" Ghost-note lace between backbeats, the holy grail of feel.",
     "swingDefault": 0.67
   },
   {
     "id": "jazz-bossa-nova",
     "name": "Bossa Nova",
-    "origin": "Brazil \u00b7 Rio \u00b7 1960s",
+    "origin": "Brazil · Rio · 1960s",
     "tradition": "Bossa nova",
     "genre": "jazz",
     "timeSig": "4/4",
@@ -4233,7 +4233,7 @@
       "nylon guitar"
     ],
     "swingable": false,
-    "story": "Samba miniaturized for apartment music \u2014 Jobim, Jo\u00e3o Gilberto. Cross-stick clave on top, feathered kick below, hats whispering sixteenths.",
+    "story": "Samba miniaturized for apartment music — Jobim, João Gilberto. Cross-stick clave on top, feathered kick below, hats whispering sixteenths.",
     "relatedIds": [
       "bossa-nova",
       "samba-partido-alto",
@@ -4243,7 +4243,7 @@
   {
     "id": "afrobeat-tony-allen",
     "name": "Afrobeat (Tony Allen)",
-    "origin": "Nigeria \u00b7 Lagos \u00b7 1970s",
+    "origin": "Nigeria · Lagos · 1970s",
     "tradition": "Afrobeat",
     "genre": "popular",
     "timeSig": "4/4",
@@ -4350,7 +4350,7 @@
       "congas"
     ],
     "swingable": false,
-    "story": "Tony Allen: \"without Tony Allen, there would be no Afrobeat.\" Four limbs acting as four players \u2014 Fela Kuti's Africa 70 engine room.",
+    "story": "Tony Allen: \"without Tony Allen, there would be no Afrobeat.\" Four limbs acting as four players — Fela Kuti's Africa 70 engine room.",
     "relatedIds": [
       "afrobeat",
       "highlife-nigeria",
@@ -4361,7 +4361,7 @@
   {
     "id": "afrobeats-modern",
     "name": "Modern Afrobeats",
-    "origin": "Nigeria \u00b7 2010s",
+    "origin": "Nigeria · 2010s",
     "tradition": "Afrobeats (contemporary pop)",
     "genre": "popular",
     "timeSig": "4/4",
@@ -4468,7 +4468,7 @@
       "talking drum"
     ],
     "swingable": false,
-    "story": "Wizkid, Burna Boy, Davido \u2014 Lagos pop built on kick bounce, skipping hi-hats, and a layer of handclaps. Global radio since the late 2010s.",
+    "story": "Wizkid, Burna Boy, Davido — Lagos pop built on kick bounce, skipping hi-hats, and a layer of handclaps. Global radio since the late 2010s.",
     "relatedIds": [
       "afrobeats-naija",
       "afrobeat",
@@ -4479,7 +4479,7 @@
   {
     "id": "amapiano-log-drum",
     "name": "Amapiano",
-    "origin": "South Africa \u00b7 2010s",
+    "origin": "South Africa · 2010s",
     "tradition": "Amapiano",
     "genre": "electronic",
     "timeSig": "4/4",
@@ -4586,7 +4586,7 @@
       "deep bass"
     ],
     "swingable": false,
-    "story": "Johannesburg deep house mutated into a bass-heavy sub-genre \u2014 shuffling shaker, percussive log drum, and a tempo built for slow-dance soweto.",
+    "story": "Johannesburg deep house mutated into a bass-heavy sub-genre — shuffling shaker, percussive log drum, and a tempo built for slow-dance soweto.",
     "relatedIds": [
       "amapiano-groove",
       "kwaito",
@@ -4597,7 +4597,7 @@
   {
     "id": "gqom",
     "name": "Gqom",
-    "origin": "South Africa \u00b7 Durban \u00b7 2010s",
+    "origin": "South Africa · Durban · 2010s",
     "tradition": "Gqom",
     "genre": "electronic",
     "timeSig": "4/4",
@@ -4703,7 +4703,7 @@
       "percussion"
     ],
     "swingable": false,
-    "story": "Durban warehouse music \u2014 broken kick patterns, cavernous sub, percussive gqom (\"drum\" in isiZulu) clusters. Taxi-rank rhythm turned global.",
+    "story": "Durban warehouse music — broken kick patterns, cavernous sub, percussive gqom (\"drum\" in isiZulu) clusters. Taxi-rank rhythm turned global.",
     "relatedIds": [
       "gqom-durban",
       "amapiano-log-drum",
@@ -4713,7 +4713,7 @@
   {
     "id": "footwork",
     "name": "Footwork",
-    "origin": "USA \u00b7 Chicago \u00b7 2000s",
+    "origin": "USA · Chicago · 2000s",
     "tradition": "Chicago footwork / juke",
     "genre": "electronic",
     "timeSig": "4/4",
@@ -4819,7 +4819,7 @@
       "vocal chop"
     ],
     "swingable": false,
-    "story": "DJ Rashad, Traxman \u2014 160 BPM syncopated triplets and broken kicks built for competitive dance battles on the South Side of Chicago.",
+    "story": "DJ Rashad, Traxman — 160 BPM syncopated triplets and broken kicks built for competitive dance battles on the South Side of Chicago.",
     "relatedIds": [
       "footwork-juke",
       "footwork-internet",
@@ -4830,7 +4830,7 @@
   {
     "id": "trance-classic",
     "name": "Classic Trance",
-    "origin": "Germany \u00b7 1990s",
+    "origin": "Germany · 1990s",
     "tradition": "Trance",
     "genre": "electronic",
     "timeSig": "4/4",
@@ -4918,7 +4918,7 @@
       "supersaw"
     ],
     "swingable": false,
-    "story": "Frankfurt and Ibiza \u2014 four-on-the-floor under supersaw pads, built for hands-in-the-air moments. Paul van Dyk, Ti\u00ebsto, Armin."
+    "story": "Frankfurt and Ibiza — four-on-the-floor under supersaw pads, built for hands-in-the-air moments. Paul van Dyk, Tiësto, Armin."
   },
   {
     "id": "country-two-step-modern",
@@ -5012,7 +5012,7 @@
       "pedal steel"
     ],
     "swingable": false,
-    "story": "The traditional Bob Wills honky-tonk shuffle (see country-two-step) has kick on beats 1 and 3. From about the mid-2000s onward, Nashville production moved the kick to four-on-the-floor so country singles could translate to dance floors and pop radio \u2014 the boom-chick became a thump-thump-thump-thump with the snare riding above.",
+    "story": "The traditional Bob Wills honky-tonk shuffle (see country-two-step) has kick on beats 1 and 3. From about the mid-2000s onward, Nashville production moved the kick to four-on-the-floor so country singles could translate to dance floors and pop radio — the boom-chick became a thump-thump-thump-thump with the snare riding above.",
     "relatedIds": [
       "country-two-step"
     ]
@@ -5097,7 +5097,7 @@
       "walking bass"
     ],
     "swingable": false,
-    "story": "The 'ding-a ding-a' ride \u2014 hi-hat on the first and third of every triplet, kick on beats 1 and 3, snare on 2 and 4. Muddy Waters, B.B. King, Buddy Guy, SRV all built their grooves on this skeleton. The triplet feel is EXPLICIT in 12/8 \u2014 four dotted-quarter beats, each subdivided into three eighths. No swing slider needed; the microtiming is in the notation itself.",
+    "story": "The 'ding-a ding-a' ride — hi-hat on the first and third of every triplet, kick on beats 1 and 3, snare on 2 and 4. Muddy Waters, B.B. King, Buddy Guy, SRV all built their grooves on this skeleton. The triplet feel is EXPLICIT in 12/8 — four dotted-quarter beats, each subdivided into three eighths. No swing slider needed; the microtiming is in the notation itself.",
     "relatedIds": [
       "shuffle-rock",
       "half-time-shuffle",
@@ -5183,7 +5183,7 @@
       "drum kit"
     ],
     "swingable": false,
-    "story": "Chuck Berry, Jerry Lee Lewis, early Elvis. Same triplet subdivision as blues-shuffle, but the hi-hat doesn't spell out the shuffle \u2014 it just marks the dotted-quarter pulse. The triplet feel lives under the surface, giving rockabilly its rolling gallop without the explicit 'ding-a ding-a' of Chicago blues.",
+    "story": "Chuck Berry, Jerry Lee Lewis, early Elvis. Same triplet subdivision as blues-shuffle, but the hi-hat doesn't spell out the shuffle — it just marks the dotted-quarter pulse. The triplet feel lives under the surface, giving rockabilly its rolling gallop without the explicit 'ding-a ding-a' of Chicago blues.",
     "relatedIds": [
       "blues-shuffle",
       "half-time-shuffle"
@@ -5269,7 +5269,7 @@
       "drum kit"
     ],
     "swingable": false,
-    "story": "Bernard Purdie's 'Babylon Sisters' groove, Jeff Porcaro's 'Rosanna' groove \u2014 two of the most imitated drum patterns in R&B and soft rock. The shuffle is there (triplet subdivisions, ghosted hi-hat), but the snare hits only on beat 3 instead of 2 and 4. That halving of the backbeat is why it feels so deep \u2014 the rhythm breathes twice as slowly while the hi-hat stays busy underneath.",
+    "story": "Bernard Purdie's 'Babylon Sisters' groove, Jeff Porcaro's 'Rosanna' groove — two of the most imitated drum patterns in R&B and soft rock. The shuffle is there (triplet subdivisions, ghosted hi-hat), but the snare hits only on beat 3 instead of 2 and 4. That halving of the backbeat is why it feels so deep — the rhythm breathes twice as slowly while the hi-hat stays busy underneath.",
     "relatedIds": [
       "blues-shuffle",
       "shuffle-rock",
