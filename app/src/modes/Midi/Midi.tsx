@@ -17,6 +17,7 @@
 // is just the control panel.
 
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { useT } from '../../i18n';
 import type { Channel } from '../../patterns/types-sound';
 import {
   type ChannelOutConfig,
@@ -60,6 +61,7 @@ const COMMON_ADDRESSES: readonly string[] = [
 ];
 
 export function Midi({ bridge, channels }: Props) {
+  const t = useT();
   const {
     access, enable, enableError,
     inputs, outputs,
@@ -74,10 +76,10 @@ export function Midi({ bridge, channels }: Props) {
   } = bridge;
 
   const onResetClick = useCallback(() => {
-    if (window.confirm('Reset all MIDI settings? Mappings, channel routing, clock toggles, and active inputs will be cleared. The browser MIDI permission stays granted.')) {
+    if (window.confirm(t('midi.reset_confirm'))) {
       resetSettings();
     }
-  }, [resetSettings]);
+  }, [resetSettings, t]);
 
   const [log, setLog] = useState<LogEntry[]>([]);
   const logIdRef = useRef(0);
@@ -240,22 +242,21 @@ export function Midi({ bridge, channels }: Props) {
     <main className="bf-midi-page">
       <header className="bf-lib-hero">
         <div>
-          <h1 className="bf-lib-title">MIDI <span className="bf-midi-badge">hidden</span></h1>
+          <h1 className="bf-lib-title">{t('midi.title')} <span className="bf-midi-badge">{t('midi.hidden_badge')}</span></h1>
           <p className="bf-lib-sub">
-            Hidden tab. Bind controller CCs and notes to bus addresses, route each audio channel to a MIDI device,
-            watch traffic in both directions.
+            {t('midi.description')}
           </p>
           <div className="bf-lib-hero-actions">
             {!access
-              ? <button className="bf-chip on" onClick={() => { void enable(); }} type="button">Enable Web MIDI</button>
-              : <span className="bf-midi-status">enabled · {inputs.length} in / {outputs.length} out</span>}
+              ? <button className="bf-chip on" onClick={() => { void enable(); }} type="button">{t('midi.enable_button')}</button>
+              : <span className="bf-midi-status">{t('midi.status', { inputs: inputs.length, outputs: outputs.length })}</span>}
             <button
               className="bf-chip ghost sm"
               type="button"
               onClick={onResetClick}
-              title="Wipe all persisted MIDI settings (mappings, channel routing, clock toggles, active inputs)"
+              title={t('midi.reset_title')}
             >
-              reset settings
+              {t('midi.reset_settings')}
             </button>
           </div>
           {enableError && <div className="bf-midi-error">{enableError}</div>}
@@ -266,11 +267,11 @@ export function Midi({ bridge, channels }: Props) {
         <>
           <section className="bf-lib-zone">
             <div className="bf-zone-head">
-              <h2 className="bf-zone-title">Inputs</h2>
-              <span className="bf-zone-sub">Toggle to monitor + run the mapping bridge.</span>
+              <h2 className="bf-zone-title">{t('midi.inputs_title')}</h2>
+              <span className="bf-zone-sub">{t('midi.inputs_sub')}</span>
             </div>
             {inputs.length === 0 ? (
-              <div className="bf-lib-empty">No MIDI inputs detected. Plug a controller and reload.</div>
+              <div className="bf-lib-empty">{t('midi.no_inputs')}</div>
             ) : (
               <div className="bf-chip-row">
                 {inputs.map((i) => (
@@ -289,8 +290,8 @@ export function Midi({ bridge, channels }: Props) {
 
           <section className="bf-lib-zone">
             <div className="bf-zone-head">
-              <h2 className="bf-zone-title">Input mappings</h2>
-              <span className="bf-zone-sub">CC / note → bus address. Saved to localStorage.</span>
+              <h2 className="bf-zone-title">{t('midi.mappings_title')}</h2>
+              <span className="bf-zone-sub">{t('midi.mappings_sub')}</span>
             </div>
             <div className="bf-midi-maps">
               {inputMappings.map((m, idx) => (
@@ -302,10 +303,10 @@ export function Midi({ bridge, channels }: Props) {
                 />
               ))}
               <div className="bf-chip-row">
-                <button className="bf-chip sm ghost" type="button" onClick={() => addMapping('note')}>+ note</button>
-                <button className="bf-chip sm ghost" type="button" onClick={() => addMapping('cc')}>+ cc</button>
+                <button className="bf-chip sm ghost" type="button" onClick={() => addMapping('note')}>{t('midi.add_note')}</button>
+                <button className="bf-chip sm ghost" type="button" onClick={() => addMapping('cc')}>{t('midi.add_cc')}</button>
                 {inputMappings.length > 0 && (
-                  <button className="bf-chip sm ghost" type="button" onClick={() => setInputMappings([])}>clear all</button>
+                  <button className="bf-chip sm ghost" type="button" onClick={() => setInputMappings([])}>{t('midi.clear_all')}</button>
                 )}
               </div>
             </div>
@@ -313,10 +314,8 @@ export function Midi({ bridge, channels }: Props) {
 
           <section className="bf-lib-zone">
             <div className="bf-zone-head">
-              <h2 className="bf-zone-title">Channel outputs</h2>
-              <span className="bf-zone-sub">
-                Each audio channel → MIDI device + channel + note. Note duration = one step at the current BPM/stepUnit.
-              </span>
+              <h2 className="bf-zone-title">{t('midi.channel_out_title')}</h2>
+              <span className="bf-zone-sub">{t('midi.channel_out_sub')}</span>
             </div>
             <div className="bf-midi-maps">
               {channelOuts.map((cfg, idx) => (
@@ -335,8 +334,8 @@ export function Midi({ bridge, channels }: Props) {
 
           <section className="bf-lib-zone">
             <div className="bf-zone-head">
-              <h2 className="bf-zone-title">Clock I/O</h2>
-              <span className="bf-zone-sub">Off by default. Soft-sync only — BPM tracks within ~tens of ms.</span>
+              <h2 className="bf-zone-title">{t('midi.clock_title')}</h2>
+              <span className="bf-zone-sub">{t('midi.clock_sub')}</span>
             </div>
             <div className="bf-midi-maps">
               <div className="bf-midi-map-row">
@@ -347,7 +346,7 @@ export function Midi({ bridge, channels }: Props) {
                     checked={clockListenEnabled}
                     onChange={(e) => setClockListenEnabled(e.target.checked)}
                   />
-                  listen on active inputs (BPM + start/stop)
+                  {t('midi.clock_listen')}
                 </label>
               </div>
               <div className="bf-midi-map-row">
@@ -358,16 +357,16 @@ export function Midi({ bridge, channels }: Props) {
                     checked={clockSendEnabled}
                     onChange={(e) => setClockSendEnabled(e.target.checked)}
                   />
-                  send 24 PPQN
+                  {t('midi.clock_send')}
                 </label>
                 <label className="bf-midi-field grow">
-                  to
+                  {t('midi.clock_to')}
                   <select
                     value={clockSendOutputId}
                     onChange={(e) => setClockSendOutputId(e.target.value)}
                     className="bf-midi-input"
                   >
-                    <option value="">— none —</option>
+                    <option value="">{t('midi.none_option')}</option>
                     {outputs.map((o) => (
                       <option key={o.id} value={o.id}>{o.name ?? o.id}</option>
                     ))}
@@ -379,8 +378,8 @@ export function Midi({ bridge, channels }: Props) {
 
           <section className="bf-lib-zone">
             <div className="bf-zone-head">
-              <h2 className="bf-zone-title">Test send</h2>
-              <span className="bf-zone-sub">Pick a device, then inject a single message manually.</span>
+              <h2 className="bf-zone-title">{t('midi.test_send_title')}</h2>
+              <span className="bf-zone-sub">{t('midi.test_send_sub')}</span>
             </div>
             <div className="bf-midi-send">
               <select
@@ -388,62 +387,62 @@ export function Midi({ bridge, channels }: Props) {
                 value={testOutputId}
                 onChange={(e) => setTestOutputId(e.target.value)}
               >
-                <option value="">— select output —</option>
+                <option value="">{t('midi.select_output')}</option>
                 {outputs.map((o) => (
                   <option key={o.id} value={o.id}>{o.name ?? o.id}</option>
                 ))}
               </select>
               <label className="bf-midi-field">
-                ch
+                {t('midi.test_ch')}
                 <NumberInput min={0} max={15} value={sendChannel} onChange={setSendChannel}
                   className="bf-midi-input small" />
               </label>
               <label className="bf-midi-field">
-                note
+                {t('midi.test_note')}
                 <NumberInput min={0} max={127} value={sendNote} onChange={setSendNote}
                   className="bf-midi-input small" />
               </label>
               <span className="bf-midi-noteName">{noteName(sendNote)}</span>
               <label className="bf-midi-field">
-                vel
+                {t('midi.test_vel')}
                 <NumberInput min={0} max={127} value={sendVel} onChange={setSendVel}
                   className="bf-midi-input small" />
               </label>
-              <button type="button" className="bf-chip sm" onClick={sendNoteOn} disabled={!testOutputId}>note on</button>
-              <button type="button" className="bf-chip sm" onClick={sendNoteOff} disabled={!testOutputId}>note off</button>
+              <button type="button" className="bf-chip sm" onClick={sendNoteOn} disabled={!testOutputId}>{t('midi.test_note_on')}</button>
+              <button type="button" className="bf-chip sm" onClick={sendNoteOff} disabled={!testOutputId}>{t('midi.test_note_off')}</button>
               <label className="bf-midi-field">
-                cc#
+                {t('midi.test_cc')}
                 <NumberInput min={0} max={127} value={sendCc} onChange={setSendCc}
                   className="bf-midi-input small" />
               </label>
               <label className="bf-midi-field">
-                value
+                {t('midi.test_value')}
                 <NumberInput min={0} max={127} value={sendCcVal} onChange={setSendCcVal}
                   className="bf-midi-input small" />
               </label>
-              <button type="button" className="bf-chip sm" onClick={sendCcMsg} disabled={!testOutputId}>cc</button>
+              <button type="button" className="bf-chip sm" onClick={sendCcMsg} disabled={!testOutputId}>{t('midi.test_cc_button')}</button>
             </div>
           </section>
 
           <section className="bf-lib-zone">
             <div className="bf-zone-head">
-              <h2 className="bf-zone-title">Monitor</h2>
+              <h2 className="bf-zone-title">{t('midi.monitor_title')}</h2>
               <span className="bf-zone-sub">
-                {log.length} of {MAX_LOG} max
+                {t('midi.monitor_info', { n: log.length, max: MAX_LOG })}
                 <button
                   className="bf-linkbtn"
                   type="button"
                   onClick={() => setPaused((p) => !p)}
-                  title={paused ? 'Resume capture' : 'Pause capture (existing entries stay)'}
+                  title={paused ? t('midi.resume_title') : t('midi.pause_title')}
                 >
-                  {paused ? ' ▶ resume' : ' ❚❚ pause'}
+                  {paused ? ` ${t('midi.resume_button')}` : ` ${t('midi.pause_button')}`}
                 </button>
-                <button className="bf-linkbtn" type="button" onClick={clearLog}> clear</button>
+                <button className="bf-linkbtn" type="button" onClick={clearLog}> {t('midi.clear_button')}</button>
               </span>
             </div>
             <div className="bf-midi-log">
               {log.length === 0 ? (
-                <div className="bf-lib-empty">No traffic yet. Move a knob, hit a pad, or use Send above.</div>
+                <div className="bf-lib-empty">{t('midi.no_traffic')}</div>
               ) : (
                 log.slice().reverse().map((e) => (
                   <div key={e.id} className={`bf-midi-row dir-${e.dir}`}>
@@ -469,11 +468,12 @@ interface MappingRowProps {
 }
 
 function MappingRow({ map, onChange, onRemove }: MappingRowProps) {
+  const t = useT();
   return (
     <div className="bf-midi-map-row">
       <span className="bf-midi-kind">{map.kind}</span>
       <label className="bf-midi-field">
-        ch
+        {t('midi.map_ch')}
         <NumberInput
           min={-1} max={15}
           value={map.channel ?? -1}
@@ -483,7 +483,7 @@ function MappingRow({ map, onChange, onRemove }: MappingRowProps) {
       </label>
       {map.kind === 'note' && (
         <label className="bf-midi-field">
-          note
+          {t('midi.map_note')}
           <NumberInput
             min={-1} max={127}
             value={map.note ?? -1}
@@ -494,7 +494,7 @@ function MappingRow({ map, onChange, onRemove }: MappingRowProps) {
       )}
       {map.kind === 'cc' && (
         <label className="bf-midi-field">
-          cc
+          {t('midi.map_cc')}
           <NumberInput
             min={0} max={127}
             value={map.cc}
@@ -513,7 +513,7 @@ function MappingRow({ map, onChange, onRemove }: MappingRowProps) {
           className="bf-midi-input"
         />
       </label>
-      <button type="button" className="bf-chip sm ghost" onClick={onRemove}>×</button>
+      <button type="button" className="bf-chip sm ghost" onClick={onRemove}>{t('midi.map_remove')}</button>
 
       <datalist id="bf-midi-addresses">
         {COMMON_ADDRESSES.map((a) => <option key={a} value={a} />)}
@@ -532,6 +532,7 @@ interface ChannelOutRowProps {
 }
 
 function ChannelOutRow({ idx, label, cfg, outputs, onChange, onTest }: ChannelOutRowProps) {
+  const t = useT();
   const canTest = cfg.outputId !== null;
   return (
     <div className="bf-midi-map-row">
@@ -543,23 +544,23 @@ function ChannelOutRow({ idx, label, cfg, outputs, onChange, onTest }: ChannelOu
           checked={cfg.enabled}
           onChange={(e) => onChange({ enabled: e.target.checked })}
         />
-        enable
+        {t('midi.channel_enable')}
       </label>
       <label className="bf-midi-field grow">
-        out
+        {t('midi.channel_out_label')}
         <select
           value={cfg.outputId ?? ''}
           onChange={(e) => onChange({ outputId: e.target.value === '' ? null : e.target.value })}
           className="bf-midi-input"
         >
-          <option value="">— none —</option>
+          <option value="">{t('midi.none_option')}</option>
           {outputs.map((o) => (
             <option key={o.id} value={o.id}>{o.name ?? o.id}</option>
           ))}
         </select>
       </label>
       <label className="bf-midi-field">
-        ch
+        {t('midi.channel_midi_ch')}
         <NumberInput
           min={1} max={16}
           value={cfg.midiChannel + 1}
@@ -568,7 +569,7 @@ function ChannelOutRow({ idx, label, cfg, outputs, onChange, onTest }: ChannelOu
         />
       </label>
       <label className="bf-midi-field">
-        note
+        {t('midi.channel_note')}
         <NumberInput
           min={0} max={127}
           value={cfg.note}
@@ -578,7 +579,7 @@ function ChannelOutRow({ idx, label, cfg, outputs, onChange, onTest }: ChannelOu
       </label>
       <span className="bf-midi-noteName">{noteName(cfg.note)}</span>
       <label className="bf-midi-field">
-        vel×
+        {t('midi.channel_vel')}
         <NumberInput
           min={0} max={1} step={0.05} decimals={2}
           value={cfg.velocityScale}
@@ -591,9 +592,9 @@ function ChannelOutRow({ idx, label, cfg, outputs, onChange, onTest }: ChannelOu
         className="bf-chip sm"
         onClick={onTest}
         disabled={!canTest}
-        title={canTest ? 'Send a single note hit at this row\'s config' : 'Pick an output device first'}
+        title={canTest ? t('midi.channel_test_title') : t('midi.channel_test_disabled')}
       >
-        test
+        {t('midi.channel_test')}
       </button>
     </div>
   );
