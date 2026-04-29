@@ -36,6 +36,7 @@ import { buildKitMachine, KIT_REVERB_SEND } from './kit-presets';
 import { parseTimeSigDenom } from '../tempo';
 import { makeSequencer, type Sequencer } from '../../modules/sequencer';
 import SchedulerWorker from '../scheduler-worker.ts?worker';
+import { logError } from '../../lib/log';
 
 const NUM_CHANNELS = 5;
 
@@ -646,9 +647,23 @@ export class SoundEngine {
     try {
       const w = new SchedulerWorker();
       w.onmessage = () => this.tick();
-      w.onerror = () => { /* swallow; tick() fallback handles continuity */ };
+      // onerror fires on syntax errors, CSP violations, OOM, or
+      // unhandled exceptions inside the worker — not transient
+      // hiccups. Surface the failure so a regression isn't invisible,
+      // mark the worker dead, and re-enter the tick loop on the
+      // setTimeout fallback so a running pattern doesn't freeze.
+      w.onerror = (e) => {
+        logError('Scheduler worker error; falling back to setTimeout', e.message || e);
+        this.workerFailed = true;
+        if (this.worker) {
+          try { this.worker.terminate(); } catch { /* idempotent */ }
+          this.worker = null;
+        }
+        if (this.sequencer?.running()) this.tick();
+      };
       this.worker = w;
-    } catch {
+    } catch (err) {
+      logError('Scheduler worker construction failed; falling back to setTimeout', err);
       this.workerFailed = true;
     }
   }

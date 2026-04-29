@@ -23,6 +23,7 @@ import {
 } from '../modules/midi';
 import { useSession } from '../modules/session';
 import { loadChannelOuts, saveChannelOuts } from './midiChannelOut';
+import { logError } from './log';
 import { loadMidiMappings, saveMidiMappings } from './midiMappings';
 
 export interface SentLogEntry {
@@ -146,6 +147,10 @@ export function useMidiBridge(engine: SoundEngine, channelCount: number): MidiBr
       try { localStorage.setItem('bf_midi_auto_enable', '1'); } catch { /* ignore */ }
     } catch (e) {
       setEnableError(e instanceof Error ? e.message : String(e));
+      // Surface globally too — the auto-enable path runs regardless
+      // of which tab is active, and otherwise a denied permission or
+      // policy block would only show inside the MIDI tab.
+      logError('MIDI enable failed', e);
     }
   }, [midi]);
 
