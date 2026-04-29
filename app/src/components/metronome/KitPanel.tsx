@@ -1,3 +1,4 @@
+import { useT } from '../../i18n';
 import { ALL_KITS, type KitId } from '../../patterns/types';
 import type { SoundKit } from '../../patterns/types-sound';
 
@@ -20,19 +21,20 @@ export function KitPanel({
   activeKit, onSelect, resetTo, onReset,
   savedEnsembles, activeSavedId, onSelectSaved,
 }: Props) {
+  const t = useT();
   const hasSaved = (savedEnsembles?.length ?? 0) > 0;
   return (
     <div className="bf-panel">
       <div className="bf-panel-head">
-        ensemble
+        {t('kit.title')}
         {resetTo && onReset && (
           <button
             className="bf-kit-reset"
             onClick={onReset}
-            title={`Reset to pattern default: ${resetTo}`}
+            title={t('kit.reset_title', { name: resetTo })}
             type="button"
           >
-            ⤺ {resetTo}
+            {t('kit.reset_button', { name: resetTo })}
           </button>
         )}
       </div>
@@ -50,7 +52,7 @@ export function KitPanel({
       </div>
       {hasSaved && onSelectSaved && (
         <>
-          <div className="bf-kit-saved-label">your ensembles</div>
+          <div className="bf-kit-saved-label">{t('kit.your_ensembles')}</div>
           <div className="bf-kit-grid">
             {savedEnsembles!.map((kit) => (
               <button

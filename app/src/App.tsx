@@ -124,7 +124,7 @@ export default function App() {
       const pattern = await deserializePattern(hash);
       if (cancelled) return;
       if (!pattern) {
-        logError('Share link invalid or corrupted', 'could not decode ?p= pattern');
+        logError(t('errors.share_invalid'), 'could not decode ?p= pattern');
         return;
       }
       const shareId = `shared-${pattern.id}-${Date.now().toString(36)}`;
@@ -201,7 +201,7 @@ export default function App() {
         lastEncodedRef.current = { tab, patternId };
       } catch (err) {
         // Fall back to short-id URL if encoding fails — better than nothing.
-        logWarn(`Pattern URL encoding fell back to short-id · ${err instanceof Error ? err.message : String(err)}`);
+        logWarn(`${t('errors.pattern_url_encoding')} · ${err instanceof Error ? err.message : String(err)}`);
         const search = `?tab=practice&pattern=${encodeURIComponent(patternId)}`;
         if (window.location.search !== search) {
           window.history.replaceState(null, '', `${window.location.pathname}${search}${window.location.hash}`);
@@ -210,7 +210,7 @@ export default function App() {
       }
     })();
     return () => { cancelled = true; };
-  }, [tab, patternId, patternSourcesTick]);
+  }, [tab, patternId, patternSourcesTick, t]);
 
   // Browser back/forward: re-read URL and apply to state. The URL-sync effect
   // above is guarded against no-op replaceState, so this won't loop.
@@ -259,13 +259,13 @@ export default function App() {
         // IDB version mismatch or quota issue — load proceeds with
         // whatever's already cached, but the user should know rather
         // than wonder why their saved pattern didn't load.
-        logWarn(`Could not refresh user pattern cache · ${err instanceof Error ? err.message : String(err)}`);
+        logWarn(`${t('errors.cache_refresh_failed')} · ${err instanceof Error ? err.message : String(err)}`);
       })
       .finally(() => {
         setPatternId(id);
         setTab('practice');
       });
-  }, [engine, refreshUserCache]);
+  }, [engine, refreshUserCache, t]);
 
   // Library → Studio handoff. Drops the pattern into the session
   // and opens Studio (the renamed Sound page) for sound design +
@@ -298,10 +298,10 @@ export default function App() {
             href="https://github.com/cemergin/beatforge"
             target="_blank"
             rel="noopener noreferrer"
-            title="BeatForge on GitHub — source, issues, contributions"
+            title={t('app.github')}
           >
             <span className="bf-logo" />
-            <span className="bf-wordmark">BeatForge</span>
+            <span className="bf-wordmark">{t('app.brand')}</span>
           </a>
           <span className="bf-tag">/{tab}</span>
         </div>
@@ -332,14 +332,14 @@ export default function App() {
         </nav>
         <div className="bf-topright">
           <LangPicker />
-          <div className="bf-theme-seg" role="group" aria-label="theme">
-            {THEMES.map((t) => (
+          <div className="bf-theme-seg" role="group" aria-label={t('theme.label')}>
+            {THEMES.map((themeName) => (
               <button
-                key={t}
-                className={`bf-theme-btn bf-theme-${t} ${theme === t ? 'on' : ''}`}
-                onClick={() => setTheme(t)}
-                title={t}
-                aria-label={t}
+                key={themeName}
+                className={`bf-theme-btn bf-theme-${themeName} ${theme === themeName ? 'on' : ''}`}
+                onClick={() => setTheme(themeName)}
+                title={t(`theme.${themeName}` as const)}
+                aria-label={t(`theme.${themeName}` as const)}
                 type="button"
               >
                 <span className="bf-theme-swatch" />
@@ -392,6 +392,7 @@ function ModeShell({
   initialSoundPatternId, setInitialSoundPatternId,
   setTab, loadInPractice, openInStudio,
 }: ModeShellProps) {
+  const t = useT();
   const session = useSession();
   // patternId → session.loadPattern when they diverge. Keeps Library
   // handoffs and URL nav as the explicit "load new" trigger; session
@@ -420,7 +421,7 @@ function ModeShell({
       dirtyGuardInFlightRef.current = true;
       try {
         const ok = window.confirm(
-          `You have unsaved changes to "${sessionPatternName}". Discard them and load ${p.name}?`,
+          t('dirty_guard.confirm', { name: sessionPatternName, next: p.name }),
         );
         if (!ok) {
           setPatternId(sessionPatternId);
@@ -431,7 +432,7 @@ function ModeShell({
       }
     }
     sessionLoadPattern(p);
-  }, [patternId, sessionPatternId, sessionDirty, sessionPatternName, sessionLoadPattern, setPatternId]);
+  }, [patternId, sessionPatternId, sessionDirty, sessionPatternName, sessionLoadPattern, setPatternId, t]);
 
   // Modular control plane lives at the shell level so input-mapped
   // ParamEvents (from the secret MIDI tab) drive audio regardless of
@@ -450,14 +451,14 @@ function ModeShell({
       // Rare iOS Safari edge case where AudioContext can't be
       // created. Without surfacing this, every master-bus knob would
       // be dead but the UI looks fine.
-      logError('Audio context init failed; master-bus knobs disabled', err);
+      logError(t('errors.audio_context_failed'), err);
     });
     return () => {
       active = false;
       unbind();
       unregisterMaster?.();
     };
-  }, [engine, router]);
+  }, [engine, router, t]);
 
   // Per-channel adapter registrations — keyed on channel COUNT to
   // avoid tearing down the adapter cache on every knob tweak. Knob

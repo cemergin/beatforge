@@ -1,3 +1,5 @@
+import { useT } from '../../i18n';
+
 interface Props {
   countInBars: number;
   setCountInBars: (n: number) => void;
@@ -6,9 +8,10 @@ interface Props {
 const OPTIONS = [0, 1, 2, 4];
 
 export function CountInPanel({ countInBars, setCountInBars }: Props) {
+  const t = useT();
   return (
     <div className="bf-panel">
-      <div className="bf-panel-head">count-in</div>
+      <div className="bf-panel-head">{t('count_in.title')}</div>
       <div className="bf-seg">
         {OPTIONS.map((n) => (
           <button
@@ -17,7 +20,9 @@ export function CountInPanel({ countInBars, setCountInBars }: Props) {
             onClick={() => setCountInBars(n)}
             type="button"
           >
-            {n === 0 ? 'off' : `${n} bar${n > 1 ? 's' : ''}`}
+            {n === 0
+              ? t('count_in.off')
+              : t(n === 1 ? 'count_in.bar_singular' : 'count_in.bar_plural', { n })}
           </button>
         ))}
       </div>

@@ -3,11 +3,13 @@
 // React components (Fast Refresh requirement).
 
 import { Component, useEffect, useState, type ErrorInfo, type ReactNode } from 'react';
+import { useT } from '../i18n';
 import { logError, subscribeLog, type LogEntry } from './log';
 
 const TOAST_TTL_MS = 6000;
 
 export function ErrorToasts() {
+  const t = useT();
   // Visible toasts are derived in an effect from the log + a ticking
   // clock — keeps render pure (no Date.now() during render).
   const [visible, setVisible] = useState<LogEntry[]>([]);
@@ -55,7 +57,7 @@ export function ErrorToasts() {
           }}
         >
           <strong style={{ marginRight: 8, textTransform: 'uppercase', fontSize: 10, letterSpacing: 0.1 }}>
-            {e.severity === 'error' ? '✕ error' : '! notice'}
+            {e.severity === 'error' ? t('errors.error_label') : t('errors.notice_label')}
           </strong>
           {e.message}
         </div>

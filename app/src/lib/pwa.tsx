@@ -7,6 +7,7 @@
 // App.tsx) but no longer compete over registerSW().
 
 import { useEffect, useState } from 'react';
+import { useT } from '../i18n';
 
 type BeforeInstallPromptEvent = Event & {
   prompt: () => Promise<void>;
@@ -62,6 +63,7 @@ const mutedButtonStyle: React.CSSProperties = {
 };
 
 export function PWAStatus() {
+  const t = useT();
   const [installEvent, setInstallEvent] = useState<BeforeInstallPromptEvent | null>(null);
   const [installDismissed, setInstallDismissed] = useState(false);
 
@@ -95,9 +97,9 @@ export function PWAStatus() {
 
   return (
     <div style={toastStyle}>
-      <span>Install BeatForge · works offline</span>
-      <button style={buttonStyle} onClick={install}>Install</button>
-      <button style={mutedButtonStyle} onClick={dismissInstall}>Not now</button>
+      <span>{t('pwa.install_prompt')}</span>
+      <button style={buttonStyle} onClick={install}>{t('pwa.install_button')}</button>
+      <button style={mutedButtonStyle} onClick={dismissInstall}>{t('pwa.dismiss_button')}</button>
     </div>
   );
 }

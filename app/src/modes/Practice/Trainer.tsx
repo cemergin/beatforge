@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { NumberInput } from '../../components/NumberInput';
+import { useT } from '../../i18n';
 
 export interface TrainerCfg {
   from: number;
@@ -25,6 +26,7 @@ interface Props {
 }
 
 export function Trainer({ cfg, setCfg, on, setOn, bar, bpm, cycleStartMs }: Props) {
+  const t = useT();
   const progress = Math.max(0, Math.min(1, (bpm - cfg.from) / Math.max(1, cfg.to - cfg.from)));
   const barsInCycle = cfg.mode === 'cycles' ? bar % cfg.bars : 0;
 
@@ -50,9 +52,9 @@ export function Trainer({ cfg, setCfg, on, setOn, bar, bpm, cycleStartMs }: Prop
   return (
     <div className="bf-panel bf-trainer">
       <div className="bf-panel-head">
-        <span>speed trainer</span>
+        <span>{t('trainer.title')}</span>
         <button className={`bf-toggle ${on ? 'on' : ''}`} onClick={() => setOn(!on)}>
-          {on ? 'on' : 'off'}
+          {on ? t('trainer.on') : t('trainer.off')}
         </button>
       </div>
 
@@ -65,21 +67,21 @@ export function Trainer({ cfg, setCfg, on, setOn, bar, bpm, cycleStartMs }: Prop
       </div>
 
       <div className="bf-row">
-        <label>from</label>
+        <label>{t('trainer.from')}</label>
         <NumberInput min={30} max={800} value={cfg.from}
                onChange={(n) => setCfg({ ...cfg, from: n })}
                ariaLabel="Trainer starting BPM" />
-        <label>→ to</label>
+        <label>→ {t('trainer.to')}</label>
         <NumberInput min={30} max={800} value={cfg.to}
                onChange={(n) => setCfg({ ...cfg, to: n })}
                ariaLabel="Trainer target BPM" />
       </div>
       <div className="bf-row">
-        <label>+</label>
+        <label>{t('trainer.plus')}</label>
         <NumberInput min={1} max={20} value={cfg.step}
                onChange={(n) => setCfg({ ...cfg, step: n })}
                ariaLabel="Trainer BPM increment per cycle" />
-        <label>every</label>
+        <label>{t('trainer.every')}</label>
         {cfg.mode === 'cycles' ? (
           <NumberInput min={1} max={64} value={cfg.bars}
             onChange={(n) => setCfg({ ...cfg, bars: n })}
@@ -90,13 +92,13 @@ export function Trainer({ cfg, setCfg, on, setOn, bar, bpm, cycleStartMs }: Prop
             ariaLabel="Trainer seconds between BPM bumps" />
         )}
         <div className="bf-mode-seg">
-          <button className={cfg.mode === 'cycles' ? 'on' : ''} onClick={() => setCfg({ ...cfg, mode: 'cycles' })}>bars</button>
-          <button className={cfg.mode === 'time' ? 'on' : ''} onClick={() => setCfg({ ...cfg, mode: 'time' })}>sec</button>
+          <button className={cfg.mode === 'cycles' ? 'on' : ''} onClick={() => setCfg({ ...cfg, mode: 'cycles' })}>{t('trainer.bars')}</button>
+          <button className={cfg.mode === 'time' ? 'on' : ''} onClick={() => setCfg({ ...cfg, mode: 'time' })}>{t('trainer.sec')}</button>
         </div>
       </div>
       {on && cfg.mode === 'cycles' && (
         <div className="bf-trainer-barcount">
-          <span className="bf-mini-label">cycle</span>
+          <span className="bf-mini-label">{t('trainer.cycle')}</span>
           <div className="bf-barpips">
             {Array.from({ length: cfg.bars }).map((_, i) => (
               <span key={i} className={`bf-pip ${i < barsInCycle ? 'on' : ''}`} />
@@ -106,7 +108,7 @@ export function Trainer({ cfg, setCfg, on, setOn, bar, bpm, cycleStartMs }: Prop
       )}
       {on && cfg.mode === 'time' && cycleStartMs != null && (
         <div className="bf-trainer-cyclecount">
-          <span className="bf-mini-label">next bump</span>
+          <span className="bf-mini-label">{t('trainer.next_bump')}</span>
           <div className="bf-trainer-cyclebar" aria-hidden="true">
             <div
               className="bf-trainer-cyclebar-fill"

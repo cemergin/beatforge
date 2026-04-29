@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { denomGlyph, parseTimeSigDenom } from '../../audio/tempo';
+import { useT } from '../../i18n';
 
 interface Props {
   /** "Natural" BPM — the rate at the time signature's denominator
@@ -28,6 +29,7 @@ export function BpmHero({
   bpm, setBpm, onTap, tapArmed, countingIn, timeSig,
   children, min = 30, max = 400,
 }: Props) {
+  const t = useT();
   const denom = parseTimeSigDenom(timeSig);
   const glyph = denomGlyph(denom);
 
@@ -44,10 +46,10 @@ export function BpmHero({
         <span className="bf-bpm-eq" aria-hidden="true">=</span>
         <span className="bf-bpm-num">{bpm}</span>
       </div>
-      <div className="bf-bpm-unit" title={`Beats per minute, where the beat is ${glyph} (${timeSig} denominator)`}>
-        BPM · {timeSig}
+      <div className="bf-bpm-unit" title={t('bpm_hero.unit_title', { glyph, timeSig })}>
+        {t('bpm_hero.unit_label', { timeSig })}
       </div>
-      <div className="bf-bpm-conversions" aria-label="Equivalent tempos at other note values">
+      <div className="bf-bpm-conversions" aria-label={t('bpm_hero.conversions')}>
         {companions.map((c, i) => (
           <span key={c.glyph} className="bf-bpm-conversion-item">
             {i > 0 && <span className="bf-bpm-conversions-sep">·</span>}
@@ -58,7 +60,7 @@ export function BpmHero({
       <div className="bf-bpm-controls">
         <button
           onClick={() => setBpm((b) => Math.max(min, b - 1))}
-          aria-label="Decrease BPM"
+          aria-label={t('bpm_hero.decrease')}
           type="button"
         >
           −
@@ -68,12 +70,12 @@ export function BpmHero({
           min={min}
           max={max}
           value={bpm}
-          aria-label={`BPM (${glyph} per minute)`}
+          aria-label={t('bpm_hero.bpm_aria', { glyph })}
           onChange={(e) => setBpm(Number(e.target.value))}
         />
         <button
           onClick={() => setBpm((b) => Math.min(max, b + 1))}
-          aria-label="Increase BPM"
+          aria-label={t('bpm_hero.increase')}
           type="button"
         >
           +
@@ -81,15 +83,15 @@ export function BpmHero({
         <button
           className={`bf-bpm-tap ${tapArmed ? 'armed' : ''}`}
           onClick={onTap}
-          title="Tap repeatedly to set BPM (or press T)"
-          aria-label="Tap to set tempo"
+          title={t('bpm_hero.tap_title')}
+          aria-label={t('bpm_hero.tap_label')}
           type="button"
         >
           t
         </button>
       </div>
       {children}
-      {countingIn && <div className="bf-counting-in-badge">counting in…</div>}
+      {countingIn && <div className="bf-counting-in-badge">{t('bpm_hero.counting_in')}</div>}
     </div>
   );
 }

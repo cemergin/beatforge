@@ -12,8 +12,10 @@
 
 import { useEffect, useState } from 'react';
 import { registerSW } from 'virtual:pwa-register';
+import { useT } from '../i18n';
 
 export function UpdateBanner() {
+  const t = useT();
   const [needRefresh, setNeedRefresh] = useState(false);
   const [updateSW, setUpdateSW] = useState<((reloadPage?: boolean) => Promise<void>) | null>(null);
 
@@ -32,19 +34,19 @@ export function UpdateBanner() {
 
   return (
     <div className="bf-update-banner" role="status">
-      <span className="bf-update-text">New version available</span>
+      <span className="bf-update-text">{t('update.available')}</span>
       <button
         className="bf-update-refresh"
         onClick={() => void updateSW(true)}
         type="button"
       >
-        Refresh
+        {t('update.refresh')}
       </button>
       <button
         className="bf-update-dismiss"
         onClick={() => setNeedRefresh(false)}
         type="button"
-        aria-label="Dismiss"
+        aria-label={t('update.dismiss')}
       >
         ×
       </button>

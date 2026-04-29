@@ -2,6 +2,8 @@
 // Engine-agnostic: parent passes callbacks and current state. Built so
 // Studio + Sound can share once the engines converge.
 
+import { useT } from '../i18n';
+
 interface Props {
   isPlaying: boolean;
   bpm: number;
@@ -33,26 +35,27 @@ export function TransportBar({
   barCounter,
   rightSlot,
 }: Props) {
+  const t = useT();
   return (
     <div className="bf-transport">
       <button
         type="button"
         className={`bf-transport-play ${isPlaying ? 'on' : ''}`}
         onClick={onPlayToggle}
-        aria-label={isPlaying ? 'Stop' : 'Play'}
-        title={isPlaying ? 'Stop (Space)' : 'Play (Space)'}
+        aria-label={isPlaying ? t('transport.stop') : t('transport.play')}
+        title={isPlaying ? t('transport.stop_title') : t('transport.play_title')}
       >
         {isPlaying ? '■' : '▶'}
       </button>
 
       {barCounter !== undefined && barCounter > 0 && (
-        <span className="bf-transport-bar-counter" aria-label="Current bar">
-          bar {barCounter}
+        <span className="bf-transport-bar-counter" aria-label={t('transport.bar_counter')}>
+          {t('transport.bar_prefix')} {barCounter}
         </span>
       )}
 
       <div className="bf-transport-bpm">
-        <label className="bf-transport-bpm-label" htmlFor="bf-transport-bpm-input">BPM</label>
+        <label className="bf-transport-bpm-label" htmlFor="bf-transport-bpm-input">{t('transport.bpm_label')}</label>
         <input
           id="bf-transport-bpm-input"
           type="number"
@@ -74,9 +77,9 @@ export function TransportBar({
           type="button"
           className="bf-transport-tap"
           onClick={onTap}
-          title="Tap tempo (T)"
+          title={t('transport.tap_title')}
         >
-          tap
+          {t('transport.tap')}
         </button>
       )}
 
@@ -85,9 +88,9 @@ export function TransportBar({
           type="button"
           className="bf-transport-clear"
           onClick={onClear}
-          title="Clear all steps"
+          title={t('transport.clear_title')}
         >
-          clear
+          {t('transport.clear')}
         </button>
       )}
 
