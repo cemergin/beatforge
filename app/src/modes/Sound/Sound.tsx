@@ -38,6 +38,7 @@ import { SpectrumAnalyzer } from './SpectrumAnalyzer';
 import { Knob } from './Knob';
 import { StepGrid } from '../../components/StepGrid';
 import { BpmInput } from '../../components/BpmInput';
+import { NumberInput } from '../../components/NumberInput';
 import { Disclosure } from '../../components/Disclosure';
 import { BeatDots } from '../../components/BeatDots';
 import { CircularGrid } from '../../components/CircularGrid';
@@ -1191,17 +1192,15 @@ export function Sound({ engine, initialSoundPatternId, onConsumedInitial }: Soun
                   <option value="__custom">{meter.label} (custom)</option>
                 )}
               </select>
-              <input
-                type="number"
-                min={1} max={64}
+              <NumberInput
+                min={1}
+                max={64}
                 value={sumGroup(meter.grouping)}
-                onChange={(e) => {
-                  const n = parseInt(e.target.value, 10);
-                  if (!Number.isFinite(n) || n < 1 || n > 64) return;
+                onChange={(n) => {
                   onMeterChange({ label: `${n}/${meter.stepUnit}`, grouping: [n], stepUnit: meter.stepUnit });
                 }}
                 className="bf-sound-meter-num"
-                aria-label="Time signature numerator"
+                ariaLabel="Time signature numerator"
                 title="Numerator — number of beats per bar"
               />
               <span className="bf-sound-meter-slash">/</span>

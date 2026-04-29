@@ -116,7 +116,7 @@ export function useMetronome(engine: SoundEngine, opts: MetronomeOptions): UseMe
   const [countingIn, setCountingIn] = useState(false);
   const [trainerOn, setTrainerOn] = useState(false);
   const [trainerCfg, setTrainerCfg] = useState<TrainerCfg>({
-    from: 100, to: 160, step: 5, bars: 4, mode: 'cycles',
+    from: 100, to: 160, step: 5, bars: 16, seconds: 180, mode: 'cycles',
   });
   const [trainerBar, setTrainerBar] = useState(0);
   const [trainerCycleStartMs, setTrainerCycleStartMs] = useState<number | null>(null);
@@ -179,7 +179,7 @@ export function useMetronome(engine: SoundEngine, opts: MetronomeOptions): UseMe
         ? Math.min(trainerCfg.to, b + trainerCfg.step)
         : Math.max(trainerCfg.to, b - trainerCfg.step));
       setTrainerCycleStartMs(performance.now());
-    }, trainerCfg.bars * 1000);
+    }, trainerCfg.seconds * 1000);
     return () => clearInterval(iv);
     // setBpm closure is captured at interval-creation; not in deps.
     // eslint-disable-next-line react-hooks/exhaustive-deps

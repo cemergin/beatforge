@@ -24,6 +24,7 @@ import {
   type MidiOutputLike,
 } from '../../modules/midi';
 import type { MidiBridge } from '../../lib/useMidiBridge';
+import { NumberInput } from '../../components/NumberInput';
 
 interface Props {
   bridge: MidiBridge;
@@ -384,51 +385,31 @@ export function Midi({ bridge, channels }: Props) {
               </select>
               <label className="bf-midi-field">
                 ch
-                <input
-                  type="number" min={0} max={15}
-                  value={sendChannel}
-                  onChange={(e) => setSendChannel(clamp(parseInt(e.target.value, 10) || 0, 0, 15))}
-                  className="bf-midi-input small"
-                />
+                <NumberInput min={0} max={15} value={sendChannel} onChange={setSendChannel}
+                  className="bf-midi-input small" />
               </label>
               <label className="bf-midi-field">
                 note
-                <input
-                  type="number" min={0} max={127}
-                  value={sendNote}
-                  onChange={(e) => setSendNote(clamp(parseInt(e.target.value, 10) || 0, 0, 127))}
-                  className="bf-midi-input small"
-                />
+                <NumberInput min={0} max={127} value={sendNote} onChange={setSendNote}
+                  className="bf-midi-input small" />
               </label>
               <span className="bf-midi-noteName">{noteName(sendNote)}</span>
               <label className="bf-midi-field">
                 vel
-                <input
-                  type="number" min={0} max={127}
-                  value={sendVel}
-                  onChange={(e) => setSendVel(clamp(parseInt(e.target.value, 10) || 0, 0, 127))}
-                  className="bf-midi-input small"
-                />
+                <NumberInput min={0} max={127} value={sendVel} onChange={setSendVel}
+                  className="bf-midi-input small" />
               </label>
               <button type="button" className="bf-chip sm" onClick={sendNoteOn} disabled={!testOutputId}>note on</button>
               <button type="button" className="bf-chip sm" onClick={sendNoteOff} disabled={!testOutputId}>note off</button>
               <label className="bf-midi-field">
                 cc#
-                <input
-                  type="number" min={0} max={127}
-                  value={sendCc}
-                  onChange={(e) => setSendCc(clamp(parseInt(e.target.value, 10) || 0, 0, 127))}
-                  className="bf-midi-input small"
-                />
+                <NumberInput min={0} max={127} value={sendCc} onChange={setSendCc}
+                  className="bf-midi-input small" />
               </label>
               <label className="bf-midi-field">
                 value
-                <input
-                  type="number" min={0} max={127}
-                  value={sendCcVal}
-                  onChange={(e) => setSendCcVal(clamp(parseInt(e.target.value, 10) || 0, 0, 127))}
-                  className="bf-midi-input small"
-                />
+                <NumberInput min={0} max={127} value={sendCcVal} onChange={setSendCcVal}
+                  className="bf-midi-input small" />
               </label>
               <button type="button" className="bf-chip sm" onClick={sendCcMsg} disabled={!testOutputId}>cc</button>
             </div>
@@ -483,28 +464,20 @@ function MappingRow({ map, onChange, onRemove }: MappingRowProps) {
       <span className="bf-midi-kind">{map.kind}</span>
       <label className="bf-midi-field">
         ch
-        <input
-          type="number" min={-1} max={15}
+        <NumberInput
+          min={-1} max={15}
           value={map.channel ?? -1}
-          onChange={(e) => {
-            const n = parseInt(e.target.value, 10);
-            onChange({ channel: Number.isFinite(n) && n >= 0 && n <= 15 ? n : undefined });
-          }}
-          placeholder="any"
+          onChange={(n) => onChange({ channel: n >= 0 && n <= 15 ? n : undefined })}
           className="bf-midi-input small"
         />
       </label>
       {map.kind === 'note' && (
         <label className="bf-midi-field">
           note
-          <input
-            type="number" min={-1} max={127}
+          <NumberInput
+            min={-1} max={127}
             value={map.note ?? -1}
-            onChange={(e) => {
-              const n = parseInt(e.target.value, 10);
-              onChange({ note: Number.isFinite(n) && n >= 0 && n <= 127 ? n : undefined });
-            }}
-            placeholder="any"
+            onChange={(n) => onChange({ note: n >= 0 && n <= 127 ? n : undefined })}
             className="bf-midi-input small"
           />
         </label>
@@ -512,13 +485,10 @@ function MappingRow({ map, onChange, onRemove }: MappingRowProps) {
       {map.kind === 'cc' && (
         <label className="bf-midi-field">
           cc
-          <input
-            type="number" min={0} max={127}
+          <NumberInput
+            min={0} max={127}
             value={map.cc}
-            onChange={(e) => {
-              const n = clamp(parseInt(e.target.value, 10) || 0, 0, 127);
-              onChange({ cc: n });
-            }}
+            onChange={(n) => onChange({ cc: n })}
             className="bf-midi-input small"
           />
         </label>
@@ -580,38 +550,29 @@ function ChannelOutRow({ idx, label, cfg, outputs, onChange, onTest }: ChannelOu
       </label>
       <label className="bf-midi-field">
         ch
-        <input
-          type="number" min={1} max={16}
+        <NumberInput
+          min={1} max={16}
           value={cfg.midiChannel + 1}
-          onChange={(e) => {
-            const n = clamp(parseInt(e.target.value, 10) || 1, 1, 16);
-            onChange({ midiChannel: n - 1 });
-          }}
+          onChange={(n) => onChange({ midiChannel: n - 1 })}
           className="bf-midi-input small"
         />
       </label>
       <label className="bf-midi-field">
         note
-        <input
-          type="number" min={0} max={127}
+        <NumberInput
+          min={0} max={127}
           value={cfg.note}
-          onChange={(e) => {
-            const n = clamp(parseInt(e.target.value, 10) || 0, 0, 127);
-            onChange({ note: n });
-          }}
+          onChange={(n) => onChange({ note: n })}
           className="bf-midi-input small"
         />
       </label>
       <span className="bf-midi-noteName">{noteName(cfg.note)}</span>
       <label className="bf-midi-field">
         vel×
-        <input
-          type="number" min={0} max={1} step={0.05}
+        <NumberInput
+          min={0} max={1} step={0.05} decimals={2}
           value={cfg.velocityScale}
-          onChange={(e) => {
-            const n = parseFloat(e.target.value);
-            onChange({ velocityScale: Number.isFinite(n) ? clamp(n, 0, 1) : 1 });
-          }}
+          onChange={(n) => onChange({ velocityScale: n })}
           className="bf-midi-input small"
         />
       </label>
@@ -661,6 +622,3 @@ function noteName(n: number): string {
   return `${name}${octave}`;
 }
 
-function clamp(n: number, lo: number, hi: number): number {
-  return Math.max(lo, Math.min(hi, n));
-}
