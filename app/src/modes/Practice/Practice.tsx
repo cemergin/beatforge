@@ -95,6 +95,13 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
   const [cursors, setCursors] = useState<Record<string, number>>({});
   const denom = parseTimeSigDenom(pattern.timeSig);
 
+  // Trainer auto-complete needs to call toggle() (declared further
+  // down in this component). Refs bridge the declaration order — the
+  // arrow we hand to useMetronome is stable; the actual handler reads
+  // through the refs which Practice keeps in sync via useEffect below.
+  const playingRef = useRef(playing);
+  const toggleRef = useRef<() => void | Promise<void>>(() => {});
+
   const m = useMetronome(engine, {
     stepUnit: pattern.stepUnit,
     timeSig: pattern.timeSig,
@@ -102,6 +109,13 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
     initialBpm: stepToNaturalBpm(pattern.bpm.default, pattern.stepUnit, denom),
     initialSwing: swingDefaultToSlider(pattern.swingDefault),
     playing,
+    onTrainerComplete: () => {
+      // The hook flipped trainerOn off itself; we just stop playback
+      // so the metronome doesn't keep clicking after the goal is
+      // reached. Guarded by playingRef to avoid stopping something
+      // already stopped (e.g. user paused mid-final-cycle).
+      if (playingRef.current) void toggleRef.current();
+    },
   });
   const {
     bpm, setBpm, handleTap, tapTimes, resetTaps,
@@ -225,6 +239,14 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [patternId]);
 
+  // session is read through a ref by the effects below so they can
+  // reach session.channels / session.setKit without listing `session`
+  // in their dep arrays — adding session would loop because session
+  // mutates whenever any of its state pieces change, which would re-
+  // fire the effect, which would call session.* again, etc.
+  const sessionRef = useRef(session);
+  useEffect(() => { sessionRef.current = session; }, [session]);
+
   // Track the previous focus so we can detect a groove ↔ click toggle
   // and restart the grid in unison. Cell edits (pattern alone changes)
   // shouldn't reset phase; focus toggles should.
@@ -234,6 +256,17 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
     prevFocusRef.current = focus;
     const base = focus === 'click' ? buildClickSkeleton(pattern) : pattern;
     engine.loadPattern({ ...base, grouping });
+    // engine.loadPattern rebuilds machines from this._kit (kit defaults)
+    // and resets each channel's level/pan/sends. That wipes any timbre
+    // customizations the user made in Studio/Sound — the ensemble they
+    // picked, per-channel knob tweaks, saved SoundKit selection. Re-
+    // apply session.channels (the source of truth) right after so a
+    // tab switch back to Practice keeps the sounds intact.
+    const channels = sessionRef.current.channels;
+    if (channels.length > 0) {
+      engine.setMachines(channels.map((c) => c.machine));
+      channels.forEach((c, i) => engine.applyChannelEffects(i, c.effects));
+    }
     // Force every channel back to step 0 of the next bar so they
     // start together after the swap (otherwise rows whose length
     // didn't change keep playing at their current phase).
@@ -246,13 +279,6 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
   // EXPLICIT kit changes (user picked a different kit). Routing through
   // session.setKit instead of engine.setKit keeps session.channels +
   // engine in lockstep so a Practice→Studio handoff sees the same state.
-  //
-  // session is read through a ref so this effect only depends on
-  // activeKit — adding session to deps would loop because session.setKit
-  // changes the session reference, which would re-fire the effect, which
-  // would call setKit again, etc.
-  const sessionRef = useRef(session);
-  useEffect(() => { sessionRef.current = session; }, [session]);
   const kitMountedRef = useRef(false);
   useEffect(() => {
     if (!kitMountedRef.current) {
@@ -301,6 +327,12 @@ export function Practice({ engine, patternId, onPatternChange }: Props) {
       }
     }
   }, [engine, playing, bpm, trainerOn, trainerCfg.from, countInBars, pattern.steps, pattern.stepUnit, denom, clearCountInTimer, setBpm, setCountingIn]);
+
+  // Keep the trainer-complete bridge refs current. The arrow we passed
+  // to useMetronome captures these refs once and reads through them at
+  // call time, side-stepping the declaration-order constraint.
+  useEffect(() => { playingRef.current = playing; }, [playing]);
+  useEffect(() => { toggleRef.current = toggle; }, [toggle]);
 
   // Keyboard shortcuts — Space for play/stop, 1-9 for highlights,
   // T for tap-tempo, S for toggle star.
