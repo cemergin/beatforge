@@ -43,6 +43,12 @@ interface MetronomeOptions {
   initialSwing: number;
   /** Engine is currently playing — gates the trainer time-mode interval. */
   playing: boolean;
+  /** Fires once the trainer's BPM ramp reaches its target and one
+   *  further cycle (bars or seconds) has played at that target. The
+   *  hook flips trainerOn off itself before invoking; the host's job
+   *  is to stop playback (or whatever else "training complete" means
+   *  for that surface). */
+  onTrainerComplete?: () => void;
 }
 
 export interface UseMetronome {
@@ -97,17 +103,33 @@ export function useMetronome(engine: SoundEngine, opts: MetronomeOptions): UseMe
   const session = useSession();
   const bpm = session.bpm;
   const swing = session.swing;
-  // Preserve the legacy "function-form setter" API the trainer
-  // effects rely on — session.setBpm only takes a number, so we
-  // resolve the function form against the current session bpm here.
+  // The session object identity churns on every BPM/swing/etc change
+  // because SessionProvider's value is useMemo'd over those state
+  // pieces. Capture it via a ref so async work (the trainer's
+  // setInterval, the tap-tempo handler) reads the LIVE session at
+  // call time instead of whatever snapshot was current when its
+  // closure was formed. Without this, the trainer's time-mode
+  // interval reads stale session.bpm and only ramps once.
+  const sessionRef = useRef(session);
+  useEffect(() => { sessionRef.current = session; }, [session]);
+
+  // Stable function-form setters. Reading session via the ref means
+  // these callbacks have no deps and never get re-created — long-
+  // lived consumers (intervals, event subscriptions) can capture
+  // them once and still see the latest value at call time.
   const setBpm = useCallback((next: number | ((prev: number) => number)) => {
-    const v = typeof next === 'function' ? next(session.bpm) : next;
-    session.setBpm(v);
-  }, [session]);
+    const v = typeof next === 'function' ? next(sessionRef.current.bpm) : next;
+    sessionRef.current.setBpm(v);
+  }, []);
   const setSwing = useCallback((next: number | ((prev: number) => number)) => {
-    const v = typeof next === 'function' ? next(session.swing) : next;
-    session.setSwing(v);
-  }, [session]);
+    const v = typeof next === 'function' ? next(sessionRef.current.swing) : next;
+    sessionRef.current.setSwing(v);
+  }, []);
+
+  // Completion callback held in a ref so callers can pass an inline
+  // arrow without churning the trainer effects' deps.
+  const onCompleteRef = useRef(opts.onTrainerComplete);
+  useEffect(() => { onCompleteRef.current = opts.onTrainerComplete; }, [opts.onTrainerComplete]);
 
   // ── State ────────────────────────────────────────────────────────
   const [strong, setStrong] = useState(100);
@@ -149,24 +171,32 @@ export function useMetronome(engine: SoundEngine, opts: MetronomeOptions): UseMe
   // BPM ramp triggered by bar-count boundaries — the bar count IS the
   // trigger we react to, so set-state-in-effect is the right pattern.
   // `from > to` ⇒ descending ramp (slow-down practice). The clamp is
-  // toward `to` regardless of direction.
+  // toward `to` regardless of direction. Plateau (next === current)
+  // means we already reached `to` last bump and just played one extra
+  // cycle at target; fire completion instead of re-bumping.
   useEffect(() => {
     if (!trainerOn || !playing) return;
     if (trainerCfg.mode === 'cycles' && trainerBar > 0 && trainerBar % trainerCfg.bars === 0) {
       const ascending = trainerCfg.from <= trainerCfg.to;
-      setBpm((b) => ascending
-        ? Math.min(trainerCfg.to, b + trainerCfg.step)
-        : Math.max(trainerCfg.to, b - trainerCfg.step));
+      const cur = sessionRef.current.bpm;
+      const next = ascending
+        ? Math.min(trainerCfg.to, cur + trainerCfg.step)
+        : Math.max(trainerCfg.to, cur - trainerCfg.step);
+      if (next === cur) {
+        setTrainerOn(false);
+        onCompleteRef.current?.();
+      } else {
+        sessionRef.current.setBpm(next);
+      }
     }
-    // setBpm intentionally not in deps — adding it would re-fire this
-    // effect every BPM change (since setBpm closes over session.bpm),
-    // looping. The trigger is trainerBar; setBpm is read at call time.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [trainerBar, trainerOn, playing, trainerCfg]);
 
   // ── Speed trainer — time mode (countdown drives BpmHero/Trainer) ─
-  // Interval-driven BPM ramp + cycle-start clock; the setInterval body
-  // is cleanup-bound so React doesn't see it as a render-time write.
+  // Interval-driven BPM ramp + cycle-start clock. Reads bpm via
+  // sessionRef so each tick sees the LIVE value — capturing setBpm's
+  // function form would lock the closure to the bpm at interval-
+  // creation time and the ramp would only bump once. Plateau detection
+  // mirrors cycles mode.
   useEffect(() => {
     if (!trainerOn || trainerCfg.mode !== 'time' || !playing) {
       setTrainerCycleStartMs(null);
@@ -175,14 +205,20 @@ export function useMetronome(engine: SoundEngine, opts: MetronomeOptions): UseMe
     setTrainerCycleStartMs(performance.now());
     const ascending = trainerCfg.from <= trainerCfg.to;
     const iv = setInterval(() => {
-      setBpm((b) => ascending
-        ? Math.min(trainerCfg.to, b + trainerCfg.step)
-        : Math.max(trainerCfg.to, b - trainerCfg.step));
+      const cur = sessionRef.current.bpm;
+      const next = ascending
+        ? Math.min(trainerCfg.to, cur + trainerCfg.step)
+        : Math.max(trainerCfg.to, cur - trainerCfg.step);
+      if (next === cur) {
+        clearInterval(iv);
+        setTrainerOn(false);
+        onCompleteRef.current?.();
+        return;
+      }
+      sessionRef.current.setBpm(next);
       setTrainerCycleStartMs(performance.now());
     }, trainerCfg.seconds * 1000);
     return () => clearInterval(iv);
-    // setBpm closure is captured at interval-creation; not in deps.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [trainerOn, trainerCfg, playing]);
   /* eslint-enable react-hooks/set-state-in-effect */
 
